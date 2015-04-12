@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>OJB Analytics Portal Landing Page</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+	
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<style>
+		body {
+			padding-top: 40px;
+			padding-left: 40px;
+		}
+		banner-head {
+		    padding-left: 40px;
+		}
+	</style>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="css/search.css">	
+</head>
+<body>
+
+<div class="container">
+	<div id="main_header" style="width: 940px; padding-bottom: 20px; padding-top: 20px; padding-left: 20px; background: #deebf7;">
+	    <table><tr><td><img src="img/ojbc-logo.png"></td><td><h1 style="padding-left: 40px;">Demo Analytics Portal</h1></td></tr></table>
+   </div>
+   <div id="explain" align="center" style="width: 940px; padding-left: 20px; font-size: 18px;">
+   <p><i>This is a placeholder / demo landing page that provides access to the OJB Analytics functionality in development.  A Member will configure
+        this page with the jurisdiction's own branding, and highlighting the dashboards, reports, and other capabilities appropriate for that jurisdiction.</i></p>
+   </div>
+   <div id="main" style="padding-top: 20px; width: 940px; padding-left: 20px;">
+    <table width="100%" cellspacing="5px">
+        <tr><td style="text-align: center; background: #deebf7; width: 50%"><h2>Tools</h2></td><td style="text-align: center; background: #deebf7;"><h2>Dashboards</h2></td></tr>
+        <tr>
+            <td rowspan="2">
+            <table><tr><td>
+                <img src="img/saiku.png" onclick="javascript:window.parent.Home.openFile('Saiku Analytics','Saiku Analytics', 'content/saiku-ui/index.html?biplugin5=true');$('#btnCreateNew').popover('hide')"/></td>
+                <td style="padding-left: 10px">Ad-Hoc Reporting (Saiku Analytics)</td></tr></table>
+            </td>
+            <td style="padding-left: 10px">Law Enforcement Incidents Dashboard</td>
+        </tr>
+        <tr>
+            <td style="padding-left: 10px">Pretrial Services Dashboard</td>
+        </tr>
+        <tr>
+            <td rowspan="1">
+            <table><tr><td>
+                <img src="img/pivot4j.png" onclick="javascript:window.parent.Home.openFile('Pivot4j','Pivot4j',
+                'plugin/pivot4j/faces/catalog.xhtml');$('#btnCreateNew').popover('hide')"/></td>
+                <td style="padding-left: 10px">Ad-Hoc Reporting (Pivot4j)</td></tr></table>
+            </td>
+            <td style="padding-left: 10px">Drug Crimes Dashboard</td>
+        </tr>
+    </table>
+   </div>
+</div> 
+<!-- /container -->
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="js/vendor/jquery-1.9.1.min.js"></script>
+        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
