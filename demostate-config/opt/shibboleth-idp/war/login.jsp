@@ -4,6 +4,30 @@
 
     <head>
         <title>Demostate Identity Provider Login</title>
+        <style>
+.form-element {
+  width: 100%;
+  padding: 13px 12px;  
+  border: none;
+  font-size: 14px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+.form-field {
+  color: #B7B7B7;
+  border: 1px solid #B7B7B7;
+}
+.form-field-focus {
+  color: #333333;
+  border-color: #333;
+}
+.form-button {
+  background: #deebf7;
+  font-weight: bold;
+  cursor: pointer;
+}
+        </style>
     </head>
     
     <body style="width: 50%; height: 100%; margin-left: auto; margin-right: auto; margin-top: 40px">
@@ -34,16 +58,16 @@
                 <tr><td style="font-weight: bold">
                 <label for="username">User ID:</label>
                 </td><td>
-                <input name="j_username" type="text" value="">
+                <input name="j_username" type="text" value="" class="form-element form-field">
                 </td></tr>
                 <tr><td style="font-weight: bold">
                 <label for="password">Password:</label>
                 </td>
                 <td>
-                <input name="j_password" type="password" value="">
+                <input name="j_password" type="password" value="" class="form-element form-field">
                 </td></tr>
-                <tr><td>
-                <button type="submit">Login</button>
+                <tr><td align="center" colspan="2">
+                <button type="submit" class="form-button">Login</button>
                 </td></tr>
                 </table>
                 
