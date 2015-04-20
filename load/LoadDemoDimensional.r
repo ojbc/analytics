@@ -1,9 +1,9 @@
 # Loads the dimensional database with dummy/demo data
 
-STATE <- "ME"
+STATE <- "VT"
 
-demoArresteeCount = 500
-demoIncidentCount = 750
+demoArresteeCount = 250
+demoIncidentCount = 500
 
 DATE_ID_FORMAT <- "%Y%m%d"
 
@@ -13,22 +13,20 @@ library(dplyr)
 library(rgdal)
 library(sp)
 
-state_shp <- readOGR("/Users/scott/Documents/R-expt/Shapefiles/tl_2014_us_state", "tl_2014_us_state")
-county_shp = readOGR("/Users/scott/Documents/R-expt/Shapefiles/tl_2014_us_county/", "tl_2014_us_county")
-countyData <- read.csv("CountyData.csv")
+state_shp <- readOGR("/opt/data/Shapefiles/tl_2014_us_state", "tl_2014_us_state")
+county_shp = readOGR("/opt/data/Shapefiles/tl_2014_us_county/", "tl_2014_us_county")
+countyData <- read.csv("/opt/data/CO-EST2013-Alldata.csv")
+countyData <- mutate(filter(countyData, SUMLEV==50), fips=paste0(formatC(STATE, width=2, digits=2, flag="0"), formatC(COUNTY, width=3, digits=3, flag="0")))
 
 state_df <- state_shp@data
 stateFips <- as.character(filter(state_df, STUSPS==STATE)$STATEFP)
 
-county_df <- filter(county_shp@data, STATEFP==stateFips)
+county_df <- arrange(filter(county_shp@data, STATEFP==stateFips), GEOID)
 
 getCountyProbs <- function() {
-  counties <- filter(countyData, fips %in% county_df$GEOID)
-  statePop <- sum(counties$PST045213)
-  #countyProb <- rep(.05, nrow(county_df) + 1)
-  # todo: change this to scale probs based on census population
-  #countyProb[9] <- .3 # chittenden
-  countyProb <- (.9*counties$PST045213)/statePop
+  counties <- arrange(filter(countyData, fips %in% county_df$GEOID), fips)
+  statePop <- sum(counties$POPESTIMATE2013)
+  countyProb <- (.9*counties$POPESTIMATE2013)/statePop
   c(countyProb, .1)
 }
 
@@ -83,7 +81,7 @@ County <- data.table(CountyID=countyID, CountyName=countyName)
 dbWriteTable(conn, "County", County, append=TRUE, row.names=FALSE)
 
 # note: you can change top age, but it must be divisible by age range step
-topAge <- 110
+topAge <- 85
 ageRangeStep <- 5
 ages <- 0:(topAge+1)
 ageCount <- length(ages)

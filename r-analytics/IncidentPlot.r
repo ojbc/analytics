@@ -1,4 +1,4 @@
-STATE = 'ME'
+STATE = 'VT'
 
 library(rgdal)
 library(ggplot2)
@@ -32,7 +32,7 @@ map <- ggplot() +
 
 map
 
-city <- get_map("Augusta, Maine", zoom=12, source = "google")
+city <- get_map("Waterbury, Vermont", zoom=12, source = "google")
 map <- ggmap(city) + 
   geom_point(data=Incident, aes(x = IncidentLocationLongitude, y=IncidentLocationLatitude, colour=IncidentTypeDescription), size=4)
 map
