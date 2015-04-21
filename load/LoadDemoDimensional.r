@@ -2,8 +2,8 @@
 
 STATE <- "VT"
 
-demoArresteeCount = 250
-demoIncidentCount = 500
+demoArresteeCount = 5000
+demoIncidentCount = 8000
 
 DATE_ID_FORMAT <- "%Y%m%d"
 
@@ -12,21 +12,24 @@ library(data.table)
 library(dplyr)
 library(rgdal)
 library(sp)
+library(readr)
+library(tidyr)
 
 state_shp <- readOGR("/opt/data/Shapefiles/tl_2014_us_state", "tl_2014_us_state")
 county_shp = readOGR("/opt/data/Shapefiles/tl_2014_us_county/", "tl_2014_us_county")
-countyData <- read.csv("/opt/data/CO-EST2013-Alldata.csv")
+countyData <- read_csv("/opt/data/CC-EST2013-Alldata.csv")
 countyData <- mutate(filter(countyData, SUMLEV==50), fips=paste0(formatC(STATE, width=2, digits=2, flag="0"), formatC(COUNTY, width=3, digits=3, flag="0")))
 
 state_df <- state_shp@data
 stateFips <- as.character(filter(state_df, STUSPS==STATE)$STATEFP)
 
 county_df <- arrange(filter(county_shp@data, STATEFP==stateFips), GEOID)
+countyData <- arrange(filter(countyData, fips %in% county_df$GEOID), fips)
 
 getCountyProbs <- function() {
-  counties <- arrange(filter(countyData, fips %in% county_df$GEOID), fips)
-  statePop <- sum(counties$POPESTIMATE2013)
-  countyProb <- (.9*counties$POPESTIMATE2013)/statePop
+  counties <- filter(countyData, AGEGRP==0, YEAR==1)
+  statePop <- sum(counties$TOT_POP)
+  countyProb <- (.9*counties$TOT_POP)/statePop
   c(countyProb, .1)
 }
 
@@ -38,6 +41,7 @@ dbSendQuery(conn, "delete from Incident")
 dbSendQuery(conn, "delete from Arrest")
 dbSendQuery(conn, "delete from Charge")
 dbSendQuery(conn, "delete from PretrialServiceParticipation")
+dbSendQuery(conn, "delete from Population")
 
 # clear out dimension tables
 dbSendQuery(conn, "delete from Agency")
@@ -46,6 +50,7 @@ dbSendQuery(conn, "delete from Date")
 dbSendQuery(conn, "delete from Disposition")
 dbSendQuery(conn, "delete from OffenseType")
 dbSendQuery(conn, "delete from PersonAge")
+dbSendQuery(conn, "delete from PersonAgeRange")
 dbSendQuery(conn, "delete from PersonRace")
 dbSendQuery(conn, "delete from PersonSex")
 dbSendQuery(conn, "delete from PretrialService")
@@ -105,8 +110,27 @@ ageRanges[ageCount-1] <- ageStrings[ageCount-1]
 ageRangesSort[ageCount] <- ageStrings[ageCount]
 ageRangesSort[ageCount-1] <- ageStrings[ageCount-1]
 
-PersonAge <- data.table(PersonAgeID=(ages+1), AgeInYears=ageStrings, AgeRange5=ageRanges, AgeRange5Sort=ageRangesSort)
+# This would need refactoring if you ever wanted to have an age range step different than 5.  We chose that because that's what
+# the Census uses
+
+AgeRange5=unique(ageRanges)
+PersonAgeRange <- data.table(PersonAgeRangeID=1:length(AgeRange5), AgeRange5, AgeRange5Sort=AgeRange5)
+dbWriteTable(conn, "PersonAgeRange", PersonAgeRange, append=TRUE, row.names=FALSE)
+
+PersonAge <- data.table(PersonAgeID=(ages+1), AgeInYears=ageStrings, PersonAgeRangeID=match(ageRanges, AgeRange5))
 dbWriteTable(conn, "PersonAge", PersonAge, append=TRUE, row.names=FALSE)
+
+popData <- gather(select(filter(countyData, AGEGRP!=0, YEAR==6), fips, AGEGRP, YEAR, matches(".AC_.*")), group, PopulationCount, matches(".AC_.*"))
+popData <- mutate(popData, PersonSexID=ifelse(grepl("_MALE", group), match("Male", sexes), match("Female", sexes)))
+popData <- mutate(popData, PersonRaceID=
+                    ifelse(grepl("WAC", group), match("WHITE", races),
+                           ifelse(grepl("BAC", group), match("BLACK", races),
+                                  ifelse(grepl("IAC", group), match("AMERICAN INDIAN", races),
+                                         ifelse(grepl("AAC", group), match("ASIAN", races), match("UNKNOWN", races))))))
+popData <- mutate(popData, PersonAgeRangeID=AGEGRP)
+popData <- select(mutate(rename(popData, CountyID=fips), PopulationID=rownames(popData), Year=2013), -YEAR, -AGEGRP, -group)
+popData <- data.table(popData)
+dbWriteTable(conn, "Population", popData, append=TRUE, row.names=FALSE)
 
 offenseID <- c(2204, 0102, 1103, 4904, 4005, 2001, 3916, 6409, 2510, 4199, 6404, 2502,
                0912, 1212, 2703, 3911, 3540, 7399, 5704, 2199, 3617, 1601, 5499, 4804,
