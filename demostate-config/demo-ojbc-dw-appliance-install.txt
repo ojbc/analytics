@@ -1,0 +1,514 @@
+Pentaho VM Install procedure
+
+1. Download Open SUSE 13.1 install DVD iso from http://software.opensuse.org/131/en
+2. Install in VMWare
+3. During install:
+
+    a. On desktop choice screen, select "Other"...  "Basic server" (without desktop)
+    b. Setup default user as "demouser", password="password"
+    c. On Install settings screen, "Change...", "Firewall/SSH...", disable firewall
+    
+4. After reboot, Yast...Software Management...install emacs-nox
+
+4a. Also, noticed that in both VMWare and VirtualBox, the bios doesn't include a System Management Bus.  This causes one of the default modules in Open SUSE not to load, and it appears to degrade (at least startup and shutdown) performance.  To address this, edit /etc/modprobe.d/50-blacklist.conf, and add the line "blacklist i2c_piix4" to it.  Then reboot.
+
+5. Set up static networking
+
+    a. /etc/sysconfig/network/config:  Add static DNS server - for Mac, 172.16.120.2
+    b. /etc/sysconfig/network/ifcfg-[nic name]:
+    
+        BOOTPROTO='static'
+        STARTMODE='auto'
+        BROADCAST='172.16.120.255'
+        IPADDR='172.16.120.147'
+        NETMASK='255.255.255.0'
+        
+    c. create file (or edit) /etc/sysconfig/network/routes:
+    
+        default 172.16.120.2
+        
+    d. edit /etc/hosts:
+    
+        172.16.120.147 dw.ojbc-local.org
+        172.16.120.147 sp-dw.ojbc-local.org
+        172.16.120.147 idp-dw.ojbc-local.org
+        172.16.120.147 www-dw.ojbc-local.org
+        172.16.120.147 dw
+        
+    e. edit etc/HOSTNAME:  dw.ojbc-local.org
+   
+6. Start sshd
+    
+    a. turn off firewall:  /sbin/SuSEfirewall2 off
+    b. service sshd start
+    c. chkconfig sshd on
+    
+    
+6. Install Java
+
+    a. Download RPM binary (64 bit)
+    b. chmod of binary (.bin file) to +x
+    c. run bin file
+    d. check:  java -version
+    e. edit /etc/bash.bashrc.local:
+    
+        JAVA_HOME=/usr/java/default
+        export JAVA_HOME
+
+        PATH=$PATH:$JAVA_HOME/bin
+        
+7. Setup OpenDS
+
+Server log:
+
+dw:/opt/OpenDS-2.3.0-build003 # ./setup --cli
+
+OpenDS Directory Server 2.3.0-build003
+Please wait while the setup program initializes...
+
+What would you like to use as the initial root user DN for the Directory
+Server? [cn=Directory Manager]: 
+Please provide the password to use for the initial root user: password
+Please re-enter the password for confirmation: password
+
+On which port would you like the Directory Server to accept connections from
+LDAP clients? [389]: 1389
+
+On which port would you like the Administration Connector to accept
+connections? [4444]: 
+Do you want to create base DNs in the server? (yes / no) [yes]: 
+
+Provide the base DN for the directory data: [dc=example,dc=com]: dc=ojbc-local,dc=org
+Options for populating the database:
+
+    1)  Only create the base entry
+    2)  Leave the database empty
+    3)  Import data from an LDIF file
+    4)  Load automatically-generated sample data
+
+Enter choice [1]: 
+
+Do you want to enable SSL? (yes / no) [no]: 
+
+Do you want to enable Start TLS? (yes / no) [no]: 
+
+Do you want to start the server when the configuration is completed? (yes /
+no) [yes]: 
+
+
+Setup Summary
+=============
+LDAP Listener Port:            1389
+Administration Connector Port: 4444
+LDAP Secure Access:            disabled
+Root User DN:                  cn=Directory Manager
+Directory Data:                Create New Base DN dc=ojbc-local,dc=org.
+Base DN Data: Only Create Base Entry (dc=ojbc-local,dc=org)
+
+Start Server when the configuration is completed
+
+
+What would you like to do?
+
+    1)  Set up the server with the parameters above
+    2)  Provide the setup parameters again
+    3)  Print equivalent non-interactive command-line
+    4)  Cancel and exit
+
+Enter choice [1]: 
+
+See /tmp/opends-setup-4982666692433794469.log for a detailed log of this operation.
+
+Configuring Directory Server ..... Done.
+Creating Base Entry dc=ojbc-local,dc=org ..... Done.
+Starting Directory Server ........ Done.
+
+To see basic server configuration status and configuration you can launch /opt/OpenDS-2.3.0-build003/bin/status
+dw:/opt/OpenDS-2.3.0-build003 # 
+
+(End server log)
+
+8. Setup LDAP Directory in OpenDS (adapted from OJB wiki instructions)
+
+    a. Open OpenDS control panel in a windows environment (e.g. Mac or PC)
+    b. Manage Entries
+    c. New OU (called "People")...right click on base DN, New Organizational Unit...
+    d. Right click the new OU, New User...
+    e. Create demouser, with password=password
+    f. Set up required attributes.  At a minimum, you need federation ID (which is constructed by Shib from uid), first, last, and employer.  See the Shib config files checked into SVN for a current list of expected attributes.
+    
+9. Setup OpenDS to run as a service
+
+    a. /opt/OpenDS-2.3.0-build003/bin/create-rc-script -f /etc/init.d/opends
+    b. in /etc/init.d/rc3.d:  ln -s ../opends S08opends
+    c. in /etc/init.d/rc3.d:  ln -s ../opends K02opends
+
+10. Install Pentaho biserver
+
+    a. Download Pentaho Business Analytics Platform from community.pentaho.com
+    b. Copy zip file to server in /opt
+    c. Unzip zip file
+    d. run start-pentaho.sh
+    e. verify you can login with default username/password (admin/password)
+
+11. Setup Tomcat SSL (follow OJBC wiki instructions).
+
+Server log:
+
+keytool -genkey -alias tomcat -keyalg RSA -keystore /opt/pentaho/biserver-ce/tomcat/conf/keystore
+Enter keystore password:  password
+Re-enter new password: password
+What is your first and last name?
+  [Unknown]:  Demo User
+What is the name of your organizational unit?
+  [Unknown]:  OJBC
+What is the name of your organization?
+  [Unknown]:  OJBC
+What is the name of your City or Locality?
+  [Unknown]:  Democity
+What is the name of your State or Province?
+  [Unknown]:  Demostate
+What is the two-letter country code for this unit?
+  [Unknown]:  US
+Is CN=Demo User, OU=OJBC, O=OJBC, L=Democity, ST=Demostate, C=US correct?
+  [no]:  yes
+
+Enter key password for <tomcat>
+        (RETURN if same as keystore password):
+        
+End server log.
+
+    a. Update tomcat server.xml to point to keystore and change default ports.  server.xml should look like this:
+    
+       <Connector port="9080" protocol="HTTP/1.1"/>
+       <Connector port="9443" protocol="HTTP/1.1" SSLEnabled="true" scheme="https" secure="true" clientAuth="false" sslProtocol="TLS"
+               keystoreFile="/opt/pentaho/biserver-ce/tomcat/conf/keystore" keystorePass="password"/>
+               
+    b. Restart Tomcat and verify that you can hit https://dw.ojbc-local.org:9443/pentaho/Login and http://dw.ojbc-local.org:9080/pentaho/Login
+    
+12. Install Shib IDP
+
+Server log:
+
+dw:~/shibboleth-identityprovider-2.4.0 # ./install.sh
+Buildfile: src/installer/resources/build.xml
+
+install:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Be sure you have read the installation/upgrade instructions on the Shibboleth website before proceeding.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Where should the Shibboleth Identity Provider software be installed? [/opt/shibboleth-idp]
+
+What is the fully qualified hostname of the Shibboleth Identity Provider server? [idp.example.org]
+idp-dw.ojbc-local.org
+A keystore is about to be generated for you. Please enter a password that will be used to protect it.
+password
+Updating property file: /root/shibboleth-identityprovider-2.4.0/src/installer/resources/install.properties
+Created dir: /opt/shibboleth-idp
+Created dir: /opt/shibboleth-idp/bin
+Created dir: /opt/shibboleth-idp/conf
+Created dir: /opt/shibboleth-idp/credentials
+Created dir: /opt/shibboleth-idp/lib
+Created dir: /opt/shibboleth-idp/lib/endorsed
+Created dir: /opt/shibboleth-idp/logs
+Created dir: /opt/shibboleth-idp/metadata
+Created dir: /opt/shibboleth-idp/war
+Generating signing and encryption key, certificate, and keystore. 
+Copying 5 files to /opt/shibboleth-idp/bin
+Copying 8 files to /opt/shibboleth-idp/conf
+Copying 1 file to /opt/shibboleth-idp/metadata
+Copying 46 files to /opt/shibboleth-idp/lib
+Copying 5 files to /opt/shibboleth-idp/lib/endorsed
+Copying 1 file to /root/shibboleth-identityprovider-2.4.0/src/installer
+Building war: /root/shibboleth-identityprovider-2.4.0/src/installer/idp.war
+Copying 1 file to /opt/shibboleth-idp/war
+Deleting: /root/shibboleth-identityprovider-2.4.0/src/installer/web.xml
+Deleting: /root/shibboleth-identityprovider-2.4.0/src/installer/idp.war
+
+BUILD SUCCESSFUL
+Total time: 26 seconds
+dw:~/shibboleth-identityprovider-2.4.0 # 
+
+(End server log)
+
+    a. Per the wiki instructions, follow these steps https://wiki.shibboleth.net/confluence/display/SHIB2/IdPApacheTomcatPrepare
+    
+    cp -R /opt/shibboleth-idp/lib/endorsed /opt/pentaho/biserver-ce/tomcat
+    
+    Most importantly, you need to create /opt/pentaho/biserver-ce/tomcat/conf/Catalina/localhost/idp.xml and put this content in it:
+    
+    <Context docBase="/opt/shibboleth-idp/war/idp.war"
+         privileged="true"
+         antiResourceLocking="false"
+         antiJARLocking="false"
+         unpackWAR="false"
+         swallowOutput="true" />
+    
+14.  Install Apache httpd and unixODBC
+
+    (Shib SP, if downloaded in RPM form, is still incompatible with Apache 2.4.  It also requires a particular version of unixODBC that isn't available in current SUSE distros.  Yes, this is a pain.)
+    
+    i. Go into YAST, define a new repository:  http://download.opensuse.org/repositories/openSUSE:12.2/standard/
+    2. Select only that repository
+    3. Search for unixODBC.  Make sure you are installing version 2.2.12
+    4. Search for apache.  Make sure you are installing version 2.2.x.  Also grab mod_jk.
+    5. service apache2 start
+    6. Put a simple index.html document in /srv/www/htdocs/index.html and verify that apache is working.
+    7. Set apache to run on startup:  chkconfig apache2 on
+        
+15. Set up Apache SSL
+
+Server Log:
+
+dw:~ # openssl req -new -x509 -days 3650 -nodes -out /etc/apache2/ssl/httpd.pem -keyout /etc/apache2/ssl/httpd.key
+Generating a 1024 bit RSA private key
+...........++++++
+......................................................................................................................++++++
+writing new private key to '/etc/apache2/ssl/httpd.key'
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:US
+State or Province Name (full name) [Some-State]:Demostate
+Locality Name (eg, city) []:Democity
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:OJBC
+Organizational Unit Name (eg, section) []:OJBC
+Common Name (e.g. server FQDN or YOUR name) []:www-dw.ojbc-local.org
+Email Address []:info@ojbc.org
+dw:~ # 
+
+End server log.
+
+Then:
+
+    a. Copy /etc/apache2/vhosts.d/vhost-ssl.template to vhost-ssl.conf
+    b. Edit vhost-ssl.conf to:
+        i. Specify the correct ServerName (www-dw.ojbc-local.org)
+        ii. Point to the proper certificate files just created above
+    c. Edit /etc/sysconfig/apache2.  Add "SSL" to APACHE_SERVER_FLAGS.
+    
+Test SSL by going to https://www-dw.ojbc-local.org.  You'll get a cert warning but then see your same test page.
+
+16.  Install Shibboleth SP
+        
+    a. service apache2 stop
+    b. Next go back to the main screen in YAST, deselect the repo you added in step a, and re-select all the others
+    c. Add repo http://download.opensuse.org/repositories/security:/shibboleth/openSUSE_12.3/
+    d. Search for and install shibboleth
+    e. install an appropriate shibboleth2.xml and referenced ctf file in /etc/shibboleth.  Best just to copy a previously existing one.
+    f. Edit /etc/apache2/conf.d/shibd.conf to protect /ojbc_web_util and /pentaho with shibboleth
+    g. service shibd restart
+    h. service apache2 start
+    i. At this point, I noticed that if you completely restart everything, Pentaho will not start up, because of a missing opensaml dependency. I did not
+       run this to ground, but I suspect that installing opensaml as part of the SP install mucked with some open saml jar files, somewhere.  In any case,
+       to fix it, simply go into the IDP webapp's lib directory, find the opensaml jar file, and copy it to the pentaho webapp's lib folder.  Weird, I know.
+       But it worked.
+    
+16a. Build CTF
+
+    a. Now that you have both SP and IDP metadata, you can build a GFIPM Cryptographic Trust Fabric document.  Easiest thing to do here is take an existing one and update the info with the appropriate metadata and certificates.  See wiki instructions and GFIPM docs.  A few pointers:
+    
+        i. Shibboleth (both IDP and SP) put a lot of extraneous metadata in the generated metadata files.  Trim according to GFIPM specs.
+        ii. Add ContactInformation elements
+    
+17. Configure IDP
+
+    a. Copy CTF to /opt/shibboleth-idp/metadata and update conf/relying-party.xml to reference it
+    
+18. Setup mod_jk
+
+    a. Follow wiki instructions pretty much
+    b. I did find that I had to put 127.0.0.1 as the host in the workers.properties file.  Not sure why.  If I used the full host name, I'd get a segfault on apache startup in libapr.  Just trial and error.
+    c. Deploy ojbc_web_util into Tomcat, protect that path in shib.conf and mod_jk.conf.  Assuming you've set up the IDP and SP to send/receive attributes (per the wiki instructions) you should see the assertion in the test JSP.
+    
+19. Test:
+
+    a. Deploy ojbc_web_util to the pentaho tomcat instance and verify that you can see the assertion in the saml jsp
+    b. If you try to hit https://dw.ojbc-local.org/pentaho/Login, you should get redirected to the IDP and log in, then be bounced back to Pentaho.
+       But you still need to log into Pentaho separately.  That's what we're about to fix!
+
+20. Add new users to opends
+
+    The approach taken here is to make sure there is some attribute in the directory (and in the SAML assertion) that (a) uniquely identifies each
+    user, across the federation, and (b) makes a good pentaho username.  At first I considered the federation id, but decided that wouldn't look good
+    displayed in the UI.  So I added email address as an attribute for the demostate federation.  LDAP has a standard attribute for this of course
+    (called "mail"), so that just needs to be populated.
+    
+    Create the following users:
+    
+        demoadmin, demoadmin@ojbc-local.org, password=password
+        demouser1, demouser1@ojbc-local.org, password=password
+        demouser2, demouser2@ojbc-local.org, password=password
+
+21. Release the new email addy attribute:
+
+    a. in /opt/shibboleth-idp, edit attribute-resolver.xml: add a new resolver:AttributeDefinition in with the other GFIPM/demostate attributes. Give it
+       a id="email", sourceAttributeId="mail", and resolver:AttributeEncoder/@name="gfipm:2.0:user:EmailAddressText"
+    b. in /opt/shibboleth-idp, edit attribute-filter.xml:  add a new afp:AttributeRule like the other GFIPM/demostate attributes, with attributeID="email".
+    c. in /etc/shibboleth, edit attribute-map.xml, add a new Attribute element name="gfipm:2.0:user:EmailAddressText", id="email"
+    
+    d. Test: bounce shibd and restart the pentaho tomcat instance.  Hit the ojbc_web_util page and verify that email addy is now showing up for the new users
+    
+22. Add new users to Pentaho
+
+    Create the following users in Pentaho:
+    
+        demoadmin@ojbc-local.org (Admin role)
+        demouser1@ojbc-local.org (Basic user roles...report author, power user, etc.)
+        demouser2@ojbc-local.org (Basic user roles...report author, power user, etc.)
+        
+    Set the passwords to anything you want...doesn't matter.
+        
+23. Change Pentaho Spring Security setup to use shib authentication
+
+    A few notes:
+    
+        a. It will probably be easier just to check the config file out of source control, rather than trying to follow these instructions
+        b. A couple of online resources were helpful (note that some of these are for Spring 3.0, and Pentaho uses 2.0.5, but the concepts are
+            still largely the same):
+        
+            http://forums.pentaho.com/showthread.php?136864-Single-Sign-On-with-Shibboleth
+            https://sourcesup.renater.fr/tracker/download.php/240/1074/7414/960/Shibboleth%20Integrated%20Spring%20Security%20Implementation%20Guide.docx          http://docs.spring.io/spring-security/site/docs/3.0.x/reference/security-filter-chain.html
+            http://docs.spring.io/spring-security/site/docs/3.0.x/reference/preauth.html
+            
+        The general idea is that there is a chain of filters that process each incoming request.  Out of the box, Pentaho hands the request,
+        eventually, to a filter that prompts the user to authenticate with built-in Pentaho credentials (the user and pwd you assign on the admin console).
+        This filter is (I believe) the httpSessionContextIntegrationFilter.  So, we want to replace that with a different kind of filter that
+        actually does no authentication, and instead accepts the username from shib via http headers.
+        
+        To accomplish this, you only need to modify one file:  /opt/pentaho/biserver-ce/pentaho-solutions/system/applicationContext-spring-security.xml
+        
+    a. In the filterChainProxy bean declaration at the top of the file, there is a CDATA section with several lines starting with a path spec, followed
+       by a list of filters.  Remove the four lines that are there by default.
+    b. Replace those lines with:
+    
+     /**=securityContextHolderAwareRequestFilter,httpSessionPentahoSessionContextIntegrationFilter,shibPreAuthenticationFilter,httpSessionReuseDetectionFilter,logoutFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
+
+    c. In the authenticationManager bean declaration just below that, there are two authentication providers in the list.  remove those lines.  Insert this
+       one instead:
+       
+       <ref local="preAuthenticatedAuthenticationProvider"/>
+       
+    d. In the edits you just made, you referenced a couple new beans; we now need to declare them:
+    
+       <bean id="preAuthenticatedAuthenticationProvider" class="org.springframework.security.providers.preauth.PreAuthenticatedAuthenticationProvider">
+         <property name="preAuthenticatedUserDetailsService">
+           <bean id="userDetailsServiceWrapper" class="org.springframework.security.userdetails.UserDetailsByNameServiceWrapper">
+           <property name="userDetailsService" ref="userDetailsService"/>
+           </bean> 
+         </property>
+       </bean>
+     
+       <bean id="shibPreAuthenticationFilter" class="org.springframework.security.ui.preauth.header.RequestHeaderPreAuthenticatedProcessingFilter">
+         <property name="principalRequestHeader" value="email"/>
+         <property name="authenticationManager" ref="authenticationManager"/>
+       </bean>
+       
+    e. Note the use of "email" for the value of the principalRequestHeader property on the pre auth shib filter.  This is important, and must match
+       the value of an http header set by shib.  It can be anything, but for all this to work, it *has* to match exactly a username defined in Pentaho.
+       
+    f. Restart Pentaho
+    
+    g. Test:  hit https://dw.ojbc-local.org/pentaho/Login.  You should be bounced to the IDP.  Login with one of the users. When redirected to Pentaho,
+       you should be logged in as that user in the app.
+       
+24. Install Saiku
+
+    a. Go into Marketplace (note that you will need to come in as having logged in as demoadmin.
+    b. Install Saiku.  Test.
+    
+25. General cleanup
+
+    a. Turn off unneeded Tomcat 9080 connector.  Still need 9443 up, since the IDP uses it (TODO: consider proxying this through mod_jk too).
+    b. Remove cruft from various shib IDP and SP config files...unneeded attribute declarations, etc.
+    
+26. Set up Pentaho to start as a service
+
+    a. Copied a tomcat service script from the demoserver and modified (get it out of SVN)
+    b. Put script in /etc/init.d/pentaho and adjust perms
+    c. Test:  service pentaho start, service pentaho stop
+    d. chkconfig pentaho on
+    
+27. Install R
+
+    We need R to be able to run scripts that load a data warehouse.  Unfortunately, the version of R available through Yast or Zypper requires X.  So to get around that we install it from source:
+
+    a. Download the source ball from CRAN: http://cran.r-project.org/src/base/R-3/R-3.1.1.tar.gz
+    b. Unzip it and untar it in /tmp
+    c. You need to install a few things to allow building of R from src.  Open Yast (as su), search for and install:
+    
+        i. gcc
+        ii. gcc+
+        iii. gcc fortran
+        iv. readline headers (do a search for readline, which will already be installed...you need to install the header files)
+        
+    d. Navigate into the root of the untarred source ball.  Run:  ./configure --with-x=no
+    e. make
+    f. make check (ignore any errors reported about internet)
+    g. make install
+    h. test:  Rscript -e "cat('Hello world.\n')"
+        --> should write "Hello world." (without quotes) to output
+        
+28. Install H2 database
+
+    ** Note: we have abandoned the idea of using H2 to store the analytical database, because performance is too slow.  However, leaving these instructions in, just in case we change our minds down the road and to capture some lessons learned **
+
+    We use the H2 database, at least in demo mode, to store the data warehouse data.  We will load the data with R, using an R package called "RH2".  This package is fussy about versions of H2; in fact, the version running in R needs to be exactly the same as the server version.  Thus the following somewhat backwards procedure:
+    
+    1. Start R from command line (just type "R" without quotes)
+    2. From R console:
+    
+        install.packages("RJDBC")
+        install.packages("RH2")
+        
+    3. Create directory /opt/h2 and subdirectory /opt/h2/databases
+    4. ln -s /usr/local/lib64/R/library/RH2/java/h2-1.3.175.jar /opt/h2/h2.jar
+    5. (Note that if you're installing a more recent version of RH2, the specific version of the jar in the link above may be different)
+    6. Create file /etc/init.d/h2, to look something like this (or copy the opends service script and edit):
+    
+case "${1}" in
+start)
+  java -cp /opt/h2/h2.jar org.h2.tools.Server -tcp -tcpPort 49101 -baseDir /opt/h2/databases -tcpAllowOthers -webPort 49102 -web -webAllowOthers &
+  exit ${?}
+  ;;
+stop)
+  java -cp /opt/h2/h2.jar org.h2.tools.Server -tcpShutdown tcp://localhost:49101
+  exit ${?}
+  ;;
+restart)
+  java -cp /opt/h2/h2.jar org.h2.tools.Server -tcpShutdown tcp://localhost:49101
+  java -cp /opt/h2/h2.jar org.h2.tools.Server -tcp -tcpPort 49101 -baseDir /opt/h2/databases -tcpAllowOthers -webPort 49102 -web -webAllowOthers &
+  exit ${?}
+  ;;
+*)
+  echo "Usage:  $0 { start | stop | restart }"
+  exit 1
+  ;;
+esac
+
+    4. Note in the above, port 49101 is where the h2 database listens for database connections, and port 49102 is the port for the H2
+        web console.
+    5. Test:  Open browser and hit http://dw.ojbc-local.org:49102/.  Login to JDBC URL=jdbc:h2:tcp://dw:49101/ojbc_analytics_demo
+    
+29. Install MySQL
+
+    1. In yast, install packages libmysqlclient-devel and mysql-community-server
+    2. After install, test:
+    
+        service mysql start
+        mysql -u root
+        ...then at mysql prompt, do a query like "show databases;" just to verify that it works
+        
+    3. chkconfig mysql on
+    
+30. Install R package RMySQL (MySQL interface)
+
+    1. Open R from cmd line
+    2. install.packages("RMySQL")
+    3. library(RMySQL)
+    
