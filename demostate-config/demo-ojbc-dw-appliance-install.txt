@@ -10,7 +10,11 @@ Pentaho VM Install procedure
     
 4. After reboot, Yast...Software Management...install emacs-nox
 
-4a. Also, noticed that in both VMWare and VirtualBox, the bios doesn't include a System Management Bus.  This causes one of the default modules in Open SUSE not to load, and it appears to degrade (at least startup and shutdown) performance.  To address this, edit /etc/modprobe.d/50-blacklist.conf, and add the line "blacklist i2c_piix4" to it.  Then reboot.
+4a. Also, noticed that in both VMWare and VirtualBox, the bios doesn't include a System Management Bus.  
+	This causes one of the default modules in Open SUSE not to load, and it appears to degrade 
+	(at least startup and shutdown) performance.  
+	To address this, edit /etc/modprobe.d/50-blacklist.conf, and add the line "blacklist i2c_piix4" to it.  
+	Then reboot.
 
 5. Set up static networking
 
@@ -135,7 +139,8 @@ dw:/opt/OpenDS-2.3.0-build003 #
     c. New OU (called "People")...right click on base DN, New Organizational Unit...
     d. Right click the new OU, New User...
     e. Create demouser, with password=password
-    f. Set up required attributes.  At a minimum, you need federation ID (which is constructed by Shib from uid), first, last, and employer.  See the Shib config files checked into SVN for a current list of expected attributes.
+    f. Set up required attributes.  At a minimum, you need federation ID (which is constructed by Shib from uid), 
+    first, last, and employer.  See the Shib config files checked into SVN for a current list of expected attributes.
     
 9. Setup OpenDS to run as a service
 
@@ -246,7 +251,8 @@ dw:~/shibboleth-identityprovider-2.4.0 #
     
 14.  Install Apache httpd and unixODBC
 
-    (Shib SP, if downloaded in RPM form, is still incompatible with Apache 2.4.  It also requires a particular version of unixODBC that isn't available in current SUSE distros.  Yes, this is a pain.)
+    (Shib SP, if downloaded in RPM form, is still incompatible with Apache 2.4.  It also requires a particular 
+    version of unixODBC that isn't available in current SUSE distros.  Yes, this is a pain.)
     
     i. Go into YAST, define a new repository:  http://download.opensuse.org/repositories/openSUSE:12.2/standard/
     2. Select only that repository
@@ -311,7 +317,9 @@ Test SSL by going to https://www-dw.ojbc-local.org.  You'll get a cert warning b
     
 16a. Build CTF
 
-    a. Now that you have both SP and IDP metadata, you can build a GFIPM Cryptographic Trust Fabric document.  Easiest thing to do here is take an existing one and update the info with the appropriate metadata and certificates.  See wiki instructions and GFIPM docs.  A few pointers:
+    a. Now that you have both SP and IDP metadata, you can build a GFIPM Cryptographic Trust Fabric document.  
+    Easiest thing to do here is take an existing one and update the info with the appropriate metadata and certificates.  
+    See wiki instructions and GFIPM docs.  A few pointers:
     
         i. Shibboleth (both IDP and SP) put a lot of extraneous metadata in the generated metadata files.  Trim according to GFIPM specs.
         ii. Add ContactInformation elements
@@ -323,8 +331,10 @@ Test SSL by going to https://www-dw.ojbc-local.org.  You'll get a cert warning b
 18. Setup mod_jk
 
     a. Follow wiki instructions pretty much
-    b. I did find that I had to put 127.0.0.1 as the host in the workers.properties file.  Not sure why.  If I used the full host name, I'd get a segfault on apache startup in libapr.  Just trial and error.
-    c. Deploy ojbc_web_util into Tomcat, protect that path in shib.conf and mod_jk.conf.  Assuming you've set up the IDP and SP to send/receive attributes (per the wiki instructions) you should see the assertion in the test JSP.
+    b. I did find that I had to put 127.0.0.1 as the host in the workers.properties file.  Not sure why.  
+    	If I used the full host name, I'd get a segfault on apache startup in libapr.  Just trial and error.
+    c. Deploy ojbc_web_util into Tomcat, protect that path in shib.conf and mod_jk.conf.  Assuming you've 
+    	set up the IDP and SP to send/receive attributes (per the wiki instructions) you should see the assertion in the test JSP.
     
 19. Test:
 
@@ -456,9 +466,12 @@ Test SSL by going to https://www-dw.ojbc-local.org.  You'll get a cert warning b
         
 28. Install H2 database
 
-    ** Note: we have abandoned the idea of using H2 to store the analytical database, because performance is too slow.  However, leaving these instructions in, just in case we change our minds down the road and to capture some lessons learned **
+    ** Note: we have abandoned the idea of using H2 to store the analytical database, because performance is too slow.  However, 
+    leaving these instructions in, just in case we change our minds down the road and to capture some lessons learned **
 
-    We use the H2 database, at least in demo mode, to store the data warehouse data.  We will load the data with R, using an R package called "RH2".  This package is fussy about versions of H2; in fact, the version running in R needs to be exactly the same as the server version.  Thus the following somewhat backwards procedure:
+    We use the H2 database, at least in demo mode, to store the data warehouse data.  We will load the data with R, using an 
+    R package called "RH2".  This package is fussy about versions of H2; in fact, the version running in R needs to be exactly 
+    the same as the server version.  Thus the following somewhat backwards procedure:
     
     1. Start R from command line (just type "R" without quotes)
     2. From R console:
