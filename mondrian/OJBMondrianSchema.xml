@@ -115,6 +115,16 @@
 			<Table name="IncidentType"/>
 			<Level name="IncidentType" visible="true" table="IncidentType" column="IncidentTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
+        <Hierarchy name="Incident Category" visible="true" hasAll="true" allMemberName="All Categories" allMemberCaption="All Categories" primaryKey="IncidentTypeID" caption="Incident Category">
+            <View alias="IncidentTypeWithCategory">
+			    <SQL dialect="mysql">
+			        <![CDATA[select IncidentTypeID, IncidentTypeDescription, IncidentCategoryDescription from IncidentType, IncidentCategory
+                    where IncidentType.IncidentCategoryID=IncidentCategory.IncidentCategoryID]]>
+                </SQL>
+            </View>
+            <Level name="IncidentCategory" visible="true" column="IncidentCategoryDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" caption="Incident Category"/>
+			<Level name="IncidentType" visible="true" column="IncidentTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+        </Hierarchy>
 	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Time Of Day">
 		<Hierarchy name="Time" visible="true" hasAll="true" allMemberName="All Times" allMemberCaption="All Times" primaryKey="TimeID" caption="Time Of Day">
@@ -201,7 +211,7 @@
 		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="ArresteeRaceID" highCardinality="false"/>
 		<DimensionUsage source="Offense Type" name="Offense Type" visible="true" foreignKey="ArrestOffenseTypeID" highCardinality="false"/>
 		<DimensionUsage source="Sex" name="Sex" visible="true" foreignKey="ArresteeSexID" highCardinality="false"/>
-		<DimensionUsage source="Disposition" name="Disposition" visible="true" foreignKey="DispositionID" highCardinality="false"/>
+		<DimensionUsage source="Disposition" name="Disposition" visible="true" foreignKey="PriorDispositionID" highCardinality="false"/>
 		<DimensionUsage source="Risk Score" name="Risk Score" visible="true" foreignKey="RiskScoreID" highCardinality="false"/>
 		<DimensionUsage source="Pretrial Service" name="Pretrial Service" visible="true" foreignKey="PretrialServiceID" highCardinality="false"/>
 		<DimensionUsage source="Age" name="Age" caption="Age" visible="true" foreignKey="ArresteeAgeID" highCardinality="false"/>
