@@ -139,6 +139,10 @@
 			<Level name="Month" visible="true" column="MonthName" ordinalColumn="Month" type="String" uniqueMembers="false" levelType="TimeMonths" hideMemberIf="Never"/>
 			<Level name="Day" visible="true" column="Day" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never"/>
 		</Hierarchy>
+		<Hierarchy name="CalDate" visible="true" hasAll="true" primaryKey="DateID" caption="Calendar Date">
+			<Table name="Date"/>
+			<Level name="Date" visible="true" column="CalendarDate" type="Date" uniqueMembers="true" levelType="TimeDays" hideMemberIf="Never"/>
+		</Hierarchy>
 	</Dimension>
 	<Cube name="Population" visible="false" enabled="true">
 		<Table name="Population"/>
