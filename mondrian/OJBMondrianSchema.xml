@@ -145,7 +145,7 @@
 		</Hierarchy>
 		<Hierarchy name="Day of Week" visible="true" hasAll="true" primaryKey="DateID" caption="Day of Week">
 			<Table name="Date"/>
-			<Level name="Day of Week" visible="true" column="DayOfWeek" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never"/>
+			<Level name="Day of Week" visible="true" column="DayOfWeek" ordinalColumn="DayOfWeekSort" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	<Cube name="Population" visible="false" enabled="true">
