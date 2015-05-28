@@ -4,7 +4,17 @@
  <print-settings numCopies="1" zoom="0.6" pageNumbersPrinted="false" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
-   <property key="Logical" value="PlayPen Database" />
+   <property key="Logical" value="OJBC Analytics" />
+   <property key="Connection Type" value="MySQL" />
+   <property key="JDBC URL" value="jdbc:mysql://localhost:3306/ojbc_analytics_demo" />
+   <property key="UID" value="root" />
+   <property key="PWD" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.database" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.port" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.hostname" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.repos.login" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.repos.password" value="" />
+   <property key="ca.sqlpower.wabit.WabitDataSource.UUID" value="w554c8023-7374-4d8d-84d6-dc8e178fd4f2" />
   </data-source>
   <data-source id="DS2">
    <property key="Connection Type" value="MySQL" />
@@ -733,7 +743,7 @@
   <table id="TAB203" populated="true" UUID="4fdf5ae8-e77c-42e4-81b1-cf500f5b410f" name="IncidentCategory" objectType="TABLE" physicalName="IncidentCategory" >
    <remarks></remarks>
    <folder id="FOLTAB2031" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL204" populated="true" UUID="61daa5fa-810b-4687-82f4-29d65d352337" autoIncrement="false" autoIncrementSequenceName="IncidentCategory_IncidentCategoryID_seq" defaultValue="" name="IncidentCategoryID" nullable="0" physicalName="IncidentCategoryID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL204" populated="true" UUID="61daa5fa-810b-4687-82f4-29d65d352337" autoIncrement="false" autoIncrementSequenceName="IncidentCategory_IncidentCategoryID_seq_1" defaultValue="" name="IncidentCategoryID" nullable="0" physicalName="IncidentCategoryID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL205" populated="true" UUID="e8f0ab57-9250-4580-aa25-3b2b6f7764a9" autoIncrement="false" autoIncrementSequenceName="IncidentCategory_IncidentCategoryDescription_seq" defaultValue="" name="IncidentCategoryDescription" nullable="0" physicalName="IncidentCategoryDescription" precision="80" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -745,7 +755,7 @@
     <folder id="FOLTAB2032" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB2034" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX206" populated="true" UUID="08b53604-c46b-4f57-9ff1-82629eeb6fa9" clustered="false" name="IncidentCategory_pk" physicalName="IncidentCategory_pk" primaryKeyIndex="true" unique="false" >
+    <index id="IDX206" populated="true" UUID="08b53604-c46b-4f57-9ff1-82629eeb6fa9" clustered="false" name="IncidentCategory_pk" physicalName="incidentcategory_pk" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC207" populated="true" UUID="aa3341fa-4414-44db-a4c5-dba3caa7248b" ascendingOrDescending="UNSPECIFIED" column-ref="COL204" name="IncidentCategoryID" physicalName="IncidentCategoryID" />
     </index>
    </folder>
@@ -844,12 +854,12 @@
    <relationship id="REL268" populated="true" UUID="4d6a81ec-5e3f-480f-b8ef-adc851cf3b70" deferrability="7" deleteRule="3" fk-table-ref="TAB187" fkCardinality="7" identifying="false" name="AgeRange_Population_fk" physicalName="agerange_population_fk" pk-table-ref="TAB197" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP269" populated="true" UUID="815713ef-dbb5-4384-b26a-daaab3194c95" fk-column-ref="COL193" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL198" />
    </relationship>
-   <relationship id="REL270" populated="true" UUID="8d14e3b8-2d5c-45af-b5b7-68a357fa9fe8" deferrability="7" deleteRule="3" fk-table-ref="TAB160" fkCardinality="7" identifying="false" name="IncidentCategory_IncidentType_fk" physicalName="IncidentCategory_IncidentType_fk" pk-table-ref="TAB203" pkCardinality="2" updateRule="3" >
+   <relationship id="REL270" populated="true" UUID="8d14e3b8-2d5c-45af-b5b7-68a357fa9fe8" deferrability="7" deleteRule="3" fk-table-ref="TAB160" fkCardinality="7" identifying="false" name="IncidentCategory_IncidentType_fk" physicalName="incidentcategory_incidenttype_fk" pk-table-ref="TAB203" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP271" populated="true" UUID="e1f804fe-d7ba-4ca9-a058-a642bafd6d72" fk-column-ref="COL163" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL204" />
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
