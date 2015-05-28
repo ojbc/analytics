@@ -59,6 +59,7 @@ dbSendQuery(conn, "delete from Time")
 dbSendQuery(conn, "delete from YesNo")
 dbSendQuery(conn, "delete from AssessedNeed")
 dbSendQuery(conn, "delete from IncidentType")
+dbSendQuery(conn, "delete from IncidentCategory")
 
 sexes <- c("Male","Female","Unknown")
 PersonSex <- data.table(PersonSexID=1:length(sexes), PersonSexDescription=sexes)
@@ -72,8 +73,12 @@ yesno <- c("Yes","No")
 YesNo <- data.table(YesNoID=1:length(yesno), YesNoDescription=yesno)
 dbWriteTable(conn, "YesNo", YesNo, append=TRUE, row.names=FALSE)
 
-incidentType <- c("Incident Type A", "Incident Type B", "Unknown")
-IncidentType <- data.table(IncidentTypeID=1:length(incidentType), IncidentTypeDescription=incidentType)
+incidentCategory <- c("Incident Category 1", "Incident Category 2", "Incident Category 3", "Unknown")
+IncidentCategory <- data.table(IncidentCategoryID=1:length(incidentCategory), IncidentCategoryDescription=incidentCategory)
+dbWriteTable(conn, "IncidentCategory", IncidentCategory, append=TRUE, row.names=FALSE)
+
+incidentType <- c("Incident Type A", "Incident Type B", "Incident Type C", "Incident Type D", "Unknown")
+IncidentType <- data.table(IncidentTypeID=1:length(incidentType), IncidentTypeDescription=incidentType, IncidentCategoryID=c(1,1,1,2,4))
 dbWriteTable(conn, "IncidentType", IncidentType, append=TRUE, row.names=FALSE)
 
 need <- c("Need 1","Need 2", "Need 3", "None", "Unknown")
@@ -81,7 +86,7 @@ AssessedNeed <- data.table(AssessedNeedID=1:length(need), AssessedNeedDescriptio
 dbWriteTable(conn, "AssessedNeed", AssessedNeed, append=TRUE, row.names=FALSE)
 
 countyID <- c(as.character(county_df$GEOID), "99999")
-countyName <- c(as.character(county_df$NAME), "Unkown")
+countyName <- c(as.character(county_df$NAME), "Unknown")
 County <- data.table(CountyID=countyID, CountyName=countyName)
 dbWriteTable(conn, "County", County, append=TRUE, row.names=FALSE)
 
@@ -131,6 +136,8 @@ popData <- mutate(popData, PersonAgeRangeID=AGEGRP)
 popData <- select(mutate(rename(popData, CountyID=fips), PopulationID=rownames(popData), Year=2013), -YEAR, -AGEGRP, -group)
 popData <- data.table(popData)
 dbWriteTable(conn, "Population", popData, append=TRUE, row.names=FALSE)
+
+raceProbs <- as.vector(wtd.table(popData$PersonRaceID, weights = popData$PopulationCount)$sum.of.weights)
 
 offenseID <- c(2204, 0102, 1103, 4904, 4005, 2001, 3916, 6409, 2510, 4199, 6404, 2502,
                0912, 1212, 2703, 3911, 3540, 7399, 5704, 2199, 3617, 1601, 5499, 4804,
@@ -240,6 +247,8 @@ isParticipant[1:5] <- "yes"
 PretrialService <- data.table(PretrialServiceID=serviceID, PretrialServiceDescription=serviceDescription, IsParticipant=isParticipant)
 dbWriteTable(conn, "PretrialService", PretrialService, append=TRUE, row.names=FALSE)
 
+serviceProbs <- c(runif(n=length(serviceID)-2, min=0, max=.9), .05, .05)
+
 riskScoreID <- 1:4
 riskScoreDescription = c("High","Medium","Low","Unknown")
 RiskScore <- data.table(RiskScoreID=riskScoreID, RiskScoreDescription=riskScoreDescription)
@@ -309,7 +318,7 @@ buildArrestRow <- function(ids) {
   seconds <- sample(0:59, size=n, replace=TRUE)
   timeID <- makeTimeID(hours, minutes, seconds)
   
-  raceTypeID <- sample(1:5, size=n, replace=TRUE, prob=c(.3, .2, .4, .15, .05))
+  raceTypeID <- sample(1:5, size=n, replace=TRUE, prob=raceProbs)
   
   ageID <- rchisq(n=n, df=23)
   for (i in 1:length(ageID)) {if (ageID[i] < 16) ageID[i] <- runif(min=16, max=23, n=1)}
@@ -320,7 +329,7 @@ buildArrestRow <- function(ids) {
   
   arresteeCountyID <- sample(countyID, size=n, replace=TRUE, prob=countyProb)
   arrestingAgencyID <- sample(agencyID, size=n, replace=TRUE)
-  arrestPretrialServiceID <- sample(serviceID, size=n, replace=TRUE, prob=c(rep(.18, 5), .05, .05))
+  arrestPretrialServiceID <- sample(serviceID, size=n, replace=TRUE, prob=serviceProbs)
   violated <- sample(1:2, size=n, replace=TRUE, prob=c(.3, .7))
   drugRelated <- sample(1:2, size=n, replace=TRUE, prob=c(.35, .65))
   
@@ -379,7 +388,7 @@ buildRearrestRow <- function(id, index, arrestDataFrame, idLookupField, depth) {
   newRowDf$ArrestLocationLatitude <- coords[1,"lat"]
   newRowDf$ArrestLocationLongitude <- coords[1,"long"]
   
-  newRowDf$PretrialServiceID <- sample(serviceID, size=1, prob=c(rep(.18, 5), .05, .05))
+  newRowDf$PretrialServiceID <- sample(serviceID, size=1, prob=serviceProbs)
   newRowDf$ViolatedConditionsOfRelease <- sample(1:2, size=1, prob=c(.3, .7))
   newRowDf$ViolatedConditionsOfRelease <- sample(1:2, size=1, prob=c(.35, .65))
 
@@ -422,6 +431,8 @@ dbWriteTable(conn, "Arrest", arrest, append=TRUE, row.names=FALSE)
 # Charge
 #
 
+offenseProbs <- runif(n=length(offenseID))
+
 makeCharges <- function(arrestID) {
   getDispoOffense <- function(offenseTypeID) {
     dispoOffenseTypeID <- offenseTypeID
@@ -431,9 +442,9 @@ makeCharges <- function(arrestID) {
     dispoOffenseTypeID
   }
   makeCharge <- function(arrestID) {
-    offenseTypeID <- sample(offenseID, size=1)
+    offenseTypeID <- sample(offenseID, size=1, prob = offenseProbs)
     dispoOffenseTypeID <- getDispoOffense(offenseTypeID)
-    arrestDispo <- sample(dispoID, size=1)
+    arrestDispo <- sample(dispoID, size=1, prob=c(.3, .4, .4, .1))
     dateID <- as.character(arrest[arrest$ArrestID==arrestID, "DateID"])
     arrestDate <- as.Date(dateID, DATE_ID_FORMAT)
     DispositionDate <- arrestDate + runif(n=1, min=60, max=400)
@@ -464,14 +475,17 @@ makeCharges <- function(arrestID) {
 charges <- bind_rows(Map(makeCharges, arrest$ArrestID))
 charges$ChargeID <- 1:nrow(charges)
 
-dbWriteTable(conn, "Charge", as.data.frame(charges), append=TRUE, row.names=FALSE)
+Charge <- as.data.frame(charges)
+dbWriteTable(conn, "Charge", Charge, append=TRUE, row.names=FALSE)
 
 #
 # PretrialParticipation
 #
 
+riskScoreProbs <- runif(n=length(riskScoreID))
+
 makePretrialParticipation <- function(arrestID) {
-  PretrialServiceID <- sample(serviceID, size=1, prob=c(rep(.18, 5), .05, .05))
+  PretrialServiceID <- sample(serviceID, size=1, prob=serviceProbs)
   countyProb <- getCountyProbs()
   CountyID <- sample(countyID, size=1, prob=countyProb)
   dateID <- as.character(arrest[arrest$ArrestID==arrestID, "DateID"])
@@ -479,7 +493,7 @@ makePretrialParticipation <- function(arrestID) {
   IntakeDate <- arrestDate + runif(n=1, min=1, max=30)
   IntakeDateID <- format(IntakeDate, DATE_ID_FORMAT)
   AssessedNeedID <- sample(1:5, size=1, prob=c(.2, .2, .15, .4, .05))
-  RiskScoreID <- sample(riskScoreID, size=1)
+  RiskScoreID <- sample(riskScoreID, size=1, prob=riskScoreProbs)
   PretrialServiceParticipationID <- NA
   data.frame(PretrialServiceParticipationID, PretrialServiceID, CountyID, IntakeDateID, RiskScoreID, AssessedNeedID, ArrestID=arrestID)
 }
@@ -493,22 +507,30 @@ dbWriteTable(conn, "PretrialServiceParticipation", as.data.frame(PretrialService
 # Incident
 #
 
+incidentTypeProbs <- sort(runif(n=nrow(IncidentType)), decreasing=T)
+incidentTypeProbs[length(incidentTypeProbs)] <- .02
+
 IncidentID <- 1:demoIncidentCount
 DateID <- format(runif(n=demoIncidentCount, min=0, max=364) + as.Date("2013-01-01"), DATE_ID_FORMAT)
 hours <- sample(0:23, size=demoIncidentCount, replace=TRUE)
 minutes <- sample(0:59, size=demoIncidentCount, replace=TRUE)
 seconds <- sample(0:59, size=demoIncidentCount, replace=TRUE)
 TimeID <- makeTimeID(hours, minutes, seconds)
-IncidentTypeID <- sample(length(IncidentType), size=demoIncidentCount, replace=TRUE)
+IncidentTypeID <- sample(nrow(IncidentType), size=demoIncidentCount, replace=TRUE, prob=incidentTypeProbs)
 ReportingAgencyID=sample(agencyID, size=demoIncidentCount, replace=TRUE)
 countyProb <- getCountyProbs()
 CountyID <- sample(countyID, size=demoIncidentCount, prob=countyProb, replace = T)
 coords <- getRandomCoordsInCounties(CountyID)
 IncidentLocationLatitude <- coords$lat
 IncidentLocationLongitude <- coords$long
+IncidentNumber <- paste0("INC", IncidentID)
+Town <- paste0("Town ", ReportingAgencyID)
+Street <- paste(1:demoIncidentCount, c("Main", "Maple", "Dorset", "Williston", "Oak", "Springfield", "Elm"))
 
 Incident <- data.table(IncidentID, DateID, TimeID, ReportingAgencyID, IncidentTypeID,
-                       CountyID, IncidentLocationLatitude, IncidentLocationLongitude)
+                       CountyID, IncidentLocationLatitude, IncidentLocationLongitude, IncidentLocationStreetAddress=Street,
+                       IncidentLocationTown=Town, IncidentCaseNumber=IncidentNumber)
+
 dbWriteTable(conn, "Incident", Incident, append=TRUE, row.names=FALSE)
 
 dbDisconnect(conn)

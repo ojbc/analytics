@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="AgencyQuery" type="sql.jndi">
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="IncidentListQuery" type="sql.jndi">
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="Top20CallsQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJBC+Analytics</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="AnnualTrendQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJBC+Analytics</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="HeatGridQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJBC+Analytics</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+   </DataSources>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="AgencyQuery"
+               id="AgencyQuery"
+               type="sql">
+      <Columns/>
+      <Parameters/>
+      <Query>select "All Agencies" as AgencyName union
+select distinct AgencyName from Agency</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="IncidentListQuery"
+               id="IncidentListQuery"
+               type="sql">
+      <Columns/>
+      <Parameters>
+         <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
+         <Parameter default="24" name="IncidentListTimePeriodParameter" type="String"/>
+      </Parameters>
+      <Query>select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, 
+concat(Hour, ':', lpad(Minute, 2, '0')) as TimeString, 
+IncidentLocationStreetAddress, IncidentLocationTown
+from Incident, IncidentType, Time, Date, Agency
+where Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and 
+Incident.IncidentTypeID=IncidentType.IncidentTypeID and
+Incident.ReportingAgencyID=AgencyID
+and (if(${AgencyParameter}="All Agencies", 1, AgencyName=${AgencyParameter}))
+and
+str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &lt; str_to_date("2013-02-01-10-10-10", "%Y-%m-%d-%H-%i-%s") and
+str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &gt; date_sub(str_to_date("2013-02-01-10-10-10", "%Y-%m-%d-%H-%i-%s"),
+    interval ${IncidentListTimePeriodParameter} hour)</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="Top20CallsQuery"
+               id="Top20CallsQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="30" name="Top20CallsDateRangeParameter" type="Integer"/>
+         <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
+      </Parameters>
+      <Query>SELECT {[Measures].[IncidentCount]} ON COLUMNS,
+{topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])} ON ROWS
+FROM [Incident]
+WHERE CrossJoin({[Agency].[${AgencyParameter}]}, {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[2013-12-01]):[Date.CalDate].[2013-12-01]})</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="AnnualTrendQuery"
+               id="AnnualTrendQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="365" name="AnnualTrendDateRangeParameter" type="Integer"/>
+         <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
+      </Parameters>
+      <Query>SELECT
+NON EMPTY CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,
+NON EMPTY {parallelperiod([Date.CalDate].[Date], ${AnnualTrendDateRangeParameter}, [Date.CalDate].[2013-12-01]):[Date.CalDate].[2013-12-01]} ON ROWS
+FROM [Incident] WHERE [Agency].[${AgencyParameter}]</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="HeatGridQuery"
+               id="HeatGridQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
+         <Parameter default="30" name="HeatGridDateRangeParameter" type="Integer"/>
+      </Parameters>
+      <Query>SELECT
+NON EMPTY CrossJoin({[Time Of Day.Time].[Hour].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,
+NON EMPTY hierarchize({[Date.Day of Week].[Day of Week].Members}) ON ROWS
+FROM [Incident]
+WHERE CrossJoin(parallelperiod([Date.CalDate].[Date], ${HeatGridDateRangeParameter}, [Date.CalDate].[2013-12-01]):[Date.CalDate].[2013-12-01],
+    [Agency].[${AgencyParameter}])</Query>
+   </DataAccess>
+</CDADescriptor>
