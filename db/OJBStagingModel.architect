@@ -624,7 +624,7 @@
     <column id="COL169" populated="true" UUID="a64c44ad-036b-45c5-9522-d16588f4d58c" autoIncrement="false" autoIncrementSequenceName="Person_PersonSSN_seq" defaultValue="" name="PersonSSN" nullable="0" physicalName="PersonSSN" precision="11" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL170" populated="true" UUID="01a9454f-af3f-4a24-9209-3daafef69296" autoIncrement="false" autoIncrementSequenceName="Person_PersonUniqueIdentifier_seq" defaultValue="" name="PersonUniqueIdentifier" nullable="0" physicalName="PersonUniqueIdentifier" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL170" populated="true" UUID="01a9454f-af3f-4a24-9209-3daafef69296" autoIncrement="false" autoIncrementSequenceName="Person_PersonUniqueIdentifier_seq" defaultValue="" name="PersonUniqueIdentifier" nullable="0" physicalName="PersonUniqueIdentifier" precision="36" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
      <remarks></remarks>
     </column>
     </folder>
