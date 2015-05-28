@@ -13,12 +13,13 @@
       if you wish to use channel security, add "channelProcessingFilter," in
       front of "httpSessionContextIntegrationFilter" in the list below
   -->
+<!--  /**=securityContextHolderAwareRequestFilter,httpSessionPentahoSessionContextIntegrationFilter,shibPreAuthenticationFilter,httpSessionReuseDetectionFilter,logoutFilter,exceptionTranslationFilter,filterInvocationInterceptor-->
   <bean id="filterChainProxy" class="org.springframework.security.util.FilterChainProxy">
     <property name="filterInvocationDefinitionSource">
       <value>
         <![CDATA[CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
         PATTERN_TYPE_APACHE_ANT
-        /**=securityContextHolderAwareRequestFilter,httpSessionPentahoSessionContextIntegrationFilter,shibPreAuthenticationFilter,httpSessionReuseDetectionFilter,logoutFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor]]>
+        /**=securityContextHolderAwareRequestFilter,httpSessionPentahoSessionContextIntegrationFilter,httpSessionContextIntegrationFilter,httpSessionReuseDetectionFilter,logoutFilter,authenticationProcessingFilter,shibPreAuthenticationFilter,basicProcessingFilter,requestParameterProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor]]>
       </value>
     </property>
   </bean>
@@ -28,6 +29,7 @@
     <property name="providers">
       <list>
         <ref local="preAuthenticatedAuthenticationProvider"/>
+        <ref local="anonymousAuthenticationProvider" />
       </list>
     </property>
   </bean>
@@ -35,16 +37,16 @@
   <bean id="preAuthenticatedAuthenticationProvider" class="org.springframework.security.providers.preauth.PreAuthenticatedAuthenticationProvider">
     <property name="preAuthenticatedUserDetailsService">
       <bean id="userDetailsServiceWrapper" class="org.springframework.security.userdetails.UserDetailsByNameServiceWrapper">
-	<property name="userDetailsService" ref="userDetailsService"/>
+        <property name="userDetailsService" ref="userDetailsService"/>
       </bean> 
     </property>
   </bean>
-
+  
   <bean id="shibPreAuthenticationFilter" class="org.springframework.security.ui.preauth.header.RequestHeaderPreAuthenticatedProcessingFilter">
     <property name="principalRequestHeader" value="email"/>
     <property name="authenticationManager" ref="authenticationManager"/>
   </bean>
-
+  
   <!-- Automatically receives AuthenticationEvent messages -->
   <bean id="loggerListener"
         class="org.springframework.security.event.authentication.LoggerListener" />
@@ -138,13 +140,16 @@
   <bean id="exceptionTranslationFilter"
         class="org.springframework.security.ui.ExceptionTranslationFilter">
     <property name="authenticationEntryPoint">
-      <ref local="authenticationProcessingFilterEntryPoint" />
+      <ref local="preAuthenticatedProcessingFilterEntryPoint" />
     </property>
     <property name="accessDeniedHandler">
       <bean class="org.springframework.security.ui.AccessDeniedHandlerImpl" />
     </property>
   </bean>
 
+  <bean id="preAuthenticatedProcessingFilterEntryPoint"
+    class="org.springframework.security.ui.preauth.PreAuthenticatedProcessingFilterEntryPoint"/>
+  
   <bean id="exceptionTranslationFilterForWS" class="org.springframework.security.ui.ExceptionTranslationFilter">
     <property name="authenticationEntryPoint">
       <ref local="basicProcessingFilterEntryPoint" />

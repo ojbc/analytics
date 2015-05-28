@@ -383,7 +383,8 @@ Test SSL by going to https://www-dw.ojbc-local.org.  You'll get a cert warning b
             still largely the same):
         
             http://forums.pentaho.com/showthread.php?136864-Single-Sign-On-with-Shibboleth
-            https://sourcesup.renater.fr/tracker/download.php/240/1074/7414/960/Shibboleth%20Integrated%20Spring%20Security%20Implementation%20Guide.docx          http://docs.spring.io/spring-security/site/docs/3.0.x/reference/security-filter-chain.html
+            https://sourcesup.renater.fr/tracker/download.php/240/1074/7414/960/Shibboleth%20Integrated%20Spring%20Security%20Implementation%20Guide.docx         
+            http://docs.spring.io/spring-security/site/docs/3.0.x/reference/security-filter-chain.html
             http://docs.spring.io/spring-security/site/docs/3.0.x/reference/preauth.html
             
         The general idea is that there is a chain of filters that process each incoming request.  Out of the box, Pentaho hands the request,
@@ -397,13 +398,14 @@ Test SSL by going to https://www-dw.ojbc-local.org.  You'll get a cert warning b
        by a list of filters.  Remove the four lines that are there by default.
     b. Replace those lines with:
     
-     /**=securityContextHolderAwareRequestFilter,httpSessionPentahoSessionContextIntegrationFilter,shibPreAuthenticationFilter,httpSessionReuseDetectionFilter,logoutFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
+       /**=securityContextHolderAwareRequestFilter,httpSessionPentahoSessionContextIntegrationFilter,httpSessionContextIntegrationFilter,httpSessionReuseDetectionFilter,logoutFilter,authenticationProcessingFilter,shibPreAuthenticationFilter,basicProcessingFilter,requestParameterProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
 
-    c. In the authenticationManager bean declaration just below that, there are two authentication providers in the list.  remove those lines.  Insert this
-       one instead:
+    c. In the authenticationManager bean declaration just below that, there are two authentication providers in the list.  remove those lines.  Insert these two
+       instead:
        
        <ref local="preAuthenticatedAuthenticationProvider"/>
-       
+       <ref local="anonymousAuthenticationProvider" />
+               
     d. In the edits you just made, you referenced a couple new beans; we now need to declare them:
     
        <bean id="preAuthenticatedAuthenticationProvider" class="org.springframework.security.providers.preauth.PreAuthenticatedAuthenticationProvider">
@@ -422,9 +424,24 @@ Test SSL by going to https://www-dw.ojbc-local.org.  You'll get a cert warning b
     e. Note the use of "email" for the value of the principalRequestHeader property on the pre auth shib filter.  This is important, and must match
        the value of an http header set by shib.  It can be anything, but for all this to work, it *has* to match exactly a username defined in Pentaho.
        
-    f. Restart Pentaho
+    f. Add preAuthenticatedProcessingFilterEntryPoint bean 
+       <bean id="preAuthenticatedProcessingFilterEntryPoint"
+    	class="org.springframework.security.ui.preauth.PreAuthenticatedProcessingFilterEntryPoint"/>
+    	
+    g. Make exceptionTranslationFilter refrence the preAuthenticatedProcessingFilterEntryPoint like this. 
+         <bean id="exceptionTranslationFilter"
+	        class="org.springframework.security.ui.ExceptionTranslationFilter">
+    		<property name="authenticationEntryPoint">
+      			<ref local="preAuthenticatedProcessingFilterEntryPoint" />
+    		</property>
+    		<property name="accessDeniedHandler">
+      			<bean class="org.springframework.security.ui.AccessDeniedHandlerImpl" />
+    		</property>
+  		</bean>
+       
+    h. Restart Pentaho
     
-    g. Test:  hit https://dw.ojbc-local.org/pentaho/Login.  You should be bounced to the IDP.  Login with one of the users. When redirected to Pentaho,
+    i. Test:  hit https://dw.ojbc-local.org/pentaho/Login.  You should be bounced to the IDP.  Login with one of the users. When redirected to Pentaho,
        you should be logged in as that user in the app.
        
 24. Install Saiku
