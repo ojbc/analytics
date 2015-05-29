@@ -268,7 +268,8 @@ dbWriteTable(conn, "Agency", Agency, append=TRUE, row.names=FALSE)
 
 dates <- seq(from=as.Date("2012-01-01"), to=as.Date("2032-12-31"), by="day")
 dateID <- format(dates, DATE_ID_FORMAT)
-Date <- data.table(DateID=dateID, CalendarDate=dates, DateMMDDYYYY=format(dates, "%m/%d/%Y"), Year=year(dates), YearLabel=as.character(year(dates)), Month=month(dates), MonthName=months(dates), Day=mday(dates), DayOfWeek=weekdays(dates))
+weekdaynames <- c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
+Date <- data.table(DateID=dateID, CalendarDate=dates, DateMMDDYYYY=format(dates, "%m/%d/%Y"), Year=year(dates), YearLabel=as.character(year(dates)), Month=month(dates), MonthName=months(dates), Day=mday(dates), DayOfWeek=weekdays(dates), DayOfWeekSort=match(weekdays(dates), weekdaynames))
 dbWriteTable(conn, "Date", Date, append=TRUE, row.names=FALSE)
 
 makeTimeID <- function(hours, minutes, seconds) as.integer(paste(formatC(hours, digits=2, width=2, flag="0"), formatC(minutes, digits=2, width=2, flag="0"), formatC(seconds, digits=2, width=2, flag="0"), sep=""))
