@@ -4,8 +4,8 @@
  <print-settings numCopies="1" zoom="0.6" pageNumbersPrinted="false" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
-   <property key="Logical" value="OJBC Staging" />
    <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:mysql://localhost:3306/ojbc_staging_demo" />
    <property key="UID" value="root" />
    <property key="PWD" value="" />
@@ -16,8 +16,8 @@
    <property key="ca.sqlpower.architect.etl.kettle.repos.password" value="" />
   </data-source>
   <data-source id="DS0">
-   <property key="Logical" value="OJBC Staging" />
    <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:mysql://localhost:3306/ojbc_staging_demo" />
    <property key="UID" value="root" />
    <property key="PWD" value="" />
@@ -29,7 +29,7 @@
   </data-source>
  </project-data-sources>
  <source-databases>
-  <database id="DB0" populated="true" UUID="ec3beafe-27c4-4e19-8e81-a74afd3a8d0c" dbcs-ref="DS0" name="OJBC Staging" physicalName="OJBC Analytics" >
+  <database id="DB0" populated="true" UUID="ec3beafe-27c4-4e19-8e81-a74afd3a8d0c" dbcs-ref="DS0" name="PlayPen Database" physicalName="OJBC Analytics" >
    <catalog id="CAT1" populated="false" UUID="58c60f71-5745-4946-9a77-7023a3e64806" name="information_schema" nativeTerm="database" physicalName="information_schema" >
    </catalog>
    <catalog id="CAT2" populated="false" UUID="7b3c818e-3a1f-4a79-86aa-03d6acd3b0f2" name="Activities" nativeTerm="database" physicalName="Activities" >
@@ -207,7 +207,7 @@
      <remarks></remarks>
     </column>
     <column id="COL58" populated="true" UUID="e71164ca-a49f-4ecc-b7c0-08ed9ef1339d" autoIncrement="false" autoIncrementSequenceName="Incident_RecordType_seq" defaultValue="" name="RecordType" nullable="0" physicalName="RecordType" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
-     <remarks>ete</remarks>
+     <remarks>N for new record, U for update to previous record, D for delete</remarks>
     </column>
     </folder>
     <folder id="FOLTAB473" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
@@ -627,7 +627,7 @@
   <table id="TAB169" populated="true" UUID="ce808f79-5967-47db-9e86-021595348ddd" name="Disposition" objectType="TABLE" physicalName="Disposition" >
    <remarks></remarks>
    <folder id="FOLTAB1691" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL170" populated="true" UUID="092d5048-63e4-4c97-89cd-e80d703b807b" autoIncrement="false" autoIncrementSequenceName="Disposition_DispositionID_seq" defaultValue="" name="DispositionID" nullable="0" physicalName="DispositionID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL170" populated="true" UUID="092d5048-63e4-4c97-89cd-e80d703b807b" autoIncrement="true" autoIncrementSequenceName="Disposition_DispositionID_seq" defaultValue="" name="DispositionID" nullable="0" physicalName="DispositionID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL171" populated="true" UUID="fb090ad7-2e87-4dd9-85db-51a268de15af" autoIncrement="false" autoIncrementSequenceName="Person_PersonID_seq_3" defaultValue="" name="PersonID" nullable="0" physicalName="PersonID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -737,7 +737,7 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
