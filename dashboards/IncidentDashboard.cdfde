@@ -1311,8 +1311,8 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -1321,13 +1321,13 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "140",
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "140",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -1351,12 +1351,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -2402,7 +2402,7 @@
      },
      {
       "name": "tooltipEnabled",
-      "value": true,
+      "value": "false",
       "type": "Boolean"
      },
      {
@@ -2585,8 +2585,13 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "140",
+      "type": "Integer"
+     },
+     {
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -2595,13 +2600,8 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "140",
-      "type": "Integer"
-     },
-     {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -2621,16 +2621,16 @@
      },
      {
       "name": "preExecution",
-      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"series\": {\n            formatter: function(value) {\n                return value.split(\"/\")[0];\n            }\n        },\n        \"category\": {\n            label: \"Date\"\n        }\n    };\n} ",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postFetch",
-      "value": "",
+      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"series\": {\n            formatter: function(value) {\n                return value.split(\"/\")[0];\n            },\n            label: \"Category\"\n        },\n        \"category\": {\n            label: \"Date\"\n        },\n        \"value\": {\n            label: \"# Incidents\"\n        }\n    };\n} ",
       "type": "JavaScript"
      },
      {
       "name": "postExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -3426,7 +3426,7 @@
      },
      {
       "name": "orthoAxisTitle",
-      "value": "",
+      "value": "Incidents",
       "type": "String"
      },
      {
@@ -3889,8 +3889,13 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "width",
+      "value": "400",
       "type": "Integer"
      },
      {
@@ -3899,13 +3904,8 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "width",
-      "value": "400",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -3925,16 +3925,16 @@
      },
      {
       "name": "preExecution",
+      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"series\": {\n            formatter: function(value) {\n                return value.split(\"/\")[0] + \":00\";\n            },\n            label: \"Hour\"\n        },\n        \"category\": {\n            label: \"Day\"\n        },\n        \"value\": {\n            label: \"# Incidents\"\n        }\n    };\n} ",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
       "name": "postExecution",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -4682,11 +4682,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "colWidths",
-      "value": "[]",
-      "type": "Array"
-     },
-     {
       "name": "colHeaders",
       "value": "[\"Agency Case #\",\"Incident Type\",\"Date\",\"Time\",\"Street Address\",\"Town\"]",
       "type": "Array"
@@ -4708,6 +4703,11 @@
      },
      {
       "name": "colFormats",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "colWidths",
       "value": "[]",
       "type": "Array"
      },
@@ -4767,14 +4767,14 @@
       "type": "Datasource"
      },
      {
-      "name": "sortBy",
-      "value": "[]",
-      "type": "SortByArray"
-     },
-     {
       "name": "sDom",
       "value": "",
       "type": "JavaScript"
+     },
+     {
+      "name": "sortBy",
+      "value": "[]",
+      "type": "SortByArray"
      },
      {
       "name": "refreshPeriod",
