@@ -17,6 +17,12 @@
 			<Level name="Race" visible="true" table="PersonRace" column="PersonRaceDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Drug">
+		<Hierarchy name="Drug" visible="true" hasAll="true" primaryKey="InvolvedDrugID" caption="Drug">
+			<Table name="InvolvedDrug"/>
+			<Level name="Drug" visible="true" table="InvolvedDrug" column="InvolvedDrugDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Offense Type" caption="Type of Offense">
         <Hierarchy name="OffenseType" visible="true" hasAll="true" allMemberName="All Offenses" primaryKey="OffenseTypeID" caption="Offense Type">
             <Table name="OffenseType"/>
@@ -30,6 +36,16 @@
         <Hierarchy name="Offense Severity" visible="true" hasAll="true" allMemberName="All Severities" allMemberCaption="All Severities" primaryKey="OffenseTypeID" caption="Offense Severity">
             <Table name="OffenseType"/>
             <Level name="OffenseSeverity" visible="true" column="OffenseSeverity" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" caption="Severity of Offense"/>
+            <Level name="OffenseType" visible="true" column="OffenseDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" caption="Type of Offense"/>
+        </Hierarchy>
+        <Hierarchy name="Ready Cash Offenses" visible="true" hasAll="true" allMemberName="All Offenses" allMemberCaption="All Offenses" primaryKey="OffenseTypeID" caption="Ready Cash Offenses">
+            <View alias="ReadyCashOffenseType">
+			    <SQL dialect="mysql">
+			        <![CDATA[select OffenseTypeID, OffenseDescription, ReadyCashOffenseCategoryDescription from OffenseType, ReadyCashOffenseCategory
+                    where OffenseType.ReadyCashOffenseCategoryID=ReadyCashOffenseCategory.ReadyCashOffenseCategoryID]]>
+                </SQL>
+            </View>
+            <Level name="ReadyCashOffenseCategory" visible="true" column="ReadyCashOffenseCategoryDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" caption="Ready Cash Offense Category"/>
             <Level name="OffenseType" visible="true" column="OffenseDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" caption="Type of Offense"/>
         </Hierarchy>
 	</Dimension>
@@ -200,6 +216,7 @@
     pc.DispositionID as PriorDispositionID,
     pc.SentenceTermDays,
     pc.SentenceFineAmount,
+    pc.InvolvedDrugID,
     sc.DispositionID as SubsequentDispositionID,
     psp.PretrialServiceID,
     psp.AssessedNeedID,
@@ -217,6 +234,7 @@
 		<DimensionUsage source="County" name="County" visible="true" foreignKey="CountyID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="ArrestingAgencyID" highCardinality="false"/>
 		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="ArresteeRaceID" highCardinality="false"/>
+		<DimensionUsage source="Drug" name="Drug" visible="true" foreignKey="InvolvedDrugID" highCardinality="false"/>
 		<DimensionUsage source="Offense Type" name="Offense Type" visible="true" foreignKey="ArrestOffenseTypeID" highCardinality="false"/>
 		<DimensionUsage source="Sex" name="Sex" visible="true" foreignKey="ArresteeSexID" highCardinality="false"/>
 		<DimensionUsage source="Disposition" name="Disposition" visible="true" foreignKey="PriorDispositionID" highCardinality="false"/>
