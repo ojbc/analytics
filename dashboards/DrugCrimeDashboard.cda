@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="YearQuery" type="sql.jndi">
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="CountyQuery" type="sql.jndi">
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="DrugArrestCountQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJBC+Analytics</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+   </DataSources>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="YearQuery"
+               id="YearQuery"
+               type="sql">
+      <Columns/>
+      <Parameters/>
+      <Query>select "All Years" as YearLabel
+union
+select distinct YearLabel
+from Arrest, Date where Arrest.DateID=Date.DateID
+union
+select distinct YearLabel
+from Charge, Date where Charge.DispositionDateID=Date.DateID</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="CountyQuery"
+               id="CountyQuery"
+               type="sql">
+      <Columns/>
+      <Parameters/>
+      <Query>select "All Counties" as CountyName
+union
+select CountyName from County</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="DrugArrestCountQuery"
+               id="DrugArrestCountQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters/>
+      <Query>WITH
+SET [~FILTER] AS
+    {[County].[All Counties]}
+SET [~Date.DateYMD_Year] AS
+    {[Date.DateYMD].[2013]}
+SET [~Date.DateYMD_Month] AS
+    Exists({[Date.DateYMD].[Month].Members}, [~Date.DateYMD_Year])
+SET [~COLUMNS] AS
+    Hierarchize({[~Date.DateYMD_Month]})
+SET [~ROWS] AS
+    Except({[Drug].[Drug].Members}, {[Drug].[None]})
+SELECT
+NON EMPTY CrossJoin([~COLUMNS], {[Measures].[ArrestChargeCount]}) ON COLUMNS,
+NON EMPTY [~ROWS] ON ROWS
+FROM [ArrestCharge]
+WHERE [~FILTER]</Query>
+   </DataAccess>
+</CDADescriptor>
