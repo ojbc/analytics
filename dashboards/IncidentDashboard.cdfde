@@ -1266,6 +1266,34 @@
     ]
    },
    {
+    "id": "04ed0eeb-ac55-4ea0-b829-6d3f5dbcccd6",
+    "type": "ComponentsJavascriptParameter",
+    "typeDesc": "Custom parameter",
+    "parent": "GENERIC",
+    "properties": [
+     {
+      "name": "name",
+      "value": "BaseDateParameter",
+      "type": "Id"
+     },
+     {
+      "name": "javaScript",
+      "value": "f = function() {\n    \n    // Use this line for real deployment\n    // var d = new Date();\n    \n    // Use this line for testing using \"dummy\" data\n    var d = new Date(\"2013-12-31 10:10:10\");\n    \n    var month = '' + (d.getMonth() + 1);\n    var day = '' + d.getDate();\n    var year = d.getFullYear();\n\n    if (month.length < 2) month = '0' + month;\n    if (day.length < 2) day = '0' + day;\n\n    return [year, month, day].join('-');\n    \n} ",
+      "type": "JavaScript"
+     },
+     {
+      "name": "parameterViewRole",
+      "value": "unused",
+      "type": "parameterViewRoleCustom"
+     },
+     {
+      "name": "bookmarkable",
+      "value": "false",
+      "type": "Boolean"
+     }
+    ]
+   },
+   {
     "id": "CHARTS",
     "name": "Charts",
     "type": "Label",
@@ -1302,7 +1330,7 @@
      },
      {
       "name": "parameters",
-      "value": "[[\"Top20CallsDateRangeParameter\",\"Top20CallsDateRangeParameter\"],[\"AgencyParameter\",\"AgencyParameter\"]]",
+      "value": "[[\"Top20CallsDateRangeParameter\",\"Top20CallsDateRangeParameter\"],[\"AgencyParameter\",\"AgencyParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"]]",
       "type": "ValuesArray"
      },
      {
@@ -1311,8 +1339,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "140",
       "type": "Integer"
      },
      {
@@ -1321,13 +1349,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "140",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -1351,12 +1379,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -2576,23 +2604,13 @@
      },
      {
       "name": "parameters",
-      "value": "[[\"AnnualTrendDateRangeParameter\",\"AnnualTrendDateRangeParameter\"],[\"AgencyParameter\",\"AgencyParameter\"]]",
+      "value": "[[\"AnnualTrendDateRangeParameter\",\"AnnualTrendDateRangeParameter\"],[\"AgencyParameter\",\"AgencyParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"]]",
       "type": "ValuesArray"
      },
      {
       "name": "dataSource",
       "value": "AnnualTrendQuery",
       "type": "Datasource"
-     },
-     {
-      "name": "height",
-      "value": "140",
-      "type": "Integer"
-     },
-     {
-      "name": "priority",
-      "value": 5,
-      "type": "Integer"
      },
      {
       "name": "width",
@@ -2602,6 +2620,16 @@
      {
       "name": "refreshPeriod",
       "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "priority",
+      "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "height",
+      "value": "140",
       "type": "Integer"
      },
      {
@@ -2625,12 +2653,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -3880,23 +3908,13 @@
      },
      {
       "name": "parameters",
-      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"HeatGridDateRangeParameter\",\"HeatGridDateRangeParameter\"]]",
+      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"HeatGridDateRangeParameter\",\"HeatGridDateRangeParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"]]",
       "type": "ValuesArray"
      },
      {
       "name": "dataSource",
       "value": "HeatGridQuery",
       "type": "Datasource"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "width",
-      "value": "400",
-      "type": "Integer"
      },
      {
       "name": "height",
@@ -3906,6 +3924,16 @@
      {
       "name": "priority",
       "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "width",
+      "value": "400",
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -3929,12 +3957,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -4682,13 +4710,8 @@
       "type": "JavaScript"
      },
      {
-      "name": "colHeaders",
-      "value": "[\"Agency Case #\",\"Incident Type\",\"Date\",\"Time\",\"Street Address\",\"Town\"]",
-      "type": "Array"
-     },
-     {
       "name": "parameters",
-      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"IncidentListTimePeriodParameter\",\"IncidentListTimePeriodParameter\"]]",
+      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"IncidentListTimePeriodParameter\",\"IncidentListTimePeriodParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"]]",
       "type": "ValuesArray"
      },
      {
@@ -4709,6 +4732,11 @@
      {
       "name": "colWidths",
       "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "colHeaders",
+      "value": "[\"Agency Case #\",\"Incident Type\",\"Date\",\"Time\",\"Street Address\",\"Town\"]",
       "type": "Array"
      },
      {
@@ -4767,14 +4795,14 @@
       "type": "Datasource"
      },
      {
-      "name": "sDom",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
       "name": "sortBy",
       "value": "[]",
       "type": "SortByArray"
+     },
+     {
+      "name": "sDom",
+      "value": "",
+      "type": "JavaScript"
      },
      {
       "name": "refreshPeriod",
@@ -5529,12 +5557,12 @@
      },
      {
       "name": "query",
-      "value": "select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, \nconcat(Hour, ':', lpad(Minute, 2, '0')) as TimeString, \nIncidentLocationStreetAddress, IncidentLocationTown\nfrom Incident, IncidentType, Time, Date, Agency\nwhere Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and \nIncident.IncidentTypeID=IncidentType.IncidentTypeID and\nIncident.ReportingAgencyID=AgencyID\nand (if(${AgencyParameter}=\"All Agencies\", 1, AgencyName=${AgencyParameter}))\nand\nstr_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') < str_to_date(\"2013-02-01-10-10-10\", \"%Y-%m-%d-%H-%i-%s\") and\nstr_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') > date_sub(str_to_date(\"2013-02-01-10-10-10\", \"%Y-%m-%d-%H-%i-%s\"),\n    interval ${IncidentListTimePeriodParameter} hour)",
+      "value": "select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, \nconcat(Hour, ':', lpad(Minute, 2, '0')) as TimeString, \nIncidentLocationStreetAddress, IncidentLocationTown\nfrom Incident, IncidentType, Time, Date, Agency\nwhere Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and \nIncident.IncidentTypeID=IncidentType.IncidentTypeID and\nIncident.ReportingAgencyID=AgencyID\nand (if(${AgencyParameter}=\"All Agencies\", 1, AgencyName=${AgencyParameter}))\nand\nstr_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') < str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\") and\nstr_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') > date_sub(str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\"),\n    interval ${IncidentListTimePeriodParameter} hour)",
       "type": "SqlQuery"
      },
      {
       "name": "parameters",
-      "value": "[[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"IncidentListTimePeriodParameter\",\"24\",\"String\",\"\"]]",
+      "value": "[[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"IncidentListTimePeriodParameter\",\"24\",\"String\",\"\"],[\"BaseDateParameter\",\"\",\"String\",\"\"]]",
       "type": "CdaParameters"
      },
      {
@@ -5614,12 +5642,12 @@
      },
      {
       "name": "query",
-      "value": "SELECT {[Measures].[IncidentCount]} ON COLUMNS,\n{topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])} ON ROWS\nFROM [Incident]\nWHERE CrossJoin({[Agency].[${AgencyParameter}]}, {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[2013-12-01]):[Date.CalDate].[2013-12-01]})",
+      "value": "SELECT {[Measures].[IncidentCount]} ON COLUMNS,\n{topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])} ON ROWS\nFROM [Incident]\nWHERE CrossJoin({[Agency].[${AgencyParameter}]}, {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})",
       "type": "CurrentMdxQuery"
      },
      {
       "name": "parameters",
-      "value": "[[\"Top20CallsDateRangeParameter\",\"30\",\"Integer\",\"\"],[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"]]",
+      "value": "[[\"Top20CallsDateRangeParameter\",\"30\",\"Integer\",\"\"],[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"BaseDateParameter\",\"\",\"String\",\"\"]]",
       "type": "CdaParameters"
      },
      {
@@ -5690,12 +5718,12 @@
      },
      {
       "name": "query",
-      "value": "SELECT\nNON EMPTY CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,\nNON EMPTY {parallelperiod([Date.CalDate].[Date], ${AnnualTrendDateRangeParameter}, [Date.CalDate].[2013-12-01]):[Date.CalDate].[2013-12-01]} ON ROWS\nFROM [Incident] WHERE [Agency].[${AgencyParameter}]",
+      "value": "SELECT\nNON EMPTY CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,\nNON EMPTY {parallelperiod([Date.CalDate].[Date], ${AnnualTrendDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]} ON ROWS\nFROM [Incident] WHERE [Agency].[${AgencyParameter}]",
       "type": "CurrentMdxQuery"
      },
      {
       "name": "parameters",
-      "value": "[[\"AnnualTrendDateRangeParameter\",\"365\",\"Integer\",\"\"],[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"]]",
+      "value": "[[\"AnnualTrendDateRangeParameter\",\"365\",\"Integer\",\"\"],[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"BaseDateParameter\",\"\",\"String\",\"\"]]",
       "type": "CdaParameters"
      },
      {
@@ -5766,12 +5794,12 @@
      },
      {
       "name": "query",
-      "value": "SELECT\nNON EMPTY CrossJoin({[Time Of Day.Time].[Hour].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,\nNON EMPTY hierarchize({[Date.Day of Week].[Day of Week].Members}) ON ROWS\nFROM [Incident]\nWHERE CrossJoin(parallelperiod([Date.CalDate].[Date], ${HeatGridDateRangeParameter}, [Date.CalDate].[2013-12-01]):[Date.CalDate].[2013-12-01],\n    [Agency].[${AgencyParameter}])",
+      "value": "SELECT\nNON EMPTY CrossJoin({[Time Of Day.Time].[Hour].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,\nNON EMPTY hierarchize({[Date.Day of Week].[Day of Week].Members}) ON ROWS\nFROM [Incident]\nWHERE CrossJoin(parallelperiod([Date.CalDate].[Date], ${HeatGridDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}],\n    [Agency].[${AgencyParameter}])",
       "type": "CurrentMdxQuery"
      },
      {
       "name": "parameters",
-      "value": "[[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"HeatGridDateRangeParameter\",\"30\",\"Integer\",\"\"]]",
+      "value": "[[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"HeatGridDateRangeParameter\",\"30\",\"Integer\",\"\"],[\"BaseDateParameter\",\"\",\"String\",\"\"]]",
       "type": "CdaParameters"
      },
      {

@@ -36,6 +36,7 @@ select distinct AgencyName from Agency</Query>
       <Parameters>
          <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
          <Parameter default="24" name="IncidentListTimePeriodParameter" type="String"/>
+         <Parameter default="" name="BaseDateParameter" type="String"/>
       </Parameters>
       <Query>select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, 
 concat(Hour, ':', lpad(Minute, 2, '0')) as TimeString, 
@@ -46,8 +47,8 @@ Incident.IncidentTypeID=IncidentType.IncidentTypeID and
 Incident.ReportingAgencyID=AgencyID
 and (if(${AgencyParameter}="All Agencies", 1, AgencyName=${AgencyParameter}))
 and
-str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &lt; str_to_date("2013-02-01-10-10-10", "%Y-%m-%d-%H-%i-%s") and
-str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &gt; date_sub(str_to_date("2013-02-01-10-10-10", "%Y-%m-%d-%H-%i-%s"),
+str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &lt; str_to_date(${BaseDateParameter}, "%Y-%m-%d-%H-%i-%s") and
+str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &gt; date_sub(str_to_date(${BaseDateParameter}, "%Y-%m-%d-%H-%i-%s"),
     interval ${IncidentListTimePeriodParameter} hour)</Query>
    </DataAccess>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="Top20CallsQuery"
@@ -58,11 +59,12 @@ str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Seco
       <Parameters>
          <Parameter default="30" name="Top20CallsDateRangeParameter" type="Integer"/>
          <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
+         <Parameter default="" name="BaseDateParameter" type="String"/>
       </Parameters>
       <Query>SELECT {[Measures].[IncidentCount]} ON COLUMNS,
 {topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])} ON ROWS
 FROM [Incident]
-WHERE CrossJoin({[Agency].[${AgencyParameter}]}, {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[2013-12-01]):[Date.CalDate].[2013-12-01]})</Query>
+WHERE CrossJoin({[Agency].[${AgencyParameter}]}, {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})</Query>
    </DataAccess>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="AnnualTrendQuery"
                id="AnnualTrendQuery"
@@ -72,10 +74,11 @@ WHERE CrossJoin({[Agency].[${AgencyParameter}]}, {parallelperiod([Date.CalDate].
       <Parameters>
          <Parameter default="365" name="AnnualTrendDateRangeParameter" type="Integer"/>
          <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
+         <Parameter default="" name="BaseDateParameter" type="String"/>
       </Parameters>
       <Query>SELECT
 NON EMPTY CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,
-NON EMPTY {parallelperiod([Date.CalDate].[Date], ${AnnualTrendDateRangeParameter}, [Date.CalDate].[2013-12-01]):[Date.CalDate].[2013-12-01]} ON ROWS
+NON EMPTY {parallelperiod([Date.CalDate].[Date], ${AnnualTrendDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]} ON ROWS
 FROM [Incident] WHERE [Agency].[${AgencyParameter}]</Query>
    </DataAccess>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="HeatGridQuery"
@@ -86,12 +89,13 @@ FROM [Incident] WHERE [Agency].[${AgencyParameter}]</Query>
       <Parameters>
          <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
          <Parameter default="30" name="HeatGridDateRangeParameter" type="Integer"/>
+         <Parameter default="" name="BaseDateParameter" type="String"/>
       </Parameters>
       <Query>SELECT
 NON EMPTY CrossJoin({[Time Of Day.Time].[Hour].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,
 NON EMPTY hierarchize({[Date.Day of Week].[Day of Week].Members}) ON ROWS
 FROM [Incident]
-WHERE CrossJoin(parallelperiod([Date.CalDate].[Date], ${HeatGridDateRangeParameter}, [Date.CalDate].[2013-12-01]):[Date.CalDate].[2013-12-01],
+WHERE CrossJoin(parallelperiod([Date.CalDate].[Date], ${HeatGridDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}],
     [Agency].[${AgencyParameter}])</Query>
    </DataAccess>
 </CDADescriptor>
