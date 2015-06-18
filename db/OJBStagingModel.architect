@@ -379,7 +379,7 @@
     <column id="COL103" populated="true" UUID="2be0f213-d8eb-453d-bb3f-701abf91d01d" autoIncrement="true" autoIncrementSequenceName="DispositionType_DispositionTypeID_seq" defaultValue="" name="DispositionTypeID" nullable="0" physicalName="DispositionTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL104" populated="true" UUID="48004e82-cd83-4684-8965-9136b4da88b7" autoIncrement="false" autoIncrementSequenceName="DispositionType_DispositionDescription_seq" defaultValue="" name="DispositionDescription" nullable="0" physicalName="DispositionDescription" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL104" populated="true" UUID="48004e82-cd83-4684-8965-9136b4da88b7" autoIncrement="false" autoIncrementSequenceName="DispositionType_DispositionDescription_seq" defaultValue="" name="DispositionDescription" nullable="0" physicalName="DispositionDescription" precision="35" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL105" populated="true" UUID="7b92c854-03ca-4caa-be6b-5b8645ba70b9" autoIncrement="false" autoIncrementSequenceName="DispositionType_IsConviction_seq" defaultValue="" name="IsConviction" nullable="0" physicalName="IsConviction" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
@@ -804,7 +804,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="279" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="20" y="20" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB62" x="451" y="291" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB74" x="517" y="665" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
