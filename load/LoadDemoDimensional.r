@@ -15,6 +15,7 @@ library(sp)
 library(readr)
 library(tidyr)
 library(Hmisc)
+library(stringr)
 
 state_shp <- readOGR("/opt/data/Shapefiles/tl_2014_us_state", "tl_2014_us_state")
 county_shp = readOGR("/opt/data/Shapefiles/tl_2014_us_county/", "tl_2014_us_county")
@@ -184,7 +185,10 @@ dbWriteTable(conn, "Agency", Agency, append=TRUE, row.names=FALSE)
 dates <- seq(from=as.Date("2012-01-01"), to=as.Date("2032-12-31"), by="day")
 dateID <- format(dates, DATE_ID_FORMAT)
 weekdaynames <- c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
-Date <- data.table(DateID=dateID, CalendarDate=dates, DateMMDDYYYY=format(dates, "%m/%d/%Y"), Year=year(dates), YearLabel=as.character(year(dates)), Month=month(dates), MonthName=months(dates), Day=mday(dates), DayOfWeek=weekdays(dates), DayOfWeekSort=match(weekdays(dates), weekdaynames))
+Date <- data.table(DateID=dateID, CalendarDate=dates, DateMMDDYYYY=format(dates, "%m/%d/%Y"), Year=year(dates),
+                   YearLabel=as.character(year(dates)), Month=month(dates), MonthName=months(dates), Day=mday(dates),
+                   DayOfWeek=weekdays(dates), DayOfWeekSort=match(weekdays(dates), weekdaynames))
+Date <- mutate(Date, CalendarQuarter=as.integer(str_replace(quarters(CalendarDate), "Q([0-9])", "\\1")))
 dbWriteTable(conn, "Date", Date, append=TRUE, row.names=FALSE)
 
 makeTimeID <- function(hours, minutes, seconds) as.integer(paste(formatC(hours, digits=2, width=2, flag="0"), formatC(minutes, digits=2, width=2, flag="0"), formatC(seconds, digits=2, width=2, flag="0"), sep=""))

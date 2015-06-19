@@ -152,6 +152,7 @@
 		<Hierarchy name="DateYMD" visible="true" hasAll="true" primaryKey="DateID" caption="Year/Month/Day">
 			<Table name="Date"/>
 			<Level name="Year" visible="true" table="Date" column="YearLabel" type="String" uniqueMembers="false" levelType="TimeYears" hideMemberIf="Never"/>
+			<Level name="Quarter" visible="true" table="Date" column="CalendarQuarter" type="String" uniqueMembers="false" levelType="TimeQuarters" hideMemberIf="Never"/>
 			<Level name="Month" visible="true" column="MonthName" ordinalColumn="Month" type="String" uniqueMembers="false" levelType="TimeMonths" hideMemberIf="Never"/>
 			<Level name="Day" visible="true" column="Day" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never"/>
 		</Hierarchy>
@@ -164,8 +165,19 @@
 			<Level name="Day of Week" visible="true" column="DayOfWeek" ordinalColumn="DayOfWeekSort" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Year">
+	    <Hierarchy name="Year" viaible="true" hasAll="true" primaryKey="YearID">
+	        <View alias="Year">
+	            <SQL dialect="mysql">
+	            <![CDATA[select distinct Year as YearID, Year as YearLabel from Date]]>
+	            </SQL>
+	        </View>
+			<Level name="Year" visible="true" table="Year" column="YearLabel" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+	    </Hierarchy>
+	</Dimension>
 	<Cube name="Population" visible="false" enabled="true">
 		<Table name="Population"/>
+		<DimensionUsage source="Year" name="Year" visible="true" foreignKey="Year" highCardinality="false"/>
 		<DimensionUsage source="County" name="County" visible="true" foreignKey="CountyID" highCardinality="false"/>
 		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="PersonRaceID" highCardinality="false"/>
 		<DimensionUsage source="Sex" name="Sex" visible="true" foreignKey="PersonSexID" highCardinality="false"/>
@@ -175,16 +187,19 @@
 	<Cube name="CrimeCount" visible="false" enabled="true">
 		<View alias="CrimeCount">
 			<SQL dialect="mysql">
-        <![CDATA[select count(Charge.ArrestID) as ArrestCount, ArresteeRaceID, ArresteeSexID, PersonAgeRange.PersonAgeRangeID, CountyID, ArrestOffenseTypeID
-            from Arrest, PersonAge, PersonAgeRange, Charge
+        <![CDATA[select count(Charge.ArrestID) as ArrestCount, ArresteeRaceID, ArresteeSexID, PersonAgeRange.PersonAgeRangeID, CountyID, ArrestOffenseTypeID, Year, InvolvedDrugID
+            from Arrest, PersonAge, PersonAgeRange, Charge, Date
             where Arrest.ArresteeAgeID=PersonAge.PersonAgeID and PersonAge.PersonAgeRangeID=PersonAgeRange.PersonAgeRangeID and Arrest.ArrestID=Charge.ArrestID
-            group by ArresteeRaceID, ArresteeSexID, PersonAgeRange.PersonAgeRangeID, CountyID, ArrestOffenseTypeID]]>
+                and Arrest.DateID=Date.DateID
+            group by ArresteeRaceID, ArresteeSexID, PersonAgeRange.PersonAgeRangeID, CountyID, ArrestOffenseTypeID, Year]]>
 			</SQL>
 		</View>
+		<DimensionUsage source="Year" name="Year" visible="true" foreignKey="Year" highCardinality="false"/>
 		<DimensionUsage source="County" name="County" visible="true" foreignKey="CountyID" highCardinality="false"/>
 		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="ArresteeRaceID" highCardinality="false"/>
 		<DimensionUsage source="Sex" name="Sex" visible="true" foreignKey="ArresteeSexID" highCardinality="false"/>
 		<DimensionUsage source="Age Range" name="Age Range" visible="true" foreignKey="PersonAgeRangeID" highCardinality="false"/>
+		<DimensionUsage source="Drug" name="Drug" visible="true" foreignKey="InvolvedDrugID" highCardinality="false"/>
 		<DimensionUsage source="Offense Type" name="OffenseType_sep" visible="true" foreignKey="ArrestOffenseTypeID" highCardinality="false"/>
 		<DimensionUsage source="Offense Type" name="DrugOffense_sep" visible="true" foreignKey="ArrestOffenseTypeID" highCardinality="false"/>
 		<DimensionUsage source="Offense Type" name="OffenseSeverity_sep" visible="true" foreignKey="ArrestOffenseTypeID" highCardinality="false"/>
@@ -217,6 +232,7 @@
     pc.SentenceTermDays,
     pc.SentenceFineAmount,
     pc.InvolvedDrugID,
+    pc.DispositionDateID,
     sc.DispositionID as SubsequentDispositionID,
     psp.PretrialServiceID,
     psp.AssessedNeedID,
@@ -244,6 +260,7 @@
 		<DimensionUsage source="YesNoIndicator" name="ViolatedConditionsOfRelease" caption="Violated Release Conditions" visible="true" foreignKey="ViolatedConditionsOfRelease"
 			highCardinality="false"/>
 		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
+		<DimensionUsage source="Date" name="Disposition Date" visible="true" foreignKey="DispositionDateID" highCardinality="false" caption="Disposition Date"/>
 		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="TimeID" highCardinality="false"/>
 		<Measure name="ArrestChargeCount" column="ChargeID" datatype="Integer" aggregator="distinct-count" caption="Arrest Charge Count" visible="true"/>
 		<Measure name="SixMonthRearrestCount" column="SixMonthRearrest" datatype="Integer" aggregator="sum" caption="Six Month Rearrest Count" visible="true"/>
@@ -305,10 +322,12 @@
 			<CubeUsage cubeName="Population" ignoreUnrelatedDimensions="true"/>
 			<CubeUsage cubeName="CrimeCount" ignoreUnrelatedDimensions="true"/>
 		</CubeUsages>
+		<VirtualCubeDimension name="Year"/>
 		<VirtualCubeDimension name="County"/>
 		<VirtualCubeDimension name="Race"/>
 		<VirtualCubeDimension name="Sex"/>
 		<VirtualCubeDimension name="Age Range"/>
+		<VirtualCubeDimension name="Drug"/>
 		<VirtualCubeDimension name="OffenseType_sep"/>
 		<VirtualCubeDimension name="DrugOffense_sep"/>
 		<VirtualCubeDimension name="OffenseSeverity_sep"/>
