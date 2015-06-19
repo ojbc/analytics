@@ -666,7 +666,7 @@
   <table id="TAB182" populated="true" UUID="7e6cf4ff-2225-4def-aa8c-d09f06213c56" name="PretrialServiceNeedAssociation" objectType="TABLE" physicalName="PretrialServiceNeedAssociation" >
    <remarks></remarks>
    <folder id="FOLTAB1821" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL183" populated="true" UUID="fc487034-1187-4bc9-8d55-3668121e0c85" autoIncrement="false" autoIncrementSequenceName="PretrialServiceNeedAssociation_PretrialServiceNeedAssociationID_seq" defaultValue="" name="PretrialServiceNeedAssociationID" nullable="0" physicalName="PretrialServiceNeedAssociationID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL183" populated="true" UUID="fc487034-1187-4bc9-8d55-3668121e0c85" autoIncrement="true" autoIncrementSequenceName="PretrialServiceNeedAssociation_PretrialServiceNeedAssociationID_seq" defaultValue="" name="PretrialServiceNeedAssociationID" nullable="0" physicalName="PretrialServiceNeedAssociationID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL184" populated="true" UUID="1984e4cc-c065-4643-8cd8-62ee84617c20" autoIncrement="false" autoIncrementSequenceName="PretrialServiceNeedAssociation_AssessedNeedID_seq" defaultValue="" name="AssessedNeedID" nullable="0" physicalName="AssessedNeedID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -689,7 +689,7 @@
   <table id="TAB188" populated="true" UUID="72c9e600-cafb-4d00-8540-915c874a18f2" name="PretrialServiceAssociation" objectType="TABLE" physicalName="PretrialServiceAssociation" >
    <remarks></remarks>
    <folder id="FOLTAB1881" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL189" populated="true" UUID="bbd893ec-d62f-4020-a223-15819057370a" autoIncrement="false" autoIncrementSequenceName="PretrialServiceAssociation_PretrialServiceAssociationID_seq" defaultValue="" name="PretrialServiceAssociationID" nullable="0" physicalName="PretrialServiceAssociationID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL189" populated="true" UUID="bbd893ec-d62f-4020-a223-15819057370a" autoIncrement="true" autoIncrementSequenceName="PretrialServiceAssociation_PretrialServiceAssociationID_seq" defaultValue="" name="PretrialServiceAssociationID" nullable="0" physicalName="PretrialServiceAssociationID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL190" populated="true" UUID="d6b54ce7-27d4-430b-876d-9f46dfbb676b" autoIncrement="false" autoIncrementSequenceName="PretrialService_PretrialServiceID_seq_1" defaultValue="" name="PretrialServiceID" nullable="0" physicalName="PretrialServiceID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -801,10 +801,10 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="true"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="279" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="84" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="20" y="20" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB62" x="451" y="291" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB74" x="517" y="665" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
