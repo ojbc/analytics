@@ -149,7 +149,7 @@
 		</Hierarchy>
 	</Dimension>
 	<Dimension type="TimeDimension" visible="true" highCardinality="false" name="Date">
-		<Hierarchy name="DateYMD" visible="true" hasAll="true" primaryKey="DateID" caption="Year/Month/Day">
+		<Hierarchy name="DateYMD" visible="true" hasAll="true" primaryKey="DateID" caption="Year/Month/Day" allMemberName="All Years" allMemberCaption="All Years" >
 			<Table name="Date"/>
 			<Level name="Year" visible="true" table="Date" column="YearLabel" type="String" uniqueMembers="false" levelType="TimeYears" hideMemberIf="Never"/>
 			<Level name="Quarter" visible="true" table="Date" column="CalendarQuarter" type="String" uniqueMembers="false" levelType="TimeQuarters" hideMemberIf="Never"/>
