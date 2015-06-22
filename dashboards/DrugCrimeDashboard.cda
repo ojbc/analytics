@@ -7,7 +7,26 @@
       <Connection id="CountyQuery" type="sql.jndi">
          <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
+      <Connection id="DrugQuery" type="sql.jndi">
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
       <Connection id="DrugArrestCountQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJBC+Analytics</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="ReadyCashCrimeCountQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJBC+Analytics</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="DrugCrimeRecidivismQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJBC+Analytics</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="DrugCrimeDemographicsQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJBC+Analytics</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="ProsecutionsQuery" type="mondrian.jndi">
          <Catalog>mondrian:/OJBC+Analytics</Catalog>
          <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
@@ -34,18 +53,30 @@ from Charge, Date where Charge.DispositionDateID=Date.DateID</Query>
 union
 select CountyName from County</Query>
    </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="DrugQuery"
+               id="DrugQuery"
+               type="sql">
+      <Columns/>
+      <Parameters/>
+      <Query>select "All Drugs" as InvolvedDrugDescription union
+select InvolvedDrugDescription from InvolvedDrug
+    where InvolvedDrugDescription &lt;&gt; "None"</Query>
+   </DataAccess>
    <DataAccess access="public" cache="true" cacheDuration="3600"
                connection="DrugArrestCountQuery"
                id="DrugArrestCountQuery"
                type="mdx">
       <BandedMode>compact</BandedMode>
       <Columns/>
-      <Parameters/>
+      <Parameters>
+         <Parameter default="All Years" name="YearParameter" type="String"/>
+         <Parameter default="All Counties" name="CountyParameter" type="String"/>
+      </Parameters>
       <Query>WITH
 SET [~FILTER] AS
-    {[County].[All Counties]}
+    {[County].[${CountyParameter}]}
 SET [~Date.DateYMD_Year] AS
-    {[Date.DateYMD].[2013]}
+    {[Date.DateYMD].[${YearParameter}]}
 SET [~Date.DateYMD_Month] AS
     Exists({[Date.DateYMD].[Month].Members}, [~Date.DateYMD_Year])
 SET [~COLUMNS] AS
@@ -57,5 +88,101 @@ NON EMPTY CrossJoin([~COLUMNS], {[Measures].[ArrestChargeCount]}) ON COLUMNS,
 NON EMPTY [~ROWS] ON ROWS
 FROM [ArrestCharge]
 WHERE [~FILTER]</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="ReadyCashCrimeCountQuery"
+               id="ReadyCashCrimeCountQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="All Years" name="YearParameter" type="String"/>
+         <Parameter default="All Counties" name="CountyParameter" type="String"/>
+      </Parameters>
+      <Query>WITH
+SET [~FILTER] AS
+    {[County].[${CountyParameter}]}
+SET [~Date.DateYMD_Year] AS
+    {[Date.DateYMD].[${YearParameter}]}
+SET [~Date.DateYMD_Quarter] AS
+    Exists({[Date.DateYMD].[Quarter].Members}, [~Date.DateYMD_Year])
+SET [~COLUMNS] AS
+    Hierarchize({[~Date.DateYMD_Quarter]})
+SET [~ROWS] AS
+    Except({[Offense Type.Ready Cash Offenses].[ReadyCashOffenseCategory].Members}, {[Offense Type.Ready Cash Offenses].[None]})
+SELECT
+NON EMPTY CrossJoin([~COLUMNS], {[Measures].[ArrestChargeCount]}) ON COLUMNS,
+NON EMPTY [~ROWS] ON ROWS
+FROM [ArrestCharge]
+WHERE [~FILTER]</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="DrugCrimeRecidivismQuery"
+               id="DrugCrimeRecidivismQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="All Years" name="YearParameter" type="String"/>
+         <Parameter default="All Counties" name="CountyParameter" type="String"/>
+      </Parameters>
+      <Query>WITH
+SET [~ROWS] AS
+    Except({[Drug].[Drug].Members}, {[Drug].[None]})
+SELECT
+NON EMPTY {[Measures].[SixMonthRearrestRate], [Measures].[OneYearRearrestRate], [Measures].[TwoYearRearrestRate], [Measures].[OneYearReconvictionRate], [Measures].[TwoYearReconvictionRate]} ON COLUMNS,
+NON EMPTY [~ROWS] ON ROWS
+FROM [ArrestCharge]
+WHERE CrossJoin({[County].[${CountyParameter}]}, {[Date.DateYMD].[${YearParameter}]})</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="DrugCrimeDemographicsQuery"
+               id="DrugCrimeDemographicsQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="All Years" name="YearParameter" type="String"/>
+         <Parameter default="All Counties" name="CountyParameter" type="String"/>
+         <Parameter default="All Drugs" name="DemographicsDrugParameter" type="String"/>
+      </Parameters>
+      <Query>WITH
+SET [~COLUMNS_Race.Race] AS
+    {[Race].[Race].Members}
+SET [~COLUMNS_Sex.PersonSex] AS
+    {[Sex.PersonSex].[PersonSex].Members}
+SET [~ROWS_Year.Year] AS
+    {[Year].[Year].Members}
+SET [~ROWS_Age Range.AgeRange] AS
+    {[Age Range.AgeRange].[Age Range].Members}
+SELECT
+NON EMPTY CrossJoin(([~COLUMNS_Race.Race]), {[Measures].[Crime Rate Per 1000]}) ON ROWS,
+NON EMPTY {[~ROWS_Age Range.AgeRange] * [~COLUMNS_Sex.PersonSex]} ON COLUMNS
+FROM [Crime Rates]
+WHERE CrossJoin({[DrugOffense_sep.Drug Offense].[Y]} * {[Drug].[${DemographicsDrugParameter}]},
+    {[Year].[${YearParameter}]} * {[County].[${CountyParameter}]})</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="ProsecutionsQuery"
+               id="ProsecutionsQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="All Years" name="YearParameter" type="String"/>
+         <Parameter default="All Counties" name="CountyParameter" type="String"/>
+         <Parameter default="All Drugs" name="ProsecutionsDrugParameter" type="String"/>
+      </Parameters>
+      <Query>WITH
+SET [~COLUMNS] AS 'Except({[Drug].[Drug].Members}, {[Drug].[None]})'
+SET [~Disposition Date.DateYMD_Year] AS '{[Disposition Date.DateYMD].[${YearParameter}]}'
+SET [~Disposition Date.DateYMD_Month] AS 'Exists({[Disposition Date.DateYMD].[Month].Members}, [~Disposition Date.DateYMD_Year])'
+SET [~ROWS] AS 'Hierarchize({[~Disposition Date.DateYMD_Month]})'
+
+SELECT NON EMPTY {[Measures].[ArrestChargeCount]} ON COLUMNS,
+NON EMPTY [~ROWS] ON ROWS FROM [ArrestCharge]
+WHERE {Except({[Disposition].[Disposition].Members}, {[Disposition].[Not Convicted].[Unknown]}) *
+        [County].[${CountyParameter}] *
+        {[Offense Type.Drug Offense].[Y]} * {[Drug].[${ProsecutionsDrugParameter}]}}</Query>
    </DataAccess>
 </CDADescriptor>
