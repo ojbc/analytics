@@ -62,7 +62,7 @@ str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Seco
          <Parameter default="" name="BaseDateParameter" type="String"/>
       </Parameters>
       <Query>SELECT {[Measures].[IncidentCount]} ON COLUMNS,
-{topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])} ON ROWS
+order({topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS
 FROM [Incident]
 WHERE CrossJoin({[Agency].[${AgencyParameter}]}, {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})</Query>
    </DataAccess>
