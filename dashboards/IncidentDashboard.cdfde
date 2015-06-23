@@ -3,6 +3,29 @@
   "title": "CDF - Sample structure",
   "rows": [
    {
+    "id": "f931bde6-c162-185a-47e0-28f31e3023e4",
+    "type": "LayoutResourceCode",
+    "typeDesc": "Resource",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "name",
+      "value": "SharedFunctions",
+      "type": "Id"
+     },
+     {
+      "name": "resourceType",
+      "value": "Javascript",
+      "type": "Label"
+     },
+     {
+      "name": "resourceCode",
+      "value": "function addChartResizer(chart) {\n    var myself = chart;\n    // Set initial width to match the placeholder\n    myself.chartDefinition.width = myself.placeholder().width();\n\n    // Attach the resize handler only on the first execution of the chart component\n    if (!chart.resizeHandlerAttached) {\n        //Dashboards.log(\"Attaching resize handler\");\n        // Ensure render is only triggered after resize events have stopped\n        var debouncedResize = _.debounce(function () {\n\n            // Show chart again.\n            myself.placeholder().children().css('visibility', 'visible');\n\n            // Change chart width\n            myself.chartDefinition.width = myself.placeholder().width();\n            //Dashboards.log(\"Setting width on resize=\" + myself.chartDefinition.width);\n            myself.render(myself.query.lastResults());\n        }, 200);\n\n        // Attach resize handler\n        $(window).resize(function () {\n\n            //Dashboards.log(\"Resize?\");\n            //Dashboards.log(\"myself.chartDefinition.width=\" + myself.chartDefinition.width);\n            //Dashboards.log(\"myself.placeholder().width()=\" + myself.placeholder().width());\n\n            // Only trigger resize if the container has changed width\n            if (myself.chartDefinition.width != myself.placeholder().width()) {\n\n                // Temporarily hide chart so that overflow does not happen\n                myself.placeholder().children().css('visibility', 'hidden');\n\n                // Trigger the resize with debounce\n                debouncedResize();\n            }\n        });\n\n        chart.resizeHandlerAttached = true;\n    }\n\n} ",
+      "type": "Resource"
+     }
+    ]
+   },
+   {
     "id": "819de0ab-6f22-4a6b-5a8d-8b0ff35b995b",
     "type": "LayoutResourceCode",
     "typeDesc": "Resource",
@@ -395,7 +418,7 @@
      },
      {
       "name": "html",
-      "value": "<table border=\"0\">\n    <tr><td>Time Period: <span id=\"top-20-calls-date-range-div\"/></td></tr>\n    <tr><td><span id=\"top-20-calls-chart-div\"/></td></tr>\n</table> ",
+      "value": "<div class=\"row clearfix\">\n    <div class=\"col-xs-12\">Time Period: <span id=\"top-20-calls-date-range-div\"/></div>\n</div>\n<div class=\"row clearfix\">\n    <div class=\"col-xs-12\" id=\"top-20-calls-chart-div\">Top 20 Service Calls Chart</div>\n</div> ",
       "type": "Html"
      },
      {
@@ -613,7 +636,7 @@
      },
      {
       "name": "html",
-      "value": "<table border=\"0\">\n    <tr><td>Time Period: <span id=\"annual-trend-date-range-div\"/></td></tr>\n    <tr><td><span id=\"annual-trend-chart-div\"/></td></tr>\n</table> ",
+      "value": "<div class=\"row clearfix\">\n    <div class=\"col-xs-12\">Time Period: <span id=\"annual-trend-date-range-div\"/></div>\n</div>\n<div class=\"row clearfix\">\n    <div class=\"col-xs-12\" id=\"annual-trend-chart-div\">Annual Trend Chart</div>\n</div> ",
       "type": "Html"
      },
      {
@@ -831,7 +854,7 @@
      },
      {
       "name": "html",
-      "value": "<table border=\"0\">\n    <tr><td>Time Period: <span id=\"heat-grid-date-range-div\"/></td></tr>\n    <tr><td><span id=\"heat-grid-chart-div\"/></td></tr>\n</table> ",
+      "value": "<div class=\"row clearfix\">\n    <div class=\"col-xs-12\">Time Period: <span id=\"heat-grid-date-range-div\"/></div>\n</div>\n<div class=\"row clearfix\">\n    <div class=\"col-xs-12\" id=\"heat-grid-chart-div\">Annual Trend Chart</div>\n</div> ",
       "type": "Html"
      },
      {
@@ -1339,23 +1362,23 @@
       "type": "Datasource"
      },
      {
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "width",
+      "value": "",
+      "type": "Integer"
+     },
+     {
       "name": "height",
       "value": "140",
       "type": "Integer"
      },
      {
-      "name": "width",
-      "value": "400",
-      "type": "Integer"
-     },
-     {
       "name": "priority",
       "value": 5,
-      "type": "Integer"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
       "type": "Integer"
      },
      {
@@ -1375,7 +1398,7 @@
      },
      {
       "name": "preExecution",
-      "value": "",
+      "value": "function f() {\n    addChartResizer(this);\n} ",
       "type": "JavaScript"
      },
      {
@@ -2613,23 +2636,23 @@
       "type": "Datasource"
      },
      {
-      "name": "width",
-      "value": "400",
-      "type": "Integer"
-     },
-     {
       "name": "refreshPeriod",
       "value": "",
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "width",
+      "value": "400",
       "type": "Integer"
      },
      {
       "name": "height",
       "value": "140",
+      "type": "Integer"
+     },
+     {
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -2649,7 +2672,7 @@
      },
      {
       "name": "preExecution",
-      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"series\": {\n            formatter: function(value) {\n                return value.split(\"/\")[0];\n            },\n            label: \"Category\"\n        },\n        \"category\": {\n            label: \"Date\"\n        },\n        \"value\": {\n            label: \"# Incidents\"\n        }\n    };\n} ",
+      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"series\": {\n            formatter: function(value) {\n                return value.split(\"/\")[0];\n            },\n            label: \"Category\"\n        },\n        \"category\": {\n            label: \"Date\"\n        },\n        \"value\": {\n            label: \"# Incidents\"\n        }\n    };\n\n    addChartResizer(this);\n\n} ",
       "type": "JavaScript"
      },
      {
@@ -3917,18 +3940,13 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "150",
-      "type": "Integer"
-     },
-     {
       "name": "priority",
       "value": 5,
       "type": "Integer"
      },
      {
-      "name": "width",
-      "value": "400",
+      "name": "height",
+      "value": "150",
       "type": "Integer"
      },
      {
@@ -3937,8 +3955,13 @@
       "type": "Integer"
      },
      {
+      "name": "width",
+      "value": "400",
+      "type": "Integer"
+     },
+     {
       "name": "colors",
-      "value": "[]",
+      "value": "[\"green\",\"red\"]",
       "type": "Array"
      },
      {
@@ -3953,7 +3976,7 @@
      },
      {
       "name": "preExecution",
-      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"series\": {\n            formatter: function(value) {\n                return value.split(\"/\")[0] + \":00\";\n            },\n            label: \"Hour\"\n        },\n        \"category\": {\n            label: \"Day\"\n        },\n        \"value\": {\n            label: \"# Incidents\"\n        }\n    };\n} ",
+      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"series\": {\n            formatter: function(value) {\n                return value.split(\"/\")[0] + \":00\";\n            },\n            label: \"Hour\"\n        },\n        \"category\": {\n            label: \"Day\"\n        },\n        \"value\": {\n            label: \"# Incidents\"\n        }\n    };\n\n    addChartResizer(this);\n\n} ",
       "type": "JavaScript"
      },
      {
@@ -4168,7 +4191,7 @@
      },
      {
       "name": "colorMissing",
-      "value": "lightgray",
+      "value": "black",
       "type": "String"
      },
      {
@@ -4710,16 +4733,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "parameters",
-      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"IncidentListTimePeriodParameter\",\"IncidentListTimePeriodParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"]]",
-      "type": "ValuesArray"
-     },
-     {
-      "name": "expandParameters",
-      "value": "[]",
-      "type": "ValuesArray"
-     },
-     {
       "name": "colSortable",
       "value": "[]",
       "type": "Array"
@@ -4738,6 +4751,16 @@
       "name": "colHeaders",
       "value": "[\"Agency Case #\",\"Incident Type\",\"Date\",\"Time\",\"Street Address\",\"Town\"]",
       "type": "Array"
+     },
+     {
+      "name": "parameters",
+      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"IncidentListTimePeriodParameter\",\"IncidentListTimePeriodParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"]]",
+      "type": "ValuesArray"
+     },
+     {
+      "name": "expandParameters",
+      "value": "[]",
+      "type": "ValuesArray"
      },
      {
       "name": "colTypes",
