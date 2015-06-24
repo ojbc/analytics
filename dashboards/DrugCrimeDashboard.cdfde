@@ -1952,68 +1952,12 @@
     "properties": [
      {
       "name": "name",
-      "value": "ReadyCashCrimesYearParameter",
+      "value": "CurrentYearParameter",
       "type": "Id"
      },
      {
       "name": "javaScript",
       "value": "function f() {\n    return getSelectedOrCurrentYear();\n} ",
-      "type": "JavaScript"
-     },
-     {
-      "name": "parameterViewRole",
-      "value": "unused",
-      "type": "parameterViewRoleCustom"
-     },
-     {
-      "name": "bookmarkable",
-      "value": "false",
-      "type": "Boolean"
-     }
-    ]
-   },
-   {
-    "id": "23795ec0-4042-c26d-6a83-cbc716cf9f02",
-    "type": "ComponentsJavascriptParameter",
-    "typeDesc": "Custom parameter",
-    "parent": "GENERIC",
-    "properties": [
-     {
-      "name": "name",
-      "value": "BaseDateParameter",
-      "type": "Id"
-     },
-     {
-      "name": "javaScript",
-      "value": "function f() {\n    return getBaseDate();\n} ",
-      "type": "JavaScript"
-     },
-     {
-      "name": "parameterViewRole",
-      "value": "unused",
-      "type": "parameterViewRoleCustom"
-     },
-     {
-      "name": "bookmarkable",
-      "value": "false",
-      "type": "Boolean"
-     }
-    ]
-   },
-   {
-    "id": "7d9b9ec1-1f7c-9af5-9bef-85532690168e",
-    "type": "ComponentsJavascriptParameter",
-    "typeDesc": "Custom parameter",
-    "parent": "GENERIC",
-    "properties": [
-     {
-      "name": "name",
-      "value": "BaseYearParameter",
-      "type": "Id"
-     },
-     {
-      "name": "javaScript",
-      "value": "function f() {\n    return getBaseYear();\n} ",
       "type": "JavaScript"
      },
      {
@@ -2065,23 +2009,13 @@
      },
      {
       "name": "parameters",
-      "value": "[[\"YearParameter\",\"YearParameter\"],[\"CountyParameter\",\"CountyParameter\"]]",
+      "value": "[[\"YearParameter\",\"CurrentYearParameter\"],[\"CountyParameter\",\"CountyParameter\"]]",
       "type": "ValuesArray"
      },
      {
       "name": "dataSource",
       "value": "DrugArrestCountQuery",
       "type": "Datasource"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "width",
-      "value": "500",
-      "type": "Integer"
      },
      {
       "name": "height",
@@ -2091,6 +2025,16 @@
      {
       "name": "priority",
       "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "width",
+      "value": "500",
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -2110,16 +2054,16 @@
      },
      {
       "name": "preExecution",
-      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"category\": {\n            formatter: function(value) {\n                return value.split(\"/\")[0];\n            },\n            label: \"Month\"\n        },\n        \"series\": {\n            label: \"Drug Type\"\n        },\n        \"value\": {\n            label: \"# Arrests\"\n        }\n    };\n    addChartResizer(this);\n}\n ",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postFetch",
-      "value": "",
+      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"category\": {\n            formatter: function(value) {\n                return value.split(\"/\")[0];\n            },\n            label: \"Month\"\n        },\n        \"series\": {\n            label: \"Drug Type\"\n        },\n        \"value\": {\n            label: \"# Arrests\"\n        }\n    };\n    this.chartDefinition.baseAxisTitle = getSelectedOrCurrentYearFormatted();\n    addChartResizer(this);\n}\n ",
       "type": "JavaScript"
      },
      {
       "name": "postExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -3369,7 +3313,7 @@
      },
      {
       "name": "parameters",
-      "value": "[[\"YearParameter\",\"ReadyCashCrimesYearParameter\"],[\"CountyParameter\",\"CountyParameter\"]]",
+      "value": "[[\"YearParameter\",\"CurrentYearParameter\"],[\"CountyParameter\",\"CountyParameter\"]]",
       "type": "ValuesArray"
      },
      {
@@ -3378,8 +3322,8 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -3388,13 +3332,13 @@
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -3418,12 +3362,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -4652,8 +4596,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -4662,13 +4606,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -4692,12 +4636,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -5926,8 +5870,8 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -5936,13 +5880,13 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -5966,12 +5910,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -7191,7 +7135,7 @@
      },
      {
       "name": "parameters",
-      "value": "[[\"YearParameter\",\"YearParameter\"],[\"CountyParameter\",\"CountyParameter\"],[\"ProsecutionsDrugParameter\",\"ProsecutionsDrugParameter\"]]",
+      "value": "[[\"YearParameter\",\"CurrentYearParameter\"],[\"CountyParameter\",\"CountyParameter\"],[\"ProsecutionsDrugParameter\",\"ProsecutionsDrugParameter\"]]",
       "type": "ValuesArray"
      },
      {
@@ -7200,8 +7144,8 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -7210,13 +7154,13 @@
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -7236,16 +7180,16 @@
      },
      {
       "name": "preExecution",
-      "value": "function f() {\n    addChartResizer(this);\n} ",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postFetch",
-      "value": "",
+      "value": "function f() {\n    this.chartDefinition.baseAxisTitle = getSelectedOrCurrentYearFormatted();\n    addChartResizer(this);\n} ",
       "type": "JavaScript"
      },
      {
       "name": "postExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
