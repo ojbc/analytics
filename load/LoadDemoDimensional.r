@@ -6,6 +6,7 @@ demoArresteeCount = 13000
 demoIncidentCount = 25000
 
 DATE_ID_FORMAT <- "%Y%m%d"
+FULL_MONTH_FORMAT <- "%m-%Y"
 
 library(RMySQL)
 library(data.table)
@@ -184,9 +185,10 @@ dbWriteTable(conn, "Agency", Agency, append=TRUE, row.names=FALSE)
 
 dates <- seq(from=as.Date("2012-01-01"), to=as.Date("2032-12-31"), by="day")
 dateID <- format(dates, DATE_ID_FORMAT)
+fullMonth <- format(dates, FULL_MONTH_FORMAT)
 weekdaynames <- c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
 Date <- data.table(DateID=dateID, CalendarDate=dates, DateMMDDYYYY=format(dates, "%m/%d/%Y"), Year=year(dates),
-                   YearLabel=as.character(year(dates)), Month=month(dates), MonthName=months(dates), Day=mday(dates),
+                   YearLabel=as.character(year(dates)), Month=month(dates), MonthName=months(dates), FullMonth=fullMonth, Day=mday(dates),
                    DayOfWeek=weekdays(dates), DayOfWeekSort=match(weekdays(dates), weekdaynames))
 Date <- mutate(Date, CalendarQuarter=as.integer(str_replace(quarters(CalendarDate), "Q([0-9])", "\\1")))
 dbWriteTable(conn, "Date", Date, append=TRUE, row.names=FALSE)
