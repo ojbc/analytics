@@ -72,13 +72,13 @@ WHERE CrossJoin({[Agency].[${AgencyParameter}]}, {parallelperiod([Date.CalDate].
       <BandedMode>compact</BandedMode>
       <Columns/>
       <Parameters>
-         <Parameter default="365" name="AnnualTrendDateRangeParameter" type="Integer"/>
+         <Parameter default="12" name="AnnualTrendDateRangeParameter" type="Integer"/>
          <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
-         <Parameter default="" name="BaseDateParameter" type="String"/>
+         <Parameter default="" name="BaseMonthParameter" type="String"/>
       </Parameters>
       <Query>SELECT
-NON EMPTY CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,
-NON EMPTY {parallelperiod([Date.CalDate].[Date], ${AnnualTrendDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]} ON ROWS
+ CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,
+ {parallelperiod([Date.DateYMD].[Month], ${AnnualTrendDateRangeParameter}, ${BaseMonthParameter}):${BaseMonthParameter}} ON ROWS
 FROM [Incident] WHERE [Agency].[${AgencyParameter}]</Query>
    </DataAccess>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="HeatGridQuery"
@@ -92,8 +92,8 @@ FROM [Incident] WHERE [Agency].[${AgencyParameter}]</Query>
          <Parameter default="" name="BaseDateParameter" type="String"/>
       </Parameters>
       <Query>SELECT
-NON EMPTY CrossJoin({[Time Of Day.Time].[Hour].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,
-NON EMPTY hierarchize({[Date.Day of Week].[Day of Week].Members}) ON ROWS
+NON EMPTY CrossJoin({[Time Of Day.Time].[Hour].Members}, {[Measures].[IncidentCount]}) ON ROWS,
+NON EMPTY hierarchize({[Date.Day of Week].[Day of Week].Members}) ON COLUMNS
 FROM [Incident]
 WHERE CrossJoin(parallelperiod([Date.CalDate].[Date], ${HeatGridDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}],
     [Agency].[${AgencyParameter}])</Query>
