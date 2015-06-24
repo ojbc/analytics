@@ -3,6 +3,29 @@
   "title": "CDF - Sample structure",
   "rows": [
    {
+    "id": "b151905d-a6be-c15b-24f9-2e3002cc085d",
+    "type": "LayoutResourceCode",
+    "typeDesc": "Resource",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "name",
+      "value": "SharedFunctions",
+      "type": "Id"
+     },
+     {
+      "name": "resourceType",
+      "value": "Javascript",
+      "type": "Label"
+     },
+     {
+      "name": "resourceCode",
+      "value": "function getBaseDate() {\n    \n    // Use this line for real deployment\n    // var d = new Date();\n    \n    // Use this line for testing using \"dummy\" data\n    var d = new Date(\"2013-12-31 10:10:10\");\n    \n    var month = '' + (d.getMonth() + 1);\n    var day = '' + d.getDate();\n    var year = d.getFullYear();\n\n    if (month.length < 2) month = '0' + month;\n    if (day.length < 2) day = '0' + day;\n\n    return [year, month, day].join('-');\n    \n}\n\nfunction getBaseYear() {\n    var dateString = getBaseDate();\n    return dateString.split(\"-\")[0];\n}\n\nfunction getSelectedOrCurrentYear() {\n    var val = Dashboards.getParameterValue(\"YearParameter\");\n    if (\"All Years\" == val) {\n        return getBaseYear();\n    }\n    return val;\n} \n\nfunction getSelectedOrCurrentYearFormatted() {\n    var val = Dashboards.getParameterValue(\"YearParameter\");\n    if (\"All Years\" == val) {\n        return getBaseYear() + \" (Current Year)\";\n    }\n    return val;\n}\n\nfunction addChartResizer(chart) {\n    var myself = chart;\n    // Set initial width to match the placeholder\n    myself.chartDefinition.width = myself.placeholder().width();\n\n    // Attach the resize handler only on the first execution of the chart component\n    if (!chart.resizeHandlerAttached) {\n        //Dashboards.log(\"Attaching resize handler\");\n        // Ensure render is only triggered after resize events have stopped\n        var debouncedResize = _.debounce(function () {\n\n            // Show chart again.\n            myself.placeholder().children().css('visibility', 'visible');\n\n            // Change chart width\n            myself.chartDefinition.width = myself.placeholder().width();\n            //Dashboards.log(\"Setting width on resize=\" + myself.chartDefinition.width);\n            myself.render(myself.query.lastResults());\n        }, 200);\n\n        // Attach resize handler\n        $(window).resize(function () {\n\n            //Dashboards.log(\"Resize?\");\n            //Dashboards.log(\"myself.chartDefinition.width=\" + myself.chartDefinition.width);\n            //Dashboards.log(\"myself.placeholder().width()=\" + myself.placeholder().width());\n\n            // Only trigger resize if the container has changed width\n            if (myself.chartDefinition.width != myself.placeholder().width()) {\n\n                // Temporarily hide chart so that overflow does not happen\n                myself.placeholder().children().css('visibility', 'hidden');\n\n                // Trigger the resize with debounce\n                debouncedResize();\n            }\n        });\n\n        chart.resizeHandlerAttached = true;\n    }\n\n} ",
+      "type": "Resource"
+     }
+    ]
+   },
+   {
     "id": "e1882dc0-668c-64be-59da-5363ff42d14c",
     "type": "LayoutResourceCode",
     "typeDesc": "Resource",
@@ -395,7 +418,7 @@
      },
      {
       "name": "html",
-      "value": "<span id=\"drug-arrest-count-chart-div\"/> ",
+      "value": "<div class=\"row clearfix\">\n    <div class=\"col-xs-12\" id=\"drug-arrest-count-chart-div\">Drug Arrest Count Chart</div>\n</div> ",
       "type": "Html"
      },
      {
@@ -613,7 +636,7 @@
      },
      {
       "name": "html",
-      "value": "<span id=\"ready-cash-crimes-chart-div\"/> ",
+      "value": "<div class=\"row clearfix\">\n    <div class=\"col-xs-12\" id=\"ready-cash-crimes-chart-div\">Ready Cash Crimes Chart</div>\n</div> ",
       "type": "Html"
      },
      {
@@ -831,7 +854,7 @@
      },
      {
       "name": "html",
-      "value": "<span id=\"drug-crime-recidivism-chart-div\"/> ",
+      "value": "<div class=\"row clearfix\">\n    <div class=\"col-xs-12\" id=\"drug-crime-recidivism-chart-div\">Drug Crime Recidivism Chart</div>\n</div> ",
       "type": "Html"
      },
      {
@@ -1087,7 +1110,7 @@
      },
      {
       "name": "html",
-      "value": "<table>\n    <tr><td>Drug: <span id=\"demographics-drug-select-div\"/></td></tr>\n    <tr><td><span id=\"demographics-chart-div\"/></td></tr>\n</table> ",
+      "value": "<div class=\"row clearfix\">\n    <div class=\"col-xs-12\">Drug: <span id=\"demographics-drug-select-div\"/></div>\n</div>\n<div class=\"row clearfix\">\n    <div class=\"col-xs-12\" id=\"demographics-chart-div\">Demographics of Drug Crime Subjects Chart</div>\n</div> ",
       "type": "Html"
      },
      {
@@ -1305,7 +1328,7 @@
      },
      {
       "name": "html",
-      "value": "<table>\n    <tr><td>Drug: <span id=\"prosecutions-drug-select-div\"/></td></tr>\n    <tr><td><span id=\"prosecutions-chart-div\"/></td></tr>\n</table> ",
+      "value": "<div class=\"row clearfix\">\n    <div class=\"col-xs-12\">Drug: <span id=\"prosecutions-drug-select-div\"/></div>\n</div>\n<div class=\"row clearfix\">\n    <div class=\"col-xs-12\" id=\"prosecutions-chart-div\">Prosecutions for Drug Crimes Chart</div>\n</div> ",
       "type": "Html"
      },
      {
@@ -1922,6 +1945,90 @@
     ]
    },
    {
+    "id": "b9457fa7-b6ba-830a-3c91-d05b79c3dd1c",
+    "type": "ComponentsJavascriptParameter",
+    "typeDesc": "Custom parameter",
+    "parent": "GENERIC",
+    "properties": [
+     {
+      "name": "name",
+      "value": "ReadyCashCrimesYearParameter",
+      "type": "Id"
+     },
+     {
+      "name": "javaScript",
+      "value": "function f() {\n    return getSelectedOrCurrentYear();\n} ",
+      "type": "JavaScript"
+     },
+     {
+      "name": "parameterViewRole",
+      "value": "unused",
+      "type": "parameterViewRoleCustom"
+     },
+     {
+      "name": "bookmarkable",
+      "value": "false",
+      "type": "Boolean"
+     }
+    ]
+   },
+   {
+    "id": "23795ec0-4042-c26d-6a83-cbc716cf9f02",
+    "type": "ComponentsJavascriptParameter",
+    "typeDesc": "Custom parameter",
+    "parent": "GENERIC",
+    "properties": [
+     {
+      "name": "name",
+      "value": "BaseDateParameter",
+      "type": "Id"
+     },
+     {
+      "name": "javaScript",
+      "value": "function f() {\n    return getBaseDate();\n} ",
+      "type": "JavaScript"
+     },
+     {
+      "name": "parameterViewRole",
+      "value": "unused",
+      "type": "parameterViewRoleCustom"
+     },
+     {
+      "name": "bookmarkable",
+      "value": "false",
+      "type": "Boolean"
+     }
+    ]
+   },
+   {
+    "id": "7d9b9ec1-1f7c-9af5-9bef-85532690168e",
+    "type": "ComponentsJavascriptParameter",
+    "typeDesc": "Custom parameter",
+    "parent": "GENERIC",
+    "properties": [
+     {
+      "name": "name",
+      "value": "BaseYearParameter",
+      "type": "Id"
+     },
+     {
+      "name": "javaScript",
+      "value": "function f() {\n    return getBaseYear();\n} ",
+      "type": "JavaScript"
+     },
+     {
+      "name": "parameterViewRole",
+      "value": "unused",
+      "type": "parameterViewRoleCustom"
+     },
+     {
+      "name": "bookmarkable",
+      "value": "false",
+      "type": "Boolean"
+     }
+    ]
+   },
+   {
     "id": "CHARTS",
     "name": "Charts",
     "type": "Label",
@@ -1967,8 +2074,13 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "width",
+      "value": "500",
       "type": "Integer"
      },
      {
@@ -1977,13 +2089,8 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "width",
-      "value": "500",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -2003,16 +2110,16 @@
      },
      {
       "name": "preExecution",
-      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"category\": {\n            formatter: function(value) {\n                return value.split(\"/\")[0];\n            },\n            label: \"Month\"\n        },\n        \"series\": {\n            label: \"Drug Type\"\n        },\n        \"value\": {\n            label: \"# Arrests\"\n        }\n    };\n    \n}\n ",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postExecution",
-      "value": "",
+      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"category\": {\n            formatter: function(value) {\n                return value.split(\"/\")[0];\n            },\n            label: \"Month\"\n        },\n        \"series\": {\n            label: \"Drug Type\"\n        },\n        \"value\": {\n            label: \"# Arrests\"\n        }\n    };\n    addChartResizer(this);\n}\n ",
       "type": "JavaScript"
      },
      {
       "name": "postFetch",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -3262,7 +3369,7 @@
      },
      {
       "name": "parameters",
-      "value": "[[\"YearParameter\",\"YearParameter\"],[\"CountyParameter\",\"CountyParameter\"]]",
+      "value": "[[\"YearParameter\",\"ReadyCashCrimesYearParameter\"],[\"CountyParameter\",\"CountyParameter\"]]",
       "type": "ValuesArray"
      },
      {
@@ -3271,8 +3378,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -3281,13 +3388,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -3307,16 +3414,16 @@
      },
      {
       "name": "preExecution",
-      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"category\": {\n            formatter: function(value) {\n                return \"Q\" + value.split(\"/\")[0];\n            },\n            label: \"Quarter\"\n        },\n        \"series\": {\n            label: \"Crime Category\"\n        },\n        \"value\": {\n            label: \"# Arrests\"\n        }\n    };\n    \n}\n ",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postFetch",
-      "value": "",
+      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"category\": {\n            formatter: function(value) {\n                return \"Q\" + value.split(\"/\")[0];\n            },\n            label: \"Quarter\"\n        },\n        \"series\": {\n            label: \"Crime Category\"\n        },\n        \"value\": {\n            label: \"# Arrests\"\n        }\n    };\n    this.chartDefinition.baseAxisTitle = getSelectedOrCurrentYearFormatted();\n    addChartResizer(this);\n}\n ",
       "type": "JavaScript"
      },
      {
       "name": "postExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -4545,8 +4652,8 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -4555,13 +4662,13 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -4581,16 +4688,16 @@
      },
      {
       "name": "preExecution",
-      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"category\": {\n            label: \"Drug\"\n        },\n        \"series\": {\n            formatter: function(value) {\n                if (\"SixMonthRearrestRate\" == value) {\n                    return \"Rearrest (6 mos)\";\n                }\n                if (\"OneYearRearrestRate\" == value) {\n                    return \"Rearrest (1 yr)\";\n                }\n                if (\"TwoYearRearrestRate\" == value) {\n                    return \"Rearrest (2 yr)\";\n                }\n                if (\"OneYearReconvictionRate\" == value) {\n                    return \"Reconviction (1 yr)\";\n                }\n                if (\"TwoYearReconvictionRate\" == value) {\n                    return \"Reconviction (2 yr)\";\n                }\n                return \"Default (fix)\";\n            },\n            label: \"Measure\"\n        },\n        \"value\": {\n            label: \"Rate\"\n        }\n    };\n    \n}\n ",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postExecution",
-      "value": "",
+      "value": "function f() {\n    this.chartDefinition.dimensions = {\n        \"category\": {\n            label: \"Drug\"\n        },\n        \"series\": {\n            formatter: function(value) {\n                if (\"SixMonthRearrestRate\" == value) {\n                    return \"Rearrest (6 mos)\";\n                }\n                if (\"OneYearRearrestRate\" == value) {\n                    return \"Rearrest (1 yr)\";\n                }\n                if (\"TwoYearRearrestRate\" == value) {\n                    return \"Rearrest (2 yr)\";\n                }\n                if (\"OneYearReconvictionRate\" == value) {\n                    return \"Reconviction (1 yr)\";\n                }\n                if (\"TwoYearReconvictionRate\" == value) {\n                    return \"Reconviction (2 yr)\";\n                }\n                return \"Default (fix)\";\n            },\n            label: \"Measure\"\n        },\n        \"value\": {\n            label: \"Rate\"\n        }\n    };\n    addChartResizer(this);\n}\n ",
       "type": "JavaScript"
      },
      {
       "name": "postFetch",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -5819,8 +5926,8 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -5829,13 +5936,13 @@
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -5855,16 +5962,16 @@
      },
      {
       "name": "preExecution",
-      "value": "function() {\n    var cd = this.chartDefinition;\n    cd.legend = {\n        scenes: {\n           item: {\n                value: function() {\n                    var valueVar = this.base();\n                    valueVar.label = valueVar.label.split(\"~\")[0].trim();\n                    return valueVar;\n                }\n            }\n        }\n    }\n} ",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postFetch",
-      "value": "",
+      "value": "function f() {\n    var cd = this.chartDefinition;\n    cd.legend = {\n        scenes: {\n           item: {\n                value: function() {\n                    var valueVar = this.base();\n                    valueVar.label = valueVar.label.split(\"~\")[0].trim();\n                    return valueVar;\n                }\n            }\n        }\n    }\n    addChartResizer(this);\n} ",
       "type": "JavaScript"
      },
      {
       "name": "postExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -5885,7 +5992,7 @@
      },
      {
       "name": "extensionPoints",
-      "value": "[]",
+      "value": "[[\"baseAxisLabel_textAngle\",\"-1.2\"],[\"baseAxisLabel_textAlign\",\"right\"],[\"baseAxisLabel_textBaseline\",\"middle\"]]",
       "type": "EditorValuesArray"
      },
      {
@@ -7093,8 +7200,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -7103,13 +7210,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -7129,16 +7236,16 @@
      },
      {
       "name": "preExecution",
+      "value": "function f() {\n    addChartResizer(this);\n} ",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
       "name": "postExecution",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
