@@ -1390,8 +1390,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "200",
       "type": "Integer"
      },
      {
@@ -1400,13 +1400,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "200",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -1430,12 +1430,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -2664,8 +2664,13 @@
       "type": "Datasource"
      },
      {
-      "name": "width",
-      "value": "400",
+      "name": "priority",
+      "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "height",
+      "value": "200",
       "type": "Integer"
      },
      {
@@ -2674,13 +2679,8 @@
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
-      "type": "Integer"
-     },
-     {
-      "name": "height",
-      "value": "200",
+      "name": "width",
+      "value": "400",
       "type": "Integer"
      },
      {
@@ -2704,12 +2704,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -3968,16 +3968,6 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "200",
-      "type": "Integer"
-     },
-     {
-      "name": "priority",
-      "value": 5,
-      "type": "Integer"
-     },
-     {
       "name": "width",
       "value": "400",
       "type": "Integer"
@@ -3988,8 +3978,18 @@
       "type": "Integer"
      },
      {
+      "name": "priority",
+      "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "height",
+      "value": "200",
+      "type": "Integer"
+     },
+     {
       "name": "colors",
-      "value": "[\"green\",\"red\"]",
+      "value": "[\"lightgreen\",\"red\"]",
       "type": "Array"
      },
      {
@@ -4008,12 +4008,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -4761,11 +4761,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "colSortable",
-      "value": "[]",
-      "type": "Array"
-     },
-     {
       "name": "colFormats",
       "value": "[]",
       "type": "Array"
@@ -4789,6 +4784,11 @@
       "name": "expandParameters",
       "value": "[]",
       "type": "ValuesArray"
+     },
+     {
+      "name": "colSortable",
+      "value": "[]",
+      "type": "Array"
      },
      {
       "name": "colTypes",
@@ -4846,14 +4846,14 @@
       "type": "Datasource"
      },
      {
-      "name": "sortBy",
-      "value": "[]",
-      "type": "SortByArray"
-     },
-     {
       "name": "sDom",
       "value": "",
       "type": "JavaScript"
+     },
+     {
+      "name": "sortBy",
+      "value": "[]",
+      "type": "SortByArray"
      },
      {
       "name": "refreshPeriod",
