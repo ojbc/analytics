@@ -561,7 +561,7 @@
     <column id="COL152" populated="true" UUID="356d3665-d601-423a-98a4-39cac9fa2782" autoIncrement="false" autoIncrementSequenceName="Disposition_ArrestingAgencyORI_seq" defaultValue="" name="ArrestingAgencyORI" nullable="0" physicalName="ArrestingAgencyORI" precision="12" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL153" populated="true" UUID="3ee95d66-b9c9-4a96-84d8-638f9cf5d540" autoIncrement="false" autoIncrementSequenceName="Disposition_SentenceTermDays_seq" defaultValue="" name="SentenceTermDays" nullable="1" physicalName="SentenceTermDays" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL153" populated="true" UUID="3ee95d66-b9c9-4a96-84d8-638f9cf5d540" autoIncrement="false" autoIncrementSequenceName="Disposition_SentenceTermDays_seq" defaultValue="" name="SentenceTermDays" nullable="1" physicalName="SentenceTermDays" precision="10" referenceCount="1" scale="2" sourceDataTypeName="UserDefinedSQLType" type="2" userDefinedTypeUUID="115245ce-612c-4d6a-b559-6dd903dd959a" >
      <remarks></remarks>
     </column>
     <column id="COL154" populated="true" UUID="024ca992-7153-4e9f-9605-4e185ddc15b9" autoIncrement="false" autoIncrementSequenceName="Disposition_SentenceFineAmount_seq" defaultValue="" name="SentenceFineAmount" nullable="1" physicalName="SentenceFineAmount" precision="10" referenceCount="1" scale="2" sourceDataTypeName="UserDefinedSQLType" type="2" userDefinedTypeUUID="115245ce-612c-4d6a-b559-6dd903dd959a" >
@@ -725,7 +725,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="131" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="20" y="20" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB62" x="451" y="291" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB74" x="517" y="665" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
