@@ -197,10 +197,10 @@
     <column id="COL57" populated="true" UUID="e71164ca-a49f-4ecc-b7c0-08ed9ef1339d" autoIncrement="false" autoIncrementSequenceName="Incident_RecordType_seq" defaultValue="" name="RecordType" nullable="0" physicalName="RecordType" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
      <remarks>N for new record, U for update to previous record, D for delete</remarks>
     </column>
-    <column id="COL58" populated="true" UUID="4a1f82dc-a511-4431-bd97-c7a67d275c28" autoIncrement="false" autoIncrementSequenceName="Incident_Timestamp_seq" defaultValue="" name="Timestamp" nullable="0" physicalName="Timestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL58" populated="true" UUID="cd14d2da-e20c-4daa-9d65-c209fb854962" autoIncrement="false" autoIncrementSequenceName="Incident_IncidentDescriptionText_seq" defaultValue="" name="IncidentDescriptionText" nullable="0" physicalName="IncidentDescriptionText" precision="120" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL59" populated="true" UUID="cd14d2da-e20c-4daa-9d65-c209fb854962" autoIncrement="false" autoIncrementSequenceName="Incident_IncidentDescriptionText_seq" defaultValue="" name="IncidentDescriptionText" nullable="0" physicalName="IncidentDescriptionText" precision="120" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL59" populated="true" UUID="4a1f82dc-a511-4431-bd97-c7a67d275c28" autoIncrement="false" autoIncrementSequenceName="Incident_Timestamp_seq" defaultValue="" name="Timestamp" nullable="0" physicalName="Timestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     </folder>
@@ -599,7 +599,7 @@
     <column id="COL166" populated="true" UUID="f5683ee6-37e4-4a11-be72-edb854707679" autoIncrement="false" autoIncrementSequenceName="IncidentCircumstance_IncidentCircumstanceID_seq" defaultValue="" name="IncidentCircumstanceID" nullable="0" physicalName="IncidentCircumstanceID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL167" populated="true" UUID="10f3f341-22b2-4d41-837c-00ae78a95b21" autoIncrement="false" autoIncrementSequenceName="Incident_IncidentID_seq" defaultValue="" name="IncidentID" nullable="0" physicalName="IncidentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL167" populated="true" UUID="10f3f341-22b2-4d41-837c-00ae78a95b21" autoIncrement="false" autoIncrementSequenceName="Incident_IncidentID_seq_1_1" defaultValue="" name="IncidentID" nullable="0" physicalName="IncidentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL168" populated="true" UUID="c02fe1cd-652d-49a1-a500-277460deda6c" autoIncrement="false" autoIncrementSequenceName="IncidentCircumstance_IncidentCircumstanceText_seq" defaultValue="" name="IncidentCircumstanceText" nullable="0" physicalName="IncidentCircumstanceText" precision="80" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -664,7 +664,7 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="true"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
