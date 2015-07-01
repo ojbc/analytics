@@ -593,7 +593,7 @@
   <table id="TAB164" populated="true" UUID="7642327e-00a9-4d6c-aa08-3d093919b415" name="IncidentCircumstance" objectType="TABLE" physicalName="IncidentCircumstance" >
    <remarks></remarks>
    <folder id="FOLTAB1641" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL165" populated="true" UUID="f5683ee6-37e4-4a11-be72-edb854707679" autoIncrement="false" autoIncrementSequenceName="IncidentCircumstance_IncidentCircumstanceID_seq" defaultValue="" name="IncidentCircumstanceID" nullable="0" physicalName="IncidentCircumstanceID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL165" populated="true" UUID="f5683ee6-37e4-4a11-be72-edb854707679" autoIncrement="true" autoIncrementSequenceName="IncidentCircumstance_IncidentCircumstanceID_seq" defaultValue="" name="IncidentCircumstanceID" nullable="0" physicalName="IncidentCircumstanceID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL166" populated="true" UUID="10f3f341-22b2-4d41-837c-00ae78a95b21" autoIncrement="false" autoIncrementSequenceName="Incident_IncidentID_seq_1_1" defaultValue="" name="IncidentID" nullable="0" physicalName="IncidentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
