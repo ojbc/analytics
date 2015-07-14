@@ -200,7 +200,7 @@
     <column id="COL58" populated="true" UUID="e71164ca-a49f-4ecc-b7c0-08ed9ef1339d" autoIncrement="false" autoIncrementSequenceName="Incident_RecordType_seq" defaultValue="" name="RecordType" nullable="0" physicalName="RecordType" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
      <remarks>N for new record, U for update to previous record, D for delete</remarks>
     </column>
-    <column id="COL59" populated="true" UUID="4a1f82dc-a511-4431-bd97-c7a67d275c28" autoIncrement="false" autoIncrementSequenceName="Incident_Timestamp_seq" defaultValue="" name="Timestamp" nullable="0" physicalName="Timestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL59" populated="true" UUID="4a1f82dc-a511-4431-bd97-c7a67d275c28" autoIncrement="false" autoIncrementSequenceName="Incident_Timestamp_seq" defaultValue="CURRENT_TIMESTAMP()" name="Timestamp" nullable="0" physicalName="Timestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     </folder>
@@ -238,7 +238,7 @@
     <column id="COL69" populated="true" UUID="3985245e-7489-4c05-abbe-29cdb866fed6" autoIncrement="false" autoIncrementSequenceName="Arrest_ReportingSystem_seq" defaultValue="" name="ReportingSystem" nullable="0" physicalName="ReportingSystem" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL70" populated="true" UUID="9f427c86-4fad-4450-9902-27ecb8735321" autoIncrement="false" autoIncrementSequenceName="Arrest_Timestamp_seq" defaultValue="" name="Timestamp" nullable="0" physicalName="Timestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL70" populated="true" UUID="9f427c86-4fad-4450-9902-27ecb8735321" autoIncrement="false" autoIncrementSequenceName="Arrest_Timestamp_seq" defaultValue="CURRENT_TIMESTAMP()" name="Timestamp" nullable="0" physicalName="Timestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     </folder>
@@ -422,7 +422,7 @@
     <column id="COL117" populated="true" UUID="663d177c-4689-4df2-9b87-1f059d06906c" autoIncrement="false" autoIncrementSequenceName="PretrialServiceParticipation_ArrestIncidentCaseNumber_seq" defaultValue="" name="ArrestIncidentCaseNumber" nullable="0" physicalName="ArrestIncidentCaseNumber" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL118" populated="true" UUID="637fc40f-46ea-46d5-ae42-bf8415e0fad6" autoIncrement="false" autoIncrementSequenceName="PretrialServiceParticipation_Timestamp_seq" defaultValue="" name="Timestamp" nullable="0" physicalName="Timestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL118" populated="true" UUID="637fc40f-46ea-46d5-ae42-bf8415e0fad6" autoIncrement="false" autoIncrementSequenceName="PretrialServiceParticipation_Timestamp_seq" defaultValue="CURRENT_TIMESTAMP()" name="Timestamp" nullable="0" physicalName="Timestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     </folder>
@@ -533,7 +533,7 @@
     <column id="COL149" populated="true" UUID="7d74c4a2-4994-4ccb-a91a-87fa6ddf746c" autoIncrement="false" autoIncrementSequenceName="Disposition_RecidivismEligibilityDate_seq" defaultValue="" name="RecidivismEligibilityDate" nullable="1" physicalName="RecidivismEligibilityDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
      <remarks></remarks>
     </column>
-    <column id="COL150" populated="true" UUID="886776ed-151d-49c5-aa2e-cb1323180f3c" autoIncrement="false" autoIncrementSequenceName="Disposition_Timestamp_seq" defaultValue="" name="Timestamp" nullable="0" physicalName="Timestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL150" populated="true" UUID="886776ed-151d-49c5-aa2e-cb1323180f3c" autoIncrement="false" autoIncrementSequenceName="Disposition_Timestamp_seq" defaultValue="CURRENT_TIMESTAMP()" name="Timestamp" nullable="0" physicalName="Timestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     </folder>
@@ -693,7 +693,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="131" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="20" y="20" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB62" x="451" y="291" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB73" x="1201" y="850" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
