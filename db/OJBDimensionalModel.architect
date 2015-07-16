@@ -4,8 +4,8 @@
  <print-settings numCopies="1" zoom="0.6" pageNumbersPrinted="false" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
-   <property key="Logical" value="OJBC Analytics" />
    <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:mysql://localhost:3306/ojbc_analytics_demo" />
    <property key="UID" value="root" />
    <property key="PWD" value="" />
@@ -16,9 +16,9 @@
    <property key="ca.sqlpower.architect.etl.kettle.repos.password" value="" />
    <property key="ca.sqlpower.wabit.WabitDataSource.UUID" value="w554c8023-7374-4d8d-84d6-dc8e178fd4f2" />
   </data-source>
-  <data-source id="DS2">
-   <property key="Logical" value="PlayPen Database" />
+  <data-source id="DS0">
    <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:mysql://localhost:3306/ojbc_analytics_demo" />
    <property key="UID" value="root" />
    <property key="PWD" value="" />
@@ -31,7 +31,7 @@
   </data-source>
  </project-data-sources>
  <source-databases>
-  <database id="DB0" populated="true" UUID="ec3beafe-27c4-4e19-8e81-a74afd3a8d0c" dbcs-ref="DS2" name="PlayPen Database" physicalName="OJBC Analytics" >
+  <database id="DB0" populated="true" UUID="ec3beafe-27c4-4e19-8e81-a74afd3a8d0c" dbcs-ref="DS0" name="PlayPen Database" physicalName="OJBC Analytics" >
    <catalog id="CAT1" populated="false" UUID="58c60f71-5745-4946-9a77-7023a3e64806" name="information_schema" nativeTerm="database" physicalName="information_schema" >
    </catalog>
    <catalog id="CAT2" populated="false" UUID="7b3c818e-3a1f-4a79-86aa-03d6acd3b0f2" name="Activities" nativeTerm="database" physicalName="Activities" >
@@ -946,7 +946,7 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
@@ -965,12 +965,12 @@
   <table-pane table-ref="TAB148" x="621" y="915" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB154" x="933" y="480" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB159" x="79" y="684" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB164" x="75" y="280" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB164" x="72" y="285" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB170" x="229" y="996" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB180" x="501" y="619" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB192" x="1151" y="591" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB202" x="1144" y="335" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB208" x="59" y="602" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB208" x="57" y="604" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB213" x="757" y="141" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB218" x="1209" y="772" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB223" x="393" y="21" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
