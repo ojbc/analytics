@@ -2,11 +2,8 @@
 
 STATE <- "VT"
 
-demoArresteeCount = 13000
-demoIncidentCount = 25000
-
-DATE_ID_FORMAT <- "%Y%m%d"
-FULL_MONTH_FORMAT <- "%m-%Y"
+demoArresteeCount = 100
+demoIncidentCount = 250
 
 library(RMySQL)
 library(data.table)
@@ -17,6 +14,11 @@ library(readr)
 library(tidyr)
 library(Hmisc)
 library(stringr)
+library(xlsx)
+
+source("LoadDateTimeDimensionTables.R")
+source("LoadDemographicsDimensionTables.R")
+source("LoadIncidentTypeDimensionTables.R")
 
 state_shp <- readOGR("/opt/data/Shapefiles/tl_2014_us_state", "tl_2014_us_state")
 county_shp = readOGR("/opt/data/Shapefiles/tl_2014_us_county/", "tl_2014_us_county")
@@ -49,41 +51,18 @@ dbSendQuery(conn, "delete from Population")
 # clear out dimension tables
 dbSendQuery(conn, "delete from Agency")
 dbSendQuery(conn, "delete from County")
-dbSendQuery(conn, "delete from Date")
 dbSendQuery(conn, "delete from Disposition")
 dbSendQuery(conn, "delete from OffenseType")
-dbSendQuery(conn, "delete from PersonAge")
-dbSendQuery(conn, "delete from PersonAgeRange")
-dbSendQuery(conn, "delete from PersonRace")
-dbSendQuery(conn, "delete from PersonSex")
 dbSendQuery(conn, "delete from PretrialService")
 dbSendQuery(conn, "delete from RiskScore")
-dbSendQuery(conn, "delete from Time")
 dbSendQuery(conn, "delete from YesNo")
 dbSendQuery(conn, "delete from AssessedNeed")
-dbSendQuery(conn, "delete from IncidentType")
-dbSendQuery(conn, "delete from IncidentCategory")
 dbSendQuery(conn, "delete from ReadyCashOffenseCategory")
-
-sexes <- c("Male","Female","Unknown")
-PersonSex <- data.table(PersonSexID=1:length(sexes), PersonSexDescription=sexes)
-dbWriteTable(conn, "PersonSex", PersonSex, append=TRUE, row.names=FALSE)
-
-races <- c("BLACK","ASIAN","WHITE","UNKNOWN","AMERICAN INDIAN")
-PersonRace <- data.table(PersonRaceID=1:length(races), PersonRaceDescription=races)
-dbWriteTable(conn, "PersonRace", PersonRace, append=TRUE, row.names=FALSE)
+dbSendQuery(conn, "delete from Town")
 
 yesno <- c("Yes","No")
 YesNo <- data.table(YesNoID=1:length(yesno), YesNoDescription=yesno)
 dbWriteTable(conn, "YesNo", YesNo, append=TRUE, row.names=FALSE)
-
-incidentCategory <- c("Incident Category 1", "Incident Category 2", "Incident Category 3", "Unknown")
-IncidentCategory <- data.table(IncidentCategoryID=1:length(incidentCategory), IncidentCategoryDescription=incidentCategory)
-dbWriteTable(conn, "IncidentCategory", IncidentCategory, append=TRUE, row.names=FALSE)
-
-incidentType <- c("Incident Type A", "Incident Type B", "Incident Type C", "Incident Type D", "Unknown")
-IncidentType <- data.table(IncidentTypeID=1:length(incidentType), IncidentTypeDescription=incidentType, IncidentCategoryID=c(1,1,1,2,4))
-dbWriteTable(conn, "IncidentType", IncidentType, append=TRUE, row.names=FALSE)
 
 need <- c("Need 1","Need 2", "Need 3", "None", "Unknown")
 AssessedNeed <- data.table(AssessedNeedID=1:length(need), AssessedNeedDescription=need)
@@ -94,41 +73,11 @@ countyName <- c(as.character(county_df$NAME), "Unknown")
 County <- data.table(CountyID=countyID, CountyName=countyName)
 dbWriteTable(conn, "County", County, append=TRUE, row.names=FALSE)
 
-# note: you can change top age, but it must be divisible by age range step
-topAge <- 85
-ageRangeStep <- 5
-ages <- 0:(topAge+1)
-ageCount <- length(ages)
-ageStrings <- as.character(ages)
-ageStrings[ageCount] <- "Unknown"
-ageStrings[ageCount-1] <- paste(ageStrings[ageCount-1],"+",sep="")
-ageRanges <- rep("", ageCount)
-ageRangesSort <- rep("", ageCount)
-currentBottom <- 0
-for (a in ages)
-{
-  currentTop <- currentBottom+(ageRangeStep-1)
-  currentTopS <- as.character(currentTop)
-  if (currentTop == topAge) currentTopS <- paste(currentTopS,"+",sep="")
-  ageRanges[a+1] <- paste(currentBottom, "-", currentTopS, sep="")
-  ageRangesSort[a+1] <- paste(formatC(currentBottom, width=3, digits=3, flag="0"), formatC(currentTop, width=3, digits=3, flag="0"), sep = "")
-  if ((a+1) %% 5 == 0) currentBottom <- currentBottom + ageRangeStep
-}
-ageRanges[ageCount] <- ageStrings[ageCount]
-ageRanges[ageCount-1] <- ageStrings[ageCount-1]
-ageRangesSort[ageCount] <- ageStrings[ageCount]
-ageRangesSort[ageCount-1] <- ageStrings[ageCount-1]
+PersonSex <- loadSexDimensionTable(conn)
+PersonRace <- loadRaceDimensionTable(conn)
 
-# This would need refactoring if you ever wanted to have an age range step different than 5.  We chose that because that's what
-# the Census uses
-
-AgeRange5=unique(ageRanges)
-PersonAgeRange <- data.table(PersonAgeRangeID=1:length(AgeRange5), AgeRange5, AgeRange5Sort=AgeRange5)
-dbWriteTable(conn, "PersonAgeRange", PersonAgeRange, append=TRUE, row.names=FALSE)
-
-PersonAge <- data.table(PersonAgeID=(ages+1), AgeInYears=ageStrings, PersonAgeRangeID=match(ageRanges, AgeRange5))
-dbWriteTable(conn, "PersonAge", PersonAge, append=TRUE, row.names=FALSE)
-
+sexes <- PersonSex$PersonSexDescription
+races <- PersonRace$PersonRaceDescription
 popData <- gather(select(filter(countyData, AGEGRP!=0, YEAR==6), fips, AGEGRP, YEAR, matches(".AC_.*")), group, PopulationCount, matches(".AC_.*"))
 popData <- mutate(popData, PersonSexID=ifelse(grepl("_MALE", group), match("Male", sexes), match("Female", sexes)))
 popData <- mutate(popData, PersonRaceID=
@@ -171,6 +120,11 @@ riskScoreDescription = c("High","Medium","Low","Unknown")
 RiskScore <- data.table(RiskScoreID=riskScoreID, RiskScoreDescription=riskScoreDescription)
 dbWriteTable(conn, "RiskScore", RiskScore, append=TRUE, row.names=FALSE)
 
+townID <- 1:10
+townDescription = paste0("Town ", townID)
+Town <- data.table(TownID=townID, TownDescription=townDescription)
+dbWriteTable(conn, "Town", Town, append=TRUE, row.names=FALSE)
+
 dispoID <- 1:4
 dispoDescription <- c("Conviction","Acquittal","Declined Prosecution","Unknown")
 isConviction <- c("Y","N","N","N")
@@ -183,25 +137,11 @@ agencyName[11] <- "Unknown"
 Agency <- data.table(AgencyID=agencyID, AgencyName=agencyName)
 dbWriteTable(conn, "Agency", Agency, append=TRUE, row.names=FALSE)
 
-dates <- seq(from=as.Date("2012-01-01"), to=as.Date("2032-12-31"), by="day")
-dateID <- format(dates, DATE_ID_FORMAT)
-fullMonth <- format(dates, FULL_MONTH_FORMAT)
-weekdaynames <- c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
-Date <- data.table(DateID=dateID, CalendarDate=dates, DateMMDDYYYY=format(dates, "%m/%d/%Y"), Year=year(dates),
-                   YearLabel=as.character(year(dates)), Month=month(dates), MonthName=months(dates), FullMonth=fullMonth, Day=mday(dates),
-                   DayOfWeek=weekdays(dates), DayOfWeekSort=match(weekdays(dates), weekdaynames))
-Date <- mutate(Date, CalendarQuarter=as.integer(str_replace(quarters(CalendarDate), "Q([0-9])", "\\1")))
-dbWriteTable(conn, "Date", Date, append=TRUE, row.names=FALSE)
-
-makeTimeID <- function(hours, minutes, seconds) as.integer(paste(formatC(hours, digits=2, width=2, flag="0"), formatC(minutes, digits=2, width=2, flag="0"), formatC(seconds, digits=2, width=2, flag="0"), sep=""))
-
-hours <- rep(0:23, each=3600)
-minutes <- rep(rep(0:59, each=60), 24)
-seconds <- rep(0:59, 60*24)
-timeID <- makeTimeID(hours, minutes, seconds)
-
-Time <- data.table(TimeID=timeID, Hour=hours, Minute=minutes, Second=seconds)
-dbWriteTable(conn, "Time", Time, append=TRUE, row.names=FALSE)
+loadDateDimensionTable(conn)
+loadTimeDimensionTable(conn)
+loadAgeDimensionTables(conn)
+loadIncidentCategoryDimensionTable(conn)
+IncidentType <- loadIncidentTypeDimensionTable(conn)
 
 getRandomCoordsInCounty <- function(countyId) {
   if (countyId != "99999") {
@@ -254,6 +194,7 @@ buildArrestRow <- function(ids) {
   arrestPretrialServiceID <- sample(serviceID, size=n, replace=TRUE, prob=serviceProbs)
   violated <- sample(1:2, size=n, replace=TRUE, prob=c(.3, .7))
   drugRelated <- sample(1:2, size=n, replace=TRUE, prob=c(.35, .65))
+  pretrialEligible <- sample(1:2, size=n, replace=TRUE, prob=c(.6, .4))
   
   coords <- getRandomCoordsInCounties(arresteeCountyID)
   ArrestLocationLatitude <- coords$lat
@@ -272,6 +213,7 @@ buildArrestRow <- function(ids) {
              ArrestDrugRelated=drugRelated,
              ArrestLocationLatitude,
              ArrestLocationLongitude,
+             PretrialServiceEligible=pretrialEligible,
              temp_date=date)
   
 }
@@ -353,6 +295,7 @@ dbWriteTable(conn, "Arrest", arrest, append=TRUE, row.names=FALSE)
 # Charge
 #
 
+offenseID <- OffenseType$OffenseTypeID
 offenseProbs <- runif(n=length(offenseID))
 
 makeCharges <- function(arrestID) {
@@ -456,12 +399,12 @@ coords <- getRandomCoordsInCounties(CountyID)
 IncidentLocationLatitude <- coords$lat
 IncidentLocationLongitude <- coords$long
 IncidentNumber <- paste0("INC", IncidentID)
-Town <- paste0("Town ", ReportingAgencyID)
+Town <- sample(townID, size=demoIncidentCount, replace=TRUE)
 Street <- paste(1:demoIncidentCount, c("Main", "Maple", "Dorset", "Williston", "Oak", "Springfield", "Elm"))
 
 Incident <- data.table(IncidentID, DateID, TimeID, ReportingAgencyID, IncidentTypeID,
                        CountyID, IncidentLocationLatitude, IncidentLocationLongitude, IncidentLocationStreetAddress=Street,
-                       IncidentLocationTown=Town, IncidentCaseNumber=IncidentNumber)
+                       TownID=Town, IncidentCaseNumber=IncidentNumber)
 
 dbWriteTable(conn, "Incident", Incident, append=TRUE, row.names=FALSE)
 
