@@ -1,0 +1,139 @@
+<!--
+    
+    Unless explicitly acquired and licensed from Licensor under another license, the contents of
+    this file are subject to the Reciprocal Public License ("RPL") Version 1.5, or subsequent
+    versions as allowed by the RPL, and You may not copy or use this file in either source code
+    or executable form, except in compliance with the terms and conditions of the RPL
+    All software distributed under the RPL is provided strictly on an "AS IS" basis, WITHOUT
+    WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, AND LICENSOR HEREBY DISCLAIMS ALL SUCH
+    WARRANTIES, INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+    PARTICULAR PURPOSE, QUIET ENJOYMENT, OR NON-INFRINGEMENT. See the RPL for specific language
+    governing rights and limitations under the RPL.
+
+    http://opensource.org/licenses/RPL-1.5
+
+    Copyright 2012-2015 Open Justice Broker Consortium
+
+    -->
+<Schema name="OJB Transparency Demo">
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="AgencyUnit" caption="Agency/Unit">
+		<Hierarchy name="AgencyUnit" visible="true" hasAll="true" allMemberName="All Units" allMemberCaption="All Units" primaryKey="UnitID">
+			<View alias="AgencyUnit">
+			    <SQL dialect="mysql">
+			        <![CDATA[select UnitID, UnitName, AgencyName from Unit, Agency
+                    where Unit.AgencyID=Agency.AgencyID]]>
+                </SQL>
+            </View>
+			<Level name="Agency" visible="true" column="AgencyName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Unit" visible="true" column="UnitName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Complaint Type">
+		<Hierarchy name="Complaint Type" visible="true" hasAll="true" primaryKey="ComplaintTypeID">
+			<Table name="ComplaintType"/>
+			<Level name="Complaint Type" visible="true" column="ComplaintTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Complaint Disposition">
+		<Hierarchy name="Complaint Disposition" visible="true" hasAll="true" primaryKey="ComplaintDispositionTypeID">
+			<Table name="ComplaintDispositionType"/>
+			<Level name="Complaint Disposition" visible="true" column="ComplaintDispositionTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Use Of Force Type">
+		<Hierarchy name="Use Of Force Type" visible="true" hasAll="true" primaryKey="UseOfForceTypeID">
+			<Table name="UseOfForceType"/>
+			<Level name="Use Of Force Type" visible="true" column="UseOfForceTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Race">
+		<Hierarchy name="Race" visible="true" hasAll="true" primaryKey="PersonRaceID" caption="Race">
+			<Table name="PersonRace"/>
+			<Level name="Race" visible="true" table="PersonRace" column="PersonRaceDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Sex">
+		<Hierarchy name="PersonSex" visible="true" hasAll="true" allMemberName="All Sexes" allMemberCaption="All Sexes" caption="Sex">
+			<Table name="PersonSex"/>
+			<Level name="PersonSex" visible="true" table="PersonSex" column="PersonSexID" nameColumn="PersonSexDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Age">
+		<Hierarchy name="PersonAge" visible="true" hasAll="true" primaryKey="PersonAgeID" primaryKeyTable="PersonAge" caption="Age">
+			<Join leftKey="PersonAgeRangeID" rightKey="PersonAgeRangeID">
+				<Table name="PersonAge"/>
+				<Table name="PersonAgeRange"/>
+			</Join>
+			<Level name="AgeRange" visible="true" column="AgeRange5" table="PersonAgeRange" ordinalColumn="AgeRange5Sort" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="AgeYears" visible="true" column="AgeInYears" table="PersonAge" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Incident Type">
+		<Hierarchy name="IncidentType" visible="true" hasAll="true" allMemberName="All Types" allMemberCaption="All Types" primaryKey="IncidentTypeID" caption="Incident Type">
+			<Table name="IncidentType"/>
+			<Level name="IncidentType" visible="true" table="IncidentType" column="IncidentTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+        <Hierarchy name="Incident Category" visible="true" hasAll="true" allMemberName="All Categories" allMemberCaption="All Categories" primaryKey="IncidentTypeID" caption="Incident Category">
+            <View alias="IncidentTypeWithCategory">
+			    <SQL dialect="mysql">
+			        <![CDATA[select IncidentTypeID, IncidentTypeDescription, IncidentCategoryDescription from IncidentType, IncidentCategory
+                    where IncidentType.IncidentCategoryID=IncidentCategory.IncidentCategoryID]]>
+                </SQL>
+            </View>
+            <Level name="IncidentCategory" visible="true" column="IncidentCategoryDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" caption="Incident Category"/>
+			<Level name="IncidentType" visible="true" column="IncidentTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+        </Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Time Of Day">
+		<Hierarchy name="Time" visible="true" hasAll="true" allMemberName="All Times" allMemberCaption="All Times" primaryKey="TimeID" caption="Time Of Day">
+			<Table name="Time"/>
+			<Level name="Hour" visible="true" table="Time" column="Hour" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="TimeDimension" visible="true" highCardinality="false" name="Date">
+		<Hierarchy name="DateYMD" visible="true" hasAll="true" primaryKey="DateID" caption="Year/Month/Day" allMemberName="All Years" allMemberCaption="All Years" >
+			<Table name="Date"/>
+			<Level name="Year" visible="true" table="Date" column="YearLabel" type="String" uniqueMembers="false" levelType="TimeYears" hideMemberIf="Never"/>
+			<Level name="Quarter" visible="true" table="Date" column="CalendarQuarter" type="String" uniqueMembers="false" levelType="TimeQuarters" hideMemberIf="Never"/>
+			<Level name="Month" visible="true" column="FullMonth" ordinalColumn="Month" type="String" uniqueMembers="false" levelType="TimeMonths" hideMemberIf="Never"/>
+			<Level name="Day" visible="true" column="Day" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never"/>
+		</Hierarchy>
+		<Hierarchy name="CalDate" visible="true" hasAll="true" primaryKey="DateID" caption="Calendar Date">
+			<Table name="Date"/>
+			<Level name="Date" visible="true" column="CalendarDate" type="Date" uniqueMembers="true" levelType="TimeDays" hideMemberIf="Never"/>
+		</Hierarchy>
+		<Hierarchy name="Day of Week" visible="true" hasAll="true" primaryKey="DateID" caption="Day of Week">
+			<Table name="Date"/>
+			<Level name="Day of Week" visible="true" column="DayOfWeek" ordinalColumn="DayOfWeekSort" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Cube name="Complaints" visible="true" enabled="true">
+		<View alias="OfficerComplaint">
+			    <SQL dialect="mysql">
+			        <![CDATA[select Complaint.*, UnitID from Complaint, Officer
+                    where Complaint.OfficerID=Officer.OfficerID]]>
+                </SQL>
+            </View>
+		<DimensionUsage source="Complaint Type" name="Complaint Type" visible="true" foreignKey="ComplaintTypeID" highCardinality="false"/>
+		<DimensionUsage source="Complaint Disposition" name="Complaint Disposition" visible="true" foreignKey="ComplaintDispositionTypeID" highCardinality="false"/>
+		<DimensionUsage source="AgencyUnit" name="Agency/Unit" visible="true" foreignKey="UnitID" highCardinality="false"/>
+		<DimensionUsage source="Date" name="Complaint Date" visible="true" foreignKey="DateID" highCardinality="false"/>
+		<Measure name="ComplaintCount" column="ComplaintID" datatype="Integer" aggregator="count" caption="Complaint Count" visible="true"/>
+	</Cube>
+	<Cube name="Officer-Subject Interactions" visible="true" enabled="true">
+		<View alias="OfficerSubjectInteraction">
+			    <SQL dialect="mysql">
+			        <![CDATA[select Incident.*, UnitID, UseOfForceTypeID, PersonRaceID, PersonSexID, PersonAgeID from Incident, OfficerIncidentInvolvement, Officer, IncidentSubjectInvolvement, Subject where Incident.IncidentID=OfficerIncidentInvolvement.IncidentID and OfficerIncidentInvolvement.OfficerID=Officer.OfficerID and IncidentSubjectInvolvement.IncidentID=Incident.IncidentID and IncidentSubjectInvolvement.SubjectID=Subject.SubjectID]]>
+                </SQL>
+            </View>
+		<DimensionUsage source="AgencyUnit" name="Agency/Unit" visible="true" foreignKey="UnitID" highCardinality="false"/>
+		<DimensionUsage source="Incident Type" name="Incident Type" visible="true" foreignKey="IncidentTypeID" highCardinality="false"/>
+		<DimensionUsage source="Use Of Force Type" name="Use Of Force Type" visible="true" foreignKey="UseOfForceTypeID" highCardinality="false"/>
+		<DimensionUsage source="Sex" name="Sex" visible="true" foreignKey="PersonSexID" highCardinality="false"/>
+		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="PersonRaceID" highCardinality="false"/>
+		<DimensionUsage source="Age" name="Age" visible="true" foreignKey="PersonAgeID" highCardinality="false"/>
+		<DimensionUsage source="Date" name="Incident Date" visible="true" foreignKey="DateID" highCardinality="false"/>
+		<DimensionUsage source="Time Of Day" name="Incident Time" visible="true" foreignKey="TimeID" highCardinality="false"/>
+		<Measure name="IncidentCount" column="IncidentID" datatype="Integer" aggregator="count" caption="Interaction Count" visible="true"/>
+	</Cube>
+</Schema>
