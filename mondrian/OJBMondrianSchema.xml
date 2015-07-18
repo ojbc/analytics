@@ -22,6 +22,12 @@
 			<Level name="County" visible="true" table="County" column="CountyName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Town">
+		<Hierarchy name="Town" visible="true" hasAll="true" allMemberName="All Towns" allMemberCaption="All Towns" primaryKey="TownID">
+			<Table name="Town"/>
+			<Level name="Town" visible="true" table="Town" column="TownDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Agency">
 		<Hierarchy name="Agency" visible="true" hasAll="true" allMemberName="All Agencies" allMemberCaption="All Agencies" primaryKey="AgencyID">
 			<Table name="Agency"/>
@@ -311,6 +317,7 @@
 	</Cube>
 	<Cube name="Incident" caption="Incident" visible="true" cache="true" enabled="true">
 		<Table name="Incident"/>
+		<DimensionUsage source="Town" name="Town" visible="true" foreignKey="TownID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="ReportingAgencyID" highCardinality="false"/>
 		<DimensionUsage source="Incident Type" name="Incident Type" visible="true" foreignKey="IncidentTypeID" highCardinality="false"/>
 		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
