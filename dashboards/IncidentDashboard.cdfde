@@ -162,7 +162,7 @@
      },
      {
       "name": "html",
-      "value": "<h5>Agency: <span id=\"agency-select-div\"/></h5> ",
+      "value": "<table cellpadding=\"50\">\n<tr>\n<td><h5>Agency: <span id=\"agency-select-div\"/></h5></td>\n<td><h5>Town: <span id=\"town-select-div\"/></h5></td>\n</tr>\n</table> ",
       "type": "Html"
      },
      {
@@ -1345,6 +1345,34 @@
     ]
    },
    {
+    "id": "5f20c250-788b-032f-595c-8e68b945a0d3",
+    "type": "ComponentsParameter",
+    "typeDesc": "Simple parameter",
+    "parent": "GENERIC",
+    "properties": [
+     {
+      "name": "name",
+      "value": "TownParameter",
+      "type": "Id"
+     },
+     {
+      "name": "propertyValue",
+      "value": "All Towns",
+      "type": "String"
+     },
+     {
+      "name": "parameterViewRole",
+      "value": "unused",
+      "type": "parameterViewRoleCustom"
+     },
+     {
+      "name": "bookmarkable",
+      "value": "false",
+      "type": "Boolean"
+     }
+    ]
+   },
+   {
     "id": "CHARTS",
     "name": "Charts",
     "type": "Label",
@@ -1376,12 +1404,12 @@
      },
      {
       "name": "listeners",
-      "value": "['${p:AgencyParameter}','${p:Top20CallsDateRangeParameter}']",
+      "value": "['${p:AgencyParameter}','${p:Top20CallsDateRangeParameter}','${p:TownParameter}']",
       "type": "Listeners"
      },
      {
       "name": "parameters",
-      "value": "[[\"Top20CallsDateRangeParameter\",\"Top20CallsDateRangeParameter\"],[\"AgencyParameter\",\"AgencyParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"]]",
+      "value": "[[\"Top20CallsDateRangeParameter\",\"Top20CallsDateRangeParameter\"],[\"AgencyParameter\",\"AgencyParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"],[\"TownParameter\",\"TownParameter\"]]",
       "type": "ValuesArray"
      },
      {
@@ -1390,8 +1418,8 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "200",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -1400,13 +1428,13 @@
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "200",
       "type": "Integer"
      },
      {
@@ -1430,12 +1458,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -2650,28 +2678,18 @@
      },
      {
       "name": "listeners",
-      "value": "['${p:AgencyParameter}','${p:AnnualTrendDateRangeParameter}']",
+      "value": "['${p:AgencyParameter}','${p:AnnualTrendDateRangeParameter}','${p:TownParameter}']",
       "type": "Listeners"
      },
      {
       "name": "parameters",
-      "value": "[[\"AnnualTrendDateRangeParameter\",\"AnnualTrendDateRangeParameter\"],[\"AgencyParameter\",\"AgencyParameter\"],[\"BaseMonthParameter\",\"BaseMonthParameter\"]]",
+      "value": "[[\"AnnualTrendDateRangeParameter\",\"AnnualTrendDateRangeParameter\"],[\"AgencyParameter\",\"AgencyParameter\"],[\"BaseMonthParameter\",\"BaseMonthParameter\"],[\"TownParameter\",\"TownParameter\"]]",
       "type": "ValuesArray"
      },
      {
       "name": "dataSource",
       "value": "AnnualTrendQuery",
       "type": "Datasource"
-     },
-     {
-      "name": "priority",
-      "value": 5,
-      "type": "Integer"
-     },
-     {
-      "name": "height",
-      "value": "200",
-      "type": "Integer"
      },
      {
       "name": "refreshPeriod",
@@ -2681,6 +2699,16 @@
      {
       "name": "width",
       "value": "400",
+      "type": "Integer"
+     },
+     {
+      "name": "height",
+      "value": "200",
+      "type": "Integer"
+     },
+     {
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -2704,12 +2732,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -3954,28 +3982,18 @@
      },
      {
       "name": "listeners",
-      "value": "['${p:AgencyParameter}','${p:HeatGridDateRangeParameter}']",
+      "value": "['${p:AgencyParameter}','${p:HeatGridDateRangeParameter}','${p:TownParameter}']",
       "type": "Listeners"
      },
      {
       "name": "parameters",
-      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"HeatGridDateRangeParameter\",\"HeatGridDateRangeParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"]]",
+      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"HeatGridDateRangeParameter\",\"HeatGridDateRangeParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"],[\"TownParameter\",\"TownParameter\"]]",
       "type": "ValuesArray"
      },
      {
       "name": "dataSource",
       "value": "HeatGridQuery",
       "type": "Datasource"
-     },
-     {
-      "name": "width",
-      "value": "400",
-      "type": "Integer"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
      },
      {
       "name": "priority",
@@ -3985,6 +4003,16 @@
      {
       "name": "height",
       "value": "200",
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "width",
+      "value": "400",
       "type": "Integer"
      },
      {
@@ -4008,12 +4036,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -4747,7 +4775,7 @@
      },
      {
       "name": "listeners",
-      "value": "['${p:AgencyParameter}','${p:IncidentListTimePeriodParameter}']",
+      "value": "['${p:AgencyParameter}','${p:IncidentListTimePeriodParameter}','${p:TownParameter}']",
       "type": "Listeners"
      },
      {
@@ -4761,11 +4789,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "colFormats",
-      "value": "[]",
-      "type": "Array"
-     },
-     {
       "name": "colWidths",
       "value": "[]",
       "type": "Array"
@@ -4777,7 +4800,7 @@
      },
      {
       "name": "parameters",
-      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"IncidentListTimePeriodParameter\",\"IncidentListTimePeriodParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"]]",
+      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"IncidentListTimePeriodParameter\",\"IncidentListTimePeriodParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"],[\"TownParameter\",\"TownParameter\"]]",
       "type": "ValuesArray"
      },
      {
@@ -4787,6 +4810,11 @@
      },
      {
       "name": "colSortable",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "colFormats",
       "value": "[]",
       "type": "Array"
      },
@@ -4846,14 +4874,14 @@
       "type": "Datasource"
      },
      {
-      "name": "sDom",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
       "name": "sortBy",
       "value": "[]",
       "type": "SortByArray"
+     },
+     {
+      "name": "sDom",
+      "value": "",
+      "type": "JavaScript"
      },
      {
       "name": "refreshPeriod",
@@ -5500,6 +5528,119 @@
       "type": "JavaScript"
      }
     ]
+   },
+   {
+    "id": "f5c18e25-7582-30f7-b476-dc2cd48d1f28",
+    "type": "ComponentsBSSelectBaseComponent",
+    "typeDesc": "Bootstrap Select",
+    "parent": "IVYISBOOTSTRAP",
+    "properties": [
+     {
+      "name": "name",
+      "value": "TownSelect",
+      "type": "Id"
+     },
+     {
+      "name": "parameter",
+      "value": "${p:TownParameter}",
+      "type": "Parameter"
+     },
+     {
+      "name": "listeners",
+      "value": "[]",
+      "type": "Listeners"
+     },
+     {
+      "name": "parameters",
+      "value": "[[\"TownParameter\",\"TownParameter\"]]",
+      "type": "ValuesArray"
+     },
+     {
+      "name": "valueAsId",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "dataSource",
+      "value": "TownQuery",
+      "type": "Datasource"
+     },
+     {
+      "name": "valuesArray",
+      "value": "[]",
+      "type": "ValuesArray"
+     },
+     {
+      "name": "priority",
+      "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "buttonBlock",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "buttonType",
+      "value": "btn-default",
+      "type": "buttonTypeCustom"
+     },
+     {
+      "name": "buttonSize",
+      "value": "",
+      "type": "buttonSizeCustom"
+     },
+     {
+      "name": "prependIcon",
+      "value": "False",
+      "type": "Boolean"
+     },
+     {
+      "name": "buttonIcon",
+      "value": "none",
+      "type": "buttonIconCustom"
+     },
+     {
+      "name": "htmlObject",
+      "value": "town-select-div",
+      "type": "HtmlObject"
+     },
+     {
+      "name": "executeAtStart",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "preExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postFetch",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "preChange",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postChange",
+      "value": "",
+      "type": "JavaScript"
+     }
+    ]
    }
   ]
  },
@@ -5608,12 +5749,78 @@
      },
      {
       "name": "query",
-      "value": "select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, \nconcat(Hour, ':', lpad(Minute, 2, '0')) as TimeString, \nIncidentLocationStreetAddress, IncidentLocationTown\nfrom Incident, IncidentType, Time, Date, Agency\nwhere Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and \nIncident.IncidentTypeID=IncidentType.IncidentTypeID and\nIncident.ReportingAgencyID=AgencyID\nand (if(${AgencyParameter}=\"All Agencies\", 1, AgencyName=${AgencyParameter}))\nand\nstr_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') < str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\") and\nstr_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') > date_sub(str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\"),\n    interval ${IncidentListTimePeriodParameter} hour)",
+      "value": "select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, \nconcat(Hour, ':', lpad(Minute, 2, '0')) as TimeString, \nIncidentLocationStreetAddress, TownDescription\nfrom Incident, IncidentType, Time, Date, Agency, Town\nwhere Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and\nIncident.IncidentTypeID=IncidentType.IncidentTypeID and\nIncident.ReportingAgencyID=AgencyID and\nIncident.TownID=Town.TownID\nand (if(${AgencyParameter}=\"All Agencies\", 1, AgencyName=${AgencyParameter}))\nand (if(${TownParameter}=\"All Towns\", 1, TownDescription=${TownParameter}))\nand str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') < str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\")\nand str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') > date_sub(str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\"),\n    interval ${IncidentListTimePeriodParameter} hour)",
       "type": "SqlQuery"
      },
      {
       "name": "parameters",
-      "value": "[[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"IncidentListTimePeriodParameter\",\"24\",\"String\",\"\"],[\"BaseDateParameter\",\"\",\"String\",\"\"]]",
+      "value": "[[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"IncidentListTimePeriodParameter\",\"24\",\"String\",\"\"],[\"BaseDateParameter\",\"\",\"String\",\"\"],[\"TownParameter\",\"All Towns\",\"String\",\"\"]]",
+      "type": "CdaParameters"
+     },
+     {
+      "name": "outputMode",
+      "value": "include",
+      "type": "OutputMode"
+     },
+     {
+      "name": "cdacolumns",
+      "value": "[]",
+      "type": "CdaColumnsArray"
+     },
+     {
+      "name": "cdacalculatedcolumns",
+      "value": "[]",
+      "type": "CdaCalculatedColumnsArray"
+     },
+     {
+      "name": "output",
+      "value": "[]",
+      "type": "IndexArray"
+     },
+     {
+      "name": "cacheDuration",
+      "value": 3600,
+      "type": "Integer"
+     },
+     {
+      "name": "cache",
+      "value": "true",
+      "type": "Boolean"
+     }
+    ],
+    "meta": "CDA",
+    "meta_conntype": "sql.jndi",
+    "meta_datype": "sql"
+   },
+   {
+    "id": "8b814c4b-709b-d997-e7dc-04647ac2cc91",
+    "type": "Componentssql_sqlJndi",
+    "typeDesc": "sql over sqlJndi",
+    "parent": "SQL",
+    "properties": [
+     {
+      "name": "name",
+      "value": "TownQuery",
+      "type": "Id"
+     },
+     {
+      "name": "access",
+      "value": "public",
+      "type": "Access"
+     },
+     {
+      "name": "jndi",
+      "value": "ojbc_analytics_demo",
+      "type": "Jndi"
+     },
+     {
+      "name": "query",
+      "value": "select \"All Towns\" as TownDescription union\nselect distinct TownDescription from Town",
+      "type": "SqlQuery"
+     },
+     {
+      "name": "parameters",
+      "value": "[]",
       "type": "CdaParameters"
      },
      {
@@ -5693,12 +5900,12 @@
      },
      {
       "name": "query",
-      "value": "SELECT {[Measures].[IncidentCount]} ON COLUMNS,\norder({topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS\nFROM [Incident]\nWHERE CrossJoin({[Agency].[${AgencyParameter}]}, {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})",
+      "value": "SELECT {[Measures].[IncidentCount]} ON COLUMNS,\norder({topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS\nFROM [Incident]\nWHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},\n{parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})",
       "type": "CurrentMdxQuery"
      },
      {
       "name": "parameters",
-      "value": "[[\"Top20CallsDateRangeParameter\",\"30\",\"Integer\",\"\"],[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"BaseDateParameter\",\"\",\"String\",\"\"]]",
+      "value": "[[\"Top20CallsDateRangeParameter\",\"30\",\"Integer\",\"\"],[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"BaseDateParameter\",\"\",\"String\",\"\"],[\"TownParameter\",\"All Towns\",\"String\",\"\"]]",
       "type": "CdaParameters"
      },
      {
@@ -5769,12 +5976,12 @@
      },
      {
       "name": "query",
-      "value": "SELECT\n CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,\n {parallelperiod([Date.DateYMD].[Month], ${AnnualTrendDateRangeParameter}, ${BaseMonthParameter}):${BaseMonthParameter}} ON ROWS\nFROM [Incident] WHERE [Agency].[${AgencyParameter}]",
+      "value": "SELECT\n CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,\n {parallelperiod([Date.DateYMD].[Month], ${AnnualTrendDateRangeParameter}, ${BaseMonthParameter}):${BaseMonthParameter}} ON ROWS\nFROM [Incident] WHERE [Agency].[${AgencyParameter}] * [Town].[${TownParameter}]",
       "type": "CurrentMdxQuery"
      },
      {
       "name": "parameters",
-      "value": "[[\"AnnualTrendDateRangeParameter\",\"12\",\"Integer\",\"\"],[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"BaseMonthParameter\",\"\",\"String\",\"\"]]",
+      "value": "[[\"AnnualTrendDateRangeParameter\",\"12\",\"Integer\",\"\"],[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"BaseMonthParameter\",\"\",\"String\",\"\"],[\"TownParameter\",\"All Towns\",\"String\",\"\"]]",
       "type": "CdaParameters"
      },
      {
@@ -5845,12 +6052,12 @@
      },
      {
       "name": "query",
-      "value": "SELECT\nNON EMPTY CrossJoin({[Time Of Day.Time].[Hour].Members}, {[Measures].[IncidentCount]}) ON ROWS,\nNON EMPTY hierarchize({[Date.Day of Week].[Day of Week].Members}) ON COLUMNS\nFROM [Incident]\nWHERE CrossJoin(parallelperiod([Date.CalDate].[Date], ${HeatGridDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}],\n    [Agency].[${AgencyParameter}])",
+      "value": "SELECT\nNON EMPTY CrossJoin({[Time Of Day.Time].[Hour].Members}, {[Measures].[IncidentCount]}) ON ROWS,\nNON EMPTY hierarchize({[Date.Day of Week].[Day of Week].Members}) ON COLUMNS\nFROM [Incident]\nWHERE CrossJoin(parallelperiod([Date.CalDate].[Date], ${HeatGridDateRangeParameter},\n    [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}],\n    [Town].[${TownParameter}] * [Agency].[${AgencyParameter}])",
       "type": "CurrentMdxQuery"
      },
      {
       "name": "parameters",
-      "value": "[[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"HeatGridDateRangeParameter\",\"30\",\"Integer\",\"\"],[\"BaseDateParameter\",\"\",\"String\",\"\"]]",
+      "value": "[[\"AgencyParameter\",\"All Agencies\",\"String\",\"\"],[\"HeatGridDateRangeParameter\",\"30\",\"Integer\",\"\"],[\"BaseDateParameter\",\"\",\"String\",\"\"],[\"TownParameter\",\"All Towns\",\"String\",\"\"]]",
       "type": "CdaParameters"
      },
      {

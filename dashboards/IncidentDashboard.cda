@@ -1,27 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    
-    Unless explicitly acquired and licensed from Licensor under another license, the contents of
-    this file are subject to the Reciprocal Public License ("RPL") Version 1.5, or subsequent
-    versions as allowed by the RPL, and You may not copy or use this file in either source code
-    or executable form, except in compliance with the terms and conditions of the RPL
-    All software distributed under the RPL is provided strictly on an "AS IS" basis, WITHOUT
-    WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, AND LICENSOR HEREBY DISCLAIMS ALL SUCH
-    WARRANTIES, INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-    PARTICULAR PURPOSE, QUIET ENJOYMENT, OR NON-INFRINGEMENT. See the RPL for specific language
-    governing rights and limitations under the RPL.
-
-    http://opensource.org/licenses/RPL-1.5
-
-    Copyright 2012-2015 Open Justice Broker Consortium
-
-    -->
 <CDADescriptor>
    <DataSources>
       <Connection id="AgencyQuery" type="sql.jndi">
          <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
       <Connection id="IncidentListQuery" type="sql.jndi">
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="TownQuery" type="sql.jndi">
          <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
       <Connection id="Top20CallsQuery" type="mondrian.jndi">
@@ -54,19 +40,29 @@ select distinct AgencyName from Agency</Query>
          <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
          <Parameter default="24" name="IncidentListTimePeriodParameter" type="String"/>
          <Parameter default="" name="BaseDateParameter" type="String"/>
+         <Parameter default="All Towns" name="TownParameter" type="String"/>
       </Parameters>
       <Query>select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, 
 concat(Hour, ':', lpad(Minute, 2, '0')) as TimeString, 
-IncidentLocationStreetAddress, IncidentLocationTown
-from Incident, IncidentType, Time, Date, Agency
-where Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and 
+IncidentLocationStreetAddress, TownDescription
+from Incident, IncidentType, Time, Date, Agency, Town
+where Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and
 Incident.IncidentTypeID=IncidentType.IncidentTypeID and
-Incident.ReportingAgencyID=AgencyID
+Incident.ReportingAgencyID=AgencyID and
+Incident.TownID=Town.TownID
 and (if(${AgencyParameter}="All Agencies", 1, AgencyName=${AgencyParameter}))
-and
-str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &lt; str_to_date(${BaseDateParameter}, "%Y-%m-%d-%H-%i-%s") and
-str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &gt; date_sub(str_to_date(${BaseDateParameter}, "%Y-%m-%d-%H-%i-%s"),
+and (if(${TownParameter}="All Towns", 1, TownDescription=${TownParameter}))
+and str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &lt; str_to_date(${BaseDateParameter}, "%Y-%m-%d-%H-%i-%s")
+and str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &gt; date_sub(str_to_date(${BaseDateParameter}, "%Y-%m-%d-%H-%i-%s"),
     interval ${IncidentListTimePeriodParameter} hour)</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="TownQuery"
+               id="TownQuery"
+               type="sql">
+      <Columns/>
+      <Parameters/>
+      <Query>select "All Towns" as TownDescription union
+select distinct TownDescription from Town</Query>
    </DataAccess>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="Top20CallsQuery"
                id="Top20CallsQuery"
@@ -77,11 +73,13 @@ str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Seco
          <Parameter default="30" name="Top20CallsDateRangeParameter" type="Integer"/>
          <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
          <Parameter default="" name="BaseDateParameter" type="String"/>
+         <Parameter default="All Towns" name="TownParameter" type="String"/>
       </Parameters>
       <Query>SELECT {[Measures].[IncidentCount]} ON COLUMNS,
 order({topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS
 FROM [Incident]
-WHERE CrossJoin({[Agency].[${AgencyParameter}]}, {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})</Query>
+WHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},
+{parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})</Query>
    </DataAccess>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="AnnualTrendQuery"
                id="AnnualTrendQuery"
@@ -92,11 +90,12 @@ WHERE CrossJoin({[Agency].[${AgencyParameter}]}, {parallelperiod([Date.CalDate].
          <Parameter default="12" name="AnnualTrendDateRangeParameter" type="Integer"/>
          <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
          <Parameter default="" name="BaseMonthParameter" type="String"/>
+         <Parameter default="All Towns" name="TownParameter" type="String"/>
       </Parameters>
       <Query>SELECT
  CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,
  {parallelperiod([Date.DateYMD].[Month], ${AnnualTrendDateRangeParameter}, ${BaseMonthParameter}):${BaseMonthParameter}} ON ROWS
-FROM [Incident] WHERE [Agency].[${AgencyParameter}]</Query>
+FROM [Incident] WHERE [Agency].[${AgencyParameter}] * [Town].[${TownParameter}]</Query>
    </DataAccess>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="HeatGridQuery"
                id="HeatGridQuery"
@@ -107,12 +106,14 @@ FROM [Incident] WHERE [Agency].[${AgencyParameter}]</Query>
          <Parameter default="All Agencies" name="AgencyParameter" type="String"/>
          <Parameter default="30" name="HeatGridDateRangeParameter" type="Integer"/>
          <Parameter default="" name="BaseDateParameter" type="String"/>
+         <Parameter default="All Towns" name="TownParameter" type="String"/>
       </Parameters>
       <Query>SELECT
 NON EMPTY CrossJoin({[Time Of Day.Time].[Hour].Members}, {[Measures].[IncidentCount]}) ON ROWS,
 NON EMPTY hierarchize({[Date.Day of Week].[Day of Week].Members}) ON COLUMNS
 FROM [Incident]
-WHERE CrossJoin(parallelperiod([Date.CalDate].[Date], ${HeatGridDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}],
-    [Agency].[${AgencyParameter}])</Query>
+WHERE CrossJoin(parallelperiod([Date.CalDate].[Date], ${HeatGridDateRangeParameter},
+    [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}],
+    [Town].[${TownParameter}] * [Agency].[${AgencyParameter}])</Query>
    </DataAccess>
 </CDADescriptor>
