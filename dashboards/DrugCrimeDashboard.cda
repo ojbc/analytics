@@ -1,21 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    
-    Unless explicitly acquired and licensed from Licensor under another license, the contents of
-    this file are subject to the Reciprocal Public License ("RPL") Version 1.5, or subsequent
-    versions as allowed by the RPL, and You may not copy or use this file in either source code
-    or executable form, except in compliance with the terms and conditions of the RPL
-    All software distributed under the RPL is provided strictly on an "AS IS" basis, WITHOUT
-    WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, AND LICENSOR HEREBY DISCLAIMS ALL SUCH
-    WARRANTIES, INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-    PARTICULAR PURPOSE, QUIET ENJOYMENT, OR NON-INFRINGEMENT. See the RPL for specific language
-    governing rights and limitations under the RPL.
-
-    http://opensource.org/licenses/RPL-1.5
-
-    Copyright 2012-2015 Open Justice Broker Consortium
-
-    -->
 <CDADescriptor>
    <DataSources>
       <Connection id="YearQuery" type="sql.jndi">
@@ -164,8 +147,6 @@ WHERE CrossJoin({[County].[${CountyParameter}]}, {[Date.DateYMD].[${YearParamete
          <Parameter default="All Drugs" name="DemographicsDrugParameter" type="String"/>
       </Parameters>
       <Query>WITH
-SET [~COLUMNS_Race.Race] AS
-    {[Race].[Race].Members}
 SET [~COLUMNS_Sex.PersonSex] AS
     {[Sex.PersonSex].[PersonSex].Members}
 SET [~ROWS_Year.Year] AS
@@ -173,7 +154,7 @@ SET [~ROWS_Year.Year] AS
 SET [~ROWS_Age Range.AgeRange] AS
     {[Age Range.AgeRange].[Age Range].Members}
 SELECT
-NON EMPTY CrossJoin(([~COLUMNS_Race.Race]), {[Measures].[Crime Rate Per 1000]}) ON ROWS,
+NON EMPTY {[Measures].[Crime Rate Per 1000]} ON ROWS,
 NON EMPTY {[~ROWS_Age Range.AgeRange] * [~COLUMNS_Sex.PersonSex]} ON COLUMNS
 FROM [Crime Rates]
 WHERE CrossJoin({[DrugOffense_sep.Drug Offense].[Y]} * {[Drug].[${DemographicsDrugParameter}]},

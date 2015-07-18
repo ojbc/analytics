@@ -2018,8 +2018,13 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "width",
+      "value": "500",
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -2028,13 +2033,8 @@
       "type": "Integer"
      },
      {
-      "name": "width",
-      "value": "500",
-      "type": "Integer"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -2058,12 +2058,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -3322,8 +3322,8 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -3332,13 +3332,13 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -3362,12 +3362,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -4596,8 +4596,8 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -4606,13 +4606,13 @@
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -4636,12 +4636,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -5870,8 +5870,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -5880,13 +5880,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -5910,12 +5910,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -6346,7 +6346,7 @@
      },
      {
       "name": "legendVisible",
-      "value": "true",
+      "value": "false",
       "type": "Boolean"
      },
      {
@@ -6901,7 +6901,7 @@
      },
      {
       "name": "stacked",
-      "value": "true",
+      "value": "false",
       "type": "Boolean"
      },
      {
@@ -7144,8 +7144,8 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -7154,13 +7154,13 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -7184,12 +7184,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -8872,7 +8872,7 @@
      },
      {
       "name": "query",
-      "value": "WITH\nSET [~COLUMNS_Race.Race] AS\n    {[Race].[Race].Members}\nSET [~COLUMNS_Sex.PersonSex] AS\n    {[Sex.PersonSex].[PersonSex].Members}\nSET [~ROWS_Year.Year] AS\n    {[Year].[Year].Members}\nSET [~ROWS_Age Range.AgeRange] AS\n    {[Age Range.AgeRange].[Age Range].Members}\nSELECT\nNON EMPTY CrossJoin(([~COLUMNS_Race.Race]), {[Measures].[Crime Rate Per 1000]}) ON ROWS,\nNON EMPTY {[~ROWS_Age Range.AgeRange] * [~COLUMNS_Sex.PersonSex]} ON COLUMNS\nFROM [Crime Rates]\nWHERE CrossJoin({[DrugOffense_sep.Drug Offense].[Y]} * {[Drug].[${DemographicsDrugParameter}]},\n    {[Year].[${YearParameter}]} * {[County].[${CountyParameter}]})",
+      "value": "WITH\nSET [~COLUMNS_Sex.PersonSex] AS\n    {[Sex.PersonSex].[PersonSex].Members}\nSET [~ROWS_Year.Year] AS\n    {[Year].[Year].Members}\nSET [~ROWS_Age Range.AgeRange] AS\n    {[Age Range.AgeRange].[Age Range].Members}\nSELECT\nNON EMPTY {[Measures].[Crime Rate Per 1000]} ON ROWS,\nNON EMPTY {[~ROWS_Age Range.AgeRange] * [~COLUMNS_Sex.PersonSex]} ON COLUMNS\nFROM [Crime Rates]\nWHERE CrossJoin({[DrugOffense_sep.Drug Offense].[Y]} * {[Drug].[${DemographicsDrugParameter}]},\n    {[Year].[${YearParameter}]} * {[County].[${CountyParameter}]})",
       "type": "CurrentMdxQuery"
      },
      {
