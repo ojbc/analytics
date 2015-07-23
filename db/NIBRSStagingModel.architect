@@ -22,7 +22,7 @@
     <column id="COL4" populated="true" UUID="98758721-7894-4009-98eb-097297c3a821" autoIncrement="false" autoIncrementSequenceName="AdminSeg_SegmentLevel_seq" defaultValue="" name="SegmentLevel" nullable="1" physicalName="SegmentLevel" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL5" populated="true" UUID="5ef1ed5f-ac64-48ed-b690-caea3af316b4" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeID" nullable="0" physicalName="SegmentActionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL5" populated="true" UUID="5ef1ed5f-ac64-48ed-b690-caea3af316b4" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeTypeID" nullable="0" physicalName="SegmentActionTypeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL6" populated="true" UUID="5eed0e01-d224-4034-b44a-1676a9c09de7" autoIncrement="false" autoIncrementSequenceName="AdminSeg_MonthOfTape_seq" defaultValue="" name="MonthOfTape" nullable="1" physicalName="MonthOfTape" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -123,7 +123,7 @@ offense(s) being exceptionally cleared.</remarks>
     <column id="COL30" populated="true" UUID="23e44f8a-da88-4747-9e6d-7a97e69f6f75" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_SegmentLevel_seq" defaultValue="" name="SegmentLevel" nullable="1" physicalName="SegmentLevel" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL31" populated="true" UUID="568e16f3-3e4c-46ee-bb44-98a15440faa5" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeID" nullable="0" physicalName="SegmentActionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL31" populated="true" UUID="568e16f3-3e4c-46ee-bb44-98a15440faa5" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeTypeID" nullable="0" physicalName="SegmentActionTypeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL32" populated="true" UUID="691c9d77-97c8-42b9-88aa-e46cf82280da" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_MonthOfTape_seq" defaultValue="" name="MonthOfTape" nullable="1" physicalName="MonthOfTape" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -183,7 +183,7 @@ Rental Storage Facility.</remarks>
     <column id="COL47" populated="true" UUID="5d6b7a7d-1a48-45df-85a0-256e0d7bf61a" autoIncrement="false" autoIncrementSequenceName="PropertySegment_SegmentLevel_seq" defaultValue="" name="SegmentLevel" nullable="1" physicalName="SegmentLevel" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL48" populated="true" UUID="bce77033-0c6e-4272-b224-40cac2d90c09" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeID" nullable="0" physicalName="SegmentActionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL48" populated="true" UUID="bce77033-0c6e-4272-b224-40cac2d90c09" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeTypeID" nullable="0" physicalName="SegmentActionTypeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL49" populated="true" UUID="7dd0cdef-33f9-4429-86f3-4ca689055955" autoIncrement="false" autoIncrementSequenceName="PropertySegment_MonthOfTape_seq" defaultValue="" name="MonthOfTape" nullable="1" physicalName="MonthOfTape" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -315,7 +315,7 @@ segment per victim.</remarks>
     <column id="COL79" populated="true" UUID="9ce98143-eee4-4220-a164-a6530db8e886" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_SegmentLevel_seq" defaultValue="" name="SegmentLevel" nullable="0" physicalName="SegmentLevel" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL80" populated="true" UUID="e72cfb64-da98-450d-9e1e-3bb56ef8979d" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeID" nullable="0" physicalName="SegmentActionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL80" populated="true" UUID="e72cfb64-da98-450d-9e1e-3bb56ef8979d" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeTypeID" nullable="0" physicalName="SegmentActionTypeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL81" populated="true" UUID="a2dc4349-eefa-470d-a4a5-00eaa5360a05" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_MonthOfTape_seq" defaultValue="" name="MonthOfTape" nullable="1" physicalName="MonthOfTape" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -407,7 +407,7 @@ range such as 25 to 30 years (2530).</remarks>
     <column id="COL105" populated="true" UUID="bbff6f3f-fe38-4832-8bc5-2df2e4fabcdb" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_SegmentLevel_seq" defaultValue="" name="SegmentLevel" nullable="1" physicalName="SegmentLevel" precision="1" referenceCount="1" scale="0" source-column-ref="COL30" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL106" populated="true" UUID="d1e17dca-83a0-4002-8eeb-46f299ca0f3c" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeID" nullable="0" physicalName="SegmentActionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL106" populated="true" UUID="d1e17dca-83a0-4002-8eeb-46f299ca0f3c" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeTypeID" nullable="0" physicalName="SegmentActionTypeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL107" populated="true" UUID="84bec128-c4d2-44e2-b839-17cdc981d3a2" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_MonthOfTape_seq" defaultValue="" name="MonthOfTape" nullable="1" physicalName="MonthOfTape" precision="2" referenceCount="1" scale="0" source-column-ref="COL32" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -464,7 +464,7 @@ such as 25 to 30 years (2530).</remarks>
     <column id="COL121" populated="true" UUID="87ee9dcc-3eec-4f89-85dc-7d5998e66326" autoIncrement="false" autoIncrementSequenceName="AdminSeg_SegmentLevel_seq" defaultValue="" name="SegmentLevel" nullable="1" physicalName="SegmentLevel" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL122" populated="true" UUID="6ecda1e8-5270-46ff-b491-d7386e8fdc77" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeID" nullable="0" physicalName="SegmentActionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL122" populated="true" UUID="6ecda1e8-5270-46ff-b491-d7386e8fdc77" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeTypeID" nullable="0" physicalName="SegmentActionTypeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL123" populated="true" UUID="b050d911-b592-41ab-aebe-fb128e95cbe9" autoIncrement="false" autoIncrementSequenceName="AdminSeg_MonthOfTape_seq" defaultValue="" name="MonthOfTape" nullable="1" physicalName="MonthOfTape" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -725,18 +725,18 @@ reporting these data.</remarks>
     </index>
    </folder>
   </table>
-  <table id="TAB190" populated="true" UUID="5d9abfd6-d247-4643-9ec6-d2e4a7efa42c" name="SegmentActionType" objectType="TABLE" physicalName="SegmentActionType" >
+  <table id="TAB190" populated="true" UUID="5d9abfd6-d247-4643-9ec6-d2e4a7efa42c" name="SegmentActionTypeType" objectType="TABLE" physicalName="SegmentActionTypeType" >
    <remarks>Instructs the FBI as to what kind of database
 activity is to be performed.
 Valid Codes: I, M, D, and W.</remarks>
    <folder id="FOLTAB1901" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL191" populated="true" UUID="34fe14fb-eb0e-4cb3-9b52-85c9fdcc8d61" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeID" nullable="0" physicalName="SegmentActionTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL191" populated="true" UUID="34fe14fb-eb0e-4cb3-9b52-85c9fdcc8d61" autoIncrement="false" autoIncrementSequenceName="SegmentActionTypeType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeTypeID" nullable="0" physicalName="SegmentActionTypeTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL192" populated="true" UUID="b04c1f41-f77a-4cf3-b648-d93a7ae737b2" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionType_seq" defaultValue="" name="SegmentActionTypeCode" nullable="1" physicalName="SegmentActionTypeCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL193" populated="true" UUID="521831b2-2c11-4106-8965-4894d027b824" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeDescription_seq" defaultValue="" name="SegmentActionTypeDescription" nullable="0" physicalName="SegmentActionTypeDescription" precision="22" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL193" populated="true" UUID="521831b2-2c11-4106-8965-4894d027b824" autoIncrement="false" autoIncrementSequenceName="SegmentActionTypeType_SegmentActionTypeDescription_seq" defaultValue="" name="SegmentActionTypeDescription" nullable="0" physicalName="SegmentActionTypeDescription" precision="22" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -745,8 +745,8 @@ Valid Codes: I, M, D, and W.</remarks>
     <folder id="FOLTAB1902" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB1904" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX194" populated="true" UUID="0a2ea3e4-347e-456a-8eb0-83c3682372fe" clustered="false" name="SegmentActionType_pk" physicalName="SegmentActionTypeLookup_pk" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC195" populated="true" UUID="5c98b6b2-76f1-493a-95fe-477d2d4c9409" ascendingOrDescending="UNSPECIFIED" column-ref="COL191" name="SegmentActionTypeID" physicalName="SegmentActionTypeID" />
+    <index id="IDX194" populated="true" UUID="0a2ea3e4-347e-456a-8eb0-83c3682372fe" clustered="false" name="SegmentActionTypeType_pk" physicalName="SegmentActionTypeLookup_pk" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC195" populated="true" UUID="5c98b6b2-76f1-493a-95fe-477d2d4c9409" ascendingOrDescending="UNSPECIFIED" column-ref="COL191" name="SegmentActionTypeTypeID" physicalName="SegmentActionTypeTypeID" />
     </index>
    </folder>
   </table>
@@ -1234,7 +1234,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL322" populated="true" UUID="ed191f8a-bdf9-4521-90e4-e412595c5b66" autoIncrement="false" autoIncrementSequenceName="ArrestReportSegment_SegmentLevel_seq" defaultValue="" name="SegmentLevel" nullable="1" physicalName="SegmentLevel" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL323" populated="true" UUID="9341b359-a8e1-4f3f-b110-3923f2a6d43f" autoIncrement="false" autoIncrementSequenceName="ArrestReportSegment_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeID" nullable="0" physicalName="SegmentActionTypeID" precision="0" referenceCount="2" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL323" populated="true" UUID="9341b359-a8e1-4f3f-b110-3923f2a6d43f" autoIncrement="false" autoIncrementSequenceName="ArrestReportSegment_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeTypeID" nullable="0" physicalName="SegmentActionTypeTypeID" precision="0" referenceCount="2" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL324" populated="true" UUID="705e66e4-f495-471f-a7d9-c3be2f163b7b" autoIncrement="false" autoIncrementSequenceName="ArrestReportSegment_MonthOfTape_seq" defaultValue="" name="MonthOfTape" nullable="1" physicalName="MonthOfTape" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
