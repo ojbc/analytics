@@ -64,11 +64,11 @@ loadAgeDimensionTables <- function(conn) {
   
   AgeRange5=unique(ageRanges)
   PersonAgeRange <- data.table(PersonAgeRangeID=1:length(AgeRange5), AgeRange5, AgeRange5Sort=AgeRange5)
+  dbSendQuery(conn, "delete from PersonAgeRange")
   dbWriteTable(conn, "PersonAgeRange", PersonAgeRange, append=TRUE, row.names=FALSE)
   
   PersonAge <- data.table(PersonAgeID=(ages+1), AgeInYears=ageStrings, PersonAgeRangeID=match(ageRanges, AgeRange5))
   dbSendQuery(conn, "delete from PersonAge")
-  dbSendQuery(conn, "delete from PersonAgeRange")
   dbWriteTable(conn, "PersonAge", PersonAge, append=TRUE, row.names=FALSE)
   
 }
