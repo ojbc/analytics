@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="EligibleArrestQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJBC+Analytics</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="NeedsQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJBC+Analytics</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="PretrialMonitoringQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJBC+Analytics</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="PretrialRecidivismQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJBC+Analytics</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
+      </Connection>
+   </DataSources>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="EligibleArrestQuery"
+               id="EligibleArrestQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="" name="BaseDateParameter" type="String"/>
+      </Parameters>
+      <Query>WITH
+SET [~ROWS] AS
+    {[Pretrial District.Region].[Region].Members}
+SELECT
+NON EMPTY {[Measures].[PretrialServiceEligiblePercent]} ON COLUMNS,
+NON EMPTY [~ROWS] ON ROWS
+FROM [ArrestCharge]
+WHERE {parallelperiod([Date.CalDate].[Date], 90,
+    [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]}</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="NeedsQuery"
+               id="NeedsQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="" name="BaseDateParameter" type="String"/>
+      </Parameters>
+      <Query>WITH
+SET [~COLUMNS] AS
+    Except({[Assessed Need.AssessedNeed].[Assessed Need].Members}, {[Assessed Need.AssessedNeed].[None]})
+SET [~ROWS] AS
+    {[Region].[Region].Members}
+SELECT
+NON EMPTY CrossJoin([~COLUMNS], {[Measures].[PretrialServiceParticipantCount]}) ON COLUMNS,
+NON EMPTY [~ROWS] ON ROWS
+FROM [PretrialServicesNeedsAssessment]
+WHERE {parallelperiod([Intake Date.CalDate].[Date], 90,
+    [Intake Date.CalDate].[${BaseDateParameter}]):[Intake Date.CalDate].[${BaseDateParameter}]}</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="PretrialMonitoringQuery"
+               id="PretrialMonitoringQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="" name="PretrialMonitoringServiceNameParameter" type="String"/>
+         <Parameter default="" name="BaseDateParameter" type="String"/>
+      </Parameters>
+      <Query>WITH
+SET [~ROWS] AS
+    {[Region].[Region].Members}
+MEMBER [Measures].[Percent Pretrial Monitoring] AS [Measures].[PretrialServiceParticipantCount]  / ( [Pretrial Service.PretrialService].[All Pretrial Services], [Measures].[PretrialServiceParticipantCount]  )
+SELECT
+NON EMPTY {[Measures].[Percent Pretrial Monitoring]} * {[Pretrial Service.PretrialService].[yes].[${PretrialMonitoringServiceNameParameter}]} ON COLUMNS,
+NON EMPTY [~ROWS] ON ROWS
+FROM [PretrialServicesNeedsAssessment]
+WHERE {parallelperiod([Intake Date.CalDate].[Date], 90,
+    [Intake Date.CalDate].[${BaseDateParameter}]):[Intake Date.CalDate].[${BaseDateParameter}]}</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="PretrialRecidivismQuery"
+               id="PretrialRecidivismQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="" name="BaseDateParameter" type="String"/>
+      </Parameters>
+      <Query>WITH
+SET [~FILTER] AS
+    {[Pretrial Service.PretrialService].[yes]} * {parallelperiod([Date.CalDate].[Date], 90,
+    [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]}
+SET [~ROWS] AS
+    {[Pretrial District.Region].[Region].Members}
+MEMBER [Measures].[SixMonthRate] as [Measures].[SixMonthRearrestCount] / [Measures].[ArrestChargeCount]
+MEMBER [Measures].[OneYearRate] as [Measures].[OneYearRearrestCount] / [Measures].[ArrestChargeCount]
+MEMBER [Measures].[TwoYearRate] as [Measures].[TwoYearRearrestCount] / [Measures].[ArrestChargeCount]
+SELECT
+NON EMPTY {[Measures].[SixMonthRate], [Measures].[OneYearRate], [Measures].[TwoYearRate]} ON COLUMNS,
+NON EMPTY [~ROWS] ON ROWS
+FROM [ArrestCharge]
+WHERE [~FILTER]</Query>
+   </DataAccess>
+</CDADescriptor>
