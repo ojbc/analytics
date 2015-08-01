@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="SelectUnitQuery" type="sql.jndi">
+         <Jndi>ojbc_transp_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="MonthlyComplaintsQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJB+Transparency+Demo</Catalog>
+         <Jndi>ojbc_transp_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="ComplaintDispositionQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJB+Transparency+Demo</Catalog>
+         <Jndi>ojbc_transp_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="UseOfForceByRaceQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJB+Transparency+Demo</Catalog>
+         <Jndi>ojbc_transp_analytics_demo</Jndi>
+      </Connection>
+      <Connection id="UseOfForceByIncidentTypeQuery" type="mondrian.jndi">
+         <Catalog>mondrian:/OJB+Transparency+Demo</Catalog>
+         <Jndi>ojbc_transp_analytics_demo</Jndi>
+      </Connection>
+   </DataSources>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="SelectUnitQuery"
+               id="SelectUnitQuery"
+               type="sql">
+      <Columns/>
+      <Parameters/>
+      <Query>select "All Units" as UnitName union select UnitName from Unit</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="MonthlyComplaintsQuery"
+               id="MonthlyComplaintsQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="" name="UnitParameter" type="String"/>
+      </Parameters>
+      <Query>WITH
+SET [~COLUMNS] AS
+    {[Complaint Date.DateYMD].[Month].Members}
+SET [~ROWS] AS
+    Hierarchize({[Agency/Unit.AgencyUnit].${UnitParameter}})
+SELECT
+NON EMPTY CrossJoin([~COLUMNS], {[Measures].[ComplaintCount]}) ON COLUMNS,
+NON EMPTY [~ROWS] ON ROWS
+FROM [Complaints]</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="ComplaintDispositionQuery"
+               id="ComplaintDispositionQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="" name="UnitParameter" type="String"/>
+      </Parameters>
+      <Query>WITH
+SET [~ROWS] AS
+    {[Complaint Disposition].[Complaint Disposition].Members}
+SELECT
+NON EMPTY {[Measures].[ComplaintCount]} ON COLUMNS,
+NON EMPTY [~ROWS] ON ROWS
+FROM [Complaints]
+WHERE {[Agency/Unit.AgencyUnit].${UnitParameter}}</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="UseOfForceByRaceQuery"
+               id="UseOfForceByRaceQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="" name="UnitParameter" type="String"/>
+      </Parameters>
+      <Query>WITH
+SET [~COLUMNS] AS
+    {[Race].[Race].Members}
+SET [~ROWS] AS
+    Except({[Use Of Force Type].[Use Of Force Type].Members}, {[Use Of Force Type].[None]})
+MEMBER [Measures].[ShareToParent] as '100*[Measures].[IncidentCount]/([Measures].[IncidentCount], [Use Of Force Type].[Use Of Force Type].CurrentMember.Parent)'
+SELECT
+NON EMPTY CrossJoin([~COLUMNS], {[Measures].[ShareToParent]}) ON COLUMNS,
+NON EMPTY [~ROWS] ON ROWS
+FROM [Officer-Subject Interactions]
+WHERE {[Agency/Unit.AgencyUnit].${UnitParameter}}</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600"
+               connection="UseOfForceByIncidentTypeQuery"
+               id="UseOfForceByIncidentTypeQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="" name="UnitParameter" type="String"/>
+      </Parameters>
+      <Query>WITH
+SET [~COLUMNS] AS
+    {[Use Of Force Type].[Use Of Force Type].Members}
+SET [~ROWS] AS
+    {[Incident Type.IncidentType].[IncidentType].Members}
+SELECT
+NON EMPTY CrossJoin([~COLUMNS], {[Measures].[IncidentCount]}) ON COLUMNS,
+NON EMPTY [~ROWS] ON ROWS
+FROM [Officer-Subject Interactions]
+WHERE {[Agency/Unit.AgencyUnit].${UnitParameter}}</Query>
+   </DataAccess>
+</CDADescriptor>
