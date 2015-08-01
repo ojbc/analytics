@@ -16,8 +16,8 @@
 
 STATE <- "VT"
 
-demoArresteeCount = 100
-demoIncidentCount = 250
+demoArresteeCount = 12000
+demoIncidentCount = 25000
 
 library(RMySQL)
 library(data.table)
@@ -78,13 +78,17 @@ yesno <- c("Yes","No")
 YesNo <- data.table(YesNoID=1:length(yesno), YesNoDescription=yesno)
 dbWriteTable(conn, "YesNo", YesNo, append=TRUE, row.names=FALSE)
 
-need <- c("Need 1","Need 2", "Need 3", "None", "Unknown")
-AssessedNeed <- data.table(AssessedNeedID=1:length(need), AssessedNeedDescription=need)
-dbWriteTable(conn, "AssessedNeed", AssessedNeed, append=TRUE, row.names=FALSE)
+countyCount <- length(county_df$GEOID)
+
+regionID <- c(1:countyCount, (countyCount+1))
+regionDescription <- c(paste0("Region ", 1:countyCount), "Unknown")
+Region <- data.table(RegionID=regionID, RegionDescription=regionDescription)
+dbWriteTable(conn, "Region", Region, append=TRUE, row.names=FALSE)
 
 countyID <- c(as.character(county_df$GEOID), "99999")
 countyName <- c(as.character(county_df$NAME), "Unknown")
-County <- data.table(CountyID=countyID, CountyName=countyName)
+regionID <- c(sample(1:countyCount, replace = TRUE), countyCount+1)
+County <- data.table(CountyID=countyID, CountyName=countyName, RegionID=regionID)
 dbWriteTable(conn, "County", County, append=TRUE, row.names=FALSE)
 
 PersonSex <- loadSexDimensionTable(conn)
@@ -381,16 +385,38 @@ makePretrialParticipation <- function(arrestID) {
   arrestDate <- as.Date(dateID, DATE_ID_FORMAT)
   IntakeDate <- arrestDate + runif(n=1, min=1, max=30)
   IntakeDateID <- format(IntakeDate, DATE_ID_FORMAT)
-  AssessedNeedID <- sample(1:5, size=1, prob=c(.2, .2, .15, .4, .05))
   RiskScoreID <- sample(riskScoreID, size=1, prob=riskScoreProbs)
   PretrialServiceParticipationID <- NA
-  data.frame(PretrialServiceParticipationID, PretrialServiceID, CountyID, IntakeDateID, RiskScoreID, AssessedNeedID, ArrestID=arrestID)
+  data.frame(PretrialServiceParticipationID, PretrialServiceID, CountyID, IntakeDateID, RiskScoreID, ArrestID=arrestID)
 }
 pretrialParticipants <- sample(arrest$ArrestID, nrow(arrest)*.75)
 PretrialServiceParticipation <- bind_rows(Map(makePretrialParticipation, pretrialParticipants))
 PretrialServiceParticipation$PretrialServiceParticipationID <- 1:nrow(PretrialServiceParticipation)
 
+need <- c("Need 1","Need 2", "Need 3", "Need 4", "Need 5", "None", "Unknown")
+AssessedNeed <- data.table(AssessedNeedID=1:length(need), AssessedNeedDescription=need)
+dbWriteTable(conn, "AssessedNeed", AssessedNeed, append=TRUE, row.names=FALSE)
+
+makePretrialAssessedNeed <- function(pretrialServiceParticipationID) {
+  needCount <- rpois(n=1, lambda=1)
+  # note tight coupling to needs...ok for demo data script
+  if (needCount > 5) {
+    needCount <- 5
+  }
+  needs <- c(6)
+  if (needCount > 0) {
+    needs <- sample(1:5, size=needCount, prob=c(.2,.45,.1,.1,.15))
+  }
+  bind_rows(Map(function(needID) {
+    data.frame(PretrialServiceParticipationID=c(pretrialServiceParticipationID), AssessedNeedID=c(needID))
+  }, needs))
+}
+
+PretrialAssessedNeed <- bind_rows(Map(makePretrialAssessedNeed, PretrialServiceParticipation$PretrialServiceParticipationID))
+PretrialAssessedNeed$PretrialAssessedNeedID <- 1:nrow(PretrialAssessedNeed)
+
 dbWriteTable(conn, "PretrialServiceParticipation", as.data.frame(PretrialServiceParticipation), append=TRUE, row.names=FALSE)
+dbWriteTable(conn, "PretrialAssessedNeed", as.data.frame(PretrialAssessedNeed), append=TRUE, row.names=FALSE)
 
 #
 # Incident
