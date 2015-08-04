@@ -338,6 +338,19 @@
 		<Table name="Incident"/>
 		<DimensionUsage source="Town" name="Town" visible="true" foreignKey="TownID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="ReportingAgencyID" highCardinality="false"/>
+		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
+		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="TimeID" highCardinality="false"/>
+		<Measure name="IncidentCount" column="IncidentID" datatype="Integer" aggregator="distinct-count" caption="Incident Count" visible="true"/>
+	</Cube>
+	<Cube name="IncidentTypeInvolvement" caption="Incident Type Involvement" visible="true" cache="true" enabled="true">
+		<View alias="IncidentTypeInvolvement">
+		    <SQL dialect="mysql">
+        <![CDATA[ select Incident.IncidentID, TownID, ReportingAgencyID, IncidentTypeID, DateID, TimeID
+                    from Incident, IncidentTypeAssociation where Incident.IncidentID=IncidentTypeAssociation.IncidentID]]>
+			</SQL>
+		</View>
+		<DimensionUsage source="Town" name="Town" visible="true" foreignKey="TownID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="ReportingAgencyID" highCardinality="false"/>
 		<DimensionUsage source="Incident Type" name="Incident Type" visible="true" foreignKey="IncidentTypeID" highCardinality="false"/>
 		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
 		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="TimeID" highCardinality="false"/>

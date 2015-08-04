@@ -45,11 +45,12 @@ select distinct AgencyName from Agency</Query>
       <Query>select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, 
 concat(Hour, ':', lpad(Minute, 2, '0')) as TimeString, 
 IncidentLocationStreetAddress, TownDescription
-from Incident, IncidentType, Time, Date, Agency, Town
+from Incident, IncidentType, IncidentTypeAssociation, Time, Date, Agency, Town
 where Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and
-Incident.IncidentTypeID=IncidentType.IncidentTypeID and
+IncidentTypeAssociation.IncidentTypeID=IncidentType.IncidentTypeID and
 Incident.ReportingAgencyID=AgencyID and
-Incident.TownID=Town.TownID
+Incident.TownID=Town.TownID and
+Incident.IncidentID=IncidentTypeAssociation.IncidentID
 and (if(${AgencyParameter}="All Agencies", 1, AgencyName=${AgencyParameter}))
 and (if(${TownParameter}="All Towns", 1, TownDescription=${TownParameter}))
 and str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &lt; str_to_date(${BaseDateParameter}, "%Y-%m-%d-%H-%i-%s")
@@ -77,7 +78,7 @@ select distinct TownDescription from Town</Query>
       </Parameters>
       <Query>SELECT {[Measures].[IncidentCount]} ON COLUMNS,
 order({topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS
-FROM [Incident]
+FROM [IncidentTypeInvolvement]
 WHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},
 {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})</Query>
    </DataAccess>
@@ -95,7 +96,7 @@ WHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},
       <Query>SELECT
  CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,
  {parallelperiod([Date.DateYMD].[Month], ${AnnualTrendDateRangeParameter}, ${BaseMonthParameter}):${BaseMonthParameter}} ON ROWS
-FROM [Incident] WHERE [Agency].[${AgencyParameter}] * [Town].[${TownParameter}]</Query>
+FROM [IncidentTypeInvolvement] WHERE [Agency].[${AgencyParameter}] * [Town].[${TownParameter}]</Query>
    </DataAccess>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="HeatGridQuery"
                id="HeatGridQuery"

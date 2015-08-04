@@ -1552,8 +1552,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -1562,13 +1562,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "200",
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "height",
+      "value": "200",
       "type": "Integer"
      },
      {
@@ -2826,23 +2826,23 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "200",
-      "type": "Integer"
-     },
-     {
       "name": "priority",
       "value": 5,
       "type": "Integer"
      },
      {
-      "name": "width",
-      "value": "400",
+      "name": "height",
+      "value": "200",
       "type": "Integer"
      },
      {
       "name": "refreshPeriod",
       "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "width",
+      "value": "400",
       "type": "Integer"
      },
      {
@@ -4130,23 +4130,23 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
       "name": "width",
       "value": "400",
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "200",
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
       "name": "priority",
       "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "height",
+      "value": "200",
       "type": "Integer"
      },
      {
@@ -4923,16 +4923,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "colHeaders",
-      "value": "[\"Agency Case #\",\"Incident Type\",\"Date\",\"Time\",\"Street Address\",\"Town\"]",
-      "type": "Array"
-     },
-     {
-      "name": "parameters",
-      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"IncidentListTimePeriodParameter\",\"IncidentListTimePeriodParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"],[\"TownParameter\",\"TownParameter\"]]",
-      "type": "ValuesArray"
-     },
-     {
       "name": "expandParameters",
       "value": "[]",
       "type": "ValuesArray"
@@ -4951,6 +4941,16 @@
       "name": "colWidths",
       "value": "[]",
       "type": "Array"
+     },
+     {
+      "name": "colHeaders",
+      "value": "[\"Agency Case #\",\"Incident Type\",\"Date\",\"Time\",\"Street Address\",\"Town\"]",
+      "type": "Array"
+     },
+     {
+      "name": "parameters",
+      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"IncidentListTimePeriodParameter\",\"IncidentListTimePeriodParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"],[\"TownParameter\",\"TownParameter\"]]",
+      "type": "ValuesArray"
      },
      {
       "name": "colTypes",
@@ -5883,7 +5883,7 @@
      },
      {
       "name": "query",
-      "value": "select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, \nconcat(Hour, ':', lpad(Minute, 2, '0')) as TimeString, \nIncidentLocationStreetAddress, TownDescription\nfrom Incident, IncidentType, Time, Date, Agency, Town\nwhere Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and\nIncident.IncidentTypeID=IncidentType.IncidentTypeID and\nIncident.ReportingAgencyID=AgencyID and\nIncident.TownID=Town.TownID\nand (if(${AgencyParameter}=\"All Agencies\", 1, AgencyName=${AgencyParameter}))\nand (if(${TownParameter}=\"All Towns\", 1, TownDescription=${TownParameter}))\nand str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') < str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\")\nand str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') > date_sub(str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\"),\n    interval ${IncidentListTimePeriodParameter} hour)",
+      "value": "select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, \nconcat(Hour, ':', lpad(Minute, 2, '0')) as TimeString, \nIncidentLocationStreetAddress, TownDescription\nfrom Incident, IncidentType, IncidentTypeAssociation, Time, Date, Agency, Town\nwhere Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and\nIncidentTypeAssociation.IncidentTypeID=IncidentType.IncidentTypeID and\nIncident.ReportingAgencyID=AgencyID and\nIncident.TownID=Town.TownID and\nIncident.IncidentID=IncidentTypeAssociation.IncidentID\nand (if(${AgencyParameter}=\"All Agencies\", 1, AgencyName=${AgencyParameter}))\nand (if(${TownParameter}=\"All Towns\", 1, TownDescription=${TownParameter}))\nand str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') < str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\")\nand str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') > date_sub(str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\"),\n    interval ${IncidentListTimePeriodParameter} hour)",
       "type": "SqlQuery"
      },
      {
@@ -6034,7 +6034,7 @@
      },
      {
       "name": "query",
-      "value": "SELECT {[Measures].[IncidentCount]} ON COLUMNS,\norder({topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS\nFROM [Incident]\nWHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},\n{parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})",
+      "value": "SELECT {[Measures].[IncidentCount]} ON COLUMNS,\norder({topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS\nFROM [IncidentTypeInvolvement]\nWHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},\n{parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})",
       "type": "CurrentMdxQuery"
      },
      {
@@ -6110,7 +6110,7 @@
      },
      {
       "name": "query",
-      "value": "SELECT\n CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,\n {parallelperiod([Date.DateYMD].[Month], ${AnnualTrendDateRangeParameter}, ${BaseMonthParameter}):${BaseMonthParameter}} ON ROWS\nFROM [Incident] WHERE [Agency].[${AgencyParameter}] * [Town].[${TownParameter}]",
+      "value": "SELECT\n CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,\n {parallelperiod([Date.DateYMD].[Month], ${AnnualTrendDateRangeParameter}, ${BaseMonthParameter}):${BaseMonthParameter}} ON ROWS\nFROM [IncidentTypeInvolvement] WHERE [Agency].[${AgencyParameter}] * [Town].[${TownParameter}]",
       "type": "CurrentMdxQuery"
      },
      {

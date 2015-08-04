@@ -47,9 +47,11 @@ county_df <- arrange(filter(county_shp@data, STATEFP==stateFips), GEOID)
 conn <- dbConnect(MySQL(), host="localhost", dbname="ojbc_analytics_demo", username="root")
 
 # clear out fact tables
+dbSendQuery(conn, "delete from IncidentTypeAssociation")
 dbSendQuery(conn, "delete from Incident")
 dbSendQuery(conn, "delete from Arrest")
 dbSendQuery(conn, "delete from Charge")
+dbSendQuery(conn, "delete from PretrialAssessedNeed")
 dbSendQuery(conn, "delete from PretrialServiceParticipation")
 dbSendQuery(conn, "delete from Population")
 
@@ -417,16 +419,12 @@ dbWriteTable(conn, "PretrialAssessedNeed", as.data.frame(PretrialAssessedNeed), 
 # Incident
 #
 
-incidentTypeProbs <- sort(runif(n=nrow(IncidentType)), decreasing=T)
-incidentTypeProbs[length(incidentTypeProbs)] <- .02
-
 IncidentID <- 1:demoIncidentCount
 DateID <- format(runif(n=demoIncidentCount, min=0, max=364) + as.Date("2013-01-01"), DATE_ID_FORMAT)
 hours <- sample(0:23, size=demoIncidentCount, replace=TRUE)
 minutes <- sample(0:59, size=demoIncidentCount, replace=TRUE)
 seconds <- sample(0:59, size=demoIncidentCount, replace=TRUE)
 TimeID <- makeTimeID(hours, minutes, seconds)
-IncidentTypeID <- sample(nrow(IncidentType), size=demoIncidentCount, replace=TRUE, prob=incidentTypeProbs)
 ReportingAgencyID=sample(agencyID, size=demoIncidentCount, replace=TRUE)
 countyProb <- getCountyProbs()
 CountyID <- sample(countyID, size=demoIncidentCount, prob=countyProb, replace = T)
@@ -437,10 +435,28 @@ IncidentNumber <- paste0("INC", IncidentID)
 Town <- sample(townID, size=demoIncidentCount, replace=TRUE)
 Street <- paste(1:demoIncidentCount, c("Main", "Maple", "Dorset", "Williston", "Oak", "Springfield", "Elm"))
 
-Incident <- data.table(IncidentID, DateID, TimeID, ReportingAgencyID, IncidentTypeID,
+Incident <- data.table(IncidentID, DateID, TimeID, ReportingAgencyID,
                        CountyID, IncidentLocationLatitude, IncidentLocationLongitude, IncidentLocationStreetAddress=Street,
                        TownID=Town, IncidentCaseNumber=IncidentNumber)
 
+IncidentTypeAssociation <- bind_rows(Map(function(incidentID) {
+  typeCount <- rpois(n=1, lambda=1)
+  # reasonable limit...no more than five different types with one incident
+  if (typeCount > 5) {
+    typeCount <- 5
+  }
+  types <- c(6)
+  if (typeCount == 0) {
+    typeCount <- 1
+  }
+  types <- sample(1:7, size=typeCount, prob=c(rep(.16, 6), .04))
+  bind_rows(Map(function(typeID) {
+    data.frame(IncidentID=c(incidentID), IncidentTypeID=c(typeID))
+  }, types))
+}, Incident$IncidentID))
+IncidentTypeAssociation$IncidentTypeAssociationID <- 1:nrow(IncidentTypeAssociation)
+
 dbWriteTable(conn, "Incident", Incident, append=TRUE, row.names=FALSE)
+dbWriteTable(conn, "IncidentTypeAssociation", data.table(IncidentTypeAssociation), append=TRUE, row.names=FALSE)
 
 dbDisconnect(conn)
