@@ -60,6 +60,7 @@ dbSendQuery(conn, "delete from Agency")
 dbSendQuery(conn, "delete from County")
 dbSendQuery(conn, "delete from Disposition")
 dbSendQuery(conn, "delete from OffenseType")
+dbSendQuery(conn, "delete from DispositionOffenseType")
 dbSendQuery(conn, "delete from PretrialService")
 dbSendQuery(conn, "delete from RiskScore")
 dbSendQuery(conn, "delete from YesNo")
@@ -117,6 +118,9 @@ OffenseType <- select(
   -ReadyCashOffenseCategory)
 
 dbWriteTable(conn, "OffenseType", OffenseType, append=TRUE, row.names=FALSE)
+
+DispositionOffenseType <- select(OffenseType, DispositionOffenseTypeID=OffenseTypeID, DispositionOffenseTypeDescription=OffenseDescription)
+dbWriteTable(conn, "DispositionOffenseType", DispositionOffenseType, append=TRUE, row.names=FALSE)
 
 serviceID <- 1:7
 serviceDescription <- paste("service", serviceID)
@@ -324,6 +328,7 @@ makeCharges <- function(arrestID) {
   makeCharge <- function(arrestID) {
     offenseTypeID <- sample(offenseID, size=1, prob = offenseProbs)
     dispoOffenseTypeID <- getDispoOffense(offenseTypeID)
+    filedOffenseTypeID <- getDispoOffense(dispoOffenseTypeID)
     arrestDispo <- sample(dispoID, size=1, prob=c(.3, .4, .4, .1))
     dateID <- as.character(arrest[arrest$ArrestID==arrestID, "DateID"])
     arrestDate <- as.Date(dateID, DATE_ID_FORMAT)
@@ -340,7 +345,8 @@ makeCharges <- function(arrestID) {
     }
     chargeID <- NA
     data.frame(ChargeID=chargeID, ArrestOffenseTypeID=offenseTypeID, ArrestID=arrestID, SentenceTermDays=days,
-               SentenceFineAmount=fine, DispositionID=arrestDispo, DispositionDateID, DispositionOffenseTypeID=dispoOffenseTypeID)
+               SentenceFineAmount=fine, DispositionID=arrestDispo, DispositionDateID,
+               FiledOffenseTypeID=filedOffenseTypeID, DispositionOffenseTypeID=dispoOffenseTypeID)
   }
   df <- makeCharge(arrestID)
   if (rbinom(n = 1, prob = .4, size = 1)) {

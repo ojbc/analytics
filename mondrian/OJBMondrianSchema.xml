@@ -161,6 +161,12 @@
 			<Level name="YesNoIndicator" visible="true" table="YesNo" column="YesNoDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Disposition Offense Type">
+		<Hierarchy name="Disposition Offense Type" visible="true" hasAll="true" allMemberName="All Offense Types" allMemberCaption="All Offense Types" primaryKey="DispositionOffenseTypeID">
+			<Table name="DispositionOffenseType"/>
+			<Level name="Offense Type" visible="true" column="DispositionOffenseTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Incident Type">
 		<Hierarchy name="IncidentType" visible="true" hasAll="true" allMemberName="All Types" allMemberCaption="All Types" primaryKey="IncidentTypeID" caption="Incident Type">
 			<Table name="IncidentType"/>
@@ -271,6 +277,8 @@
     pc.SentenceFineAmount,
     pc.InvolvedDrugID,
     pc.DispositionDateID,
+    pc.DispositionOffenseTypeID,
+    pc.FiledOffenseTypeID,
     sc.DispositionID as SubsequentDispositionID,
     psp.RiskScoreID
     from (((Arrest as pa inner join Date as pad on pa.DateID=pad.DateID) inner join
@@ -289,6 +297,8 @@
 		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="ArresteeRaceID" highCardinality="false"/>
 		<DimensionUsage source="Drug" name="Drug" visible="true" foreignKey="InvolvedDrugID" highCardinality="false"/>
 		<DimensionUsage source="Offense Type" name="Offense Type" visible="true" foreignKey="ArrestOffenseTypeID" highCardinality="false"/>
+		<DimensionUsage source="Disposition Offense Type" name="Disposition Offense Type" visible="true" foreignKey="DispositionOffenseTypeID" highCardinality="false"/>
+		<DimensionUsage source="Disposition Offense Type" caption="Filed Offense Type" name="Filed Offense Type" visible="true" foreignKey="FiledOffenseTypeID" highCardinality="false"/>
 		<DimensionUsage source="Sex" name="Sex" visible="true" foreignKey="ArresteeSexID" highCardinality="false"/>
 		<DimensionUsage source="Disposition" name="Disposition" visible="true" foreignKey="PriorDispositionID" highCardinality="false"/>
 		<DimensionUsage source="Risk Score" name="Risk Score" visible="true" foreignKey="RiskScoreID" highCardinality="false"/>
