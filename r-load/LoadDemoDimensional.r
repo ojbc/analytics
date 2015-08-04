@@ -33,24 +33,15 @@ library(xlsx)
 source("LoadDateTimeDimensionTables.R")
 source("LoadDemographicsDimensionTables.R")
 source("LoadIncidentTypeDimensionTables.R")
+source("LoadCountyPopulationData.R")
 
 state_shp <- readOGR("/opt/data/Shapefiles/tl_2014_us_state", "tl_2014_us_state")
 county_shp = readOGR("/opt/data/Shapefiles/tl_2014_us_county/", "tl_2014_us_county")
-countyData <- read_csv("/opt/data/CC-EST2013-Alldata.csv")
-countyData <- mutate(filter(countyData, SUMLEV==50), fips=paste0(formatC(STATE, width=2, digits=2, flag="0"), formatC(COUNTY, width=3, digits=3, flag="0")))
 
 state_df <- state_shp@data
 stateFips <- as.character(filter(state_df, STUSPS==STATE)$STATEFP)
 
 county_df <- arrange(filter(county_shp@data, STATEFP==stateFips), GEOID)
-countyData <- arrange(filter(countyData, fips %in% county_df$GEOID), fips)
-
-getCountyProbs <- function() {
-  counties <- filter(countyData, AGEGRP==0, YEAR==1)
-  statePop <- sum(counties$TOT_POP)
-  countyProb <- (.9*counties$TOT_POP)/statePop
-  c(countyProb, .1)
-}
 
 #conn <- dbConnect(MySQL(), host="dw", dbname="ojbc_analytics_demo", username="root")
 conn <- dbConnect(MySQL(), host="localhost", dbname="ojbc_analytics_demo", username="root")
@@ -96,19 +87,23 @@ PersonRace <- loadRaceDimensionTable(conn)
 
 sexes <- PersonSex$PersonSexDescription
 races <- PersonRace$PersonRaceDescription
-popData <- gather(select(filter(countyData, AGEGRP!=0, YEAR==6), fips, AGEGRP, YEAR, matches(".AC_.*")), group, PopulationCount, matches(".AC_.*"))
-popData <- mutate(popData, PersonSexID=ifelse(grepl("_MALE", group), match("Male", sexes), match("Female", sexes)))
-popData <- mutate(popData, PersonRaceID=
-                    ifelse(grepl("WAC", group), match("WHITE", races),
-                           ifelse(grepl("BAC", group), match("BLACK", races),
-                                  ifelse(grepl("IAC", group), match("AMERICAN INDIAN", races),
-                                         ifelse(grepl("AAC", group), match("ASIAN", races), match("UNKNOWN", races))))))
-popData <- mutate(popData, PersonAgeRangeID=AGEGRP)
-popData <- select(mutate(rename(popData, CountyID=fips), PopulationID=rownames(popData), Year=2013), -YEAR, -AGEGRP, -group)
-popData <- data.table(popData)
+
+popData <- data.table(bind_rows(
+  getCountyPopulationData("/opt/data/CC-EST2012-Alldata.csv", 2012, stateFips),
+  getCountyPopulationData("/opt/data/CC-EST2013-Alldata.csv", 2013, stateFips),
+  getCountyPopulationData("/opt/data/CC-EST2014-Alldata.csv", 2014, stateFips)))
 dbWriteTable(conn, "Population", popData, append=TRUE, row.names=FALSE)
 
+getCountyProbs <- function() {
+  countyPopData <- summarise(group_by(popData, CountyID), totalPop=sum(PopulationCount))
+  counties <- countyPopData$totalPop
+  countyProb <- (.9*counties/sum(counties))  
+  c(countyProb, .1)
+}
+
 raceProbs <- as.vector(wtd.table(popData$PersonRaceID, weights = popData$PopulationCount)$sum.of.weights)
+raceProbs <- append(raceProbs, .1*sum(raceProbs), after=match("UNKNOWN", races)-1)
+raceProbs <- raceProbs/sum(raceProbs)
 
 readyCashCategory <- c("Larceny-Other", "Burglary", "Theft From Motor Vehicle", "Theft from Building", "Shoplifting", "None")
 ReadyCashOffenseCategory <- data.table(ReadyCashOffenseCategoryID=1:length(readyCashCategory), ReadyCashOffenseCategoryDescription=readyCashCategory)
