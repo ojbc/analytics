@@ -4,9 +4,9 @@
  <print-settings numCopies="1" zoom="0.6" pageNumbersPrinted="false" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
-   <property key="Logical" value="ojbc_analytics_demo" />
+   <property key="Logical" value="(Target Database)" />
    <property key="Connection Type" value="MySQL" />
-   <property key="JDBC URL" value="jdbc:mysql://localhost:3306/ojbc_analytics_demo" />
+   <property key="JDBC URL" value="jdbc:mysql://localhost:3306/ojbc_analytics_vt" />
    <property key="UID" value="root" />
    <property key="PWD" value="" />
    <property key="ca.sqlpower.architect.etl.kettle.database" value="" />
@@ -14,11 +14,10 @@
    <property key="ca.sqlpower.architect.etl.kettle.hostname" value="" />
    <property key="ca.sqlpower.architect.etl.kettle.repos.login" value="" />
    <property key="ca.sqlpower.architect.etl.kettle.repos.password" value="" />
-   <property key="ca.sqlpower.wabit.WabitDataSource.UUID" value="w554c8023-7374-4d8d-84d6-dc8e178fd4f2" />
   </data-source>
   <data-source id="DS2">
-   <property key="Logical" value="PlayPen Database" />
    <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:mysql://localhost:3306/ojbc_analytics" />
    <property key="UID" value="root" />
    <property key="PWD" value="" />
