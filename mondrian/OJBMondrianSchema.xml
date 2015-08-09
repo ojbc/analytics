@@ -260,8 +260,6 @@
     pa.ArresteeSexID,
     pa.ArresteeRaceID,
     pa.ArrestingAgencyID,
-    pa.ViolatedConditionsOfRelease,
-    pa.PretrialServiceID,
     if(pa.PretrialServiceEligible=1, 1, 0) as PretrialServiceEligible,
     datediff(sad.CalendarDate, pad.CalendarDate) as DaysBetweenArrests,
     if(datediff(sad.CalendarDate, pad.CalendarDate) <= 180, 1, 0) as SixMonthRearrest,
@@ -280,6 +278,7 @@
     pc.DispositionOffenseTypeID,
     pc.FiledOffenseTypeID,
     sc.DispositionID as SubsequentDispositionID,
+    psp.PretrialServiceID,
     psp.RiskScoreID
     from (((Arrest as pa inner join Date as pad on pa.DateID=pad.DateID) inner join
             (Charge as pc inner join Date as pcd on pc.DispositionDateID=pcd.DateID) on pa.ArrestID=pc.ArrestID) left join
@@ -304,8 +303,6 @@
 		<DimensionUsage source="Risk Score" name="Risk Score" visible="true" foreignKey="RiskScoreID" highCardinality="false"/>
 		<DimensionUsage source="Pretrial Service" name="Pretrial Service" visible="true" foreignKey="PretrialServiceID" highCardinality="false"/>
 		<DimensionUsage source="Age" name="Age" caption="Age" visible="true" foreignKey="ArresteeAgeID" highCardinality="false"/>
-		<DimensionUsage source="YesNoIndicator" name="ViolatedConditionsOfRelease" caption="Violated Release Conditions" visible="true" foreignKey="ViolatedConditionsOfRelease"
-			highCardinality="false"/>
 		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
 		<DimensionUsage source="Date" name="Disposition Date" visible="true" foreignKey="DispositionDateID" highCardinality="false" caption="Disposition Date"/>
 		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="TimeID" highCardinality="false"/>

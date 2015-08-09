@@ -210,8 +210,6 @@ buildArrestRow <- function(ids) {
   
   arresteeCountyID <- sample(countyID, size=n, replace=TRUE, prob=countyProb)
   arrestingAgencyID <- sample(agencyID, size=n, replace=TRUE)
-  arrestPretrialServiceID <- sample(serviceID, size=n, replace=TRUE, prob=serviceProbs)
-  violated <- sample(1:2, size=n, replace=TRUE, prob=c(.3, .7))
   drugRelated <- sample(1:2, size=n, replace=TRUE, prob=c(.35, .65))
   pretrialEligible <- sample(1:2, size=n, replace=TRUE, prob=c(.6, .4))
   
@@ -219,6 +217,9 @@ buildArrestRow <- function(ids) {
   ArrestLocationLatitude <- coords$lat
   ArrestLocationLongitude <- coords$long
 
+  # Note: in the demo database, we don't populate the incident ID or staging person ID, because it's not really needed (it's just there
+  # for loading from staging)
+  
   df <- data.frame(ArrestID=ids,
              DateID=as.integer(dateID),
              TimeID=timeID,
@@ -227,8 +228,6 @@ buildArrestRow <- function(ids) {
              ArresteeSexID=sexID,
              CountyID=arresteeCountyID,
              ArrestingAgencyID=arrestingAgencyID,
-             PretrialServiceID=arrestPretrialServiceID,
-             ViolatedConditionsOfRelease=violated,
              ArrestDrugRelated=drugRelated,
              ArrestLocationLatitude,
              ArrestLocationLongitude,
@@ -271,10 +270,6 @@ buildRearrestRow <- function(id, index, arrestDataFrame, idLookupField, depth) {
   newRowDf$ArrestLocationLatitude <- coords[1,"lat"]
   newRowDf$ArrestLocationLongitude <- coords[1,"long"]
   
-  newRowDf$PretrialServiceID <- sample(serviceID, size=1, prob=serviceProbs)
-  newRowDf$ViolatedConditionsOfRelease <- sample(1:2, size=1, prob=c(.3, .7))
-  newRowDf$ViolatedConditionsOfRelease <- sample(1:2, size=1, prob=c(.35, .65))
-
   newRowDf$SubsequentArrestID <- as.integer(NA)
   
   newRowDf
