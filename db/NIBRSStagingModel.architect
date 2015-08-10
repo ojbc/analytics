@@ -1264,7 +1264,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <folder id="FOLTAB3272" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB3274" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX347" populated="true" UUID="b5dd9180-2508-4ab3-888b-03eace41f4e0" clustered="false" name="Arrestee_pk" physicalName="arrestee_pk" primaryKeyIndex="true" unique="false" >
+    <index id="IDX347" populated="true" UUID="b5dd9180-2508-4ab3-888b-03eace41f4e0" clustered="false" name="ArresteReport_pk" physicalName="arrestereport_pk" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC348" populated="true" UUID="d3d0b182-f2de-4e40-94a0-64ad27e8a474" ascendingOrDescending="UNSPECIFIED" column-ref="COL328" name="ArresteReportSegmentID" physicalName="ArresteReportSegmentID" />
     </index>
    </folder>
@@ -1322,7 +1322,7 @@ FO, GL, DU, NP, and XX.</remarks>
      <remarks></remarks>
     </column>
     <column id="COL363" populated="true" UUID="8c15ea0b-ff5b-470a-80e2-6ef78f103e33" autoIncrement="false" autoIncrementSequenceName="MethodOfEntryType_MethodOfEntryCode_seq" defaultValue="" name="MethodOfEntryCode" nullable="1" physicalName="MethodOfEntryCode" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
-     <remarks> Offense Code is 220
+     <remarks>Offense Code is 220
 (Burglary).</remarks>
     </column>
     <column id="COL364" populated="true" UUID="446144bd-74e3-4236-8094-4b1686be2e96" autoIncrement="false" autoIncrementSequenceName="MethodOfEntryType_MethodOfEntryDescription_seq" defaultValue="" name="MethodOfEntryDescription" nullable="1" physicalName="MethodOfEntryDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -1730,7 +1730,7 @@ FO, GL, DU, NP, and XX.</remarks>
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.6595236053843678" viewportX="0" viewportY="0" relationship-style="direct" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.6595236053843678" viewportX="559" viewportY="0" relationship-style="direct" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB1" x="36" y="31" bgColor="0xbfd6ff" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB17" x="39" y="533" bgColor="0xdfedce" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB27" x="382" y="34" bgColor="0xbfd6ff" fgColor="0x000000" rounded="false" dashed="false"/>
