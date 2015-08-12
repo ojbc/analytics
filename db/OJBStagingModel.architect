@@ -697,18 +697,18 @@
    <relationship id="REL208" populated="true" UUID="536958a4-e868-4e9c-a28a-29e82a9615ea" deferrability="7" deleteRule="0" fk-table-ref="TAB62" fkCardinality="7" identifying="false" name="Person_Arrest_fk" physicalName="person_arrest_fk" pk-table-ref="TAB129" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP209" populated="true" UUID="1e8db7c7-1db2-40c1-a601-18ee9beed660" fk-column-ref="COL64" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL130" />
    </relationship>
-   <relationship id="REL210" populated="true" UUID="a9dd5b6c-424d-4123-aa95-94c28f6dcdeb" deferrability="7" deleteRule="3" fk-table-ref="TAB137" fkCardinality="7" identifying="false" name="Person_Disposition_fk" physicalName="person_disposition_fk" pk-table-ref="TAB129" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP211" populated="true" UUID="76dd775e-0a2f-4b89-8db0-665cfb1274b1" fk-column-ref="COL139" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL130" />
+   <relationship id="REL210" populated="true" UUID="a9dd5b6c-424d-4123-aa95-94c28f6dcdeb" deferrability="7" deleteRule="0" fk-table-ref="TAB137" fkCardinality="7" identifying="false" name="Person_Disposition_fk" physicalName="Person_Disposition_fk" pk-table-ref="TAB129" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP211" populated="true" UUID="00c9539f-6948-4eb0-98ca-cbfb0dc3933f" fk-column-ref="COL139" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL130" />
    </relationship>
    <relationship id="REL212" populated="true" UUID="21fff31d-8eb1-4614-8541-443e10549e83" deferrability="7" deleteRule="0" fk-table-ref="TAB109" fkCardinality="7" identifying="false" name="Person_PretrialServiceParticipation_fk" physicalName="person_pretrialserviceparticipation_fk" pk-table-ref="TAB129" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP213" populated="true" UUID="6a7c9b0d-8e99-451b-a80c-b3bcd4a7df38" fk-column-ref="COL111" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL130" />
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="42" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="20" y="20" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB62" x="451" y="291" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB73" x="1201" y="850" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
