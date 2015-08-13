@@ -192,7 +192,7 @@
     <column id="COL52" populated="true" UUID="2a2ac714-1c77-4ca4-9faa-f9afabba91e9" autoIncrement="false" autoIncrementSequenceName="Incident_IncidentCaseNumber_seq" defaultValue="" name="IncidentCaseNumber" nullable="0" physicalName="IncidentCaseNumber" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL53" populated="true" UUID="d19e581d-ea70-4253-8edd-aa282245b702" autoIncrement="false" autoIncrementSequenceName="County_CountyID_seq" defaultValue="" name="CountyID" nullable="0" physicalName="CountyID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL53" populated="true" UUID="d19e581d-ea70-4253-8edd-aa282245b702" autoIncrement="false" autoIncrementSequenceName="County_CountyID_seq" defaultValue="" name="CountyID" nullable="1" physicalName="CountyID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL54" populated="true" UUID="0a4a961f-cacf-4dc3-93e9-2c2911c2ae26" autoIncrement="false" autoIncrementSequenceName="Incident_IncidentLocationLatitude_seq" defaultValue="" name="IncidentLocationLatitude" nullable="1" physicalName="IncidentLocationLatitude" precision="14" referenceCount="1" scale="10" sourceDataTypeName="UserDefinedSQLType" type="2" userDefinedTypeUUID="115245ce-612c-4d6a-b559-6dd903dd959a" >
@@ -204,7 +204,7 @@
     <column id="COL56" populated="true" UUID="9af40a55-f7b5-4975-a57f-ccda1ed41b07" autoIncrement="false" autoIncrementSequenceName="Incident_IncidentLocationStreetAddress_seq" defaultValue="" name="IncidentLocationStreetAddress" nullable="1" physicalName="IncidentLocationStreetAddress" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL57" populated="true" UUID="a0bc7f2e-510a-4f0d-8f5c-7d51bd160246" autoIncrement="false" autoIncrementSequenceName="Town_TownID_seq" defaultValue="" name="TownID" nullable="0" physicalName="TownID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL57" populated="true" UUID="a0bc7f2e-510a-4f0d-8f5c-7d51bd160246" autoIncrement="false" autoIncrementSequenceName="Town_TownID_seq" defaultValue="" name="TownID" nullable="1" physicalName="TownID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL58" populated="true" UUID="cd531a6a-9c6c-4d68-8869-8f8d70cc139a" autoIncrement="false" autoIncrementSequenceName="Incident_StagingRecordID_seq" defaultValue="" name="StagingRecordID" nullable="0" physicalName="StagingRecordID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -336,7 +336,7 @@
     <column id="COL95" populated="true" UUID="66e2166d-843e-4fd3-b71c-c4c89225a6d0" autoIncrement="false" autoIncrementSequenceName="Arrest_ArrestDrugRelated_seq" defaultValue="" name="ArrestDrugRelated" nullable="0" physicalName="ArrestDrugRelated" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL96" populated="true" UUID="3123983f-0fa7-4974-a3e1-f003da1e125f" autoIncrement="false" autoIncrementSequenceName="Arrest_SubsequentArrestID_seq" defaultValue="" name="SubsequentArrestID" nullable="0" physicalName="SubsequentArrestID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL96" populated="true" UUID="3123983f-0fa7-4974-a3e1-f003da1e125f" autoIncrement="false" autoIncrementSequenceName="Arrest_SubsequentArrestID_seq" defaultValue="" name="SubsequentArrestID" nullable="1" physicalName="SubsequentArrestID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL97" populated="true" UUID="370227af-72bf-4b6e-a1ce-12870757bcc9" autoIncrement="false" autoIncrementSequenceName="Arrest_ArrestLocationLatitude_seq" defaultValue="" name="ArrestLocationLatitude" nullable="1" physicalName="ArrestLocationLatitude" precision="14" referenceCount="1" scale="10" sourceDataTypeName="UserDefinedSQLType" type="2" userDefinedTypeUUID="115245ce-612c-4d6a-b559-6dd903dd959a" >
@@ -638,7 +638,7 @@
     <column id="COL175" populated="true" UUID="3d84c5a9-5df6-403c-92ab-df153221b2b7" autoIncrement="true" autoIncrementSequenceName="PretrialServiceParticipation_PretrialServiceParticipationID_seq" defaultValue="" name="PretrialServiceParticipationID" nullable="0" physicalName="PretrialServiceParticipationID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL176" populated="true" UUID="ff438978-89fa-46b2-96e7-b56594739c61" autoIncrement="false" autoIncrementSequenceName="PretrialService_PretrialServiceID_seq_1" defaultValue="" name="PretrialServiceID" nullable="0" physicalName="PretrialServiceID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL176" populated="true" UUID="ff438978-89fa-46b2-96e7-b56594739c61" autoIncrement="false" autoIncrementSequenceName="PretrialService_PretrialServiceID_seq_1" defaultValue="" name="PretrialServiceID" nullable="1" physicalName="PretrialServiceID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL177" populated="true" UUID="98e068b2-e191-4752-9c7c-04bbd5369f1e" autoIncrement="false" autoIncrementSequenceName="County_CountyID_seq_1_1" defaultValue="" name="CountyID" nullable="0" physicalName="CountyID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -647,7 +647,7 @@
     <column id="COL178" populated="true" UUID="83734f79-9b16-468d-8f84-54e04eb26deb" autoIncrement="false" autoIncrementSequenceName="Date_IntakeDateID_seq_1" defaultValue="" name="IntakeDateID" nullable="0" physicalName="IntakeDateID" precision="0" referenceCount="1" scale="0" source-column-ref="COL64" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL179" populated="true" UUID="241ab407-7753-46a9-8809-c92557e53108" autoIncrement="false" autoIncrementSequenceName="RiskScore_RiskScoreID_seq_1" defaultValue="" name="RiskScoreID" nullable="0" physicalName="RiskScoreID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL179" populated="true" UUID="241ab407-7753-46a9-8809-c92557e53108" autoIncrement="false" autoIncrementSequenceName="RiskScore_RiskScoreID_seq_1" defaultValue="" name="RiskScoreID" nullable="1" physicalName="RiskScoreID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL180" populated="true" UUID="3093f9dc-3b24-4cc9-b8aa-0cd4c03031d2" autoIncrement="false" autoIncrementSequenceName="ArrestCharge_ArrestChargeID_seq_1" defaultValue="" name="ArrestID" nullable="0" physicalName="ArrestID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -971,7 +971,7 @@
     <column id="COL266" populated="true" UUID="d30eeea1-5cb5-4010-8183-ea9013846046" autoIncrement="true" autoIncrementSequenceName="LoadHistory_LoadID_seq_3" defaultValue="" name="LoadID" nullable="0" physicalName="LoadID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL267" populated="true" UUID="ce05e111-3dbe-44c1-ac3d-6ce6f5d8816c" autoIncrement="false" autoIncrementSequenceName="LoadHistory_LatestStagingTimestamp_seq" defaultValue="" name="LatestStagingTimestamp" nullable="0" physicalName="LatestStagingTimestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL267" populated="true" UUID="ce05e111-3dbe-44c1-ac3d-6ce6f5d8816c" autoIncrement="false" autoIncrementSequenceName="LoadHistory_LatestStagingUpdateTime_seq" defaultValue="" name="LatestStagingUpdateTime" nullable="0" physicalName="LatestStagingUpdateTime" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     <column id="COL268" populated="true" UUID="b6d3f293-ed7e-42a4-a834-faad801d12dd" autoIncrement="false" autoIncrementSequenceName="LoadHistory_LoadStartTime_seq" defaultValue="" name="LoadStartTime" nullable="0" physicalName="LoadStartTime" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
@@ -1126,7 +1126,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="167" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="129" y="20" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB63" x="1425" y="90" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB78" x="677" y="207" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
