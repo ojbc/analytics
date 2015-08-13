@@ -340,7 +340,7 @@ makeCharges <- function(arrestID) {
     }
     chargeID <- NA
     data.frame(ChargeID=chargeID, ArrestOffenseTypeID=offenseTypeID, ArrestID=arrestID, SentenceTermDays=days,
-               SentenceFineAmount=fine, DispositionID=arrestDispo, DispositionDateID,
+               SentenceFineAmount=fine, DispositionID=arrestDispo, DispositionDateID, RecidivismEligibilityDate=DispositionDate,
                FiledOffenseTypeID=filedOffenseTypeID, DispositionOffenseTypeID=dispoOffenseTypeID)
   }
   df <- makeCharge(arrestID)
