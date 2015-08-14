@@ -122,18 +122,6 @@ dbWriteTable(conn, "OffenseType", OffenseType, append=TRUE, row.names=FALSE)
 DispositionOffenseType <- select(OffenseType, DispositionOffenseTypeID=OffenseTypeID, DispositionOffenseTypeDescription=OffenseDescription)
 dbWriteTable(conn, "DispositionOffenseType", DispositionOffenseType, append=TRUE, row.names=FALSE)
 
-serviceID <- 1:7
-serviceDescription <- paste("service", serviceID)
-serviceDescription[6] <- "unknown"
-serviceDescription[7] <- "none"
-isParticipant <- serviceDescription
-isParticipant[isParticipant=="none"] <- "no"
-isParticipant[1:5] <- "yes"
-PretrialService <- data.table(PretrialServiceID=serviceID, PretrialServiceDescription=serviceDescription, IsParticipant=isParticipant)
-dbWriteTable(conn, "PretrialService", PretrialService, append=TRUE, row.names=FALSE)
-
-serviceProbs <- c(runif(n=length(serviceID)-2, min=0, max=.9), .05, .05)
-
 riskScoreID <- 1:4
 riskScoreDescription = c("High","Medium","Low","Unknown")
 RiskScore <- data.table(RiskScoreID=riskScoreID, RiskScoreDescription=riskScoreDescription)
@@ -385,7 +373,8 @@ makePretrialParticipation <- function(arrestID) {
   IntakeDateID <- format(IntakeDate, DATE_ID_FORMAT)
   RiskScoreID <- sample(riskScoreID, size=1, prob=riskScoreProbs)
   PretrialServiceParticipationID <- NA
-  data.frame(PretrialServiceParticipationID, PretrialServiceID, CountyID, IntakeDateID, RiskScoreID, ArrestID=arrestID)
+  PreChargeMonitoringIndicator <- sample(x=1:2, size=1, prob=c(.6, .4))
+  data.frame(PretrialServiceParticipationID, CountyID, IntakeDateID, RiskScoreID, ArrestID=arrestID, PreChargeMonitoringIndicator)
 }
 pretrialParticipants <- sample(arrest$ArrestID, nrow(arrest)*.75)
 PretrialServiceParticipation <- bind_rows(Map(makePretrialParticipation, pretrialParticipants))
@@ -413,8 +402,38 @@ makePretrialAssessedNeed <- function(pretrialServiceParticipationID) {
 PretrialAssessedNeed <- bind_rows(Map(makePretrialAssessedNeed, PretrialServiceParticipation$PretrialServiceParticipationID))
 PretrialAssessedNeed$PretrialAssessedNeedID <- 1:nrow(PretrialAssessedNeed)
 
+serviceID <- 1:7
+serviceDescription <- paste("service", serviceID)
+serviceDescription[6] <- "unknown"
+serviceDescription[7] <- "none"
+isParticipant <- serviceDescription
+isParticipant[isParticipant=="none"] <- "no"
+isParticipant[1:5] <- "yes"
+PretrialService <- data.table(PretrialServiceID=serviceID, PretrialServiceDescription=serviceDescription, IsParticipant=isParticipant)
+dbWriteTable(conn, "PretrialService", PretrialService, append=TRUE, row.names=FALSE)
+
+serviceProbs <- c(runif(n=length(serviceID)-2, min=0, max=.9), .05, .05)
+
+makePretrialServiceAssociation <- function(pretrialServiceParticipationID) {
+  serviceCount <- rpois(n=1, lambda=.8)
+  if (serviceCount > 4) {
+    serviceCount <- 4
+  }
+  services <- c(7)
+  if (serviceCount > 0) {
+    services <- sample(1:6, size=serviceCount, prob=c(runif(n=4, min=0, max=.9), .05, .05))
+  }
+  bind_rows(Map(function(serviceID) {
+    data.frame(PretrialServiceParticipationID=c(pretrialServiceParticipationID), PretrialServiceID=c(serviceID))
+  }, services))
+}
+
+PretrialServiceAssociation <- bind_rows(Map(makePretrialServiceAssociation, PretrialServiceParticipation$PretrialServiceParticipationID))
+PretrialServiceAssociation$PretrialServiceAssociationID <- 1:nrow(PretrialServiceAssociation)
+
 dbWriteTable(conn, "PretrialServiceParticipation", as.data.frame(PretrialServiceParticipation), append=TRUE, row.names=FALSE)
 dbWriteTable(conn, "PretrialAssessedNeed", as.data.frame(PretrialAssessedNeed), append=TRUE, row.names=FALSE)
+dbWriteTable(conn, "PretrialServiceAssociation", as.data.frame(PretrialServiceAssociation), append=TRUE, row.names=FALSE)
 
 #
 # Incident

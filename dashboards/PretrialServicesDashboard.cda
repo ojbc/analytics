@@ -70,11 +70,11 @@ WHERE {parallelperiod([Intake Date.CalDate].[Date], 90,
       <Query>WITH
 SET [~ROWS] AS
     {[Region].[Region].Members}
-MEMBER [Measures].[Percent Pretrial Monitoring] AS [Measures].[PretrialServiceParticipantCount]  / ( [Pretrial Service.PretrialService].[All Pretrial Services], [Measures].[PretrialServiceParticipantCount]  )
+MEMBER [Measures].[Percent Pretrial Monitoring] AS [Measures].[PretrialServiceParticipantCount]  / ( [Pre Charge Monitoring.YesNoIndicator].[All Options], [Measures].[PretrialServiceParticipantCount]  )
 SELECT
-NON EMPTY {[Measures].[Percent Pretrial Monitoring]} * {[Pretrial Service.PretrialService].[yes].[${PretrialMonitoringServiceNameParameter}]} ON COLUMNS,
+NON EMPTY {[Measures].[Percent Pretrial Monitoring]} * {[Pre Charge Monitoring.YesNoIndicator].[Yes]} ON COLUMNS,
 NON EMPTY [~ROWS] ON ROWS
-FROM [PretrialServicesNeedsAssessment]
+FROM [PretrialServicesParticipation]
 WHERE {parallelperiod([Intake Date.CalDate].[Date], 90,
     [Intake Date.CalDate].[${BaseDateParameter}]):[Intake Date.CalDate].[${BaseDateParameter}]}</Query>
    </DataAccess>
@@ -89,7 +89,7 @@ WHERE {parallelperiod([Intake Date.CalDate].[Date], 90,
       </Parameters>
       <Query>WITH
 SET [~FILTER] AS
-    {[Pretrial Service.PretrialService].[yes]} * {parallelperiod([Date.CalDate].[Date], 90,
+    {[Pretrial Services Participant.YesNoIndicator].[Yes]} * {parallelperiod([Date.CalDate].[Date], 90,
     [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]}
 SET [~ROWS] AS
     {[Pretrial District.Region].[Region].Members}

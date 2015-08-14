@@ -278,7 +278,7 @@
     pc.DispositionOffenseTypeID,
     pc.FiledOffenseTypeID,
     sc.DispositionID as SubsequentDispositionID,
-    psp.PretrialServiceID,
+    if(psp.PretrialServiceParticipationID is null, 2, 1) as PretrialServicesParticipantIndicator,
     psp.RiskScoreID
     from (((Arrest as pa inner join Date as pad on pa.DateID=pad.DateID) inner join
             (Charge as pc inner join Date as pcd on pc.DispositionDateID=pcd.DateID) on pa.ArrestID=pc.ArrestID) left join
@@ -301,11 +301,11 @@
 		<DimensionUsage source="Sex" name="Sex" visible="true" foreignKey="ArresteeSexID" highCardinality="false"/>
 		<DimensionUsage source="Disposition" name="Disposition" visible="true" foreignKey="PriorDispositionID" highCardinality="false"/>
 		<DimensionUsage source="Risk Score" name="Risk Score" visible="true" foreignKey="RiskScoreID" highCardinality="false"/>
-		<DimensionUsage source="Pretrial Service" name="Pretrial Service" visible="true" foreignKey="PretrialServiceID" highCardinality="false"/>
 		<DimensionUsage source="Age" name="Age" caption="Age" visible="true" foreignKey="ArresteeAgeID" highCardinality="false"/>
 		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
 		<DimensionUsage source="Date" name="Disposition Date" visible="true" foreignKey="DispositionDateID" highCardinality="false" caption="Disposition Date"/>
 		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="TimeID" highCardinality="false"/>
+		<DimensionUsage source="YesNoIndicator" name="Pretrial Services Participant" caption="Pretrial Services Participant" visible="true" foreignKey="PretrialServicesParticipantIndicator" highCardinality="false"/>
 		<Measure name="ArrestChargeCount" column="ChargeID" datatype="Integer" aggregator="distinct-count" caption="Arrest Charge Count" visible="true"/>
 		<Measure name="SixMonthRearrestCount" column="SixMonthRearrest" datatype="Integer" aggregator="sum" caption="Six Month Rearrest Count" visible="true"/>
 		<Measure name="OneYearRearrestCount" column="OneYearRearrest" datatype="Integer" aggregator="sum" caption="One Year Rearrest Count" visible="true"/>
@@ -366,34 +366,54 @@
 	<Cube name="PretrialServicesParticipation" caption="Pretrial Services Participation" visible="true" cache="true" enabled="true">
 		<View alias="PretrialServicesParticipation">
 			<SQL dialect="mysql">
-        <![CDATA[select PretrialServiceParticipationID, PretrialServiceParticipation.PretrialServiceID, ArresteeRaceID,
-        ArresteeSexID, ArresteeAgeID, PretrialServiceParticipation.CountyID, IntakeDateID, RiskScoreID
-        from PretrialServiceParticipation, Arrest
-        where PretrialServiceParticipation.ArrestID=Arrest.ArrestID]]>
+        <![CDATA[select PretrialServiceParticipationID, ArresteeRaceID, PreChargeMonitoringIndicator,
+        ArresteeSexID, ArresteeAgeID, PretrialServiceParticipation.CountyID, IntakeDateID, RiskScoreID, RegionID
+        from PretrialServiceParticipation, Arrest, County
+        where PretrialServiceParticipation.ArrestID=Arrest.ArrestID and County.CountyID=PretrialServiceParticipation.CountyID]]>
 			</SQL>
 		</View>
-		<DimensionUsage source="Pretrial Service" name="Pretrial Service" visible="true" foreignKey="PretrialServiceID" highCardinality="false"/>
+		<DimensionUsage source="YesNoIndicator" name="Pre Charge Monitoring" caption="Pre Charge Monitoring" visible="true" foreignKey="PreChargeMonitoringIndicator" highCardinality="false"/>
 		<DimensionUsage source="Risk Score" name="Risk Score" visible="true" foreignKey="RiskScoreID" highCardinality="false"/>
 		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="ArresteeRaceID" highCardinality="false"/>
 		<DimensionUsage source="Sex" name="Sex" visible="true" foreignKey="ArresteeSexID" highCardinality="false"/>
 		<DimensionUsage source="Age" name="Age" visible="true" foreignKey="ArresteeAgeID" highCardinality="false"/>
 		<DimensionUsage source="County" name="County" visible="true" foreignKey="CountyID" highCardinality="false"/>
+		<DimensionUsage source="Region" name="Region" visible="true" foreignKey="RegionID" highCardinality="false"/>
 		<DimensionUsage source="Date" name="Intake Date" visible="true" foreignKey="IntakeDateID" highCardinality="false"/>
 		<Measure name="PretrialServiceParticipantCount" column="PretrialServiceParticipationID" datatype="Integer" aggregator="distinct-count" caption="Pretrial Service Participant Count" visible="true"/>
 	</Cube>
 	<Cube name="PretrialServicesNeedsAssessment" caption="Pretrial Services Needs Assessment" visible="true" cache="true" enabled="true">
 		<View alias="PretrialServicesNeedsAssessment">
 			<SQL dialect="mysql">
-        <![CDATA[select PretrialServiceParticipation.PretrialServiceParticipationID, PretrialServiceParticipation.PretrialServiceID, ArresteeRaceID,
+        <![CDATA[select PretrialServiceParticipation.PretrialServiceParticipationID, ArresteeRaceID,
         ArresteeSexID, ArresteeAgeID, PretrialServiceParticipation.CountyID, IntakeDateID, PretrialAssessedNeed.AssessedNeedID, RiskScoreID, RegionID
         from PretrialServiceParticipation, Arrest, AssessedNeed, PretrialAssessedNeed, County
         where PretrialServiceParticipation.ArrestID=Arrest.ArrestID and PretrialServiceParticipation.PretrialServiceParticipationID=PretrialAssessedNeed.PretrialServiceParticipationID and
         PretrialAssessedNeed.AssessedNeedID=AssessedNeed.AssessedNeedID and County.CountyID=PretrialServiceParticipation.CountyID]]>
 			</SQL>
 		</View>
-		<DimensionUsage source="Pretrial Service" name="Pretrial Service" visible="true" foreignKey="PretrialServiceID" highCardinality="false"/>
 		<DimensionUsage source="Risk Score" name="Risk Score" visible="true" foreignKey="RiskScoreID" highCardinality="false"/>
 		<DimensionUsage source="Assessed Need" name="Assessed Need" visible="true" foreignKey="AssessedNeedID" highCardinality="false"/>
+		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="ArresteeRaceID" highCardinality="false"/>
+		<DimensionUsage source="Sex" name="Sex" visible="true" foreignKey="ArresteeSexID" highCardinality="false"/>
+		<DimensionUsage source="Age" name="Age" visible="true" foreignKey="ArresteeAgeID" highCardinality="false"/>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="CountyID" highCardinality="false"/>
+		<DimensionUsage source="Region" name="Region" visible="true" foreignKey="RegionID" highCardinality="false"/>
+		<DimensionUsage source="Date" name="Intake Date" visible="true" foreignKey="IntakeDateID" highCardinality="false"/>
+		<Measure name="PretrialServiceParticipantCount" column="PretrialServiceParticipationID" datatype="Integer" aggregator="distinct-count" caption="Pretrial Service Participant Count" visible="true"/>
+	</Cube>
+	<Cube name="PretrialServicesUtilized" caption="Pretrial Services Utilized" visible="true" cache="true" enabled="true">
+		<View alias="PretrialServicesUtilized">
+			<SQL dialect="mysql">
+        <![CDATA[select PretrialServiceParticipation.PretrialServiceParticipationID, ArresteeRaceID,
+        ArresteeSexID, ArresteeAgeID, PretrialServiceParticipation.CountyID, IntakeDateID, PretrialServiceAssociation.PretrialServiceID, RiskScoreID, RegionID
+        from PretrialServiceParticipation, Arrest, PretrialService, PretrialServiceAssociation, County
+        where PretrialServiceParticipation.ArrestID=Arrest.ArrestID and PretrialServiceParticipation.PretrialServiceParticipationID=PretrialServiceAssociation.PretrialServiceParticipationID and
+        PretrialServiceAssociation.PretrialServiceID=PretrialService.PretrialServiceID and County.CountyID=PretrialServiceParticipation.CountyID]]>
+			</SQL>
+		</View>
+		<DimensionUsage source="Risk Score" name="Risk Score" visible="true" foreignKey="RiskScoreID" highCardinality="false"/>
+		<DimensionUsage source="Pretrial Service" name="Pretrial Service" visible="true" foreignKey="PretrialServiceID" highCardinality="false"/>
 		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="ArresteeRaceID" highCardinality="false"/>
 		<DimensionUsage source="Sex" name="Sex" visible="true" foreignKey="ArresteeSexID" highCardinality="false"/>
 		<DimensionUsage source="Age" name="Age" visible="true" foreignKey="ArresteeAgeID" highCardinality="false"/>
