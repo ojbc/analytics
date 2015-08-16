@@ -4,8 +4,8 @@
  <print-settings numCopies="1" zoom="0.6" pageNumbersPrinted="false" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
-   <property key="Logical" value="ojbc_analytics_demo" />
    <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:mysql://localhost:3306/ojbc_analytics_demo" />
    <property key="UID" value="root" />
    <property key="PWD" value="" />
@@ -1149,10 +1149,10 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="219" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="129" y="20" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB63" x="1425" y="90" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB78" x="677" y="207" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
@@ -1178,11 +1178,11 @@
   <table-pane table-ref="TAB232" x="1351" y="821" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB237" x="535" y="70" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB242" x="505" y="1059" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB247" x="84" y="944" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB247" x="84" y="944" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB253" x="64" y="305" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB259" x="952" y="1058" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB264" x="20" y="1048" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB271" x="752" y="1230" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB271" x="752" y="1230" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-link relationship-ref="REL281" pkConnection="0.16535433070866143" fkConnection="0.35135135135135137" rLineColor="0x4daf4a" pkLabelText="" fkLabelText="" orientation="18"/>
   <table-link relationship-ref="REL289" pkConnection="0.7114093959731543" fkConnection="0.5555555555555556" rLineColor="0x4daf4a" pkLabelText="" fkLabelText="" orientation="24"/>
   <table-link relationship-ref="REL283" pkConnection="0.2634730538922156" fkConnection="0.8118811881188119" rLineColor="0x984ea3" pkLabelText="" fkLabelText="" orientation="132"/>
