@@ -448,10 +448,10 @@
     <column id="COL124" populated="true" UUID="a2f9088f-1fbb-4b24-bf00-c40310166f1f" autoIncrement="false" autoIncrementSequenceName="ArrestCharge_ArrestChargeID_seq_2" defaultValue="" name="ArrestID" nullable="0" physicalName="ArrestID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL125" populated="true" UUID="5cf90570-186f-455d-aa94-19b645913b16" autoIncrement="false" autoIncrementSequenceName="Charge_OffenseDescriptionText_seq" defaultValue="" name="OffenseDescriptionText" nullable="1" physicalName="OffenseDescriptionText" precision="120" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL125" populated="true" UUID="5cf90570-186f-455d-aa94-19b645913b16" autoIncrement="false" autoIncrementSequenceName="Charge_OffenseDescriptionText_seq" defaultValue="" name="OffenseDescriptionText" nullable="1" physicalName="OffenseDescriptionText" precision="300" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL126" populated="true" UUID="ac932649-c365-4d4d-95c6-5e038249c2dc" autoIncrement="false" autoIncrementSequenceName="Charge_OffenseDescriptionText1_seq" defaultValue="" name="OffenseDescriptionText1" nullable="1" physicalName="OffenseDescriptionText1" precision="120" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL126" populated="true" UUID="ac932649-c365-4d4d-95c6-5e038249c2dc" autoIncrement="false" autoIncrementSequenceName="Charge_OffenseDescriptionText1_seq" defaultValue="" name="OffenseDescriptionText1" nullable="1" physicalName="OffenseDescriptionText1" precision="300" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -705,10 +705,10 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="46" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="20" y="20" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB62" x="451" y="291" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB73" x="1201" y="850" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
