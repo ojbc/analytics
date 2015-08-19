@@ -404,7 +404,7 @@
     <column id="COL111" populated="true" UUID="ca37aa90-dee3-4746-a3c0-c00f4e98318c" autoIncrement="false" autoIncrementSequenceName="Person_PersonID_seq_1" defaultValue="" name="PersonID" nullable="0" physicalName="PersonID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL112" populated="true" UUID="98e068b2-e191-4752-9c7c-04bbd5369f1e" autoIncrement="false" autoIncrementSequenceName="County_CountyID_seq_1_1" defaultValue="" name="CountyID" nullable="0" physicalName="CountyID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL112" populated="true" UUID="98e068b2-e191-4752-9c7c-04bbd5369f1e" autoIncrement="false" autoIncrementSequenceName="County_CountyID_seq_1_1" defaultValue="" name="CountyID" nullable="1" physicalName="CountyID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL113" populated="true" UUID="1f8e8ec6-83bd-4e74-8c4d-625f1148ea7a" autoIncrement="false" autoIncrementSequenceName="PretrialServiceParticipation_RiskScore_seq" defaultValue="" name="RiskScore" nullable="0" physicalName="RiskScore" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -416,7 +416,7 @@
     <column id="COL115" populated="true" UUID="3d257f8f-f5bb-4f66-acc6-5479afb295ad" autoIncrement="false" autoIncrementSequenceName="PretrialServiceParticipation_RecordType_seq" defaultValue="" name="RecordType" nullable="0" physicalName="RecordType" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
      <remarks>N for new record, U for update to prior record, D for delete</remarks>
     </column>
-    <column id="COL116" populated="true" UUID="afc29a68-a4a4-44ae-b53a-6ffe241a9b1e" autoIncrement="false" autoIncrementSequenceName="PretrialServiceParticipation_ArrestingAgencyORI_seq" defaultValue="" name="ArrestingAgencyORI" nullable="0" physicalName="ArrestingAgencyORI" precision="12" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL116" populated="true" UUID="afc29a68-a4a4-44ae-b53a-6ffe241a9b1e" autoIncrement="false" autoIncrementSequenceName="PretrialServiceParticipation_ArrestingAgencyORI_seq" defaultValue="" name="ArrestingAgencyORI" nullable="1" physicalName="ArrestingAgencyORI" precision="12" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL117" populated="true" UUID="663d177c-4689-4df2-9b87-1f059d06906c" autoIncrement="false" autoIncrementSequenceName="PretrialServiceParticipation_ArrestIncidentCaseNumber_seq" defaultValue="" name="ArrestIncidentCaseNumber" nullable="0" physicalName="ArrestIncidentCaseNumber" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
