@@ -463,7 +463,7 @@ segment per victim.</remarks>
     <column id="COL130" populated="true" UUID="4dd39873-ca43-4176-9993-daea76dcf32d" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_ArresteeTransactionNumber_seq" defaultValue="" name="ArresteeSequenceNumber" nullable="0" physicalName="ArresteeSequenceNumber" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks>Valid Values: 01 through 99.</remarks>
     </column>
-    <column id="COL131" populated="true" UUID="c30b9447-4175-4ac0-8471-c6a66eb30294" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_ArresteeTransactionNumber_seq_1" defaultValue="" name="ArresteeTransactionNumber" nullable="1" physicalName="ArresteeTransactionNumber" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL131" populated="true" UUID="c30b9447-4175-4ac0-8471-c6a66eb30294" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_ArresteeTransactionNumber_seq_1" defaultValue="" name="ArresteeTransactionNumber" nullable="1" physicalName="ArresteeTransactionNumber" precision="12" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Left-justified with blank right-fill.</remarks>
     </column>
     <column id="COL132" populated="true" UUID="9b093be9-afff-465e-b2b8-b1f78ff95f77" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_ArrestDate_seq" defaultValue="" name="ArrestDate" nullable="1" physicalName="ArrestDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
@@ -588,10 +588,10 @@ Assaulted (LEOKA) data record</remarks>
     <column id="COL167" populated="true" UUID="533f9d10-a2b0-4d9d-b18b-3b0f176501d4" autoIncrement="false" autoIncrementSequenceName="LEOKASegment_CityIndicator_seq" defaultValue="" name="CityIndicator" nullable="1" physicalName="CityIndicator" precision="4" referenceCount="1" scale="0" source-column-ref="COL8" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL168" populated="true" UUID="2c004c01-14a0-4276-af86-7d6d386f3f9e" autoIncrement="false" autoIncrementSequenceName="LEOKASegment_Filler_seq" defaultValue="" name="Filler" nullable="1" physicalName="Filler" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL168" populated="true" UUID="2c004c01-14a0-4276-af86-7d6d386f3f9e" autoIncrement="false" autoIncrementSequenceName="LEOKASegment_Filler_seq" defaultValue="" name="Filler" nullable="1" physicalName="Filler" precision="12" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Must be blanks.</remarks>
     </column>
-    <column id="COL169" populated="true" UUID="9679e92d-4b0e-483c-bdcd-fe918a0a4d08" autoIncrement="false" autoIncrementSequenceName="LEOKASegment_LEOKAData_seq" defaultValue="" name="LEOKAData" nullable="1" physicalName="LEOKAData" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL169" populated="true" UUID="9679e92d-4b0e-483c-bdcd-fe918a0a4d08" autoIncrement="false" autoIncrementSequenceName="LEOKASegment_LEOKAData_seq" defaultValue="" name="LEOKAData" nullable="1" physicalName="LEOKAData" precision="600" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -614,7 +614,7 @@ Assaulted (LEOKA) data record</remarks>
     <column id="COL174" populated="true" UUID="b6099d84-d128-4107-ba51-fdc8292d8bbe" autoIncrement="false" autoIncrementSequenceName="UCROffenseCodeType_UCROffenseCode_seq" defaultValue="" name="UCROffenseCode" nullable="1" physicalName="UCROffenseCode" precision="3" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL175" populated="true" UUID="3e499226-da90-46cb-b9b9-ed1f923a46cd" autoIncrement="false" autoIncrementSequenceName="UCROffenseCodeType_UCROffenseCodeDescription_seq" defaultValue="" name="UCROffenseCodeDescription" nullable="1" physicalName="UCROffenseCodeDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL175" populated="true" UUID="3e499226-da90-46cb-b9b9-ed1f923a46cd" autoIncrement="false" autoIncrementSequenceName="UCROffenseCodeType_UCROffenseCodeDescription_seq" defaultValue="" name="UCROffenseCodeDescription" nullable="1" physicalName="UCROffenseCodeDescription" precision="70" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -637,7 +637,7 @@ Assaulted (LEOKA) data record</remarks>
     <column id="COL180" populated="true" UUID="818130b1-b52d-4bc4-8d38-24601c428efd" autoIncrement="false" autoIncrementSequenceName="TypePropertyLossEtcType_TypePropertyLossCode_seq" defaultValue="" name="TypePropertyLossEtcCode" nullable="1" physicalName="TypePropertyLossEtcCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL181" populated="true" UUID="42f2c6dc-e13a-44d0-9895-9ed3707bd9dc" autoIncrement="false" autoIncrementSequenceName="TypePropertyLossEtcType_TypePropertyLossDescription_seq" defaultValue="" name="TypePropertyLossEtcDescription" nullable="1" physicalName="TypePropertyLossEtcDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL181" populated="true" UUID="42f2c6dc-e13a-44d0-9895-9ed3707bd9dc" autoIncrement="false" autoIncrementSequenceName="TypePropertyLossEtcType_TypePropertyLossDescription_seq" defaultValue="" name="TypePropertyLossEtcDescription" nullable="1" physicalName="TypePropertyLossEtcDescription" precision="85" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -660,7 +660,7 @@ Assaulted (LEOKA) data record</remarks>
     <column id="COL186" populated="true" UUID="543b1b7e-4823-4492-a7fb-a8410df374db" autoIncrement="false" autoIncrementSequenceName="AggravatedAssaultHomicideCircumstancesType_AssaultHomicideCode_seq" defaultValue="" name="AggravatedAssaultHomicideCircumstancesCode" nullable="1" physicalName="AggravatedAssaultHomicideCircumstancesCode" precision="3" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL187" populated="true" UUID="56d33d38-984a-4d6c-8dcd-9288a30cd3f3" autoIncrement="false" autoIncrementSequenceName="AggravatedAssaultHomicideCircumstancesType_AssaultHomicideDescription_seq" defaultValue="" name="AggravatedAssaultHomicideCircumstancesDescription" nullable="1" physicalName="AggravatedAssaultHomicideCircumstancesDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL187" populated="true" UUID="56d33d38-984a-4d6c-8dcd-9288a30cd3f3" autoIncrement="false" autoIncrementSequenceName="AggravatedAssaultHomicideCircumstancesType_AssaultHomicideDescription_seq" defaultValue="" name="AggravatedAssaultHomicideCircumstancesDescription" nullable="1" physicalName="AggravatedAssaultHomicideCircumstancesDescription" precision="55" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -683,7 +683,7 @@ Assaulted (LEOKA) data record</remarks>
     <column id="COL192" populated="true" UUID="609cf4b5-32af-4fc4-830a-ed2398a455eb" autoIncrement="false" autoIncrementSequenceName="RelationshipsRelationshipVictimToOffendersType_RelationshipCode_seq" defaultValue="" name="RelationshipsVictimToOffendersCode" nullable="1" physicalName="RelationshipsVictimToOffendersCode" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL193" populated="true" UUID="30c77566-55c9-4217-b495-338ea034d5ce" autoIncrement="false" autoIncrementSequenceName="RelationshipsRelationshipVictimToOffendersType_RelationshipCodeDescription_seq" defaultValue="" name="RelationshipsVictimToOffendersDescription" nullable="1" physicalName="RelationshipsVictimToOffendersDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL193" populated="true" UUID="30c77566-55c9-4217-b495-338ea034d5ce" autoIncrement="false" autoIncrementSequenceName="RelationshipsRelationshipVictimToOffendersType_RelationshipCodeDescription_seq" defaultValue="" name="RelationshipsVictimToOffendersDescription" nullable="1" physicalName="RelationshipsVictimToOffendersDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -708,7 +708,7 @@ Valid Codes: I, M, D, and W.</remarks>
     <column id="COL198" populated="true" UUID="b04c1f41-f77a-4cf3-b648-d93a7ae737b2" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionType_seq" defaultValue="" name="SegmentActionTypeCode" nullable="1" physicalName="SegmentActionTypeCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL199" populated="true" UUID="521831b2-2c11-4106-8965-4894d027b824" autoIncrement="false" autoIncrementSequenceName="SegmentActionTypeType_SegmentActionTypeDescription_seq" defaultValue="" name="SegmentActionTypeDescription" nullable="0" physicalName="SegmentActionTypeDescription" precision="22" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL199" populated="true" UUID="521831b2-2c11-4106-8965-4894d027b824" autoIncrement="false" autoIncrementSequenceName="SegmentActionTypeType_SegmentActionTypeDescription_seq" defaultValue="" name="SegmentActionTypeDescription" nullable="0" physicalName="SegmentActionTypeDescription" precision="25" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -731,7 +731,7 @@ Valid Codes: I, M, D, and W.</remarks>
     <column id="COL204" populated="true" UUID="09cd5028-b9f2-4c17-869b-c48e56b842be" autoIncrement="false" autoIncrementSequenceName="OffenderSuspectedOfUsingType_OffenderSuspectedOfUsingType_seq" defaultValue="" name="OffenderSuspectedOfUsingCode" nullable="1" physicalName="OffenderSuspectedOfUsingCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: A, C, D, and N.</remarks>
     </column>
-    <column id="COL205" populated="true" UUID="d93bb994-dff7-4244-8941-13a79a3b2d7a" autoIncrement="false" autoIncrementSequenceName="OffenderSuspectedOfUsingType_OffenderSuspectedOfUsingDescription_seq" defaultValue="" name="OffenderSuspectedOfUsingDescription" nullable="1" physicalName="OffenderSuspectedOfUsingDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL205" populated="true" UUID="d93bb994-dff7-4244-8941-13a79a3b2d7a" autoIncrement="false" autoIncrementSequenceName="OffenderSuspectedOfUsingType_OffenderSuspectedOfUsingDescription_seq" defaultValue="" name="OffenderSuspectedOfUsingDescription" nullable="1" physicalName="OffenderSuspectedOfUsingDescription" precision="20" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -754,7 +754,7 @@ Valid Codes: I, M, D, and W.</remarks>
     <column id="COL210" populated="true" UUID="26e430df-0e1a-4878-9fe0-f5fb144a93f5" autoIncrement="false" autoIncrementSequenceName="TypeOfCriminalActivityType_TypeOfCriminalActivityCode_seq" defaultValue="" name="TypeOfCriminalActivityCode" nullable="1" physicalName="TypeOfCriminalActivityCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: B, C, D, E, O, P, T, and U.</remarks>
     </column>
-    <column id="COL211" populated="true" UUID="04f33e74-f1fe-4e04-836c-bf2b3520513f" autoIncrement="false" autoIncrementSequenceName="TypeOfCriminalActivityType_TypeOfCriminalActivityDescription_seq" defaultValue="" name="TypeOfCriminalActivityDescription" nullable="1" physicalName="TypeOfCriminalActivityDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL211" populated="true" UUID="04f33e74-f1fe-4e04-836c-bf2b3520513f" autoIncrement="false" autoIncrementSequenceName="TypeOfCriminalActivityType_TypeOfCriminalActivityDescription_seq" defaultValue="" name="TypeOfCriminalActivityDescription" nullable="1" physicalName="TypeOfCriminalActivityDescription" precision="80" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -803,7 +803,7 @@ Valid Codes: I, M, D, and W.</remarks>
     <column id="COL223" populated="true" UUID="b6f8625e-639b-416f-ab23-b61a9f22d754" autoIncrement="false" autoIncrementSequenceName="SexOfPersonType_SexOfPersonCode_seq" defaultValue="" name="SexOfPersonCode" nullable="1" physicalName="SexOfPersonCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL224" populated="true" UUID="378946ff-0003-4f6b-9a8c-2149d11c01cd" autoIncrement="false" autoIncrementSequenceName="SexOfPersonType_SexOfPersonDescription_seq" defaultValue="" name="SexOfPersonDescription" nullable="1" physicalName="SexOfPersonDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL224" populated="true" UUID="378946ff-0003-4f6b-9a8c-2149d11c01cd" autoIncrement="false" autoIncrementSequenceName="SexOfPersonType_SexOfPersonDescription_seq" defaultValue="" name="SexOfPersonDescription" nullable="1" physicalName="SexOfPersonDescription" precision="35" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -826,7 +826,7 @@ Valid Codes: I, M, D, and W.</remarks>
     <column id="COL229" populated="true" UUID="f236de08-ff6b-478c-aa04-8e13f8245599" autoIncrement="false" autoIncrementSequenceName="RaceOfPersonType_RaceOfPersonCode_seq" defaultValue="" name="RaceOfPersonCode" nullable="1" physicalName="RaceOfPersonCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL230" populated="true" UUID="9b7489ad-fe4f-4756-a398-986b775812df" autoIncrement="false" autoIncrementSequenceName="RaceOfPersonType_RaceOfPersonDescription_seq" defaultValue="" name="RaceOfPersonDescription" nullable="1" physicalName="RaceOfPersonDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL230" populated="true" UUID="9b7489ad-fe4f-4756-a398-986b775812df" autoIncrement="false" autoIncrementSequenceName="RaceOfPersonType_RaceOfPersonDescription_seq" defaultValue="" name="RaceOfPersonDescription" nullable="1" physicalName="RaceOfPersonDescription" precision="580" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -849,7 +849,7 @@ Valid Codes: I, M, D, and W.</remarks>
     <column id="COL235" populated="true" UUID="61fbf4e2-e914-476d-92ce-71daec148275" autoIncrement="false" autoIncrementSequenceName="PropertyDescriptionType_PropertyDescriptionCode_seq" defaultValue="" name="PropertyDescriptionCode" nullable="1" physicalName="PropertyDescriptionCode" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL236" populated="true" UUID="5b527648-8aae-4d9a-b691-d2933665550b" autoIncrement="false" autoIncrementSequenceName="PropertyDescriptionType_PropertyDescriptionDescription_seq" defaultValue="" name="PropertyDescriptionDescription" nullable="1" physicalName="PropertyDescriptionDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL236" populated="true" UUID="5b527648-8aae-4d9a-b691-d2933665550b" autoIncrement="false" autoIncrementSequenceName="PropertyDescriptionType_PropertyDescriptionDescription_seq" defaultValue="" name="PropertyDescriptionDescription" nullable="1" physicalName="PropertyDescriptionDescription" precision="45" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -873,7 +873,7 @@ Valid Codes: I, M, D, and W.</remarks>
      <remarks>Valid Codes: GM, KG, OZ, LB, ML, LT,
 FO, GL, DU, NP, and XX.</remarks>
     </column>
-    <column id="COL242" populated="true" UUID="e31cce5b-684e-49f9-ba5d-5df900b6da5c" autoIncrement="false" autoIncrementSequenceName="TypeDrugMeasurementTypeID_TypeDrugMeasurementDescription_seq" defaultValue="" name="TypeDrugMeasurementDescription" nullable="1" physicalName="TypeDrugMeasurementDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL242" populated="true" UUID="e31cce5b-684e-49f9-ba5d-5df900b6da5c" autoIncrement="false" autoIncrementSequenceName="TypeDrugMeasurementTypeID_TypeDrugMeasurementDescription_seq" defaultValue="" name="TypeDrugMeasurementDescription" nullable="1" physicalName="TypeDrugMeasurementDescription" precision="20" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -919,7 +919,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL253" populated="true" UUID="e6fe5d59-ce3a-490d-9697-9eaaf1818a51" autoIncrement="false" autoIncrementSequenceName="TypeOfVictimType_TypeOfVictimCode_seq" defaultValue="" name="TypeOfVictimCode" nullable="1" physicalName="TypeOfVictimCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: I, B, F, G, R, S, O, and U.</remarks>
     </column>
-    <column id="COL254" populated="true" UUID="62bb58bf-db5c-4f75-b3e1-a7e096d12f99" autoIncrement="false" autoIncrementSequenceName="TypeOfVictimType_TypeOfVictimDescription_seq" defaultValue="" name="TypeOfVictimDescription" nullable="1" physicalName="TypeOfVictimDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL254" populated="true" UUID="62bb58bf-db5c-4f75-b3e1-a7e096d12f99" autoIncrement="false" autoIncrementSequenceName="TypeOfVictimType_TypeOfVictimDescription_seq" defaultValue="" name="TypeOfVictimDescription" nullable="1" physicalName="TypeOfVictimDescription" precision="75" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -942,7 +942,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL259" populated="true" UUID="c2bbe1a1-d3fc-476c-aabc-11a9dc9d59d6" autoIncrement="false" autoIncrementSequenceName="EthnicityOfPersonType_EthnicityOfPersonCode_seq" defaultValue="" name="EthnicityOfPersonCode" nullable="1" physicalName="EthnicityOfPersonCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: H, N, and U.</remarks>
     </column>
-    <column id="COL260" populated="true" UUID="fce6743d-81f7-4a07-9326-b3819f634e25" autoIncrement="false" autoIncrementSequenceName="EthnicityOfPersonType_EthnicityOfPersonDescription_seq" defaultValue="" name="EthnicityOfPersonDescription" nullable="1" physicalName="EthnicityOfPersonDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL260" populated="true" UUID="fce6743d-81f7-4a07-9326-b3819f634e25" autoIncrement="false" autoIncrementSequenceName="EthnicityOfPersonType_EthnicityOfPersonDescription_seq" defaultValue="" name="EthnicityOfPersonDescription" nullable="1" physicalName="EthnicityOfPersonDescription" precision="25" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -965,7 +965,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL265" populated="true" UUID="631508a1-aa8e-400c-838a-ab3359fb1571" autoIncrement="false" autoIncrementSequenceName="ResidentStatusCodeLookup_1_EthnicityOfPersonCode_seq" defaultValue="" name="ResidentStatusOfPersonCode" nullable="1" physicalName="ResidentStatusOfPersonCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: R, N, and U.</remarks>
     </column>
-    <column id="COL266" populated="true" UUID="7ee5091b-58f4-4e18-afa0-7165f81a3e14" autoIncrement="false" autoIncrementSequenceName="ResidentStatusCodeLookup_1_EthnicityOfPersonDescription_seq" defaultValue="" name="ResidentStatusOfPersonDescription" nullable="1" physicalName="ResidentStatusOfPersonDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL266" populated="true" UUID="7ee5091b-58f4-4e18-afa0-7165f81a3e14" autoIncrement="false" autoIncrementSequenceName="ResidentStatusCodeLookup_1_EthnicityOfPersonDescription_seq" defaultValue="" name="ResidentStatusOfPersonDescription" nullable="1" physicalName="ResidentStatusOfPersonDescription" precision="15" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1011,7 +1011,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL277" populated="true" UUID="788adb95-2d2b-4a41-8050-cc47076e5f3d" autoIncrement="false" autoIncrementSequenceName="InjuryTable_TypeInjury_seq" defaultValue="" name="TypeInjuryCode" nullable="0" physicalName="TypeInjuryCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: N, B, I, L, M, O, T, and U.</remarks>
     </column>
-    <column id="COL278" populated="true" UUID="10f1c96f-d8fb-4fbc-a3e4-abb196799bdd" autoIncrement="false" autoIncrementSequenceName="InjuryTable_TypeInjury_seq_1" defaultValue="" name="TypeInjuryDescription" nullable="0" physicalName="TypeInjuryDescription" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL278" populated="true" UUID="10f1c96f-d8fb-4fbc-a3e4-abb196799bdd" autoIncrement="false" autoIncrementSequenceName="InjuryTable_TypeInjury_seq_1" defaultValue="" name="TypeInjuryDescription" nullable="0" physicalName="TypeInjuryDescription" precision="25" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: N, B, I, L, M, O, T, and U.</remarks>
     </column>
     </folder>
@@ -1063,7 +1063,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL291" populated="true" UUID="03bea739-038e-4c96-9749-1ec22492914f" autoIncrement="false" autoIncrementSequenceName="VictimSegment_AdditionalJustifiableHomicideCircumstances_seq" defaultValue="" name="AdditionalJustifiableHomicideCircumstancesCode" nullable="1" physicalName="AdditionalJustifiableHomicideCircumstancesCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: A through G</remarks>
     </column>
-    <column id="COL292" populated="true" UUID="f0ecc7db-6bfb-4699-9ff0-3bd8a96f6419" autoIncrement="false" autoIncrementSequenceName="AdditionalJustifiableHomicideCircumstancesType_AdditionalJustifiableHomicideCircumstancesDescription_seq" defaultValue="" name="AdditionalJustifiableHomicideCircumstancesDescription" nullable="1" physicalName="AdditionalJustifiableHomicideCircumstancesDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL292" populated="true" UUID="f0ecc7db-6bfb-4699-9ff0-3bd8a96f6419" autoIncrement="false" autoIncrementSequenceName="AdditionalJustifiableHomicideCircumstancesType_AdditionalJustifiableHomicideCircumstancesDescription_seq" defaultValue="" name="AdditionalJustifiableHomicideCircumstancesDescription" nullable="1" physicalName="AdditionalJustifiableHomicideCircumstancesDescription" precision="80" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1086,7 +1086,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL297" populated="true" UUID="447c7429-0464-4ae7-852a-9517312c1aa5" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_TypeOfArrest_seq" defaultValue="" name="TypeOfArrestCode" nullable="1" physicalName="TypeOfArrestCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: O, S, and T.</remarks>
     </column>
-    <column id="COL298" populated="true" UUID="e16d8431-e14c-46c8-85e5-adda58d51bb5" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_TypeOfArrest_seq_1" defaultValue="" name="TypeOfArrestDescription" nullable="1" physicalName="TypeOfArrestDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL298" populated="true" UUID="e16d8431-e14c-46c8-85e5-adda58d51bb5" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_TypeOfArrest_seq_1" defaultValue="" name="TypeOfArrestDescription" nullable="1" physicalName="TypeOfArrestDescription" precision="20" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1109,7 +1109,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL303" populated="true" UUID="fc0db187-b040-4237-a584-7d185f80b234" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_TypeOfArrest_seq_2" defaultValue="" name="MultipleArresteeSegmentsIndicatorCode" nullable="1" physicalName="MultipleArresteeSegmentsIndicatorCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: M, C, and N.</remarks>
     </column>
-    <column id="COL304" populated="true" UUID="d44767c8-c06d-4cc6-a6a3-8ec93e9a8f22" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_TypeOfArrest_seq_3" defaultValue="" name="MultipleArresteeSegmentsIndicatorDescription" nullable="1" physicalName="MultipleArresteeSegmentsIndicatorDescription" precision="0" referenceCount="1" scale="0" source-column-ref="COL298" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL304" populated="true" UUID="d44767c8-c06d-4cc6-a6a3-8ec93e9a8f22" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_TypeOfArrest_seq_3" defaultValue="" name="MultipleArresteeSegmentsIndicatorDescription" nullable="1" physicalName="MultipleArresteeSegmentsIndicatorDescription" precision="15" referenceCount="1" scale="0" source-column-ref="COL298" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1161,7 +1161,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL317" populated="true" UUID="a9dd572d-12f5-4a3b-9e92-7bce77bb3b73" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_ArresteeArmedWith_seq" defaultValue="" name="ArresteeWasArmedWithCode" nullable="1" physicalName="ArresteeWasArmedWithCode" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: 01 and 11 through 17</remarks>
     </column>
-    <column id="COL318" populated="true" UUID="a4892fee-b715-4879-b041-764a04cf9dca" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_ArresteeArmedWith_seq_1" defaultValue="" name="ArresteeWasArmedWithDescription" nullable="1" physicalName="ArresteeWasArmedWithDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL318" populated="true" UUID="a4892fee-b715-4879-b041-764a04cf9dca" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_ArresteeArmedWith_seq_1" defaultValue="" name="ArresteeWasArmedWithDescription" nullable="1" physicalName="ArresteeWasArmedWithDescription" precision="75" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1184,7 +1184,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL323" populated="true" UUID="f6a0d810-f795-43a0-971f-6b3952f2438c" autoIncrement="false" autoIncrementSequenceName="DispositionOfArresteeUnder18Lookup_SexOfPersonCode_seq" defaultValue="" name="DispositionOfArresteeUnder18Code" nullable="1" physicalName="DispositionOfArresteeUnder18Code" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: H and R.</remarks>
     </column>
-    <column id="COL324" populated="true" UUID="670f298b-900d-4370-8526-9d41fd6e900f" autoIncrement="false" autoIncrementSequenceName="DispositionOfArresteeUnder18Lookup_SexOfPersonDescription_seq" defaultValue="" name="DispositionOfArresteeUnder18Description" nullable="1" physicalName="DispositionOfArresteeUnder18Description" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL324" populated="true" UUID="670f298b-900d-4370-8526-9d41fd6e900f" autoIncrement="false" autoIncrementSequenceName="DispositionOfArresteeUnder18Lookup_SexOfPersonDescription_seq" defaultValue="" name="DispositionOfArresteeUnder18Description" nullable="1" physicalName="DispositionOfArresteeUnder18Description" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1225,7 +1225,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL335" populated="true" UUID="6fd2316f-7a31-48b5-aec8-c6fa830b8007" autoIncrement="false" autoIncrementSequenceName="ArrestReportSegment_ORI_seq" defaultValue="" name="ORI" nullable="1" physicalName="ORI" precision="9" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL336" populated="true" UUID="6a1a6a16-a4f4-4917-b15b-9d1587891b09" autoIncrement="false" autoIncrementSequenceName="ArrestReportSegment_ArresteeTransactionNumber_seq" defaultValue="" name="ArresteeTransactionNumber" nullable="1" physicalName="ArresteeTransactionNumber" precision="0" referenceCount="1" scale="0" source-column-ref="COL131" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL336" populated="true" UUID="6a1a6a16-a4f4-4917-b15b-9d1587891b09" autoIncrement="false" autoIncrementSequenceName="ArrestReportSegment_ArresteeTransactionNumber_seq" defaultValue="" name="ArresteeTransactionNumber" nullable="1" physicalName="ArresteeTransactionNumber" precision="12" referenceCount="1" scale="0" source-column-ref="COL131" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Left-justified with blank right-fill.</remarks>
     </column>
     <column id="COL337" populated="true" UUID="53a17096-bf11-4de8-bd33-987730b73ebf" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_ArresteeTransactionNumber_seq_2" defaultValue="" name="ArresteeSequenceNumber" nullable="0" physicalName="ArresteeSequenceNumber" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -1278,7 +1278,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL351" populated="true" UUID="24b65555-462b-48cc-9f37-d7fc85949c31" autoIncrement="false" autoIncrementSequenceName="ClearedExceptionallyType_ClearedExceptionallyCode_seq" defaultValue="" name="ClearedExceptionallyCode" nullable="1" physicalName="ClearedExceptionallyCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: A, B, C, D, E, and N.</remarks>
     </column>
-    <column id="COL352" populated="true" UUID="ae2ce721-e6a2-46d9-913a-ff3f12c504b2" autoIncrement="false" autoIncrementSequenceName="ClearedExceptionallyType_ClearedExceptionallyCode_seq_1" defaultValue="" name="ClearedExceptionallyDescription" nullable="1" physicalName="ClearedExceptionallyDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL352" populated="true" UUID="ae2ce721-e6a2-46d9-913a-ff3f12c504b2" autoIncrement="false" autoIncrementSequenceName="ClearedExceptionallyType_ClearedExceptionallyCode_seq_1" defaultValue="" name="ClearedExceptionallyDescription" nullable="1" physicalName="ClearedExceptionallyDescription" precision="220" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: A, B, C, D, E, and N.</remarks>
     </column>
     </folder>
@@ -1301,7 +1301,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL357" populated="true" UUID="566a1ea1-2f12-4f67-886c-dc1c8b5c5a99" autoIncrement="false" autoIncrementSequenceName="LocationTypeType_LocationTypeCode_seq" defaultValue="" name="LocationTypeCode" nullable="1" physicalName="LocationTypeCode" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: 01 through 25</remarks>
     </column>
-    <column id="COL358" populated="true" UUID="75f16dc8-e9c0-4153-b8f1-736e9d94cc95" autoIncrement="false" autoIncrementSequenceName="LocationTypeType_LocationTypeDescription_seq" defaultValue="" name="LocationTypeDescription" nullable="1" physicalName="LocationTypeDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL358" populated="true" UUID="75f16dc8-e9c0-4153-b8f1-736e9d94cc95" autoIncrement="false" autoIncrementSequenceName="LocationTypeType_LocationTypeDescription_seq" defaultValue="" name="LocationTypeDescription" nullable="1" physicalName="LocationTypeDescription" precision="45" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1321,11 +1321,11 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL362" populated="true" UUID="b1cedd6e-7cc4-4fb3-8bd7-b8661a520f7b" autoIncrement="false" autoIncrementSequenceName="MethodOfEntryType_MethodOfEntryTypeID_seq_1" defaultValue="" name="MethodOfEntryTypeID" nullable="0" physicalName="MethodOfEntryTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL363" populated="true" UUID="8c15ea0b-ff5b-470a-80e2-6ef78f103e33" autoIncrement="false" autoIncrementSequenceName="MethodOfEntryType_MethodOfEntryCode_seq" defaultValue="" name="MethodOfEntryCode" nullable="1" physicalName="MethodOfEntryCode" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL363" populated="true" UUID="8c15ea0b-ff5b-470a-80e2-6ef78f103e33" autoIncrement="false" autoIncrementSequenceName="MethodOfEntryType_MethodOfEntryCode_seq" defaultValue="" name="MethodOfEntryCode" nullable="1" physicalName="MethodOfEntryCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Offense Code is 220
 (Burglary).</remarks>
     </column>
-    <column id="COL364" populated="true" UUID="446144bd-74e3-4236-8094-4b1686be2e96" autoIncrement="false" autoIncrementSequenceName="MethodOfEntryType_MethodOfEntryDescription_seq" defaultValue="" name="MethodOfEntryDescription" nullable="1" physicalName="MethodOfEntryDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL364" populated="true" UUID="446144bd-74e3-4236-8094-4b1686be2e96" autoIncrement="false" autoIncrementSequenceName="MethodOfEntryType_MethodOfEntryDescription_seq" defaultValue="" name="MethodOfEntryDescription" nullable="1" physicalName="MethodOfEntryDescription" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1348,7 +1348,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL369" populated="true" UUID="07875be3-0deb-488b-89c4-69802dce8a1a" autoIncrement="false" autoIncrementSequenceName="BiasMotivationType_BiasMotivationCode_seq" defaultValue="" name="BiasMotivationCode" nullable="1" physicalName="BiasMotivationCode" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL370" populated="true" UUID="4ef04865-4653-4164-8489-dc111dced4e3" autoIncrement="false" autoIncrementSequenceName="BiasMotivationType_BiasMotivationCode_seq_1" defaultValue="" name="BiasMotivationDescription" nullable="1" physicalName="BiasMotivationDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL370" populated="true" UUID="4ef04865-4653-4164-8489-dc111dced4e3" autoIncrement="false" autoIncrementSequenceName="BiasMotivationType_BiasMotivationCode_seq_1" defaultValue="" name="BiasMotivationDescription" nullable="1" physicalName="BiasMotivationDescription" precision="60" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1371,7 +1371,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL375" populated="true" UUID="02d9ff57-315a-45a0-bee0-976c65677aef" autoIncrement="false" autoIncrementSequenceName="SuspectedDrugTypeType_SuspectedDrugTypeCode_seq" defaultValue="" name="SuspectedDrugTypeCode" nullable="1" physicalName="SuspectedDrugTypeCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: A through P, U, and X.</remarks>
     </column>
-    <column id="COL376" populated="true" UUID="483eb757-b839-4b36-a018-4e5b13310d77" autoIncrement="false" autoIncrementSequenceName="SuspectedDrugTypeType_SuspectedDrugTypeCode_seq_1" defaultValue="" name="SuspectedDrugTypeDescription" nullable="1" physicalName="SuspectedDrugTypeDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL376" populated="true" UUID="483eb757-b839-4b36-a018-4e5b13310d77" autoIncrement="false" autoIncrementSequenceName="SuspectedDrugTypeType_SuspectedDrugTypeCode_seq_1" defaultValue="" name="SuspectedDrugTypeDescription" nullable="1" physicalName="SuspectedDrugTypeDescription" precision="20" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: A through P, U, and X.</remarks>
     </column>
     </folder>
@@ -1437,10 +1437,10 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL392" populated="true" UUID="6e512ecf-a26f-4781-9bf1-bbe32cdbe414" autoIncrement="false" autoIncrementSequenceName="TypeOfWeaponForceType_TypeOfWeaponForceID_seq_1" defaultValue="" name="TypeOfWeaponForceInvolvedTypeID" nullable="0" physicalName="TypeOfWeaponForceInvolvedTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL393" populated="true" UUID="090897e9-3f87-4b9c-9972-ca2bd0ddc8ba" autoIncrement="false" autoIncrementSequenceName="TypeOfWeaponForceInvolvedType_TypeOfWeaponForceInvolvedCode_seq" defaultValue="" name="TypeOfWeaponForceInvolvedCode" nullable="1" physicalName="TypeOfWeaponForceInvolvedCode" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL393" populated="true" UUID="090897e9-3f87-4b9c-9972-ca2bd0ddc8ba" autoIncrement="false" autoIncrementSequenceName="TypeOfWeaponForceInvolvedType_TypeOfWeaponForceInvolvedCode_seq" defaultValue="" name="TypeOfWeaponForceInvolvedCode" nullable="1" physicalName="TypeOfWeaponForceInvolvedCode" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL394" populated="true" UUID="530c5c56-f65b-454a-842b-df2579a9293b" autoIncrement="false" autoIncrementSequenceName="TypeOfWeaponForceInvolvedType_TypeOfWeaponForceInvolvedDescription_seq" defaultValue="" name="TypeOfWeaponForceInvolvedDescription" nullable="1" physicalName="TypeOfWeaponForceInvolvedDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL394" populated="true" UUID="530c5c56-f65b-454a-842b-df2579a9293b" autoIncrement="false" autoIncrementSequenceName="TypeOfWeaponForceInvolvedType_TypeOfWeaponForceInvolvedDescription_seq" defaultValue="" name="TypeOfWeaponForceInvolvedDescription" nullable="1" physicalName="TypeOfWeaponForceInvolvedDescription" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1483,7 +1483,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL404" populated="true" UUID="73e9cc0f-e7d1-401b-ba10-94d11fec5c8d" autoIncrement="false" autoIncrementSequenceName="TypeOfOfficerActivityCircumstanceType_TypeOfVictimCode_seq" defaultValue="" name="OfficerActivityCircumstanceCode" nullable="1" physicalName="OfficerActivityCircumstanceCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: I, B, F, G, R, S, O, and U.</remarks>
     </column>
-    <column id="COL405" populated="true" UUID="ec7dfa8b-48a6-4de1-a5fa-a44c7fdceb3b" autoIncrement="false" autoIncrementSequenceName="TypeOfOfficerActivityCircumstanceType_TypeOfVictimDescription_seq" defaultValue="" name="OfficerActivityCircumstanceDescription" nullable="1" physicalName="OfficerActivityCircumstanceDescription" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL405" populated="true" UUID="ec7dfa8b-48a6-4de1-a5fa-a44c7fdceb3b" autoIncrement="false" autoIncrementSequenceName="TypeOfOfficerActivityCircumstanceType_TypeOfVictimDescription_seq" defaultValue="" name="OfficerActivityCircumstanceDescription" nullable="1" physicalName="OfficerActivityCircumstanceDescription" precision="75" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1506,7 +1506,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <column id="COL410" populated="true" UUID="2a52b4fa-388f-44f0-aef9-bdf9528ec7e2" autoIncrement="false" autoIncrementSequenceName="TypeOfOfficerActivityCircumstanceType_TypeOfVictimCode_seq_1" defaultValue="" name="OfficerAssignmentTypeCode" nullable="1" physicalName="OfficerAssignmentTypeCode" precision="1" referenceCount="1" scale="0" source-column-ref="COL404" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: I, B, F, G, R, S, O, and U.</remarks>
     </column>
-    <column id="COL411" populated="true" UUID="a29f2256-5987-496c-b908-543b18b03ac2" autoIncrement="false" autoIncrementSequenceName="TypeOfOfficerActivityCircumstanceType_TypeOfVictimDescription_seq_1" defaultValue="" name="OfficerAssignmentTypeDescription" nullable="1" physicalName="OfficerAssignmentTypeDescription" precision="0" referenceCount="1" scale="0" source-column-ref="COL405" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL411" populated="true" UUID="a29f2256-5987-496c-b908-543b18b03ac2" autoIncrement="false" autoIncrementSequenceName="TypeOfOfficerActivityCircumstanceType_TypeOfVictimDescription_seq_1" defaultValue="" name="OfficerAssignmentTypeDescription" nullable="1" physicalName="OfficerAssignmentTypeDescription" precision="100" referenceCount="1" scale="0" source-column-ref="COL405" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1730,7 +1730,7 @@ FO, GL, DU, NP, and XX.</remarks>
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.6595236053843678" viewportX="559" viewportY="0" relationship-style="direct" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.6595236053843678" viewportX="0" viewportY="0" relationship-style="direct" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB1" x="36" y="31" bgColor="0xbfd6ff" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB17" x="39" y="533" bgColor="0xdfedce" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB27" x="382" y="34" bgColor="0xbfd6ff" fgColor="0x000000" rounded="false" dashed="false"/>
@@ -1789,7 +1789,7 @@ FO, GL, DU, NP, and XX.</remarks>
   <table-link relationship-ref="REL520" pkConnection="0.47554347826086957" fkConnection="0.6344647519582245" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="40"/>
   <table-link relationship-ref="REL522" pkConnection="0.35374149659863946" fkConnection="0.5952380952380952" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="72"/>
   <table-link relationship-ref="REL524" pkConnection="0.3291139240506329" fkConnection="0.04985337243401759" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="66"/>
-  <table-link relationship-ref="REL518" pkConnection="0.6768558951965066" fkConnection="0.5803814713896458" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="40"/>
+  <table-link relationship-ref="REL518" pkConnection="0.6047430830039525" fkConnection="0.16422287390029325" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="72"/>
   <table-link relationship-ref="REL482" pkConnection="0.7578947368421053" fkConnection="0.7540603248259861" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
   <table-link relationship-ref="REL526" pkConnection="0.3037974683544304" fkConnection="0.7917888563049853" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="65"/>
   <table-link relationship-ref="REL428" pkConnection="0.13355048859934854" fkConnection="0.12345679012345678" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
