@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.ojbc.bundles.utilities</groupId>
+  <artifactId>analytics_data_loading_utilitity</artifactId>
+  <packaging>bundle</packaging>
+  <version>1.0.0</version>
+
+  <name>OJB :: analytics_data_loading_utilitity :: utilities</name>
+  <url>http://www.ojbc.org</url>
+
+  <properties>
+  	<java.version>1.7</java.version>
+  	<maven-bundle-plugin-version>2.4.0</maven-bundle-plugin-version>
+  	<camel-version>2.14.1</camel-version>
+	<slf4j-version>1.7.10</slf4j-version>
+	<log4j-version>1.2.17</log4j-version>
+ 	<spring-version>3.2.11.RELEASE</spring-version>	
+ 	<commons-lang-version>2.6</commons-lang-version>
+	<apache-commons-io-version>1.3.2</apache-commons-io-version>
+	<commonsCodec.version>1.7</commonsCodec.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jodatime-version>2.6</jodatime-version>
+    <mock-javamail-version>1.9</mock-javamail-version>
+    <junit-version>4.11</junit-version>
+  </properties>
+
+  <dependencies>
+		<!-- Camel libs -->
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-core</artifactId>
+      <version>${camel-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-spring</artifactId>
+      <version>${camel-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-quartz2</artifactId>
+      <version>${camel-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-exec</artifactId>
+      <version>${camel-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-mail</artifactId>
+      <version>${camel-version}</version>
+    </dependency>
+
+	<dependency>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-io</artifactId>
+		<version>${apache-commons-io-version}</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>joda-time</groupId>
+		<artifactId>joda-time</artifactId>
+		<version>${jodatime-version}</version>
+	</dependency>
+	
+	
+	<!-- for testing -->
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>${junit-version}</version>
+		<scope>test</scope>
+	</dependency>
+			
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-test</artifactId>
+		<version>${spring-version}</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-core</artifactId>
+	  <version>${spring-version}</version>
+	  <optional>true</optional>
+	</dependency>	
+	<dependency>
+		<groupId>org.apache.camel</groupId>
+		<artifactId>camel-test-spring3</artifactId>
+		<version>${camel-version}</version>
+		<scope>test</scope>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.jvnet.mock-javamail</groupId>
+		<artifactId>mock-javamail</artifactId>
+		<version>${mock-javamail-version}</version>
+		<scope>test</scope>
+	</dependency>	
+            
+	<dependency>
+		<groupId>commons-codec</groupId>
+		<artifactId>commons-codec</artifactId>
+		<version>${commonsCodec.version}</version>
+		<scope>test</scope>
+	</dependency>
+ 	<dependency>
+	    <groupId>commons-lang</groupId>
+	    <artifactId>commons-lang</artifactId>
+	    <version>${commons-lang-version}</version>
+	    <scope>test</scope>
+	</dependency>		                        
+	<!-- logging -->
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>${slf4j-version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-log4j12</artifactId>
+		<version>${slf4j-version}</version>
+	</dependency>
+	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>${log4j-version}</version>
+	</dependency>
+  </dependencies>		
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+
+	<resources>
+		<resource>
+			<directory>${basedir}/src/main/resources</directory>
+			<includes>
+				<include>META-INF/spring/**</include>
+				<include>*.*</include>
+			</includes>
+		</resource>
+		<resource>
+			<directory>${basedir}/src/main/config/dev</directory>
+			<filtering>true</filtering>
+			<includes>
+				<include>*</include>
+			</includes>
+		</resource>
+	</resources>
+	    
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<configuration>
+				<source>${java.version}</source>
+				<target>${java.version}</target>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>maven-bundle-plugin</artifactId>
+			<version>${maven-bundle-plugin-version}</version>
+		    <extensions>true</extensions>
+		    <configuration>
+		      <instructions>
+				<DynamicImport-Package>*</DynamicImport-Package>
+				<Import-Package>
+					org.springframework.beans.factory.config,
+					javax.xml.namespace,
+					service-specifications.*,
+					org.ojbc.*,
+					org.apache.camel.spring.spi,
+					*
+				</Import-Package>
+				<Bundle-Name>${pom.name}</Bundle-Name>
+		      </instructions>
+		    </configuration>
+	  </plugin>
+
+    </plugins>
+  </build>
+  
+    <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-maven-plugin</artifactId>
+        <version>${camel-version}</version>
+      </plugin>
+    </plugins>
+  </reporting>  
+</project>
