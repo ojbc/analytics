@@ -16,8 +16,8 @@
 
 STATE <- "VT"
 
-demoArresteeCount = 12000
-demoIncidentCount = 25000
+demoArresteeCount = 120
+demoIncidentCount = 250
 
 library(RMySQL)
 library(data.table)
@@ -289,10 +289,6 @@ newArrest$SubsequentArrestID[!is.na(newArrest$SubsequentArrestID.y)] <- newArres
 newArrest <- select(newArrest, -contains('.'))
 arrest <- rbind(newArrest, select(fiveTimeArrest, -(PriorArrestID)))
 
-arrest <- select(arrest, -(temp_date))
-
-dbWriteTable(conn, "Arrest", arrest, append=TRUE, row.names=FALSE)
-
 #
 # Charge
 #
@@ -355,16 +351,88 @@ Charge <- mutate(Charge, InvolvedDrugID=ifelse(
       ifelse(ArrestOffenseTypeID %in% c(3530,3531,3532,3533,3534), match("Cocaine", InvolvedDrugDescriptions),
         ifelse(ArrestOffenseTypeID >= 3500 & ArrestOffenseTypeID < 3600, match("Other Narcotics", InvolvedDrugDescriptions),
           match("None", InvolvedDrugDescriptions))))))
+
+# Compute recidivism
+
+convictionArrests <- Charge %>%
+  group_by(ArrestID) %>%
+  dplyr::summarize(DispositionID=min(DispositionID), DispositionDate=min(RecidivismEligibilityDate)) %>%
+  filter(DispositionID==1)
+arrest <- left_join(arrest, convictionArrests, by=c("ArrestID"="ArrestID"))
+
+arrestRowCount <- nrow(arrest)
+
+# note: 2 is the "No" codetable key
+daysUntilNextArrest <- as.integer(rep(NA, arrestRowCount))
+sixMonthRearrest <- rep(2, arrestRowCount)
+oneYearRearrest <- rep(2, arrestRowCount)
+twoYearRearrest <- rep(2, arrestRowCount)
+daysUntilNextConviction <- as.integer(rep(NA, arrestRowCount))
+oneYearReconviction <- rep(2, arrestRowCount)
+twoYearReconviction <- rep(2, arrestRowCount)
+
+for (r in 1:arrestRowCount) {
+  
+  arrestRow <- arrest[r,]
+  SubsequentArrestID <- arrestRow$SubsequentArrestID
+  if (!is.na(SubsequentArrestID)) {
+    nextArrestRow <- arrest[arrest$ArrestID==SubsequentArrestID,]
+    print(paste0("nextArrestRow$temp_date=", nextArrestRow$temp_date, ", arrestRow$temp_date=", arrestRow$temp_date, ", SubsequentArrestID=", SubsequentArrestID))
+    daysUntilNextArrest[r] <- as.numeric(nextArrestRow$temp_date) - as.numeric(arrestRow$temp_date)
+    sixMonthRearrest[r] <- ifelse(daysUntilNextArrest[r] <= 180, 1, 2)
+    oneYearRearrest[r] <- ifelse(daysUntilNextArrest[r] <= 365, 1, 2)
+    twoYearRearrest[r] <- ifelse(daysUntilNextArrest[r] <= 730, 1, 2)
+    if (!is.na(arrestRow$DispositionID)) {
+      nextConvictionDate <- NA
+      nextConvictionArrestID <- SubsequentArrestID
+      while (is.na(nextConvictionDate) & !is.na(nextConvictionArrestID)) {
+        if (!is.na(nextArrestRow$DispositionID)) {
+          nextConvictionDate <- nextArrestRow$DispositionDate
+        }
+        nextConvictionArrestID <- nextArrestRow$SubsequentArrestID
+        if (!is.na(nextConvictionArrestID)) {
+          nextArrestRow <- filter(arrest, ArrestID==nextConvictionArrestID)
+        }
+      }
+      if (!is.na(nextConvictionDate)) {
+        daysUntilNextConviction[r] <- as.numeric(nextConvictionDate) - as.numeric(arrestRow$temp_date)
+        oneYearReconviction[r] <- ifelse(daysUntilNextConviction[r] <= 365, 1, 2)
+        twoYearReconviction[r] <- ifelse(daysUntilNextConviction[r] <= 730, 1, 2)
+      }
+    }
+  }
+  
+}
+
+arrest <- select(arrest, -(temp_date), -(DispositionID), -(DispositionDate))
+arrest <- cbind(arrest, daysUntilNextArrest, daysUntilNextConviction, sixMonthRearrest, oneYearRearrest, twoYearRearrest,
+                oneYearReconviction, twoYearReconviction)
+arrest <- rename(arrest, DaysUntilNextConviction=daysUntilNextConviction, DaysUntilNextArrest=daysUntilNextArrest,
+                 SixMonthRearrestIndicator=sixMonthRearrest, OneYearRearrestIndicator=oneYearRearrest, TwoYearRearrestIndicator=twoYearRearrest,
+                 OneYearReconvictionIndicator=oneYearReconviction, TwoYearReconvictionIndicator=twoYearReconviction)
+
+dbWriteTable(conn, "Arrest", arrest, append=TRUE, row.names=FALSE)
 dbWriteTable(conn, "Charge", Charge, append=TRUE, row.names=FALSE)
 
 #
 # PretrialParticipation
 #
 
+serviceID <- 1:7
+serviceDescription <- paste("service", serviceID)
+serviceDescription[6] <- "unknown"
+serviceDescription[7] <- "none"
+isParticipant <- serviceDescription
+isParticipant[isParticipant=="none"] <- "no"
+isParticipant[1:5] <- "yes"
+PretrialService <- data.table(PretrialServiceID=serviceID, PretrialServiceDescription=serviceDescription, IsParticipant=isParticipant)
+dbWriteTable(conn, "PretrialService", PretrialService, append=TRUE, row.names=FALSE)
+
+serviceProbs <- c(runif(n=length(serviceID)-2, min=0, max=.9), .05, .05)
+
 riskScoreProbs <- runif(n=length(riskScoreID))
 
 makePretrialParticipation <- function(arrestID) {
-  PretrialServiceID <- sample(serviceID, size=1, prob=serviceProbs)
   countyProb <- getCountyProbs()
   CountyID <- sample(countyID, size=1, prob=countyProb)
   dateID <- as.character(arrest[arrest$ArrestID==arrestID, "DateID"])
@@ -401,18 +469,6 @@ makePretrialAssessedNeed <- function(pretrialServiceParticipationID) {
 
 PretrialAssessedNeed <- bind_rows(Map(makePretrialAssessedNeed, PretrialServiceParticipation$PretrialServiceParticipationID))
 PretrialAssessedNeed$PretrialAssessedNeedID <- 1:nrow(PretrialAssessedNeed)
-
-serviceID <- 1:7
-serviceDescription <- paste("service", serviceID)
-serviceDescription[6] <- "unknown"
-serviceDescription[7] <- "none"
-isParticipant <- serviceDescription
-isParticipant[isParticipant=="none"] <- "no"
-isParticipant[1:5] <- "yes"
-PretrialService <- data.table(PretrialServiceID=serviceID, PretrialServiceDescription=serviceDescription, IsParticipant=isParticipant)
-dbWriteTable(conn, "PretrialService", PretrialService, append=TRUE, row.names=FALSE)
-
-serviceProbs <- c(runif(n=length(serviceID)-2, min=0, max=.9), .05, .05)
 
 makePretrialServiceAssociation <- function(pretrialServiceParticipationID) {
   serviceCount <- rpois(n=1, lambda=.8)
