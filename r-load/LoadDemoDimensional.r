@@ -16,8 +16,8 @@
 
 STATE <- "VT"
 
-demoArresteeCount = 120
-demoIncidentCount = 250
+demoArresteeCount = 12000
+demoIncidentCount = 25000
 
 library(RMySQL)
 library(data.table)
@@ -377,7 +377,6 @@ for (r in 1:arrestRowCount) {
   SubsequentArrestID <- arrestRow$SubsequentArrestID
   if (!is.na(SubsequentArrestID)) {
     nextArrestRow <- arrest[arrest$ArrestID==SubsequentArrestID,]
-    print(paste0("nextArrestRow$temp_date=", nextArrestRow$temp_date, ", arrestRow$temp_date=", arrestRow$temp_date, ", SubsequentArrestID=", SubsequentArrestID))
     daysUntilNextArrest[r] <- as.numeric(nextArrestRow$temp_date) - as.numeric(arrestRow$temp_date)
     sixMonthRearrest[r] <- ifelse(daysUntilNextArrest[r] <= 180, 1, 2)
     oneYearRearrest[r] <- ifelse(daysUntilNextArrest[r] <= 365, 1, 2)
