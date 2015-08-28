@@ -4,8 +4,8 @@
  <print-settings numCopies="1" zoom="0.6" pageNumbersPrinted="false" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
-   <property key="Logical" value="ojbc_analytics" />
    <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:mysql://localhost:3306/ojbc_analytics_vt" />
    <property key="UID" value="root" />
    <property key="PWD" value="" />
@@ -423,7 +423,7 @@
     <column id="COL122" populated="true" UUID="3d198cbf-0dd7-4bab-a190-6648fea1643c" autoIncrement="true" autoIncrementSequenceName="PersonRace_PersonRaceID_seq" defaultValue="" name="PersonRaceID" nullable="0" physicalName="PersonRaceID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL123" populated="true" UUID="377093e6-cda2-422b-bef5-771b8b5eb2a2" autoIncrement="false" autoIncrementSequenceName="PersonRace_PersonRaceDescription_seq" defaultValue="" name="PersonRaceDescription" nullable="0" physicalName="PersonRaceDescription" precision="20" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL123" populated="true" UUID="377093e6-cda2-422b-bef5-771b8b5eb2a2" autoIncrement="false" autoIncrementSequenceName="PersonRace_PersonRaceDescription_seq" defaultValue="" name="PersonRaceDescription" nullable="0" physicalName="PersonRaceDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -443,7 +443,7 @@
     <column id="COL127" populated="true" UUID="6e31eebb-206d-493e-ad6b-2b2356f85db0" autoIncrement="false" autoIncrementSequenceName="PersonAge_PersonAgeID_seq" defaultValue="" name="PersonAgeID" nullable="0" physicalName="PersonAgeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL128" populated="true" UUID="e61d31e5-4d29-42ce-a588-558a4f468b0f" autoIncrement="false" autoIncrementSequenceName="PersonAge_AgeInYears_seq" defaultValue="" name="AgeInYears" nullable="0" physicalName="AgeInYears" precision="7" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL128" populated="true" UUID="e61d31e5-4d29-42ce-a588-558a4f468b0f" autoIncrement="false" autoIncrementSequenceName="PersonAge_AgeInYears_seq" defaultValue="" name="AgeInYears" nullable="0" physicalName="AgeInYears" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL129" populated="true" UUID="196ff0c0-9a54-40d5-8905-80225c4026c6" autoIncrement="false" autoIncrementSequenceName="AgeRange_AgeRangeID_seq" defaultValue="" name="PersonAgeRangeID" nullable="0" physicalName="PersonAgeRangeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -552,7 +552,7 @@
     <column id="COL155" populated="true" UUID="51fba073-fddb-4a50-ba10-435925cb8551" autoIncrement="true" autoIncrementSequenceName="YesNo_YesNoID_seq" defaultValue="" name="YesNoID" nullable="0" physicalName="YesNoID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL156" populated="true" UUID="fcf9108d-3b76-49b8-9206-020c9db67de9" autoIncrement="false" autoIncrementSequenceName="YesNo_YesNoDescription_seq" defaultValue="" name="YesNoDescription" nullable="0" physicalName="YesNoDescription" precision="3" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL156" populated="true" UUID="fcf9108d-3b76-49b8-9206-020c9db67de9" autoIncrement="false" autoIncrementSequenceName="YesNo_YesNoDescription_seq" defaultValue="" name="YesNoDescription" nullable="0" physicalName="YesNoDescription" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -572,7 +572,7 @@
     <column id="COL160" populated="true" UUID="2be0f213-d8eb-453d-bb3f-701abf91d01d" autoIncrement="true" autoIncrementSequenceName="Disposition_DispositionID_seq" defaultValue="" name="DispositionID" nullable="0" physicalName="DispositionID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL161" populated="true" UUID="48004e82-cd83-4684-8965-9136b4da88b7" autoIncrement="false" autoIncrementSequenceName="Disposition_DispositionDescription_seq" defaultValue="" name="DispositionDescription" nullable="0" physicalName="DispositionDescription" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL161" populated="true" UUID="48004e82-cd83-4684-8965-9136b4da88b7" autoIncrement="false" autoIncrementSequenceName="Disposition_DispositionDescription_seq" defaultValue="" name="DispositionDescription" nullable="0" physicalName="DispositionDescription" precision="40" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL162" populated="true" UUID="7b92c854-03ca-4caa-be6b-5b8645ba70b9" autoIncrement="false" autoIncrementSequenceName="Disposition_IsConviction_seq" defaultValue="" name="IsConviction" nullable="0" physicalName="IsConviction" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
@@ -994,7 +994,7 @@
     <column id="COL274" populated="true" UUID="b6d3f293-ed7e-42a4-a834-faad801d12dd" autoIncrement="false" autoIncrementSequenceName="LoadHistory_LoadStartTime_seq" defaultValue="" name="LoadStartTime" nullable="0" physicalName="LoadStartTime" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
-    <column id="COL275" populated="true" UUID="1a67bdb3-a324-4d8d-9940-c4ebf5bb492a" autoIncrement="false" autoIncrementSequenceName="LoadHistory_LoadEndTime_seq" defaultValue="" name="LoadEndTime" nullable="0" physicalName="LoadEndTime" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL275" populated="true" UUID="1a67bdb3-a324-4d8d-9940-c4ebf5bb492a" autoIncrement="false" autoIncrementSequenceName="LoadHistory_LoadEndTime_seq" defaultValue="" name="LoadEndTime" nullable="1" physicalName="LoadEndTime" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     </folder>
