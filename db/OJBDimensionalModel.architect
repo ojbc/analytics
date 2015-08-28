@@ -4,7 +4,16 @@
  <print-settings numCopies="1" zoom="0.6" pageNumbersPrinted="false" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
-   <property key="Logical" value="PlayPen Database" />
+   <property key="Logical" value="ojbc_analytics" />
+   <property key="Connection Type" value="MySQL" />
+   <property key="JDBC URL" value="jdbc:mysql://localhost:3306/ojbc_analytics_vt" />
+   <property key="UID" value="root" />
+   <property key="PWD" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.database" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.port" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.hostname" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.repos.login" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.repos.password" value="" />
   </data-source>
   <data-source id="DS2">
    <property key="Connection Type" value="MySQL" />
@@ -220,7 +229,7 @@
   <table id="TAB63" populated="true" UUID="26f8a335-a4b3-440a-a8da-672feff9b7fb" name="Date" objectType="TABLE" physicalName="Date" >
    <remarks></remarks>
    <folder id="FOLTAB631" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL64" populated="true" UUID="07125fec-e7d5-439a-88df-896f60de6ae8" autoIncrement="true" autoIncrementSequenceName="Date_DateID_seq_1" defaultValue="" name="DateID" nullable="0" physicalName="DateID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL64" populated="true" UUID="07125fec-e7d5-439a-88df-896f60de6ae8" autoIncrement="false" autoIncrementSequenceName="Date_DateID_seq_1" defaultValue="" name="DateID" nullable="0" physicalName="DateID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL65" populated="true" UUID="26fe40a3-2e67-4dc4-b95e-db6c66788587" autoIncrement="false" autoIncrementSequenceName="Date_CalendarDate_seq" defaultValue="" name="CalendarDate" nullable="0" physicalName="CalendarDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
@@ -270,7 +279,7 @@
   <table id="TAB78" populated="true" UUID="dcdf39b5-641c-4242-9acc-b50fed01ca3a" name="Time" objectType="TABLE" physicalName="Time" >
    <remarks></remarks>
    <folder id="FOLTAB781" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL79" populated="true" UUID="5f1ec490-5334-4084-92c6-d63ed321cb3f" autoIncrement="true" autoIncrementSequenceName="Time_TimeID_seq_1" defaultValue="" name="TimeID" nullable="0" physicalName="TimeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL79" populated="true" UUID="5f1ec490-5334-4084-92c6-d63ed321cb3f" autoIncrement="false" autoIncrementSequenceName="Time_TimeID_seq_1" defaultValue="" name="TimeID" nullable="0" physicalName="TimeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL80" populated="true" UUID="1d4eaf8a-ad5c-450c-b151-73dea6ed9633" autoIncrement="false" autoIncrementSequenceName="Time_Hour_seq" defaultValue="" name="Hour" nullable="0" physicalName="Hour" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -1098,19 +1107,19 @@
    <relationship id="REL332" populated="true" UUID="d851526b-235a-43a7-a64a-d650e66a3651" deferrability="7" deleteRule="3" fk-table-ref="TAB181" fkCardinality="7" identifying="false" name="YesNo_PretrialServiceParticipation_fk" physicalName="yesno_pretrialserviceparticipation_fk" pk-table-ref="TAB154" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP333" populated="true" UUID="dd8f149c-b49a-4683-94c4-7b5dcf5a135a" fk-column-ref="COL187" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL155" />
    </relationship>
-   <relationship id="REL334" populated="true" UUID="995d5a4d-b307-4f6e-a1ff-ca22d21fedfe" deferrability="7" deleteRule="3" fk-table-ref="TAB85" fkCardinality="7" identifying="false" name="YesNo_Arrest_fk" physicalName="YesNo_Arrest_fk" pk-table-ref="TAB154" pkCardinality="2" updateRule="3" >
+   <relationship id="REL334" populated="true" UUID="995d5a4d-b307-4f6e-a1ff-ca22d21fedfe" deferrability="7" deleteRule="3" fk-table-ref="TAB85" fkCardinality="7" identifying="false" name="YesNo_Arrest_fk" physicalName="yesno_arrest_fk" pk-table-ref="TAB154" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP335" populated="true" UUID="ffc66507-85fb-46ff-823a-7c635970e9b4" fk-column-ref="COL103" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL155" />
    </relationship>
-   <relationship id="REL336" populated="true" UUID="b3779b63-e0a0-4a8c-a085-ee455930e325" deferrability="7" deleteRule="3" fk-table-ref="TAB85" fkCardinality="7" identifying="false" name="YesNo_Arrest_fk1" physicalName="YesNo_Arrest_fk1" pk-table-ref="TAB154" pkCardinality="2" updateRule="3" >
+   <relationship id="REL336" populated="true" UUID="b3779b63-e0a0-4a8c-a085-ee455930e325" deferrability="7" deleteRule="3" fk-table-ref="TAB85" fkCardinality="7" identifying="false" name="YesNo_Arrest_fk1" physicalName="yesno_arrest_fk1" pk-table-ref="TAB154" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP337" populated="true" UUID="d29e2968-81dc-4d25-84ae-28f10ed85167" fk-column-ref="COL104" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL155" />
    </relationship>
-   <relationship id="REL338" populated="true" UUID="9a13baaf-c318-44f8-88d0-3f1b3c986dfa" deferrability="7" deleteRule="3" fk-table-ref="TAB85" fkCardinality="7" identifying="false" name="YesNo_Arrest_fk2" physicalName="YesNo_Arrest_fk2" pk-table-ref="TAB154" pkCardinality="2" updateRule="3" >
+   <relationship id="REL338" populated="true" UUID="9a13baaf-c318-44f8-88d0-3f1b3c986dfa" deferrability="7" deleteRule="3" fk-table-ref="TAB85" fkCardinality="7" identifying="false" name="YesNo_Arrest_fk2" physicalName="yesno_arrest_fk2" pk-table-ref="TAB154" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP339" populated="true" UUID="7e2685f4-3c7a-462d-ad73-b4de1caa83cb" fk-column-ref="COL105" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL155" />
    </relationship>
-   <relationship id="REL340" populated="true" UUID="b6265719-b75c-46e2-a76c-369542885300" deferrability="7" deleteRule="3" fk-table-ref="TAB85" fkCardinality="7" identifying="false" name="YesNo_Arrest_fk3" physicalName="YesNo_Arrest_fk3" pk-table-ref="TAB154" pkCardinality="2" updateRule="3" >
+   <relationship id="REL340" populated="true" UUID="b6265719-b75c-46e2-a76c-369542885300" deferrability="7" deleteRule="3" fk-table-ref="TAB85" fkCardinality="7" identifying="false" name="YesNo_Arrest_fk3" physicalName="yesno_arrest_fk3" pk-table-ref="TAB154" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP341" populated="true" UUID="a4e79159-0c49-475c-afc0-8ed0822251b9" fk-column-ref="COL106" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL155" />
    </relationship>
-   <relationship id="REL342" populated="true" UUID="2e37dca8-353c-49f3-87a0-237105a4b501" deferrability="7" deleteRule="3" fk-table-ref="TAB85" fkCardinality="7" identifying="false" name="YesNo_Arrest_fk4" physicalName="YesNo_Arrest_fk4" pk-table-ref="TAB154" pkCardinality="2" updateRule="3" >
+   <relationship id="REL342" populated="true" UUID="2e37dca8-353c-49f3-87a0-237105a4b501" deferrability="7" deleteRule="3" fk-table-ref="TAB85" fkCardinality="7" identifying="false" name="YesNo_Arrest_fk4" physicalName="yesno_arrest_fk4" pk-table-ref="TAB154" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP343" populated="true" UUID="7f99f520-1ca8-4e68-be4f-6a4fbcc8366c" fk-column-ref="COL107" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL155" />
    </relationship>
    <relationship id="REL344" populated="true" UUID="50dd49b1-02fd-45ec-9019-c738bb9e43ee" deferrability="7" deleteRule="3" fk-table-ref="TAB194" fkCardinality="7" identifying="false" name="Disposition_Charge_fk" physicalName="disposition_charge_fk" pk-table-ref="TAB159" pkCardinality="2" updateRule="3" >
@@ -1178,7 +1187,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="350" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="129" y="20" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB63" x="1425" y="90" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB78" x="677" y="176" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
