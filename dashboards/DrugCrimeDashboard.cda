@@ -2,33 +2,33 @@
 <CDADescriptor>
    <DataSources>
       <Connection id="YearQuery" type="sql.jndi">
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
       <Connection id="CountyQuery" type="sql.jndi">
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
       <Connection id="DrugQuery" type="sql.jndi">
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
       <Connection id="DrugArrestCountQuery" type="mondrian.jndi">
          <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
       <Connection id="ReadyCashCrimeCountQuery" type="mondrian.jndi">
          <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
       <Connection id="DrugCrimeRecidivismQuery" type="mondrian.jndi">
          <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
       <Connection id="DrugCrimeDemographicsQuery" type="mondrian.jndi">
          <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
       <Connection id="ProsecutionsQuery" type="mondrian.jndi">
          <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
    </DataSources>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="YearQuery"

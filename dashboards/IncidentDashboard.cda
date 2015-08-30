@@ -2,25 +2,25 @@
 <CDADescriptor>
    <DataSources>
       <Connection id="AgencyQuery" type="sql.jndi">
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
       <Connection id="IncidentListQuery" type="sql.jndi">
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
       <Connection id="TownQuery" type="sql.jndi">
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
       <Connection id="Top20CallsQuery" type="mondrian.jndi">
          <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
       <Connection id="AnnualTrendQuery" type="mondrian.jndi">
          <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
       <Connection id="HeatGridQuery" type="mondrian.jndi">
          <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics_demo</Jndi>
+         <Jndi>ojbc_analytics</Jndi>
       </Connection>
    </DataSources>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="AgencyQuery"
@@ -77,7 +77,7 @@ select distinct TownDescription from Town</Query>
          <Parameter default="All Towns" name="TownParameter" type="String"/>
       </Parameters>
       <Query>SELECT {[Measures].[IncidentCount]} ON COLUMNS,
-order({topcount([Incident Type.IncidentType].[All Types].Children, 3, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS
+order({topcount([Incident Type.IncidentType].[All Types].Children, 20, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS
 FROM [IncidentTypeInvolvement]
 WHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},
 {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})</Query>
@@ -110,7 +110,7 @@ FROM [IncidentTypeInvolvement] WHERE [Agency].[${AgencyParameter}] * [Town].[${T
          <Parameter default="All Towns" name="TownParameter" type="String"/>
       </Parameters>
       <Query>SELECT
-NON EMPTY CrossJoin({[Time Of Day.Time].[Hour].Members}, {[Measures].[IncidentCount]}) ON ROWS,
+NON EMPTY CrossJoin(except({[Time Of Day.Time].[Hour].Members}, {[Time Of Day.Time].[Hour].[-1]}), {[Measures].[IncidentCount]}) ON ROWS,
 NON EMPTY hierarchize({[Date.Day of Week].[Day of Week].Members}) ON COLUMNS
 FROM [Incident]
 WHERE CrossJoin(parallelperiod([Date.CalDate].[Date], ${HeatGridDateRangeParameter},
