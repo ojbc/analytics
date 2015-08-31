@@ -78,7 +78,7 @@ select distinct TownDescription from Town</Query>
       </Parameters>
       <Query>SELECT {[Measures].[IncidentCount]} ON COLUMNS,
 order({topcount([Incident Type.IncidentType].[All Types].Children, 20, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS
-FROM [IncidentTypeInvolvement]
+FROM [IncidentTypeInvolvement_Opt]
 WHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},
 {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})</Query>
    </DataAccess>
@@ -96,7 +96,7 @@ WHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},
       <Query>SELECT
  CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,
  {parallelperiod([Date.DateYMD].[Month], ${AnnualTrendDateRangeParameter}, ${BaseMonthParameter}):${BaseMonthParameter}} ON ROWS
-FROM [IncidentTypeInvolvement] WHERE [Agency].[${AgencyParameter}] * [Town].[${TownParameter}]</Query>
+FROM [IncidentTypeInvolvement_Opt] WHERE [Agency].[${AgencyParameter}] * [Town].[${TownParameter}]</Query>
    </DataAccess>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="HeatGridQuery"
                id="HeatGridQuery"
@@ -112,7 +112,7 @@ FROM [IncidentTypeInvolvement] WHERE [Agency].[${AgencyParameter}] * [Town].[${T
       <Query>SELECT
 NON EMPTY CrossJoin(except({[Time Of Day.Time].[Hour].Members}, {[Time Of Day.Time].[Hour].[-1]}), {[Measures].[IncidentCount]}) ON ROWS,
 NON EMPTY hierarchize({[Date.Day of Week].[Day of Week].Members}) ON COLUMNS
-FROM [Incident]
+FROM [Incident_Opt]
 WHERE CrossJoin(parallelperiod([Date.CalDate].[Date], ${HeatGridDateRangeParameter},
     [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}],
     [Town].[${TownParameter}] * [Agency].[${AgencyParameter}])</Query>

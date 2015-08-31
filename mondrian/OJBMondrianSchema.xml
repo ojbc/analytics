@@ -343,6 +343,20 @@
 		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="TimeID" highCardinality="false"/>
 		<Measure name="IncidentCount" column="IncidentID" datatype="Integer" aggregator="distinct-count" caption="Incident Count" visible="true"/>
 	</Cube>
+	<Cube name="Incident_Opt" caption="Incident" visible="false" cache="true" enabled="true">
+	<!--
+	create table IncidentOptHour as select DateID, if(TimeID=-1, -1, (TimeID div 10000)*10000) as HourTimeID, TownID, ReportingAgencyID, count(IncidentID) as IncidentCount from Incident group by DateID, HourTimeID, TownID, ReportingAgencyID;
+	create index IncidentOptHour_Date on IncidentOptHour (DateID);
+	create index IncidentOptHour_Agency on IncidentOptHour (ReportingAgencyID);
+	create index IncidentOptHour_Town on IncidentOptHour (TownID);
+	-->
+		<Table name="IncidentOptHour"/>
+		<DimensionUsage source="Town" name="Town" visible="true" foreignKey="TownID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="ReportingAgencyID" highCardinality="false"/>
+		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
+		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="HourTimeID" highCardinality="false"/>
+		<Measure name="IncidentCount" column="IncidentCount" datatype="Integer" aggregator="sum" caption="Incident Count" visible="true"/>
+	</Cube>
 	<Cube name="IncidentTypeInvolvement" caption="Incident Type Involvement" visible="true" cache="true" enabled="true">
 		<View alias="IncidentTypeInvolvement">
 		    <SQL dialect="mysql">
@@ -356,6 +370,21 @@
 		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
 		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="TimeID" highCardinality="false"/>
 		<Measure name="IncidentCount" column="IncidentID" datatype="Integer" aggregator="distinct-count" caption="Incident Count" visible="true"/>
+	</Cube>
+	<Cube name="IncidentTypeInvolvement_Opt" caption="Incident Type Involvement" visible="false" cache="true" enabled="true">
+	<!-- create table IncidentOptHourType as select DateID, if(TimeID=-1, -1, (TimeID div 10000)*10000) as HourTimeID, TownID, ReportingAgencyID, IncidentTypeID, count(IncidentTypeAssociationID) as IncidentCount from Incident, IncidentTypeAssociation where Incident.IncidentID=IncidentTypeAssociation.IncidentID  group by DateID, HourTimeID, TownID, ReportingAgencyID, IncidentTypeID;
+	create index IncidentOptHourType_Agency on IncidentOptHourType (ReportingAgencyID);
+	create index IncidentOptHourType_Type on IncidentOptHourType (IncidentTypeID);
+	create index IncidentOptHourType_Date on IncidentOptHourType (DateID);
+	create index IncidentOptHourType_Town on IncidentOptHourType (TownID);
+	-->
+		<Table name="IncidentOptHourType"/>
+		<DimensionUsage source="Town" name="Town" visible="true" foreignKey="TownID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="ReportingAgencyID" highCardinality="false"/>
+		<DimensionUsage source="Incident Type" name="Incident Type" visible="true" foreignKey="IncidentTypeID" highCardinality="false"/>
+		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
+		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="HourTimeID" highCardinality="false"/>
+		<Measure name="IncidentCount" column="IncidentCount" datatype="Integer" aggregator="sum" caption="Incident Count" visible="true"/>
 	</Cube>
 	<Cube name="PretrialServicesParticipation" caption="Pretrial Services Participation" visible="true" cache="true" enabled="true">
 		<View alias="PretrialServicesParticipation">
