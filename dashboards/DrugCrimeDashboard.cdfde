@@ -927,7 +927,7 @@
      },
      {
       "name": "html",
-      "value": "Recidivism Rates for Drug Crimes ",
+      "value": "Recidivism Levels for Drug Crimes ",
       "type": "Html"
      },
      {
@@ -2152,8 +2152,13 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "width",
+      "value": "500",
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -2162,13 +2167,8 @@
       "type": "Integer"
      },
      {
-      "name": "width",
-      "value": "500",
-      "type": "Integer"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -2192,12 +2192,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -3456,8 +3456,8 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -3466,13 +3466,13 @@
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -3496,12 +3496,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -4730,8 +4730,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -4740,13 +4740,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -4770,12 +4770,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -5516,7 +5516,7 @@
      },
      {
       "name": "orthoAxisTitle",
-      "value": "Recidivism Rate",
+      "value": "Recidivism Level",
       "type": "String"
      },
      {
@@ -6004,8 +6004,8 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -6014,13 +6014,13 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -6044,12 +6044,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -7278,8 +7278,8 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -7288,13 +7288,13 @@
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -7318,12 +7318,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
