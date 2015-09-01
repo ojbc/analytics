@@ -20,7 +20,7 @@
      },
      {
       "name": "resourceCode",
-      "value": "function getBaseDate() {\n    \n    // Use this line for real deployment\n    // var d = new Date();\n    \n    // Use this line for testing using \"dummy\" data\n    var d = new Date(\"2015-08-25 10:10:10\");\n    \n    var month = '' + (d.getMonth() + 1);\n    var day = '' + d.getDate();\n    var year = d.getFullYear();\n\n    if (month.length < 2) month = '0' + month;\n    if (day.length < 2) day = '0' + day;\n\n    return [year, month, day].join('-');\n    \n}\n\nfunction getBaseMonth() {\n    var dateString = getBaseDate().split(\"-\");\n    var year = dateString[0];\n    var month = dateString[1];\n    var quarterString = \"1\";\n    if (month == \"04\" || month == \"05\" || month == \"06\") {\n        quarterString = \"2\";\n    } else if (month == \"07\" || month == \"08\" || month == \"09\") {\n        quarterString = \"3\";\n    } else if (month == \"10\" || month == \"11\" || month == \"12\") {\n        quarterString = \"4\";\n    }\n    var ret = \"[Date.DateYMD].[\" + year + \"].[\" + quarterString + \"].[\" + month + \"-\" + year + \"]\";\n    //Dashboards.log(\"getBaseMonth() returning \" + ret);\n    return ret;\n}\n\nfunction addChartResizer(chart) {\n    var myself = chart;\n    // Set initial width to match the placeholder\n    myself.chartDefinition.width = myself.placeholder().width();\n\n    // Attach the resize handler only on the first execution of the chart component\n    if (!chart.resizeHandlerAttached) {\n        //Dashboards.log(\"Attaching resize handler\");\n        // Ensure render is only triggered after resize events have stopped\n        var debouncedResize = _.debounce(function () {\n\n            // Show chart again.\n            myself.placeholder().children().css('visibility', 'visible');\n\n            // Change chart width\n            myself.chartDefinition.width = myself.placeholder().width();\n            //Dashboards.log(\"Setting width on resize=\" + myself.chartDefinition.width);\n            myself.render(myself.query.lastResults());\n        }, 200);\n\n        // Attach resize handler\n        $(window).resize(function () {\n\n            //Dashboards.log(\"Resize?\");\n            //Dashboards.log(\"myself.chartDefinition.width=\" + myself.chartDefinition.width);\n            //Dashboards.log(\"myself.placeholder().width()=\" + myself.placeholder().width());\n\n            // Only trigger resize if the container has changed width\n            if (myself.chartDefinition.width != myself.placeholder().width()) {\n\n                // Temporarily hide chart so that overflow does not happen\n                myself.placeholder().children().css('visibility', 'hidden');\n\n                // Trigger the resize with debounce\n                debouncedResize();\n            }\n        });\n\n        chart.resizeHandlerAttached = true;\n    }\n\n} ",
+      "value": "function getBaseDate() {\n    \n    // Use this line for real deployment\n    var d = new Date();\n    \n    // Use this line for testing using \"dummy\" data\n    //var d = new Date(\"2015-08-25 10:10:10\");\n    \n    var month = '' + (d.getMonth() + 1);\n    var day = '' + d.getDate();\n    var year = d.getFullYear();\n\n    if (month.length < 2) month = '0' + month;\n    if (day.length < 2) day = '0' + day;\n\n    return [year, month, day].join('-');\n    \n}\n\nfunction getBaseMonth() {\n    var dateString = getBaseDate().split(\"-\");\n    var year = dateString[0];\n    var month = dateString[1];\n    var quarterString = \"1\";\n    if (month == \"04\" || month == \"05\" || month == \"06\") {\n        quarterString = \"2\";\n    } else if (month == \"07\" || month == \"08\" || month == \"09\") {\n        quarterString = \"3\";\n    } else if (month == \"10\" || month == \"11\" || month == \"12\") {\n        quarterString = \"4\";\n    }\n    var ret = \"[Date.DateYMD].[\" + year + \"].[\" + quarterString + \"].[\" + month + \"-\" + year + \"]\";\n    //Dashboards.log(\"getBaseMonth() returning \" + ret);\n    return ret;\n}\n\nfunction addChartResizer(chart) {\n    var myself = chart;\n    // Set initial width to match the placeholder\n    myself.chartDefinition.width = myself.placeholder().width();\n\n    // Attach the resize handler only on the first execution of the chart component\n    if (!chart.resizeHandlerAttached) {\n        //Dashboards.log(\"Attaching resize handler\");\n        // Ensure render is only triggered after resize events have stopped\n        var debouncedResize = _.debounce(function () {\n\n            // Show chart again.\n            myself.placeholder().children().css('visibility', 'visible');\n\n            // Change chart width\n            myself.chartDefinition.width = myself.placeholder().width();\n            //Dashboards.log(\"Setting width on resize=\" + myself.chartDefinition.width);\n            myself.render(myself.query.lastResults());\n        }, 200);\n\n        // Attach resize handler\n        $(window).resize(function () {\n\n            //Dashboards.log(\"Resize?\");\n            //Dashboards.log(\"myself.chartDefinition.width=\" + myself.chartDefinition.width);\n            //Dashboards.log(\"myself.placeholder().width()=\" + myself.placeholder().width());\n\n            // Only trigger resize if the container has changed width\n            if (myself.chartDefinition.width != myself.placeholder().width()) {\n\n                // Temporarily hide chart so that overflow does not happen\n                myself.placeholder().children().css('visibility', 'hidden');\n\n                // Trigger the resize with debounce\n                debouncedResize();\n            }\n        });\n\n        chart.resizeHandlerAttached = true;\n    }\n\n} ",
       "type": "Resource"
      }
     ]
@@ -1552,8 +1552,8 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "300",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -1562,13 +1562,13 @@
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "300",
       "type": "Integer"
      },
      {
@@ -1592,12 +1592,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -2826,8 +2826,13 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "300",
+      "type": "Integer"
+     },
+     {
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -2836,13 +2841,8 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "300",
-      "type": "Integer"
-     },
-     {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -2866,12 +2866,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -4130,8 +4130,13 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "width",
+      "value": "400",
       "type": "Integer"
      },
      {
@@ -4140,13 +4145,8 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "width",
-      "value": "400",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -4170,12 +4170,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -4923,11 +4923,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "parameters",
-      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"IncidentListTimePeriodParameter\",\"IncidentListTimePeriodParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"],[\"TownParameter\",\"TownParameter\"]]",
-      "type": "ValuesArray"
-     },
-     {
       "name": "expandParameters",
       "value": "[]",
       "type": "ValuesArray"
@@ -4951,6 +4946,11 @@
       "name": "colHeaders",
       "value": "[\"Agency Case #\",\"Incident Type\",\"Date\",\"Time\",\"Street Address\",\"Town\"]",
       "type": "Array"
+     },
+     {
+      "name": "parameters",
+      "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"IncidentListTimePeriodParameter\",\"IncidentListTimePeriodParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"],[\"TownParameter\",\"TownParameter\"]]",
+      "type": "ValuesArray"
      },
      {
       "name": "colTypes",
@@ -5008,14 +5008,14 @@
       "type": "Datasource"
      },
      {
-      "name": "sortBy",
-      "value": "[]",
-      "type": "SortByArray"
-     },
-     {
       "name": "sDom",
       "value": "",
       "type": "JavaScript"
+     },
+     {
+      "name": "sortBy",
+      "value": "[]",
+      "type": "SortByArray"
      },
      {
       "name": "refreshPeriod",
@@ -5883,7 +5883,7 @@
      },
      {
       "name": "query",
-      "value": "select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, \nconcat(Hour, ':', lpad(Minute, 2, '0')) as TimeString, \nIncidentLocationStreetAddress, TownDescription\nfrom Incident, IncidentType, IncidentTypeAssociation, Time, Date, Agency, Town\nwhere Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and\nIncidentTypeAssociation.IncidentTypeID=IncidentType.IncidentTypeID and\nIncident.ReportingAgencyID=AgencyID and\nIncident.TownID=Town.TownID and\nIncident.IncidentID=IncidentTypeAssociation.IncidentID\nand (if(${AgencyParameter}=\"All Agencies\", 1, AgencyName=${AgencyParameter}))\nand (if(${TownParameter}=\"All Towns\", 1, TownDescription=${TownParameter}))\nand str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') < str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\")\nand str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') > date_sub(str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\"),\n    interval ${IncidentListTimePeriodParameter} hour)",
+      "value": "select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, \nconvert(concat(Hour, ':', lpad(Minute, 2, '0')), char(5)) as TimeString, \nIncidentLocationStreetAddress, TownDescription\nfrom Incident, IncidentType, IncidentTypeAssociation, Time, Date, Agency, Town\nwhere Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and\nIncidentTypeAssociation.IncidentTypeID=IncidentType.IncidentTypeID and\nIncident.ReportingAgencyID=AgencyID and\nIncident.TownID=Town.TownID and\nIncident.IncidentID=IncidentTypeAssociation.IncidentID\nand (if(${AgencyParameter}=\"All Agencies\", 1, AgencyName=${AgencyParameter}))\nand (if(${TownParameter}=\"All Towns\", 1, TownDescription=${TownParameter}))\nand IncidentDateTime < str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\")\nand IncidentDateTime > date_sub(str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\"),\n    interval ${IncidentListTimePeriodParameter} hour)",
       "type": "SqlQuery"
      },
      {
@@ -6236,5 +6236,5 @@
    }
   ]
  },
- "filename": "/public/OJB Dashboards/IncidentDashboard.cdfde"
+ "filename": "/public/VJISS Dashboards/IncidentDashboard.cdfde"
 }
