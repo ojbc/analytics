@@ -44,7 +44,7 @@ public class RLoadingResultsFileProcessor {
 		
 		String dateTimeStamp = today.toString("yyyyMMdd_HHmmss");
 		
-		String updatedFileName = dateTimeStamp + "MainADSLoad.Rout";
+		String updatedFileName = dateTimeStamp + "MainADSLoadRout.txt";
 		String newFileNameWithPath = loadingOutputDirectory + File.separator + updatedFileName;
 		
 		File resultsFileRenamedWithDateStamp = new File(newFileNameWithPath);
