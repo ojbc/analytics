@@ -43,7 +43,7 @@ select distinct AgencyName from Agency</Query>
          <Parameter default="All Towns" name="TownParameter" type="String"/>
       </Parameters>
       <Query>select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, 
-concat(Hour, ':', lpad(Minute, 2, '0')) as TimeString, 
+convert(concat(Hour, ':', lpad(Minute, 2, '0')), char(5)) as TimeString, 
 IncidentLocationStreetAddress, TownDescription
 from Incident, IncidentType, IncidentTypeAssociation, Time, Date, Agency, Town
 where Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and
@@ -53,8 +53,8 @@ Incident.TownID=Town.TownID and
 Incident.IncidentID=IncidentTypeAssociation.IncidentID
 and (if(${AgencyParameter}="All Agencies", 1, AgencyName=${AgencyParameter}))
 and (if(${TownParameter}="All Towns", 1, TownDescription=${TownParameter}))
-and str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &lt; str_to_date(${BaseDateParameter}, "%Y-%m-%d-%H-%i-%s")
-and str_to_date(concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second), '%Y-%m-%d-%H-%i-%s') &gt; date_sub(str_to_date(${BaseDateParameter}, "%Y-%m-%d-%H-%i-%s"),
+and IncidentDateTime &lt; str_to_date(${BaseDateParameter}, "%Y-%m-%d-%H-%i-%s")
+and IncidentDateTime &gt; date_sub(str_to_date(${BaseDateParameter}, "%Y-%m-%d-%H-%i-%s"),
     interval ${IncidentListTimePeriodParameter} hour)</Query>
    </DataAccess>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="TownQuery"
