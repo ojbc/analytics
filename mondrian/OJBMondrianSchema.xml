@@ -279,7 +279,7 @@
     if(psp.PretrialServiceParticipationID is null, 2, 1) as PretrialServicesParticipantIndicator,
     psp.RiskScoreID
     from ((Arrest as a inner join Date as ad on a.DateID=ad.DateID) inner join
-            (Charge as c inner join Date as cd on c.DispositionDateID=cd.DateID) on a.ArrestID=c.ArrestID) left join
+            (Charge as c left join Date as cd on c.DispositionDateID=cd.DateID) on a.ArrestID=c.ArrestID) left join
             PretrialServiceParticipation as psp on a.ArrestID=psp.ArrestID inner join County on a.CountyID=County.CountyID]]>
 			</SQL>
 		</View>
