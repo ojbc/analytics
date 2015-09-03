@@ -94,7 +94,7 @@ WHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},
          <Parameter default="All Towns" name="TownParameter" type="String"/>
       </Parameters>
       <Query>SELECT
- CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,
+ CrossJoin({Except([Incident Type.Incident Category].[IncidentCategory].Members, [Incident Type.Incident Category].[Other])}, {[Measures].[IncidentCount]}) ON COLUMNS,
  {parallelperiod([Date.DateYMD].[Month], ${AnnualTrendDateRangeParameter}, ${BaseMonthParameter}):${BaseMonthParameter}} ON ROWS
 FROM [IncidentTypeInvolvement_Opt] WHERE [Agency].[${AgencyParameter}] * [Town].[${TownParameter}]</Query>
    </DataAccess>

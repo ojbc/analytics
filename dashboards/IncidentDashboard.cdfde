@@ -1552,8 +1552,8 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -1562,13 +1562,13 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "300",
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "300",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -1592,12 +1592,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -2826,8 +2826,13 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "300",
+      "name": "width",
+      "value": "400",
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -2836,13 +2841,8 @@
       "type": "Integer"
      },
      {
-      "name": "width",
-      "value": "400",
-      "type": "Integer"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "300",
       "type": "Integer"
      },
      {
@@ -2866,12 +2866,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -4130,8 +4130,13 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "300",
+      "type": "Integer"
+     },
+     {
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -4140,13 +4145,8 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "300",
-      "type": "Integer"
-     },
-     {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -4170,12 +4170,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -4923,11 +4923,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "expandParameters",
-      "value": "[]",
-      "type": "ValuesArray"
-     },
-     {
       "name": "colSortable",
       "value": "[]",
       "type": "Array"
@@ -4950,6 +4945,11 @@
      {
       "name": "parameters",
       "value": "[[\"AgencyParameter\",\"AgencyParameter\"],[\"IncidentListTimePeriodParameter\",\"IncidentListTimePeriodParameter\"],[\"BaseDateParameter\",\"BaseDateParameter\"],[\"TownParameter\",\"TownParameter\"]]",
+      "type": "ValuesArray"
+     },
+     {
+      "name": "expandParameters",
+      "value": "[]",
       "type": "ValuesArray"
      },
      {
@@ -5008,14 +5008,14 @@
       "type": "Datasource"
      },
      {
-      "name": "sDom",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
       "name": "sortBy",
       "value": "[]",
       "type": "SortByArray"
+     },
+     {
+      "name": "sDom",
+      "value": "",
+      "type": "JavaScript"
      },
      {
       "name": "refreshPeriod",
@@ -6110,7 +6110,7 @@
      },
      {
       "name": "query",
-      "value": "SELECT\n CrossJoin({[Incident Type.Incident Category].[IncidentCategory].Members}, {[Measures].[IncidentCount]}) ON COLUMNS,\n {parallelperiod([Date.DateYMD].[Month], ${AnnualTrendDateRangeParameter}, ${BaseMonthParameter}):${BaseMonthParameter}} ON ROWS\nFROM [IncidentTypeInvolvement_Opt] WHERE [Agency].[${AgencyParameter}] * [Town].[${TownParameter}]",
+      "value": "SELECT\n CrossJoin({Except([Incident Type.Incident Category].[IncidentCategory].Members, [Incident Type.Incident Category].[Other])}, {[Measures].[IncidentCount]}) ON COLUMNS,\n {parallelperiod([Date.DateYMD].[Month], ${AnnualTrendDateRangeParameter}, ${BaseMonthParameter}):${BaseMonthParameter}} ON ROWS\nFROM [IncidentTypeInvolvement_Opt] WHERE [Agency].[${AgencyParameter}] * [Town].[${TownParameter}]",
       "type": "CurrentMdxQuery"
      },
      {
