@@ -35,6 +35,8 @@ source("LoadDemographicsDimensionTables.R")
 source("LoadIncidentTypeDimensionTables.R")
 source("LoadCountyPopulationData.R")
 
+loadStartTime <- Sys.time()
+
 state_shp <- readOGR("/opt/data/Shapefiles/tl_2014_us_state", "tl_2014_us_state")
 county_shp = readOGR("/opt/data/Shapefiles/tl_2014_us_county/", "tl_2014_us_county")
 
@@ -54,6 +56,7 @@ dbSendQuery(conn, "delete from Charge")
 dbSendQuery(conn, "delete from PretrialAssessedNeed")
 dbSendQuery(conn, "delete from PretrialServiceParticipation")
 dbSendQuery(conn, "delete from Population")
+dbSendQuery(conn, "delete from LoadHistory")
 
 # clear out dimension tables
 dbSendQuery(conn, "delete from Agency")
@@ -533,5 +536,37 @@ IncidentTypeAssociation$IncidentTypeAssociationID <- 1:nrow(IncidentTypeAssociat
 
 dbWriteTable(conn, "Incident", Incident, append=TRUE, row.names=FALSE)
 dbWriteTable(conn, "IncidentTypeAssociation", data.table(IncidentTypeAssociation), append=TRUE, row.names=FALSE)
+
+dbClearResult(dbSendQuery(conn, paste0("update Incident join Date join Time on Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID ",
+                                       "set IncidentDateTime=str_to_date(if(Incident.TimeID=-1, concat(Year, '-', Month, '-', Day, '-0-0-0'), ",
+                                       "concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second)), '%Y-%m-%d-%H-%i-%s')")))
+dbClearResult(dbSendQuery(conn, "create index Incident_IncidentDateTime on Incident (IncidentDateTime)"))
+
+dbClearResult(dbSendQuery(conn, "drop table if exists IncidentOptHour"))
+dbClearResult(dbSendQuery(conn, paste0("create table IncidentOptHour as select DateID, ",
+                                       "if(TimeID=-1, -1, (TimeID div 10000)*10000) as HourTimeID, TownID, ReportingAgencyID, ", 
+                                       "count(IncidentID) as IncidentCount from Incident ",
+                                       "group by DateID, HourTimeID, TownID, ReportingAgencyID")))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHour_Date on IncidentOptHour (DateID)"))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHour_Agency on IncidentOptHour (ReportingAgencyID)"))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHour_Town on IncidentOptHour (TownID)"))
+
+dbClearResult(dbSendQuery(conn, "drop table if exists IncidentOptHourType"))
+dbClearResult(dbSendQuery(conn, paste0("create table IncidentOptHourType as select DateID, ",
+                                       "if(TimeID=-1, -1, (TimeID div 10000)*10000) as HourTimeID, TownID, ReportingAgencyID, ",
+                                       "IncidentTypeID, count(IncidentTypeAssociationID) as IncidentCount ",
+                                       "from Incident, IncidentTypeAssociation where Incident.IncidentID=IncidentTypeAssociation.IncidentID ",
+                                       "group by DateID, HourTimeID, TownID, ReportingAgencyID, IncidentTypeID")))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType_Date on IncidentOptHourType (DateID)"))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType_Agency on IncidentOptHourType (ReportingAgencyID)"))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType_Town on IncidentOptHourType (TownID)"))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType_Type on IncidentOptHourType (IncidentTypeID)"))
+
+dbClearResult(dbSendQuery(conn, paste0("insert into LoadHistory (LoadID, LatestStagingUpdateTime, LoadStartTime, LoadEndTime) ",
+                                       "values (1,",
+                                       paste0("'", format(loadStartTime - 30, "%Y-%m-%d %H:%M:%S"), "',"),
+                                       paste0("'", format(loadStartTime, "%Y-%m-%d %H:%M:%S"), "',"),
+                                       paste0("'", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "'"),
+                                       ")")))
 
 dbDisconnect(conn)
