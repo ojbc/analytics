@@ -1,0 +1,504 @@
+{
+ "layout": {
+  "title": "CDF - Sample structure",
+  "rows": [
+   {
+    "id": "10384ea3-6080-8ca2-d428-3fe0ec9ef176",
+    "type": "LayoutRow",
+    "typeDesc": "Row",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "name",
+      "value": "",
+      "type": "Id"
+     },
+     {
+      "name": "height",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "backgroundColor",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "roundCorners",
+      "value": "",
+      "type": "RoundCorners"
+     },
+     {
+      "name": "textAlign",
+      "value": "",
+      "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "23c3f066-39aa-852f-240f-bd164d5f6cd7",
+    "type": "LayoutBootstrapColumn",
+    "typeDesc": "Column",
+    "parent": "10384ea3-6080-8ca2-d428-3fe0ec9ef176",
+    "properties": [
+     {
+      "name": "name",
+      "value": "",
+      "type": "Id"
+     },
+     {
+      "name": "bootstrapExtraSmall",
+      "value": "12",
+      "type": "String"
+     },
+     {
+      "name": "bootstrapSmall",
+      "value": "",
+      "type": "String"
+     },
+     {
+      "name": "bootstrapMedium",
+      "value": "",
+      "type": "String"
+     },
+     {
+      "name": "bootstrapLarge",
+      "value": "",
+      "type": "String"
+     },
+     {
+      "name": "bootstrapCssClass",
+      "value": "",
+      "type": "String"
+     },
+     {
+      "name": "height",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "backgroundColor",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "roundCorners",
+      "value": "",
+      "type": "RoundCorners"
+     },
+     {
+      "name": "textAlign",
+      "value": "",
+      "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "05a86152-3eca-5192-0a02-ef4de3d6abc9",
+    "type": "BootstrapPanel",
+    "typeDesc": "Bootstrap Panel",
+    "parent": "23c3f066-39aa-852f-240f-bd164d5f6cd7",
+    "properties": [
+     {
+      "name": "name",
+      "value": "",
+      "type": "Id"
+     },
+     {
+      "name": "height",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "roundCorners",
+      "value": "",
+      "type": "RoundCorners"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     },
+     {
+      "name": "bootstrapPanelStyle",
+      "value": "panel-default",
+      "type": "bootstrapPanelStyleCustom"
+     }
+    ]
+   },
+   {
+    "id": "3a27d312-adbb-026b-7bc6-53be11b11718",
+    "type": "BootstrapPanelHeader",
+    "typeDesc": "Panel Header",
+    "parent": "05a86152-3eca-5192-0a02-ef4de3d6abc9",
+    "properties": [
+     {
+      "name": "name",
+      "value": "",
+      "type": "Id"
+     },
+     {
+      "name": "roundCorners",
+      "value": "",
+      "type": "RoundCorners"
+     },
+     {
+      "name": "textAlign",
+      "value": "",
+      "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "267ae95a-eb41-1c20-1679-c5bb1e8884d6",
+    "type": "LayoutHtml",
+    "typeDesc": "Html",
+    "parent": "3a27d312-adbb-026b-7bc6-53be11b11718",
+    "properties": [
+     {
+      "name": "name",
+      "value": "",
+      "type": "Id"
+     },
+     {
+      "name": "html",
+      "value": "ADS Status ",
+      "type": "Html"
+     },
+     {
+      "name": "fontSize",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "color",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "e6081d3b-f0a3-0014-c2cc-7bada7ed17dc",
+    "type": "BootstrapPanelBody",
+    "typeDesc": "Panel Body",
+    "parent": "05a86152-3eca-5192-0a02-ef4de3d6abc9",
+    "properties": [
+     {
+      "name": "name",
+      "value": "",
+      "type": "Id"
+     },
+     {
+      "name": "roundCorners",
+      "value": "",
+      "type": "RoundCorners"
+     },
+     {
+      "name": "textAlign",
+      "value": "",
+      "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "c6f5a1af-89ee-84bf-6a04-ca3db160aee3",
+    "type": "LayoutHtml",
+    "typeDesc": "Html",
+    "parent": "e6081d3b-f0a3-0014-c2cc-7bada7ed17dc",
+    "properties": [
+     {
+      "name": "name",
+      "value": "",
+      "type": "Id"
+     },
+     {
+      "name": "html",
+      "value": "<div id=\"status-table\"/> ",
+      "type": "Html"
+     },
+     {
+      "name": "fontSize",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "color",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   }
+  ]
+ },
+ "components": {
+  "rows": [
+   {
+    "id": "IVYISBOOTSTRAP",
+    "name": "Ivy IS Bootstrap",
+    "type": "Label",
+    "typeDesc": "<i>Group</i>",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "Group",
+      "value": "Ivy IS Bootstrap",
+      "type": "Label"
+     }
+    ]
+   },
+   {
+    "id": "e969092f-0c69-0da5-fe50-2a201fb7b639",
+    "type": "ComponentsBSTableComponent",
+    "typeDesc": "Bootstrap Table",
+    "parent": "IVYISBOOTSTRAP",
+    "properties": [
+     {
+      "name": "name",
+      "value": "ADSStatusTable",
+      "type": "Id"
+     },
+     {
+      "name": "parameter",
+      "value": "",
+      "type": "Parameter"
+     },
+     {
+      "name": "listeners",
+      "value": "[]",
+      "type": "Listeners"
+     },
+     {
+      "name": "colWidths",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "colHeaders",
+      "value": "[\"Item\",\"Value\"]",
+      "type": "Array"
+     },
+     {
+      "name": "colFormats",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "colTypes",
+      "value": "[\"string\",\"string\"]",
+      "type": "colTypesCustom"
+     },
+     {
+      "name": "parameters",
+      "value": "[]",
+      "type": "ValuesArray"
+     },
+     {
+      "name": "dataSource",
+      "value": "ADSStatusQuery",
+      "type": "Datasource"
+     },
+     {
+      "name": "priority",
+      "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "tableResponsive",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "tableStriped",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "tableBordered",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "tableHover",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "tableCondensed",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "tablePaginate",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "tablePaginateShowPrevNext",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "tablePaginateHidePageNumbers",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "tablePaginateRowPerPage",
+      "value": 25,
+      "type": "Integer"
+     },
+     {
+      "name": "tableNumbersPerPage",
+      "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "htmlObject",
+      "value": "status-table",
+      "type": "HtmlObject"
+     },
+     {
+      "name": "executeAtStart",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "preExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postFetch",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postExecution",
+      "value": "",
+      "type": "JavaScript"
+     }
+    ]
+   }
+  ]
+ },
+ "datasources": {
+  "rows": [
+   {
+    "id": "SQL",
+    "name": "SQL Queries",
+    "type": "Label",
+    "typeDesc": "<i>Group</i>",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "Group",
+      "value": "SQL Queries",
+      "type": "Label"
+     }
+    ]
+   },
+   {
+    "id": "fbd88b3d-c77f-98e0-2722-46ab2a3e2e15",
+    "type": "Componentssql_sqlJndi",
+    "typeDesc": "sql over sqlJndi",
+    "parent": "SQL",
+    "properties": [
+     {
+      "name": "name",
+      "value": "ADSStatusQuery",
+      "type": "Id"
+     },
+     {
+      "name": "access",
+      "value": "public",
+      "type": "Access"
+     },
+     {
+      "name": "jndi",
+      "value": "ojbc_analytics",
+      "type": "Jndi"
+     },
+     {
+      "name": "query",
+      "value": "select \"Incident Counts\" as d, format(count(*), 0) as c from Incident union\nselect \"Arrest Counts\" as d, format(count(*), 0) as c from Arrest union\nselect \"Pretrial Participation Counts\" as d, format(count(*), 0) as c from PretrialServiceParticipation union\nselect \"Latest Staging Record\" as d, date_format(max(LatestStagingUpdateTime), \"%Y-%m-%d %H:%i:%S\") as c from LoadHistory union\nselect \"Latest ADS Load Timestamp\" as d, date_format(max(LoadEndTime), \"%Y-%m-%d %H:%i:%S\") as c from LoadHistory",
+      "type": "SqlQuery"
+     },
+     {
+      "name": "parameters",
+      "value": "[]",
+      "type": "CdaParameters"
+     },
+     {
+      "name": "outputMode",
+      "value": "include",
+      "type": "OutputMode"
+     },
+     {
+      "name": "cdacolumns",
+      "value": "[]",
+      "type": "CdaColumnsArray"
+     },
+     {
+      "name": "cdacalculatedcolumns",
+      "value": "[]",
+      "type": "CdaCalculatedColumnsArray"
+     },
+     {
+      "name": "output",
+      "value": "[]",
+      "type": "IndexArray"
+     },
+     {
+      "name": "cacheDuration",
+      "value": 3600,
+      "type": "Integer"
+     },
+     {
+      "name": "cache",
+      "value": "true",
+      "type": "Boolean"
+     }
+    ],
+    "meta": "CDA",
+    "meta_conntype": "sql.jndi",
+    "meta_datype": "sql"
+   }
+  ]
+ },
+ "filename": "/public/OJB Dashboards/ADSStatusDashboard.cdfde"
+}

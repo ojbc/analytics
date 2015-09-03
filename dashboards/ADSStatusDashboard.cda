@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="ADSStatusQuery" type="sql.jndi">
+         <Jndi>ojbc_analytics</Jndi>
+      </Connection>
+   </DataSources>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="ADSStatusQuery"
+               id="ADSStatusQuery"
+               type="sql">
+      <Columns/>
+      <Parameters/>
+      <Query>select "Incident Counts" as d, format(count(*), 0) as c from Incident union
+select "Arrest Counts" as d, format(count(*), 0) as c from Arrest union
+select "Pretrial Participation Counts" as d, format(count(*), 0) as c from PretrialServiceParticipation union
+select "Latest Staging Record" as d, date_format(max(LatestStagingUpdateTime), "%Y-%m-%d %H:%i:%S") as c from LoadHistory union
+select "Latest ADS Load Timestamp" as d, date_format(max(LoadEndTime), "%Y-%m-%d %H:%i:%S") as c from LoadHistory</Query>
+   </DataAccess>
+</CDADescriptor>
