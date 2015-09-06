@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<architect-project version="1.0" appversion="1.0.7">
+<architect-project version="1.0" appversion="1.0.6">
  <project-name>NIBRSStagingModel</project-name>
  <print-settings printerName="Officejet 6700 [3D84A9]" numCopies="1" zoom="0.23" pageNumbersPrinted="false" orientation="0" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
-   <property key="Logical" value="NIBRS Test" />
+   <property key="Logical" value="nibrs_analytics" />
    <property key="Connection Type" value="MySQL" />
-   <property key="JDBC URL" value="jdbc:mysql://127.0.0.1:3306/NIBRSTest.mwbd" />
+   <property key="JDBC URL" value="jdbc:mysql://localhost:3306/nibrs_analytics" />
    <property key="UID" value="root" />
-   <property key="PWD" value="root123" />
+   <property key="PWD" value="" />
    <property key="ca.sqlpower.architect.etl.kettle.database" value="" />
    <property key="ca.sqlpower.architect.etl.kettle.port" value="" />
    <property key="ca.sqlpower.architect.etl.kettle.hostname" value="" />
@@ -73,13 +73,7 @@
    </folder>
   </table>
   <table id="TAB17" populated="true" UUID="201323e0-e199-441b-971f-bd6b9b4ab716" name="UCROffenseCodeAssociation" objectType="TABLE" physicalName="UCROffenseCodeAssociation" >
-   <remarks>Occurs 10 times in administrative segment
-
-Valid Code: Volume 1, section IV contains
-information on offense codes.
-The original incident’s offense(s) must be
-entered to enable identification of the
-offense(s) being exceptionally cleared.</remarks>
+   <remarks></remarks>
    <folder id="FOLTAB171" populated="true" name="Columns" physicalName="Columns" type="1">
     <column id="COL18" populated="true" UUID="26cdbec0-5af4-4c70-927e-c3c40c904d94" autoIncrement="false" autoIncrementSequenceName="UCROffenseCodeAssociation_UCROffenseCodeID_seq" defaultValue="" name="UCROffenseCodeID" nullable="0" physicalName="UCROffenseCodeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
@@ -87,19 +81,19 @@ offense(s) being exceptionally cleared.</remarks>
     <column id="COL19" populated="true" UUID="543f7c41-6fe2-4924-8293-de50fbe20cb9" autoIncrement="false" autoIncrementSequenceName="UCROffenseCodeAssociation_AdministrativeSegmentID_seq" defaultValue="" name="AdministrativeSegmentID" nullable="0" physicalName="AdministrativeSegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL20" populated="true" UUID="155ac100-60fe-4de9-81af-eab4079e6a14" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_OffenseSegmentID_seq" defaultValue="" name="OffenseSegmentID" nullable="0" physicalName="OffenseSegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL20" populated="true" UUID="155ac100-60fe-4de9-81af-eab4079e6a14" autoIncrement="false" autoIncrementSequenceName="UCROffenseCodeAssociation_OffenseSegmentID_seq" defaultValue="" name="OffenseSegmentID" nullable="0" physicalName="OffenseSegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL21" populated="true" UUID="41f66389-e1a9-421c-9b7d-176743e70873" autoIncrement="false" autoIncrementSequenceName="PropertySegment_PropertySegmentID_seq" defaultValue="" name="PropertySegmentID" nullable="0" physicalName="PropertySegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL21" populated="true" UUID="41f66389-e1a9-421c-9b7d-176743e70873" autoIncrement="false" autoIncrementSequenceName="UCROffenseCodeAssociation_PropertySegmentID_seq" defaultValue="" name="PropertySegmentID" nullable="0" physicalName="PropertySegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL22" populated="true" UUID="36427b87-57f3-459c-9c95-53f1fa347a28" autoIncrement="false" autoIncrementSequenceName="VictimSegment_VictimSegmentID_seq" defaultValue="" name="VictimSegmentID" nullable="0" physicalName="VictimSegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL22" populated="true" UUID="36427b87-57f3-459c-9c95-53f1fa347a28" autoIncrement="false" autoIncrementSequenceName="UCROffenseCodeAssociation_VictimSegmentID_seq" defaultValue="" name="VictimSegmentID" nullable="0" physicalName="VictimSegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks>Valid Values: 001 through 999.</remarks>
     </column>
     <column id="COL23" populated="true" UUID="967a60fe-98a0-4e32-8e01-98f86a3fbcd2" autoIncrement="false" autoIncrementSequenceName="ArresteeSegment_ArresteeSequenceNumber_seq" defaultValue="" name="ArresteeSegmentID" nullable="0" physicalName="ArresteeSegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks>Valid Values: 01 through 99.</remarks>
     </column>
-    <column id="COL24" populated="true" UUID="f2ad0608-7371-4c0c-8e9f-2c0a3e1bdad5" autoIncrement="false" autoIncrementSequenceName="UCROffenseCodeType_UCROffenseCodeTypeID_seq" defaultValue="" name="UCROffenseCodeTypeID" nullable="0" physicalName="UCROffenseCodeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL24" populated="true" UUID="f2ad0608-7371-4c0c-8e9f-2c0a3e1bdad5" autoIncrement="false" autoIncrementSequenceName="UCROffenseCodeAssociation_UCROffenseCodeTypeID_seq" defaultValue="" name="UCROffenseCodeTypeID" nullable="0" physicalName="UCROffenseCodeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -114,7 +108,7 @@ offense(s) being exceptionally cleared.</remarks>
    </folder>
   </table>
   <table id="TAB27" populated="true" UUID="ef596600-9906-46a0-935b-71a4a600894a" name="OffenseSegment" objectType="TABLE" physicalName="OffenseSegment" >
-   <remarks>There is one segment for each different UCR offense code (up to ten) associated with this incident.</remarks>
+   <remarks></remarks>
    <folder id="FOLTAB271" populated="true" name="Columns" physicalName="Columns" type="1">
     <column id="COL28" populated="true" UUID="040997df-8ab5-4edb-ad80-e142623978dd" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_OffenseSegmentID_seq_1" defaultValue="" name="OffenseSegmentID" nullable="0" physicalName="OffenseSegmentID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
@@ -146,16 +140,16 @@ offense(s) being exceptionally cleared.</remarks>
     <column id="COL37" populated="true" UUID="100c07b5-67d9-4bf9-9264-1fd1f91afafe" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_OffenseAttemptedCompleted_seq" defaultValue="" name="OffenseAttemptedCompleted" nullable="1" physicalName="OffenseAttemptedCompleted" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: A and C.</remarks>
     </column>
-    <column id="COL38" populated="true" UUID="12b5097a-fc29-4d9e-93de-b309d8ecb4ae" autoIncrement="false" autoIncrementSequenceName="LocationTypeType_LocationTypeTypeID_seq" defaultValue="" name="LocationTypeTypeID" nullable="0" physicalName="LocationTypeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL38" populated="true" UUID="12b5097a-fc29-4d9e-93de-b309d8ecb4ae" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_LocationTypeTypeID_seq" defaultValue="" name="LocationTypeTypeID" nullable="0" physicalName="LocationTypeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL39" populated="true" UUID="95e40202-f85d-40a2-b1a8-2e66003150d1" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_NumberOfPremisesEntered_seq" defaultValue="" name="NumberOfPremisesEntered" nullable="1" physicalName="NumberOfPremisesEntered" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL40" populated="true" UUID="df67a03d-ada8-4de8-a5bf-8750b073f7aa" autoIncrement="false" autoIncrementSequenceName="MethodOfEntryType_MethodOfEntryTypeID_seq" defaultValue="" name="MethodOfEntryTypeID" nullable="0" physicalName="MethodOfEntryTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL40" populated="true" UUID="df67a03d-ada8-4de8-a5bf-8750b073f7aa" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_MethodOfEntryTypeID_seq" defaultValue="" name="MethodOfEntryTypeID" nullable="0" physicalName="MethodOfEntryTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL41" populated="true" UUID="9385dc35-fb2d-4483-8bfc-714904813c47" autoIncrement="false" autoIncrementSequenceName="BiasMotivationType_BiasMotivationTypeID_seq" defaultValue="" name="BiasMotivationTypeID" nullable="0" physicalName="BiasMotivationTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL41" populated="true" UUID="9385dc35-fb2d-4483-8bfc-714904813c47" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_BiasMotivationTypeID_seq" defaultValue="" name="BiasMotivationTypeID" nullable="0" physicalName="BiasMotivationTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -220,7 +214,7 @@ offense(s) being exceptionally cleared.</remarks>
    </folder>
   </table>
   <table id="TAB59" populated="true" UUID="7d54b1c1-7c1c-44c5-9043-9354231274b9" name="PropertyDescription" objectType="TABLE" physicalName="PropertyDescription" >
-   <remarks>Used to store up to 10 occurrences of property items form PropertySegment</remarks>
+   <remarks></remarks>
    <folder id="FOLTAB591" populated="true" name="Columns" physicalName="Columns" type="1">
     <column id="COL60" populated="true" UUID="3a25dee0-542a-4719-b096-8837e89093b8" autoIncrement="false" autoIncrementSequenceName="TypePropertyLossCodeLookup_PropertyTypeID_seq" defaultValue="" name="PropertyDescriptionID" nullable="0" physicalName="PropertyDescriptionID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
@@ -228,7 +222,7 @@ offense(s) being exceptionally cleared.</remarks>
     <column id="COL61" populated="true" UUID="e865d472-6545-41d6-a552-5e1cb0f01fb1" autoIncrement="false" autoIncrementSequenceName="PropertyDescription_PropertySegmentID_seq" defaultValue="" name="PropertySegmentID" nullable="0" physicalName="PropertySegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL62" populated="true" UUID="bc02296e-38ab-4121-a7bc-4cc70c7c935e" autoIncrement="false" autoIncrementSequenceName="PropertyDescriptionType_PropertyDescriptionTypeID_seq" defaultValue="" name="PropertyDescriptionTypeID" nullable="0" physicalName="PropertyDescriptionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL62" populated="true" UUID="bc02296e-38ab-4121-a7bc-4cc70c7c935e" autoIncrement="false" autoIncrementSequenceName="PropertyDescription_PropertyDescriptionTypeID_seq" defaultValue="" name="PropertyDescriptionTypeID" nullable="0" physicalName="PropertyDescriptionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL63" populated="true" UUID="5194c7b9-111c-422a-8082-d9fb3ea1e906" autoIncrement="false" autoIncrementSequenceName="PropertyDescription_ValueOfProperty_seq" defaultValue="" name="ValueOfProperty" nullable="0" physicalName="ValueOfProperty" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="2" userDefinedTypeUUID="115245ce-612c-4d6a-b559-6dd903dd959a" >
@@ -283,40 +277,39 @@ e.g., 000002000 for 2,000 grams (GM).</remarks>
    </folder>
   </table>
   <table id="TAB76" populated="true" UUID="5b7f4120-2348-4b7a-943e-18602cd88a5c" name="VictimSegment" objectType="TABLE" physicalName="VictimSegment" >
-   <remarks>This segment is linked to the Offense Segment (s) applicable to this victim. There is one
-segment per victim.</remarks>
+   <remarks></remarks>
    <folder id="FOLTAB761" populated="true" name="Columns" physicalName="Columns" type="1">
     <column id="COL77" populated="true" UUID="05f29174-65eb-47ca-ac0d-21bfd068f078" autoIncrement="false" autoIncrementSequenceName="VictimSegment_VictimSegmentID_seq_1" defaultValue="" name="VictimSegmentID" nullable="0" physicalName="VictimSegmentID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks>Valid Values: 001 through 999.</remarks>
     </column>
-    <column id="COL78" populated="true" UUID="77796bae-be52-4f5d-8e9b-935411d400d7" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_RecordDescriptorWord_seq_1" defaultValue="" name="RecordDescriptorWord" nullable="1" physicalName="RecordDescriptorWord" precision="4" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL78" populated="true" UUID="77796bae-be52-4f5d-8e9b-935411d400d7" autoIncrement="false" autoIncrementSequenceName="VictimSegment_RecordDescriptorWord_seq" defaultValue="" name="RecordDescriptorWord" nullable="1" physicalName="RecordDescriptorWord" precision="4" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL79" populated="true" UUID="9ce98143-eee4-4220-a164-a6530db8e886" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_SegmentLevel_seq_1" defaultValue="" name="SegmentLevel" nullable="0" physicalName="SegmentLevel" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL79" populated="true" UUID="9ce98143-eee4-4220-a164-a6530db8e886" autoIncrement="false" autoIncrementSequenceName="VictimSegment_SegmentLevel_seq" defaultValue="" name="SegmentLevel" nullable="0" physicalName="SegmentLevel" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL80" populated="true" UUID="e72cfb64-da98-450d-9e1e-3bb56ef8979d" autoIncrement="false" autoIncrementSequenceName="SegmentActionType_SegmentActionTypeID_seq_3" defaultValue="" name="SegmentActionTypeTypeID" nullable="0" physicalName="SegmentActionTypeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL81" populated="true" UUID="a2dc4349-eefa-470d-a4a5-00eaa5360a05" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_MonthOfTape_seq_1" defaultValue="" name="MonthOfTape" nullable="1" physicalName="MonthOfTape" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL81" populated="true" UUID="a2dc4349-eefa-470d-a4a5-00eaa5360a05" autoIncrement="false" autoIncrementSequenceName="VictimSegment_MonthOfTape_seq" defaultValue="" name="MonthOfTape" nullable="1" physicalName="MonthOfTape" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL82" populated="true" UUID="e409b70e-6e59-4792-9119-a81f0e1d620a" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_YearOfTape_seq_1" defaultValue="" name="YearOfTape" nullable="1" physicalName="YearOfTape" precision="4" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL82" populated="true" UUID="e409b70e-6e59-4792-9119-a81f0e1d620a" autoIncrement="false" autoIncrementSequenceName="VictimSegment_YearOfTape_seq" defaultValue="" name="YearOfTape" nullable="1" physicalName="YearOfTape" precision="4" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL83" populated="true" UUID="2181ae08-7795-429f-855e-59a2f2af2bd3" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_CityIndicator_seq_1" defaultValue="" name="CityIndicator" nullable="1" physicalName="CityIndicator" precision="4" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL83" populated="true" UUID="2181ae08-7795-429f-855e-59a2f2af2bd3" autoIncrement="false" autoIncrementSequenceName="VictimSegment_CityIndicator_seq" defaultValue="" name="CityIndicator" nullable="1" physicalName="CityIndicator" precision="4" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL84" populated="true" UUID="90e1ef95-df48-475f-89ed-6d0a36450d2a" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_ORI_seq_1" defaultValue="" name="ORI" nullable="1" physicalName="ORI" precision="9" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL84" populated="true" UUID="90e1ef95-df48-475f-89ed-6d0a36450d2a" autoIncrement="false" autoIncrementSequenceName="VictimSegment_ORI_seq" defaultValue="" name="ORI" nullable="1" physicalName="ORI" precision="9" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL85" populated="true" UUID="829c10e6-5a09-4b23-822d-91d9f68c0c4e" autoIncrement="false" autoIncrementSequenceName="OffenseSegment_IncidentNumber_seq_1" defaultValue="" name="IncidentNumber" nullable="1" physicalName="IncidentNumber" precision="12" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL85" populated="true" UUID="829c10e6-5a09-4b23-822d-91d9f68c0c4e" autoIncrement="false" autoIncrementSequenceName="VictimSegment_IncidentNumber_seq" defaultValue="" name="IncidentNumber" nullable="1" physicalName="IncidentNumber" precision="12" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL86" populated="true" UUID="1e4e7a4f-390e-45d2-a6f9-6ea02fc1f4b8" autoIncrement="false" autoIncrementSequenceName="VictimSegment_VictimSequenceNumber_seq" defaultValue="" name="VictimSequenceNumber" nullable="1" physicalName="VictimSequenceNumber" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks>Valid Values: 001 through 999</remarks>
     </column>
-    <column id="COL87" populated="true" UUID="ddecf714-0cc9-48f9-80cb-e69f36e89942" autoIncrement="false" autoIncrementSequenceName="TypeOfVictimType_TypeOfVictimTypeID_seq" defaultValue="" name="TypeOfVictimTypeID" nullable="0" physicalName="TypeOfVictimTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL87" populated="true" UUID="ddecf714-0cc9-48f9-80cb-e69f36e89942" autoIncrement="false" autoIncrementSequenceName="VictimSegment_TypeOfVictimTypeID_seq" defaultValue="" name="TypeOfVictimTypeID" nullable="0" physicalName="TypeOfVictimTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL88" populated="true" UUID="388ebe10-8636-4ff5-805d-75659ff8cda4" autoIncrement="false" autoIncrementSequenceName="TypeOfOfficerActivityCircumstanceType_TypeOfVictimTypeID_seq" defaultValue="" name="OfficerActivityCircumstanceTypeID" nullable="0" physicalName="OfficerActivityCircumstanceTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -328,19 +321,19 @@ segment per victim.</remarks>
     <column id="COL90" populated="true" UUID="82134449-0b64-4b26-aeb2-8c24b6b21ed1" autoIncrement="false" autoIncrementSequenceName="VictimSegment_AgeOfVictim_seq" defaultValue="" name="AgeOfVictim" nullable="1" physicalName="AgeOfVictim" precision="4" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL91" populated="true" UUID="12ef4e13-fc40-499a-9030-ebd0cd994e3c" autoIncrement="false" autoIncrementSequenceName="SexOfPersonType_SexOfPersonTypeID_seq" defaultValue="" name="SexOfPersonTypeID" nullable="0" physicalName="SexOfPersonTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL91" populated="true" UUID="12ef4e13-fc40-499a-9030-ebd0cd994e3c" autoIncrement="false" autoIncrementSequenceName="VictimSegment_SexOfPersonTypeID_seq" defaultValue="" name="SexOfPersonTypeID" nullable="0" physicalName="SexOfPersonTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL92" populated="true" UUID="04ceeb0a-50b0-41d0-83b0-49eeb136010f" autoIncrement="false" autoIncrementSequenceName="RaceOfPersonType_RaceOfPersonTypeID_seq" defaultValue="" name="RaceOfPersonTypeID" nullable="0" physicalName="RaceOfPersonTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL92" populated="true" UUID="04ceeb0a-50b0-41d0-83b0-49eeb136010f" autoIncrement="false" autoIncrementSequenceName="VictimSegment_RaceOfPersonTypeID_seq" defaultValue="" name="RaceOfPersonTypeID" nullable="0" physicalName="RaceOfPersonTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL93" populated="true" UUID="a6809e62-b317-41b4-83b8-bbdaa09e33db" autoIncrement="false" autoIncrementSequenceName="EthnicityOfPersonType_EthnicityOfPersonTypeID_seq" defaultValue="" name="EthnicityOfPersonTypeID" nullable="0" physicalName="EthnicityOfPersonTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL93" populated="true" UUID="a6809e62-b317-41b4-83b8-bbdaa09e33db" autoIncrement="false" autoIncrementSequenceName="VictimSegment_EthnicityOfPersonTypeID_seq" defaultValue="" name="EthnicityOfPersonTypeID" nullable="0" physicalName="EthnicityOfPersonTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL94" populated="true" UUID="aca64025-2dd3-40de-b68f-d264fff85b75" autoIncrement="false" autoIncrementSequenceName="ResidentStatusCodeLookup_1_EthnicityOfPersonTypeID_seq" defaultValue="" name="ResidentStatusOfPersonTypeID" nullable="0" physicalName="ResidentStatusOfPersonTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL95" populated="true" UUID="1d30a411-63ec-4a06-9550-78e16d05b6c0" autoIncrement="false" autoIncrementSequenceName="AdditionalJustifiableHomicideCircumstancesType_AdditionalJustifiableHomicideCircumstancesID_seq" defaultValue="" name="AdditionalJustifiableHomicideCircumstancesID" nullable="0" physicalName="AdditionalJustifiableHomicideCircumstancesID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL95" populated="true" UUID="1d30a411-63ec-4a06-9550-78e16d05b6c0" autoIncrement="false" autoIncrementSequenceName="VictimSegment_AdditionalJustifiableHomicideCircumstancesID_seq" defaultValue="" name="AdditionalJustifiableHomicideCircumstancesID" nullable="0" physicalName="AdditionalJustifiableHomicideCircumstancesID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -511,14 +504,12 @@ segment per victim.</remarks>
    </folder>
   </table>
   <table id="TAB145" populated="true" UUID="eedc982f-e07c-4487-b04c-1f8f9393561d" name="ZeroReportingSegment" objectType="TABLE" physicalName="ZeroReportingSegment" >
-   <remarks>One record is to be submitted for each month that a reporting agency has responded that
-no crime occurred within the local agency’s jurisdiction. Section I, subsection I, “Zero-
-Reporting,” contains guidelines on submission of this data record.</remarks>
+   <remarks></remarks>
    <folder id="FOLTAB1451" populated="true" name="Columns" physicalName="Columns" type="1">
     <column id="COL146" populated="true" UUID="9c330890-7da8-44b2-b270-aca19b67b739" autoIncrement="false" autoIncrementSequenceName="ZeroReportingSegment_ZeroReportingSegmentID_seq" defaultValue="" name="ZeroReportingSegmentID" nullable="0" physicalName="ZeroReportingSegmentID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL147" populated="true" UUID="8e976161-ab70-47fc-b007-e2d60e75f25d" autoIncrement="false" autoIncrementSequenceName="AdminSeg_AdministrativeSegmentID_seq_1" defaultValue="" name="AdministrativeSegmentID" nullable="0" physicalName="AdministrativeSegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL147" populated="true" UUID="8e976161-ab70-47fc-b007-e2d60e75f25d" autoIncrement="false" autoIncrementSequenceName="ZeroReportingSegment_AdministrativeSegmentID_seq" defaultValue="" name="AdministrativeSegmentID" nullable="0" physicalName="AdministrativeSegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL148" populated="true" UUID="959149ac-afc2-4df5-a1e5-faad435b1132" autoIncrement="false" autoIncrementSequenceName="ZeroReportingSegment_RecordDescriptionWord_seq" defaultValue="" name="RecordDescriptionWord" nullable="1" physicalName="RecordDescriptionWord" precision="4" referenceCount="1" scale="0" source-column-ref="COL3" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -564,13 +555,12 @@ Incident Date; otherwise, leave blank</remarks>
    </folder>
   </table>
   <table id="TAB160" populated="true" UUID="566561cc-a490-403a-8fb0-c4de91046c3b" name="LEOKASegment" objectType="TABLE" physicalName="LEOKASegment" >
-   <remarks>Section I contains guidelines on submission of the Law Enforcement Killed and
-Assaulted (LEOKA) data record</remarks>
+   <remarks></remarks>
    <folder id="FOLTAB1601" populated="true" name="Columns" physicalName="Columns" type="1">
     <column id="COL161" populated="true" UUID="9c7bad58-8a70-419c-8fcb-60d833481972" autoIncrement="false" autoIncrementSequenceName="LEOKASegment_LEOKASegmentID_seq" defaultValue="" name="LEOKASegmentID" nullable="0" physicalName="LEOKASegmentID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL162" populated="true" UUID="94d17ea8-0011-40e1-a278-d70cac579164" autoIncrement="false" autoIncrementSequenceName="AdminSeg_AdministrativeSegmentID_seq_2" defaultValue="" name="AdministrativeSegmentID" nullable="0" physicalName="AdministrativeSegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL162" populated="true" UUID="94d17ea8-0011-40e1-a278-d70cac579164" autoIncrement="false" autoIncrementSequenceName="LEOKASegment_AdministrativeSegmentID_seq" defaultValue="" name="AdministrativeSegmentID" nullable="0" physicalName="AdministrativeSegmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL163" populated="true" UUID="73571c6f-db14-4481-924a-a0041843da95" autoIncrement="false" autoIncrementSequenceName="LEOKASegment_RecordDescriptionWord_seq" defaultValue="" name="RecordDescriptionWord" nullable="1" physicalName="RecordDescriptionWord" precision="4" referenceCount="1" scale="0" source-column-ref="COL3" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -698,9 +688,7 @@ Assaulted (LEOKA) data record</remarks>
    </folder>
   </table>
   <table id="TAB196" populated="true" UUID="5d9abfd6-d247-4643-9ec6-d2e4a7efa42c" name="SegmentActionTypeType" objectType="TABLE" physicalName="SegmentActionTypeType" >
-   <remarks>Instructs the FBI as to what kind of database
-activity is to be performed.
-Valid Codes: I, M, D, and W.</remarks>
+   <remarks>What kind of database activity is to be performed.</remarks>
    <folder id="FOLTAB1961" populated="true" name="Columns" physicalName="Columns" type="1">
     <column id="COL197" populated="true" UUID="34fe14fb-eb0e-4cb3-9b52-85c9fdcc8d61" autoIncrement="false" autoIncrementSequenceName="SegmentActionTypeType_SegmentActionTypeID_seq" defaultValue="" name="SegmentActionTypeTypeID" nullable="0" physicalName="SegmentActionTypeTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
@@ -1587,8 +1575,8 @@ FO, GL, DU, NP, and XX.</remarks>
    <relationship id="REL456" populated="true" UUID="4c190ffc-5345-4215-ae65-58fd90cde7c0" deferrability="7" deleteRule="3" fk-table-ref="TAB44" fkCardinality="3" identifying="false" name="TypePropertyLossEtcType_PropertySegment_fk" physicalName="typepropertylossetctype_propertysegment_fk" pk-table-ref="TAB178" pkCardinality="3" updateRule="3" >
     <column-mapping id="CMP457" populated="true" UUID="927bd43c-2452-4da6-99db-c7926e1f01b2" fk-column-ref="COL54" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL179" />
    </relationship>
-   <relationship id="REL458" populated="true" UUID="41f08f62-6a8a-42f3-bbbc-5ca34a2b06c1" deferrability="7" deleteRule="3" fk-table-ref="TAB269" fkCardinality="7" identifying="false" name="AggravatedAssaultHomicideCircumstancesType_AggravatedAssaultHomicideCircumstances_fk" physicalName="aggravatedassaulthomicidecircumstancestype_aggravatedassaulthomicidecircumstances_fk" pk-table-ref="TAB184" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP459" populated="true" UUID="35d9ddde-a3f2-4e82-a3b8-ff4f620c28fb" fk-column-ref="COL272" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL185" />
+   <relationship id="REL458" populated="true" UUID="41f08f62-6a8a-42f3-bbbc-5ca34a2b06c1" deferrability="7" deleteRule="3" fk-table-ref="TAB269" fkCardinality="7" identifying="false" name="AAHomicideCircumstancesType_AAHomicideCircumstances_fk" physicalName="aahomicidecircumstancestype_aahomicidecircumstances_fk" pk-table-ref="TAB184" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP459" populated="true" UUID="58fe3484-46c8-418f-802f-ec14d03c11a1" fk-column-ref="COL272" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL185" />
    </relationship>
    <relationship id="REL460" populated="true" UUID="e10c8dbd-4aa9-4114-bb64-0eb33b34cced" deferrability="7" deleteRule="3" fk-table-ref="TAB281" fkCardinality="7" identifying="false" name="RelationshipCodeLookup_OffenderVictimRelationship_fk" physicalName="relationshipcodelookup_offendervictimrelationship_fk" pk-table-ref="TAB190" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP461" populated="true" UUID="14b0bed4-585d-4e9c-92f0-e342f60b2d6d" fk-column-ref="COL285" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL191" />
