@@ -851,17 +851,17 @@ Incident Date; otherwise, leave blank</remarks>
     </index>
    </folder>
   </table>
-  <table id="TAB239" populated="true" UUID="088500c7-bc10-4324-bb85-65dcba446007" name="TypeDrugMeasurementType" objectType="TABLE" physicalName="TypeDrugMeasurementTypeID" >
+  <table id="TAB239" populated="true" UUID="088500c7-bc10-4324-bb85-65dcba446007" name="TypeDrugMeasurementType" objectType="TABLE" physicalName="TypeDrugMeasurementType" >
    <remarks></remarks>
    <folder id="FOLTAB2391" populated="true" name="Columns" physicalName="Columns" type="1">
     <column id="COL240" populated="true" UUID="28785c3a-cdac-4487-98d8-883e5447c02f" autoIncrement="false" autoIncrementSequenceName="TypeDrugMeasurementTypeID_TypeDrugMeasurementTypeID_seq_1" defaultValue="" name="TypeDrugMeasurementTypeID" nullable="0" physicalName="TypeDrugMeasurementTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL241" populated="true" UUID="43adb53e-77cd-4b41-9bd2-4014d2e06c6e" autoIncrement="false" autoIncrementSequenceName="TypeDrugMeasurementTypeID_TypeDrugMeasurementCode_seq" defaultValue="" name="TypeDrugMeasurementCode" nullable="1" physicalName="TypeDrugMeasurementCode" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL241" populated="true" UUID="43adb53e-77cd-4b41-9bd2-4014d2e06c6e" autoIncrement="false" autoIncrementSequenceName="TypeDrugMeasurementType_TypeDrugMeasurementCode_seq" defaultValue="" name="TypeDrugMeasurementCode" nullable="1" physicalName="TypeDrugMeasurementCode" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks>Valid Codes: GM, KG, OZ, LB, ML, LT,
 FO, GL, DU, NP, and XX.</remarks>
     </column>
-    <column id="COL242" populated="true" UUID="e31cce5b-684e-49f9-ba5d-5df900b6da5c" autoIncrement="false" autoIncrementSequenceName="TypeDrugMeasurementTypeID_TypeDrugMeasurementDescription_seq" defaultValue="" name="TypeDrugMeasurementDescription" nullable="1" physicalName="TypeDrugMeasurementDescription" precision="20" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL242" populated="true" UUID="e31cce5b-684e-49f9-ba5d-5df900b6da5c" autoIncrement="false" autoIncrementSequenceName="TypeDrugMeasurementType_TypeDrugMeasurementDescription_seq" defaultValue="" name="TypeDrugMeasurementDescription" nullable="1" physicalName="TypeDrugMeasurementDescription" precision="20" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -870,7 +870,7 @@ FO, GL, DU, NP, and XX.</remarks>
     <folder id="FOLTAB2392" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB2394" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX243" populated="true" UUID="0841eb4b-9812-40a8-a5b0-40cfd7125b8c" clustered="false" name="TypeDrugMeasurementTypeID_pk" physicalName="typedrugmeasurementtypeid_pk" primaryKeyIndex="true" unique="false" >
+    <index id="IDX243" populated="true" UUID="0841eb4b-9812-40a8-a5b0-40cfd7125b8c" clustered="false" name="TypeDrugMeasurementType_pk" physicalName="typedrugmeasurementtype_pk" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC244" populated="true" UUID="bb22364b-ad09-4354-bc47-d5cdd1e6c411" ascendingOrDescending="UNSPECIFIED" column-ref="COL240" name="TypeDrugMeasurementTypeID" physicalName="TypeDrugMeasurementTypeID" />
     </index>
    </folder>
