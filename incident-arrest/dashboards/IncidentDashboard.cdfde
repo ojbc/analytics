@@ -1552,8 +1552,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -1562,13 +1562,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "300",
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "height",
+      "value": "300",
       "type": "Integer"
      },
      {
@@ -2826,23 +2826,23 @@
       "type": "Datasource"
      },
      {
-      "name": "width",
-      "value": "400",
-      "type": "Integer"
-     },
-     {
       "name": "refreshPeriod",
       "value": "",
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "width",
+      "value": "400",
       "type": "Integer"
      },
      {
       "name": "height",
       "value": "300",
+      "type": "Integer"
+     },
+     {
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -4130,23 +4130,23 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "300",
-      "type": "Integer"
-     },
-     {
       "name": "priority",
       "value": 5,
       "type": "Integer"
      },
      {
-      "name": "width",
-      "value": "400",
+      "name": "height",
+      "value": "300",
       "type": "Integer"
      },
      {
       "name": "refreshPeriod",
       "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "width",
+      "value": "400",
       "type": "Integer"
      },
      {
@@ -4923,23 +4923,13 @@
       "type": "JavaScript"
      },
      {
-      "name": "colSortable",
-      "value": "[]",
-      "type": "Array"
-     },
-     {
-      "name": "colFormats",
-      "value": "[]",
-      "type": "Array"
-     },
-     {
       "name": "colWidths",
       "value": "[]",
       "type": "Array"
      },
      {
       "name": "colHeaders",
-      "value": "[\"Agency Case #\",\"Incident Type\",\"Date\",\"Time\",\"Street Address\",\"Town\"]",
+      "value": "[\"Agency Case #\",\"Incident Type\",\"Date/Time\",\"Street Address\",\"Town\"]",
       "type": "Array"
      },
      {
@@ -4951,6 +4941,16 @@
       "name": "expandParameters",
       "value": "[]",
       "type": "ValuesArray"
+     },
+     {
+      "name": "colSortable",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "colFormats",
+      "value": "[]",
+      "type": "Array"
      },
      {
       "name": "colTypes",
@@ -5883,7 +5883,7 @@
      },
      {
       "name": "query",
-      "value": "select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, \nconvert(concat(Hour, ':', lpad(Minute, 2, '0')), char(5)) as TimeString, \nIncidentLocationStreetAddress, TownDescription\nfrom Incident, IncidentType, IncidentTypeAssociation, Time, Date, Agency, Town\nwhere Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and\nIncidentTypeAssociation.IncidentTypeID=IncidentType.IncidentTypeID and\nIncident.ReportingAgencyID=AgencyID and\nIncident.TownID=Town.TownID and\nIncident.IncidentID=IncidentTypeAssociation.IncidentID\nand (if(${AgencyParameter}=\"All Agencies\", 1, AgencyName=${AgencyParameter}))\nand (if(${TownParameter}=\"All Towns\", 1, TownDescription=${TownParameter}))\nand IncidentDateTime < str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\")\nand IncidentDateTime > date_sub(str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\"),\n    interval ${IncidentListTimePeriodParameter} hour)",
+      "value": "select IncidentCaseNumber, IncidentTypeDescription, concat(DateMMDDYYYY, ' ', lpad(Hour, 2, '0'), ':', lpad(Minute, 2, '0'), ':', lpad(Second, 2, '0')) as DateTimeString,\nIncidentLocationStreetAddress, TownDescription\nfrom Incident, IncidentType, IncidentTypeAssociation, Time, Date, Agency, Town\nwhere Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and\nIncidentTypeAssociation.IncidentTypeID=IncidentType.IncidentTypeID and\nIncident.ReportingAgencyID=AgencyID and\nIncident.TownID=Town.TownID and\nIncident.IncidentID=IncidentTypeAssociation.IncidentID\nand (if(${AgencyParameter}=\"All Agencies\", 1, AgencyName=${AgencyParameter}))\nand (if(${TownParameter}=\"All Towns\", 1, TownDescription=${TownParameter}))\nand IncidentDateTime < str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\")\nand IncidentDateTime > date_sub(str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\"),\n    interval ${IncidentListTimePeriodParameter} hour)",
       "type": "SqlQuery"
      },
      {

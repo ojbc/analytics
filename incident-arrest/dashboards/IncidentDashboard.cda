@@ -42,8 +42,7 @@ select distinct AgencyName from Agency</Query>
          <Parameter default="" name="BaseDateParameter" type="String"/>
          <Parameter default="All Towns" name="TownParameter" type="String"/>
       </Parameters>
-      <Query>select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, 
-convert(concat(Hour, ':', lpad(Minute, 2, '0')), char(5)) as TimeString, 
+      <Query>select IncidentCaseNumber, IncidentTypeDescription, concat(DateMMDDYYYY, ' ', lpad(Hour, 2, '0'), ':', lpad(Minute, 2, '0'), ':', lpad(Second, 2, '0')) as DateTimeString,
 IncidentLocationStreetAddress, TownDescription
 from Incident, IncidentType, IncidentTypeAssociation, Time, Date, Agency, Town
 where Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and

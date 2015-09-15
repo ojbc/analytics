@@ -2152,13 +2152,8 @@
       "type": "Datasource"
      },
      {
-      "name": "width",
-      "value": "500",
-      "type": "Integer"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -2167,8 +2162,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "width",
+      "value": "500",
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -2192,12 +2192,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -3496,12 +3496,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -4770,12 +4770,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -6040,16 +6040,16 @@
      },
      {
       "name": "preExecution",
-      "value": "function f() {\n    var cd = this.chartDefinition;\n    cd.legend = {\n        scenes: {\n           item: {\n                value: function() {\n                    var valueVar = this.base();\n                    valueVar.label = valueVar.label.split(\"~\")[0].trim();\n                    return valueVar;\n                }\n            }\n        }\n    }\n    addChartResizer(this);\n    \n    var cccOptions = this.chartDefinition;\n\n    // For changing extension points, a little more work is required:\n    var eps = Dashboards.propertiesArrayToObject(cccOptions.extensionPoints);\n\n    // add extension points:\n    eps.bar_fillStyle = function getColor() {\n        var val = this.scene.vars.category.value;\n        if (val.search(\"Male\") != -1) {\n            return '#225ea8';\n        } else {\n            return '#df65b0';\n        }\n    };\n\n    // Serialize back eps into cccOptions\n    cccOptions.extensionPoints = Dashboards.objectToPropertiesArray(eps);\n    \n} ",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postExecution",
-      "value": "",
+      "value": "function f() {\n    var cd = this.chartDefinition;\n    cd.legend = {\n        scenes: {\n           item: {\n                value: function() {\n                    var valueVar = this.base();\n                    valueVar.label = valueVar.label.split(\"~\")[0].trim();\n                    return valueVar;\n                }\n            }\n        }\n    }\n    addChartResizer(this);\n    \n    var cccOptions = this.chartDefinition;\n\n    // For changing extension points, a little more work is required:\n    var eps = Dashboards.propertiesArrayToObject(cccOptions.extensionPoints);\n\n    // add extension points:\n    eps.bar_fillStyle = function getColor() {\n        var val = this.scene.vars.category.value;\n        if (val.search(\"Male\") != -1) {\n            return 'green';\n        } else {\n            return 'yellow';\n        }\n    };\n\n    // Serialize back eps into cccOptions\n    cccOptions.extensionPoints = Dashboards.objectToPropertiesArray(eps);\n    \n} ",
       "type": "JavaScript"
      },
      {
       "name": "postFetch",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -7318,12 +7318,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },

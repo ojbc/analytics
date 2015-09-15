@@ -162,7 +162,7 @@
      },
      {
       "name": "html",
-      "value": "<h3 align=\"center\">Pretrial Services Dashboard</h3> ",
+      "value": "<h3 align=\"center\">Pretrial Services Dashboard</h3>\n<div align=\"center\"><i>Note: Data are From the Past 90 Days</i></div> ",
       "type": "Html"
      },
      {
@@ -1222,8 +1222,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -1232,13 +1232,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "280",
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "height",
+      "value": "280",
       "type": "Integer"
      },
      {
@@ -1288,7 +1288,7 @@
      },
      {
       "name": "extensionPoints",
-      "value": "[]",
+      "value": "[[\"baseAxisLabel_textAngle\",\"-1.2\"],[\"baseAxisLabel_textAlign\",\"right\"],[\"baseAxisLabel_textBaseline\",\"middle\"]]",
       "type": "EditorValuesArray"
      },
      {
@@ -2496,8 +2496,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -2506,13 +2506,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "280",
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "height",
+      "value": "280",
       "type": "Integer"
      },
      {
@@ -3770,8 +3770,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -3780,13 +3780,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "280",
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "height",
+      "value": "280",
       "type": "Integer"
      },
      {
@@ -5044,8 +5044,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -5054,13 +5054,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "280",
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "height",
+      "value": "280",
       "type": "Integer"
      },
      {
