@@ -176,7 +176,7 @@
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="IncidentType2" caption="Original Incident Type">
 		<Hierarchy name="IncidentType" visible="true" hasAll="true" allMemberName="All Types" allMemberCaption="All Types" primaryKey="IncidentTypeID" caption="Incident Type">
 			<Table name="IncidentType2"/>
-			<Level name="IncidentType" visible="true" table="IncidentType" column="IncidentTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="IncidentType" visible="true" table="IncidentType2" column="IncidentTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Incident Type">
@@ -408,7 +408,7 @@
 		</View>
 		<DimensionUsage source="Town" name="Town" visible="true" foreignKey="TownID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="ReportingAgencyID" highCardinality="false"/>
-		<DimensionUsage source="Incident Type" name="IncidentType2" visible="true" foreignKey="IncidentTypeID" highCardinality="false"/>
+		<DimensionUsage source="IncidentType2" name="Incident Type" visible="true" foreignKey="IncidentTypeID" highCardinality="false"/>
 		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
 		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="TimeID" highCardinality="false"/>
 		<Measure name="IncidentCount" column="IncidentID" datatype="Integer" aggregator="distinct-count" caption="Incident Count" visible="true"/>
@@ -423,7 +423,7 @@
 		<Table name="IncidentOptHourType2"/>
 		<DimensionUsage source="Town" name="Town" visible="true" foreignKey="TownID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="ReportingAgencyID" highCardinality="false"/>
-		<DimensionUsage source="Incident Type" name="IncidentType2" visible="true" foreignKey="IncidentTypeID" highCardinality="false"/>
+		<DimensionUsage source="IncidentType2" name="Incident Type" visible="true" foreignKey="IncidentTypeID" highCardinality="false"/>
 		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
 		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="HourTimeID" highCardinality="false"/>
 		<Measure name="IncidentCount" column="IncidentCount" datatype="Integer" aggregator="sum" caption="Incident Count" visible="true"/>
