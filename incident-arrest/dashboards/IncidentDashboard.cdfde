@@ -1714,8 +1714,8 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "300",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -1724,13 +1724,13 @@
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "300",
       "type": "Integer"
      },
      {
@@ -1754,12 +1754,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -2988,8 +2988,13 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "300",
+      "name": "width",
+      "value": "400",
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -2998,13 +3003,8 @@
       "type": "Integer"
      },
      {
-      "name": "width",
-      "value": "400",
-      "type": "Integer"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "300",
       "type": "Integer"
      },
      {
@@ -3028,12 +3028,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -4292,8 +4292,13 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "300",
+      "type": "Integer"
+     },
+     {
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -4302,13 +4307,8 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "300",
-      "type": "Integer"
-     },
-     {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -4332,12 +4332,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -5085,11 +5085,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "colFormats",
-      "value": "[]",
-      "type": "Array"
-     },
-     {
       "name": "colWidths",
       "value": "[]",
       "type": "Array"
@@ -5111,6 +5106,11 @@
      },
      {
       "name": "colSortable",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "colFormats",
       "value": "[]",
       "type": "Array"
      },
@@ -5170,14 +5170,14 @@
       "type": "Datasource"
      },
      {
-      "name": "sDom",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
       "name": "sortBy",
       "value": "[]",
       "type": "SortByArray"
+     },
+     {
+      "name": "sDom",
+      "value": "",
+      "type": "JavaScript"
      },
      {
       "name": "refreshPeriod",
@@ -6196,7 +6196,7 @@
      },
      {
       "name": "query",
-      "value": "SELECT {[Measures].[IncidentCount]} ON COLUMNS,\norder({topcount([Incident Type.IncidentType].[All Types].Children, 20, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS\nFROM [IncidentTypeInvolvement_Opt]\nWHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},\n{parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})",
+      "value": "SELECT {[Measures].[IncidentCount]} ON COLUMNS,\norder({topcount([Incident Type.IncidentType].[All Types].Children, 20, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS\nFROM [IncidentType2Involvement_Opt]\nWHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},\n{parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})",
       "type": "CurrentMdxQuery"
      },
      {

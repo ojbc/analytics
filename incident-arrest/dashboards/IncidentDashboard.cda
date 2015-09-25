@@ -77,7 +77,7 @@ select distinct TownDescription from Town</Query>
       </Parameters>
       <Query>SELECT {[Measures].[IncidentCount]} ON COLUMNS,
 order({topcount([Incident Type.IncidentType].[All Types].Children, 20, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS
-FROM [IncidentTypeInvolvement_Opt]
+FROM [IncidentType2Involvement_Opt]
 WHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},
 {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})</Query>
    </DataAccess>
