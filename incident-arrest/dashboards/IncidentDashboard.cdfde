@@ -20,7 +20,7 @@
      },
      {
       "name": "resourceCode",
-      "value": "function getBaseDate() {\n    \n    // Use this line for real deployment\n    var d = new Date();\n    \n    // Use this line for testing using \"dummy\" data\n    //var d = new Date(\"2015-08-25 10:10:10\");\n    \n    var month = '' + (d.getMonth() + 1);\n    var day = '' + d.getDate();\n    var year = d.getFullYear();\n\n    if (month.length < 2) month = '0' + month;\n    if (day.length < 2) day = '0' + day;\n\n    return [year, month, day].join('-');\n    \n}\n\nfunction getBaseMonth() {\n    var dateString = getBaseDate().split(\"-\");\n    var year = dateString[0];\n    var month = dateString[1];\n    var quarterString = \"1\";\n    if (month == \"04\" || month == \"05\" || month == \"06\") {\n        quarterString = \"2\";\n    } else if (month == \"07\" || month == \"08\" || month == \"09\") {\n        quarterString = \"3\";\n    } else if (month == \"10\" || month == \"11\" || month == \"12\") {\n        quarterString = \"4\";\n    }\n    var ret = \"[Date.DateYMD].[\" + year + \"].[\" + quarterString + \"].[\" + month + \"-\" + year + \"]\";\n    //Dashboards.log(\"getBaseMonth() returning \" + ret);\n    return ret;\n}\n\nfunction addChartResizer(chart) {\n    var myself = chart;\n    // Set initial width to match the placeholder\n    myself.chartDefinition.width = myself.placeholder().width();\n\n    // Attach the resize handler only on the first execution of the chart component\n    if (!chart.resizeHandlerAttached) {\n        //Dashboards.log(\"Attaching resize handler\");\n        // Ensure render is only triggered after resize events have stopped\n        var debouncedResize = _.debounce(function () {\n\n            // Show chart again.\n            myself.placeholder().children().css('visibility', 'visible');\n\n            // Change chart width\n            myself.chartDefinition.width = myself.placeholder().width();\n            //Dashboards.log(\"Setting width on resize=\" + myself.chartDefinition.width);\n            myself.render(myself.query.lastResults());\n        }, 200);\n\n        // Attach resize handler\n        $(window).resize(function () {\n\n            //Dashboards.log(\"Resize?\");\n            //Dashboards.log(\"myself.chartDefinition.width=\" + myself.chartDefinition.width);\n            //Dashboards.log(\"myself.placeholder().width()=\" + myself.placeholder().width());\n\n            // Only trigger resize if the container has changed width\n            if (myself.chartDefinition.width != myself.placeholder().width()) {\n\n                // Temporarily hide chart so that overflow does not happen\n                myself.placeholder().children().css('visibility', 'hidden');\n\n                // Trigger the resize with debounce\n                debouncedResize();\n            }\n        });\n\n        chart.resizeHandlerAttached = true;\n    }\n\n} ",
+      "value": "function getBaseDate() {\n    \n    // Use this line for real deployment\n    //var d = new Date();\n    \n    // Use this line for testing using \"dummy\" data\n    var d = new Date(\"2013-12-25 10:10:10\");\n    \n    var month = '' + (d.getMonth() + 1);\n    var day = '' + d.getDate();\n    var year = d.getFullYear();\n\n    if (month.length < 2) month = '0' + month;\n    if (day.length < 2) day = '0' + day;\n\n    return [year, month, day].join('-');\n    \n}\n\nfunction getBaseMonth() {\n    return getBaseMonth(0);\n}\n\nfunction getBaseMonth(monthOffset) {\n    var dateString = getBaseDate().split(\"-\");\n    var year = parseInt(dateString[0]);\n    var month = parseInt(dateString[1]) - monthOffset;\n    if (month === 0) {\n        month = 12;\n        year = year - 1;\n    }\n    var quarterString = \"1\";\n    if (month == \"04\" || month == \"05\" || month == \"06\") {\n        quarterString = \"2\";\n    } else if (month == \"07\" || month == \"08\" || month == \"09\") {\n        quarterString = \"3\";\n    } else if (month == \"10\" || month == \"11\" || month == \"12\") {\n        quarterString = \"4\";\n    }\n    var monthS = \"\" + month;\n    if (month < 10) {\n        monthS = \"0\" + month;\n    }\n    var ret = \"[Date.DateYMD].[\" + year + \"].[\" + quarterString + \"].[\" + monthS + \"-\" + year + \"]\";\n    return ret;\n}\n\nfunction addChartResizer(chart) {\n    var myself = chart;\n    // Set initial width to match the placeholder\n    myself.chartDefinition.width = myself.placeholder().width();\n\n    // Attach the resize handler only on the first execution of the chart component\n    if (!chart.resizeHandlerAttached) {\n        //Dashboards.log(\"Attaching resize handler\");\n        // Ensure render is only triggered after resize events have stopped\n        var debouncedResize = _.debounce(function () {\n\n            // Show chart again.\n            myself.placeholder().children().css('visibility', 'visible');\n\n            // Change chart width\n            myself.chartDefinition.width = myself.placeholder().width();\n            //Dashboards.log(\"Setting width on resize=\" + myself.chartDefinition.width);\n            myself.render(myself.query.lastResults());\n        }, 200);\n\n        // Attach resize handler\n        $(window).resize(function () {\n\n            //Dashboards.log(\"Resize?\");\n            //Dashboards.log(\"myself.chartDefinition.width=\" + myself.chartDefinition.width);\n            //Dashboards.log(\"myself.placeholder().width()=\" + myself.placeholder().width());\n\n            // Only trigger resize if the container has changed width\n            if (myself.chartDefinition.width != myself.placeholder().width()) {\n\n                // Temporarily hide chart so that overflow does not happen\n                myself.placeholder().children().css('visibility', 'hidden');\n\n                // Trigger the resize with debounce\n                debouncedResize();\n            }\n        });\n\n        chart.resizeHandlerAttached = true;\n    }\n\n} ",
       "type": "Resource"
      }
     ]
@@ -162,7 +162,7 @@
      },
      {
       "name": "html",
-      "value": "<h3 align=\"center\">Law Enforcement Incident Dashboard</h3> ",
+      "value": "<div style=\"width: 100%; padding: 15px; text-align: center;position: relative; font-size: 150%; font-weight: bold\">\n    Law Enforcement Incident Dashboard\n    <div style=\"position: absolute; right: 0;top:15px; font-size: 12px; font-weight: normal\">\n    <a href=\"/ojbc-dashboard-docs/incident-dashboard-doc.html\" target=\"_blank\">Dashboard Documentation</a></div>\n</div> \n ",
       "type": "Html"
      },
      {
@@ -1263,6 +1263,140 @@
       "type": "String"
      }
     ]
+   },
+   {
+    "id": "c87be915-1c2d-a976-1c74-207784f66ea2",
+    "type": "LayoutRow",
+    "typeDesc": "Row",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "name",
+      "value": "",
+      "type": "Id"
+     },
+     {
+      "name": "height",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "backgroundColor",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "roundCorners",
+      "value": "",
+      "type": "RoundCorners"
+     },
+     {
+      "name": "textAlign",
+      "value": "",
+      "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "b7c64d86-2623-0a5e-32e2-abf635b33439",
+    "type": "LayoutBootstrapColumn",
+    "typeDesc": "Column",
+    "parent": "c87be915-1c2d-a976-1c74-207784f66ea2",
+    "properties": [
+     {
+      "name": "name",
+      "value": "",
+      "type": "Id"
+     },
+     {
+      "name": "bootstrapExtraSmall",
+      "value": "12",
+      "type": "String"
+     },
+     {
+      "name": "bootstrapSmall",
+      "value": "",
+      "type": "String"
+     },
+     {
+      "name": "bootstrapMedium",
+      "value": "",
+      "type": "String"
+     },
+     {
+      "name": "bootstrapLarge",
+      "value": "",
+      "type": "String"
+     },
+     {
+      "name": "bootstrapCssClass",
+      "value": "",
+      "type": "String"
+     },
+     {
+      "name": "height",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "backgroundColor",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "roundCorners",
+      "value": "",
+      "type": "RoundCorners"
+     },
+     {
+      "name": "textAlign",
+      "value": "",
+      "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "7857bb84-cbd3-7a40-3f93-a4cca925f93c",
+    "type": "LayoutHtml",
+    "typeDesc": "Html",
+    "parent": "b7c64d86-2623-0a5e-32e2-abf635b33439",
+    "properties": [
+     {
+      "name": "name",
+      "value": "",
+      "type": "Id"
+     },
+     {
+      "name": "html",
+      "value": "<a target=\"_blank\" href=\"/ojbc-dashboard-docs/incident-dashboard-doc.html\">Dashboard Documentation</a> ",
+      "type": "Html"
+     },
+     {
+      "name": "fontSize",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "color",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
    }
   ]
  },
@@ -1507,6 +1641,34 @@
     ]
    },
    {
+    "id": "bc2e9523-dacf-c7f9-3f30-7da4e5da823c",
+    "type": "ComponentsJavascriptParameter",
+    "typeDesc": "Custom parameter",
+    "parent": "GENERIC",
+    "properties": [
+     {
+      "name": "name",
+      "value": "BaseMonthParameterOffset1",
+      "type": "Id"
+     },
+     {
+      "name": "javaScript",
+      "value": "function f() {\n    return getBaseMonth(1);\n} ",
+      "type": "JavaScript"
+     },
+     {
+      "name": "parameterViewRole",
+      "value": "unused",
+      "type": "parameterViewRoleCustom"
+     },
+     {
+      "name": "bookmarkable",
+      "value": "false",
+      "type": "Boolean"
+     }
+    ]
+   },
+   {
     "id": "CHARTS",
     "name": "Charts",
     "type": "Label",
@@ -1552,8 +1714,8 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "height",
+      "value": "300",
       "type": "Integer"
      },
      {
@@ -1562,13 +1724,13 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "300",
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -1592,12 +1754,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -2817,23 +2979,13 @@
      },
      {
       "name": "parameters",
-      "value": "[[\"AnnualTrendDateRangeParameter\",\"AnnualTrendDateRangeParameter\"],[\"AgencyParameter\",\"AgencyParameter\"],[\"BaseMonthParameter\",\"BaseMonthParameter\"],[\"TownParameter\",\"TownParameter\"]]",
+      "value": "[[\"AnnualTrendDateRangeParameter\",\"AnnualTrendDateRangeParameter\"],[\"AgencyParameter\",\"AgencyParameter\"],[\"BaseMonthParameter\",\"BaseMonthParameterOffset1\"],[\"TownParameter\",\"TownParameter\"]]",
       "type": "ValuesArray"
      },
      {
       "name": "dataSource",
       "value": "AnnualTrendQuery",
       "type": "Datasource"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "width",
-      "value": "400",
-      "type": "Integer"
      },
      {
       "name": "height",
@@ -2843,6 +2995,16 @@
      {
       "name": "priority",
       "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "width",
+      "value": "400",
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -2866,12 +3028,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -4130,8 +4292,13 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "width",
+      "value": "400",
       "type": "Integer"
      },
      {
@@ -4140,13 +4307,8 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "width",
-      "value": "400",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -4170,12 +4332,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -4923,6 +5085,11 @@
       "type": "JavaScript"
      },
      {
+      "name": "colFormats",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
       "name": "colWidths",
       "value": "[]",
       "type": "Array"
@@ -4944,11 +5111,6 @@
      },
      {
       "name": "colSortable",
-      "value": "[]",
-      "type": "Array"
-     },
-     {
-      "name": "colFormats",
       "value": "[]",
       "type": "Array"
      },
@@ -5008,14 +5170,14 @@
       "type": "Datasource"
      },
      {
-      "name": "sortBy",
-      "value": "[]",
-      "type": "SortByArray"
-     },
-     {
       "name": "sDom",
       "value": "",
       "type": "JavaScript"
+     },
+     {
+      "name": "sortBy",
+      "value": "[]",
+      "type": "SortByArray"
      },
      {
       "name": "refreshPeriod",
@@ -5812,12 +5974,12 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
       "name": "query",
-      "value": "select \"All Agencies\" as AgencyName union\nselect distinct AgencyName from Agency",
+      "value": " select \"All Agencies\" as AgencyName union\n select * from (select AgencyName from Agency order by AgencyName) as aa",
       "type": "SqlQuery"
      },
      {
@@ -5878,7 +6040,7 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
@@ -5944,7 +6106,7 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
@@ -6024,12 +6186,12 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
       "name": "catalog",
-      "value": "mondrian:/OJBC+Analytics",
+      "value": "mondrian:/OJBC+Analytics+Demo",
       "type": "MondrianCatalog"
      },
      {
@@ -6100,12 +6262,12 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
       "name": "catalog",
-      "value": "mondrian:/OJBC+Analytics",
+      "value": "mondrian:/OJBC+Analytics+Demo",
       "type": "MondrianCatalog"
      },
      {
@@ -6176,12 +6338,12 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
       "name": "catalog",
-      "value": "mondrian:/OJBC+Analytics",
+      "value": "mondrian:/OJBC+Analytics+Demo",
       "type": "MondrianCatalog"
      },
      {
@@ -6236,5 +6398,5 @@
    }
   ]
  },
- "filename": "/public/VJISS Dashboards/IncidentDashboard.cdfde"
+ "filename": "/public/OJB Demo Dashboards/IncidentDashboard.cdfde"
 }
