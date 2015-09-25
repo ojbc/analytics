@@ -22,6 +22,12 @@
 			<Level name="County" visible="true" table="County" column="CountyName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Reporting System">
+		<Hierarchy name="Reporting System" visible="true" hasAll="true" allMemberName="All Systems" allMemberCaption="All Systems" primaryKey="ReportingSystemID">
+			<Table name="ReportingSystem"/>
+			<Level name="ReportingSystem" visible="true" table="ReportingSystem" column="ReportingSystemDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Region">
 		<Hierarchy name="Region" visible="true" hasAll="true" allMemberName="All Regions" allMemberCaption="All Regions" primaryKey="RegionID">
 			<Table name="Region"/>
@@ -165,6 +171,12 @@
 		<Hierarchy name="Disposition Offense Type" visible="true" hasAll="true" allMemberName="All Offense Types" allMemberCaption="All Offense Types" primaryKey="DispositionOffenseTypeID">
 			<Table name="DispositionOffenseType"/>
 			<Level name="Offense Type" visible="true" column="DispositionOffenseTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="IncidentType2" caption="Original Incident Type">
+		<Hierarchy name="IncidentType" visible="true" hasAll="true" allMemberName="All Types" allMemberCaption="All Types" primaryKey="IncidentTypeID" caption="Incident Type">
+			<Table name="IncidentType2"/>
+			<Level name="IncidentType" visible="true" table="IncidentType" column="IncidentTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Incident Type">
@@ -341,6 +353,7 @@
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="ReportingAgencyID" highCardinality="false"/>
 		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
 		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="TimeID" highCardinality="false"/>
+		<DimensionUsage source="Reporting System" name="Reporting System" visible="true" foreignKey="ReportingSystemID" highCardinality="false"/>
 		<Measure name="IncidentCount" column="IncidentID" datatype="Integer" aggregator="distinct-count" caption="Incident Count" visible="true"/>
 	</Cube>
 	<Cube name="Incident_Opt" caption="Incident Optimized" visible="false" cache="true" enabled="true">
@@ -382,6 +395,35 @@
 		<DimensionUsage source="Town" name="Town" visible="true" foreignKey="TownID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="ReportingAgencyID" highCardinality="false"/>
 		<DimensionUsage source="Incident Type" name="Incident Type" visible="true" foreignKey="IncidentTypeID" highCardinality="false"/>
+		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
+		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="HourTimeID" highCardinality="false"/>
+		<Measure name="IncidentCount" column="IncidentCount" datatype="Integer" aggregator="sum" caption="Incident Count" visible="true"/>
+	</Cube>
+	<Cube name="IncidentType2Involvement" caption="Original Incident Type Involvement" visible="true" cache="true" enabled="true">
+		<View alias="IncidentType2Involvement">
+		    <SQL dialect="mysql">
+        <![CDATA[ select Incident.IncidentID, TownID, ReportingAgencyID, IncidentTypeID, DateID, TimeID
+                    from Incident, IncidentType2Association where Incident.IncidentID=IncidentType2Association.IncidentID]]>
+			</SQL>
+		</View>
+		<DimensionUsage source="Town" name="Town" visible="true" foreignKey="TownID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="ReportingAgencyID" highCardinality="false"/>
+		<DimensionUsage source="Incident Type" name="IncidentType2" visible="true" foreignKey="IncidentTypeID" highCardinality="false"/>
+		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
+		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="TimeID" highCardinality="false"/>
+		<Measure name="IncidentCount" column="IncidentID" datatype="Integer" aggregator="distinct-count" caption="Incident Count" visible="true"/>
+	</Cube>
+	<Cube name="IncidentType2Involvement_Opt" caption="Original Incident Type Involvement Optimized" visible="false" cache="true" enabled="true">
+	<!-- create table IncidentOptHourType2 as select DateID, if(TimeID=-1, -1, (TimeID div 10000)*10000) as HourTimeID, TownID, ReportingAgencyID, IncidentTypeID, count(IncidentTypeAssociationID) as IncidentCount from Incident, IncidentType2Association where Incident.IncidentID=IncidentType2Association.IncidentID  group by DateID, HourTimeID, TownID, ReportingAgencyID, IncidentTypeID;
+	create index IncidentOptHourType2_Agency on IncidentOptHourType (ReportingAgencyID);
+	create index IncidentOptHourType2_Type on IncidentOptHourType (IncidentTypeID);
+	create index IncidentOptHourType2_Date on IncidentOptHourType (DateID);
+	create index IncidentOptHourType2_Town on IncidentOptHourType (TownID);
+	-->
+		<Table name="IncidentOptHourType2"/>
+		<DimensionUsage source="Town" name="Town" visible="true" foreignKey="TownID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="ReportingAgencyID" highCardinality="false"/>
+		<DimensionUsage source="Incident Type" name="IncidentType2" visible="true" foreignKey="IncidentTypeID" highCardinality="false"/>
 		<DimensionUsage source="Date" name="Date" visible="true" foreignKey="DateID" highCardinality="false"/>
 		<DimensionUsage source="Time Of Day" name="Time Of Day" visible="true" foreignKey="HourTimeID" highCardinality="false"/>
 		<Measure name="IncidentCount" column="IncidentCount" datatype="Integer" aggregator="sum" caption="Incident Count" visible="true"/>
