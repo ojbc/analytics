@@ -28,5 +28,7 @@ loadIncidentTypeDimensionTable <- function(conn) {
   IncidentType <- data.table(IncidentTypeID=1:length(incidentType), IncidentTypeDescription=incidentType, IncidentCategoryID=c(1,1,1,2,3,3,4))
   dbSendQuery(conn, "delete from IncidentType")
   dbWriteTable(conn, "IncidentType", IncidentType, append=TRUE, row.names=FALSE)
+  dbSendQuery(conn, "delete from IncidentType2")
+  dbWriteTable(conn, "IncidentType2", select(IncidentType, -IncidentCategoryID), append=TRUE, row.names=FALSE)
   IncidentType
 }
