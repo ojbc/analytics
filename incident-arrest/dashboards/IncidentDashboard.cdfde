@@ -1263,140 +1263,6 @@
       "type": "String"
      }
     ]
-   },
-   {
-    "id": "c87be915-1c2d-a976-1c74-207784f66ea2",
-    "type": "LayoutRow",
-    "typeDesc": "Row",
-    "parent": "UnIqEiD",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     },
-     {
-      "name": "cssClass",
-      "value": "",
-      "type": "String"
-     }
-    ]
-   },
-   {
-    "id": "b7c64d86-2623-0a5e-32e2-abf635b33439",
-    "type": "LayoutBootstrapColumn",
-    "typeDesc": "Column",
-    "parent": "c87be915-1c2d-a976-1c74-207784f66ea2",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "bootstrapExtraSmall",
-      "value": "12",
-      "type": "String"
-     },
-     {
-      "name": "bootstrapSmall",
-      "value": "",
-      "type": "String"
-     },
-     {
-      "name": "bootstrapMedium",
-      "value": "",
-      "type": "String"
-     },
-     {
-      "name": "bootstrapLarge",
-      "value": "",
-      "type": "String"
-     },
-     {
-      "name": "bootstrapCssClass",
-      "value": "",
-      "type": "String"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     },
-     {
-      "name": "cssClass",
-      "value": "",
-      "type": "String"
-     }
-    ]
-   },
-   {
-    "id": "7857bb84-cbd3-7a40-3f93-a4cca925f93c",
-    "type": "LayoutHtml",
-    "typeDesc": "Html",
-    "parent": "b7c64d86-2623-0a5e-32e2-abf635b33439",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "html",
-      "value": "<a target=\"_blank\" href=\"/ojbc-dashboard-docs/incident-dashboard-doc.html\">Dashboard Documentation</a> ",
-      "type": "Html"
-     },
-     {
-      "name": "fontSize",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "color",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "cssClass",
-      "value": "",
-      "type": "String"
-     }
-    ]
    }
   ]
  },
@@ -1714,8 +1580,8 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -1724,13 +1590,13 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "300",
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "300",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -1754,12 +1620,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -2988,8 +2854,13 @@
       "type": "Datasource"
      },
      {
-      "name": "width",
-      "value": "400",
+      "name": "priority",
+      "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "height",
+      "value": "300",
       "type": "Integer"
      },
      {
@@ -2998,13 +2869,8 @@
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
-      "type": "Integer"
-     },
-     {
-      "name": "height",
-      "value": "300",
+      "name": "width",
+      "value": "400",
       "type": "Integer"
      },
      {
@@ -3028,12 +2894,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
@@ -4292,8 +4158,13 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "300",
+      "name": "width",
+      "value": "400",
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -4302,13 +4173,8 @@
       "type": "Integer"
      },
      {
-      "name": "width",
-      "value": "400",
-      "type": "Integer"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "height",
+      "value": "300",
       "type": "Integer"
      },
      {
@@ -4332,12 +4198,12 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
+      "name": "postFetch",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
+      "name": "postExecution",
       "value": "",
       "type": "JavaScript"
      },
@@ -5085,11 +4951,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "colWidths",
-      "value": "[]",
-      "type": "Array"
-     },
-     {
       "name": "colHeaders",
       "value": "[\"Agency Case #\",\"Incident Type\",\"Date/Time\",\"Street Address\",\"Town\"]",
       "type": "Array"
@@ -5111,6 +4972,11 @@
      },
      {
       "name": "colFormats",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "colWidths",
       "value": "[]",
       "type": "Array"
      },
@@ -5170,14 +5036,14 @@
       "type": "Datasource"
      },
      {
-      "name": "sortBy",
-      "value": "[]",
-      "type": "SortByArray"
-     },
-     {
       "name": "sDom",
       "value": "",
       "type": "JavaScript"
+     },
+     {
+      "name": "sortBy",
+      "value": "[]",
+      "type": "SortByArray"
      },
      {
       "name": "refreshPeriod",
@@ -6045,7 +5911,7 @@
      },
      {
       "name": "query",
-      "value": "select IncidentCaseNumber, IncidentTypeDescription, concat(DateMMDDYYYY, ' ', lpad(Hour, 2, '0'), ':', lpad(Minute, 2, '0'), ':', lpad(Second, 2, '0')) as DateTimeString,\nIncidentLocationStreetAddress, TownDescription\nfrom Incident, IncidentType, IncidentTypeAssociation, Time, Date, Agency, Town\nwhere Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and\nIncidentTypeAssociation.IncidentTypeID=IncidentType.IncidentTypeID and\nIncident.ReportingAgencyID=AgencyID and\nIncident.TownID=Town.TownID and\nIncident.IncidentID=IncidentTypeAssociation.IncidentID\nand (if(${AgencyParameter}=\"All Agencies\", 1, AgencyName=${AgencyParameter}))\nand (if(${TownParameter}=\"All Towns\", 1, TownDescription=${TownParameter}))\nand IncidentDateTime < str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\")\nand IncidentDateTime > date_sub(str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\"),\n    interval ${IncidentListTimePeriodParameter} hour)",
+      "value": "select IncidentCaseNumber, IncidentTypeDescription,\ndate_format(IncidentDateTime, \"%Y-%m-%d %H:%i\") as DateTimeString,\nIncidentLocationStreetAddress, TownDescription\nfrom Incident, IncidentType, IncidentTypeAssociation, Time, Date, Agency, Town\nwhere Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and\nIncidentTypeAssociation.IncidentTypeID=IncidentType.IncidentTypeID and\nIncident.ReportingAgencyID=AgencyID and\nIncident.TownID=Town.TownID and\nIncident.IncidentID=IncidentTypeAssociation.IncidentID\nand (if(${AgencyParameter}=\"All Agencies\", 1, AgencyName=${AgencyParameter}))\nand (if(${TownParameter}=\"All Towns\", 1, TownDescription=${TownParameter}))\nand IncidentDateTime < str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\")\nand IncidentDateTime > date_sub(str_to_date(${BaseDateParameter}, \"%Y-%m-%d-%H-%i-%s\"),\n    interval ${IncidentListTimePeriodParameter} hour)",
       "type": "SqlQuery"
      },
      {
