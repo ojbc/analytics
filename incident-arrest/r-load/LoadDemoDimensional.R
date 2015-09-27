@@ -48,6 +48,8 @@ county_df <- arrange(filter(county_shp@data, STATEFP==stateFips), GEOID)
 #conn <- dbConnect(MySQL(), host="dw", dbname="ojbc_analytics_demo", username="root")
 conn <- dbConnect(MySQL(), host="localhost", dbname="ojbc_analytics_demo", username="root")
 
+dbSendQuery(conn, "set foreign_key_checks=0")
+
 # clear out fact tables
 dbSendQuery(conn, "delete from IncidentTypeAssociation")
 dbSendQuery(conn, "delete from IncidentType2Association")
