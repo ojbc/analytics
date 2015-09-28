@@ -2,25 +2,25 @@
 <CDADescriptor>
    <DataSources>
       <Connection id="AgencyQuery" type="sql.jndi">
-         <Jndi>ojbc_analytics</Jndi>
+         <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
       <Connection id="IncidentListQuery" type="sql.jndi">
-         <Jndi>ojbc_analytics</Jndi>
+         <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
       <Connection id="TownQuery" type="sql.jndi">
-         <Jndi>ojbc_analytics</Jndi>
+         <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
       <Connection id="Top20CallsQuery" type="mondrian.jndi">
-         <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics</Jndi>
+         <Catalog>mondrian:/OJBC+Analytics+Demo</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
       <Connection id="AnnualTrendQuery" type="mondrian.jndi">
-         <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics</Jndi>
+         <Catalog>mondrian:/OJBC+Analytics+Demo</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
       <Connection id="HeatGridQuery" type="mondrian.jndi">
-         <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics</Jndi>
+         <Catalog>mondrian:/OJBC+Analytics+Demo</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
    </DataSources>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="AgencyQuery"
@@ -29,7 +29,7 @@
       <Columns/>
       <Parameters/>
       <Query>select "All Agencies" as AgencyName union
-select distinct AgencyName from Agency</Query>
+ select * from (select AgencyName from Agency order by AgencyName) as aa</Query>
    </DataAccess>
    <DataAccess access="public" cache="true" cacheDuration="3600"
                connection="IncidentListQuery"
@@ -42,8 +42,8 @@ select distinct AgencyName from Agency</Query>
          <Parameter default="" name="BaseDateParameter" type="String"/>
          <Parameter default="All Towns" name="TownParameter" type="String"/>
       </Parameters>
-      <Query>select IncidentCaseNumber, IncidentTypeDescription, DateMMDDYYYY, 
-convert(concat(Hour, ':', lpad(Minute, 2, '0')), char(5)) as TimeString, 
+      <Query>select IncidentCaseNumber, IncidentTypeDescription,
+date_format(IncidentDateTime, "%Y-%m-%d %H:%i") as DateTimeString,
 IncidentLocationStreetAddress, TownDescription
 from Incident, IncidentType, IncidentTypeAssociation, Time, Date, Agency, Town
 where Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID and
@@ -78,7 +78,7 @@ select distinct TownDescription from Town</Query>
       </Parameters>
       <Query>SELECT {[Measures].[IncidentCount]} ON COLUMNS,
 order({topcount([Incident Type.IncidentType].[All Types].Children, 20, [Measures].[IncidentCount])}, [Measures].[IncidentCount], asc) ON ROWS
-FROM [IncidentTypeInvolvement_Opt]
+FROM [IncidentType2Involvement_Opt]
 WHERE CrossJoin({[Agency].[${AgencyParameter}]} * {[Town].[${TownParameter}]},
 {parallelperiod([Date.CalDate].[Date], ${Top20CallsDateRangeParameter}, [Date.CalDate].[${BaseDateParameter}]):[Date.CalDate].[${BaseDateParameter}]})</Query>
    </DataAccess>

@@ -20,7 +20,7 @@
      },
      {
       "name": "resourceCode",
-      "value": "function getBaseDate() {\n    \n    // Use this line for real deployment\n    var d = new Date();\n    \n    // Use this line for testing using \"dummy\" data\n    //var d = new Date(\"2013-01-02 10:10:10\");\n    \n    var month = '' + (d.getMonth() + 1);\n    var day = '' + d.getDate();\n    var year = d.getFullYear();\n\n    if (month.length < 2) month = '0' + month;\n    if (day.length < 2) day = '0' + day;\n\n    return [year, month, day].join('-');\n    \n}\n\nfunction getBaseYear() {\n    var dateString = getBaseDate();\n    return dateString.split(\"-\")[0];\n}\n\nfunction getSelectedOrCurrentYear() {\n    var val = Dashboards.getParameterValue(\"YearParameter\");\n    if (\"All Years\" == val) {\n        return getBaseYear();\n    }\n    return val;\n} \n\nfunction getSelectedOrCurrentYearFormatted() {\n    var val = Dashboards.getParameterValue(\"YearParameter\");\n    if (\"All Years\" == val) {\n        return getBaseYear() + \" (Current Year)\";\n    }\n    return val;\n}\n\nfunction addChartResizer(chart) {\n    var myself = chart;\n    // Set initial width to match the placeholder\n    myself.chartDefinition.width = myself.placeholder().width();\n\n    // Attach the resize handler only on the first execution of the chart component\n    if (!chart.resizeHandlerAttached) {\n        //Dashboards.log(\"Attaching resize handler\");\n        // Ensure render is only triggered after resize events have stopped\n        var debouncedResize = _.debounce(function () {\n\n            // Show chart again.\n            myself.placeholder().children().css('visibility', 'visible');\n\n            // Change chart width\n            myself.chartDefinition.width = myself.placeholder().width();\n            //Dashboards.log(\"Setting width on resize=\" + myself.chartDefinition.width);\n            myself.render(myself.query.lastResults());\n        }, 200);\n\n        // Attach resize handler\n        $(window).resize(function () {\n\n            //Dashboards.log(\"Resize?\");\n            //Dashboards.log(\"myself.chartDefinition.width=\" + myself.chartDefinition.width);\n            //Dashboards.log(\"myself.placeholder().width()=\" + myself.placeholder().width());\n\n            // Only trigger resize if the container has changed width\n            if (myself.chartDefinition.width != myself.placeholder().width()) {\n\n                // Temporarily hide chart so that overflow does not happen\n                myself.placeholder().children().css('visibility', 'hidden');\n\n                // Trigger the resize with debounce\n                debouncedResize();\n            }\n        });\n\n        chart.resizeHandlerAttached = true;\n    }\n\n} ",
+      "value": "function getBaseDate() {\n    \n    // Use this line for real deployment\n    //var d = new Date();\n    \n    // Use this line for testing using \"dummy\" data\n    var d = new Date(\"2013-01-02 10:10:10\");\n    \n    var month = '' + (d.getMonth() + 1);\n    var day = '' + d.getDate();\n    var year = d.getFullYear();\n\n    if (month.length < 2) month = '0' + month;\n    if (day.length < 2) day = '0' + day;\n\n    return [year, month, day].join('-');\n    \n}\n\nfunction getBaseYear() {\n    var dateString = getBaseDate();\n    return dateString.split(\"-\")[0];\n}\n\nfunction getSelectedOrCurrentYear() {\n    var val = Dashboards.getParameterValue(\"YearParameter\");\n    if (\"All Years\" == val) {\n        return getBaseYear();\n    }\n    return val;\n} \n\nfunction getSelectedOrCurrentYearFormatted() {\n    var val = Dashboards.getParameterValue(\"YearParameter\");\n    if (\"All Years\" == val) {\n        return getBaseYear() + \" (Current Year)\";\n    }\n    return val;\n}\n\nfunction addChartResizer(chart) {\n    var myself = chart;\n    // Set initial width to match the placeholder\n    myself.chartDefinition.width = myself.placeholder().width();\n\n    // Attach the resize handler only on the first execution of the chart component\n    if (!chart.resizeHandlerAttached) {\n        //Dashboards.log(\"Attaching resize handler\");\n        // Ensure render is only triggered after resize events have stopped\n        var debouncedResize = _.debounce(function () {\n\n            // Show chart again.\n            myself.placeholder().children().css('visibility', 'visible');\n\n            // Change chart width\n            myself.chartDefinition.width = myself.placeholder().width();\n            //Dashboards.log(\"Setting width on resize=\" + myself.chartDefinition.width);\n            myself.render(myself.query.lastResults());\n        }, 200);\n\n        // Attach resize handler\n        $(window).resize(function () {\n\n            //Dashboards.log(\"Resize?\");\n            //Dashboards.log(\"myself.chartDefinition.width=\" + myself.chartDefinition.width);\n            //Dashboards.log(\"myself.placeholder().width()=\" + myself.placeholder().width());\n\n            // Only trigger resize if the container has changed width\n            if (myself.chartDefinition.width != myself.placeholder().width()) {\n\n                // Temporarily hide chart so that overflow does not happen\n                myself.placeholder().children().css('visibility', 'hidden');\n\n                // Trigger the resize with debounce\n                debouncedResize();\n            }\n        });\n\n        chart.resizeHandlerAttached = true;\n    }\n\n} ",
       "type": "Resource"
      }
     ]
@@ -162,7 +162,7 @@
      },
      {
       "name": "html",
-      "value": "<h3 align=\"center\">Drug Crimes Dashboard</h3> ",
+      "value": "<div style=\"width: 100%; padding: 15px; text-align: center;position: relative; font-size: 150%; font-weight: bold\">\n    Drug Crime Dashboard\n    <div style=\"position: absolute; right: 0;top:15px; font-size: 12px; font-weight: normal\">\n    <a href=\"/ojbc-dashboard-docs/drug-crime-dashboard-doc.html\" target=\"_blank\">Dashboard Documentation</a></div>\n</div> ",
       "type": "Html"
      },
      {
@@ -3456,8 +3456,8 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -3466,13 +3466,13 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -4730,8 +4730,8 @@
       "type": "Datasource"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -4740,13 +4740,13 @@
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -6004,8 +6004,8 @@
       "type": "Datasource"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
@@ -6014,13 +6014,13 @@
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -6040,7 +6040,7 @@
      },
      {
       "name": "preExecution",
-      "value": "function f() {\n    var cd = this.chartDefinition;\n    cd.legend = {\n        scenes: {\n           item: {\n                value: function() {\n                    var valueVar = this.base();\n                    valueVar.label = valueVar.label.split(\"~\")[0].trim();\n                    return valueVar;\n                }\n            }\n        }\n    }\n    addChartResizer(this);\n    \n    var cccOptions = this.chartDefinition;\n\n    // For changing extension points, a little more work is required:\n    var eps = Dashboards.propertiesArrayToObject(cccOptions.extensionPoints);\n\n    // add extension points:\n    eps.bar_fillStyle = function getColor() {\n        var val = this.scene.vars.category.value;\n        if (val.search(\"Male\") != -1) {\n            return '#225ea8';\n        } else {\n            return '#df65b0';\n        }\n    };\n\n    // Serialize back eps into cccOptions\n    cccOptions.extensionPoints = Dashboards.objectToPropertiesArray(eps);\n    \n} ",
+      "value": "function f() {\n    var cd = this.chartDefinition;\n    cd.legend = {\n        scenes: {\n           item: {\n                value: function() {\n                    var valueVar = this.base();\n                    valueVar.label = valueVar.label.split(\"~\")[0].trim();\n                    return valueVar;\n                }\n            }\n        }\n    }\n    addChartResizer(this);\n    \n    var cccOptions = this.chartDefinition;\n\n    // For changing extension points, a little more work is required:\n    var eps = Dashboards.propertiesArrayToObject(cccOptions.extensionPoints);\n\n    // add extension points:\n    eps.bar_fillStyle = function getColor() {\n        var val = this.scene.vars.category.value;\n        if (val.search(\"Male\") != -1) {\n            return '#238443'; // green\n        } else {\n            return '#E6DD24'; // yellow\n        }\n    };\n\n    // Serialize back eps into cccOptions\n    cccOptions.extensionPoints = Dashboards.objectToPropertiesArray(eps);\n    \n} ",
       "type": "JavaScript"
      },
      {
@@ -7278,8 +7278,8 @@
       "type": "Datasource"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "height",
+      "value": "250",
       "type": "Integer"
      },
      {
@@ -7288,13 +7288,13 @@
       "type": "Integer"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
-      "name": "height",
-      "value": "250",
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -8556,7 +8556,7 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
@@ -8622,7 +8622,7 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
@@ -8688,7 +8688,7 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
@@ -8768,12 +8768,12 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
       "name": "catalog",
-      "value": "mondrian:/OJBC+Analytics",
+      "value": "mondrian:/OJBC+Analytics+Demo",
       "type": "MondrianCatalog"
      },
      {
@@ -8844,12 +8844,12 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
       "name": "catalog",
-      "value": "mondrian:/OJBC+Analytics",
+      "value": "mondrian:/OJBC+Analytics+Demo",
       "type": "MondrianCatalog"
      },
      {
@@ -8920,12 +8920,12 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
       "name": "catalog",
-      "value": "mondrian:/OJBC+Analytics",
+      "value": "mondrian:/OJBC+Analytics+Demo",
       "type": "MondrianCatalog"
      },
      {
@@ -8996,12 +8996,12 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
       "name": "catalog",
-      "value": "mondrian:/OJBC+Analytics",
+      "value": "mondrian:/OJBC+Analytics+Demo",
       "type": "MondrianCatalog"
      },
      {
@@ -9072,12 +9072,12 @@
      },
      {
       "name": "jndi",
-      "value": "ojbc_analytics",
+      "value": "ojbc_analytics_demo",
       "type": "Jndi"
      },
      {
       "name": "catalog",
-      "value": "mondrian:/OJBC+Analytics",
+      "value": "mondrian:/OJBC+Analytics+Demo",
       "type": "MondrianCatalog"
      },
      {
@@ -9132,5 +9132,5 @@
    }
   ]
  },
- "filename": "/public/VJISS Dashboards/DrugCrimeDashboard.cdfde"
+ "filename": "/public/OJB Demo Dashboards/DrugCrimeDashboard.cdfde"
 }

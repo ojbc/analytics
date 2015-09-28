@@ -2,20 +2,20 @@
 <CDADescriptor>
    <DataSources>
       <Connection id="EligibleArrestQuery" type="mondrian.jndi">
-         <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics</Jndi>
+         <Catalog>mondrian:/OJBC+Analytics+Demo</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
       <Connection id="NeedsQuery" type="mondrian.jndi">
-         <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics</Jndi>
+         <Catalog>mondrian:/OJBC+Analytics+Demo</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
       <Connection id="PretrialMonitoringQuery" type="mondrian.jndi">
-         <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics</Jndi>
+         <Catalog>mondrian:/OJBC+Analytics+Demo</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
       <Connection id="PretrialRecidivismQuery" type="mondrian.jndi">
-         <Catalog>mondrian:/OJBC+Analytics</Catalog>
-         <Jndi>ojbc_analytics</Jndi>
+         <Catalog>mondrian:/OJBC+Analytics+Demo</Catalog>
+         <Jndi>ojbc_analytics_demo</Jndi>
       </Connection>
    </DataSources>
    <DataAccess access="public" cache="true" cacheDuration="3600"

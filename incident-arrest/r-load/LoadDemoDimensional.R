@@ -48,8 +48,11 @@ county_df <- arrange(filter(county_shp@data, STATEFP==stateFips), GEOID)
 #conn <- dbConnect(MySQL(), host="dw", dbname="ojbc_analytics_demo", username="root")
 conn <- dbConnect(MySQL(), host="localhost", dbname="ojbc_analytics_demo", username="root")
 
+dbSendQuery(conn, "set foreign_key_checks=0")
+
 # clear out fact tables
 dbSendQuery(conn, "delete from IncidentTypeAssociation")
+dbSendQuery(conn, "delete from IncidentType2Association")
 dbSendQuery(conn, "delete from Incident")
 dbSendQuery(conn, "delete from Arrest")
 dbSendQuery(conn, "delete from Charge")
@@ -114,6 +117,11 @@ raceProbs <- raceProbs/sum(raceProbs)
 readyCashCategory <- c("Larceny-Other", "Burglary", "Theft From Motor Vehicle", "Theft from Building", "Shoplifting", "None")
 ReadyCashOffenseCategory <- data.table(ReadyCashOffenseCategoryID=1:length(readyCashCategory), ReadyCashOffenseCategoryDescription=readyCashCategory)
 dbWriteTable(conn, "ReadyCashOffenseCategory", ReadyCashOffenseCategory, append=TRUE, row.names=FALSE)
+
+reportingSystems <- c("System A", "System B", "System C", "Unknown")
+ReportingSystem <- data.table(ReportingSystemID=1:length(reportingSystems), ReportingSystemDescription=reportingSystems)
+dbWriteTable(conn, "ReportingSystem", ReportingSystem, append=TRUE, row.names=FALSE)
+reportingSystemProbs <- c(.5, .3, .15, .05)
 
 OffenseType <- read.xlsx2("OffenseType.xlsx", sheetIndex=1)
 OffenseType <- select(
@@ -507,17 +515,18 @@ ReportingAgencyID=sample(agencyID, size=demoIncidentCount, replace=TRUE)
 countyProb <- getCountyProbs()
 CountyID <- sample(countyID, size=demoIncidentCount, prob=countyProb, replace = T)
 coords <- getRandomCoordsInCounties(CountyID)
+ReportingSystemID <- sample(1:length(reportingSystemProbs), size=demoIncidentCount, prob=reportingSystemProbs, replace=T)
 IncidentLocationLatitude <- coords$lat
 IncidentLocationLongitude <- coords$long
 IncidentNumber <- paste0("INC", IncidentID)
 Town <- sample(townID, size=demoIncidentCount, replace=TRUE)
 Street <- paste(1:demoIncidentCount, c("Main", "Maple", "Dorset", "Williston", "Oak", "Springfield", "Elm"))
 
-Incident <- data.table(IncidentID, DateID, TimeID, ReportingAgencyID,
+Incident <- data.table(IncidentID, DateID, TimeID, ReportingAgencyID, ReportingSystemID,
                        CountyID, IncidentLocationLatitude, IncidentLocationLongitude, IncidentLocationStreetAddress=Street,
                        TownID=Town, IncidentCaseNumber=IncidentNumber)
 
-IncidentTypeAssociation <- bind_rows(Map(function(incidentID) {
+createIncidentTypeAssociationForIncident <- function(incidentID) {
   typeCount <- rpois(n=1, lambda=1)
   # reasonable limit...no more than five different types with one incident
   if (typeCount > 5) {
@@ -531,11 +540,16 @@ IncidentTypeAssociation <- bind_rows(Map(function(incidentID) {
   bind_rows(Map(function(typeID) {
     data.frame(IncidentID=c(incidentID), IncidentTypeID=c(typeID))
   }, types))
-}, Incident$IncidentID))
+}
+
+IncidentTypeAssociation <- bind_rows(Map(createIncidentTypeAssociationForIncident, Incident$IncidentID))
 IncidentTypeAssociation$IncidentTypeAssociationID <- 1:nrow(IncidentTypeAssociation)
+IncidentType2Association <- bind_rows(Map(createIncidentTypeAssociationForIncident, Incident$IncidentID))
+IncidentType2Association$IncidentTypeAssociationID <- 1:nrow(IncidentType2Association)
 
 dbWriteTable(conn, "Incident", Incident, append=TRUE, row.names=FALSE)
 dbWriteTable(conn, "IncidentTypeAssociation", data.table(IncidentTypeAssociation), append=TRUE, row.names=FALSE)
+dbWriteTable(conn, "IncidentType2Association", data.table(IncidentType2Association), append=TRUE, row.names=FALSE)
 
 dbClearResult(dbSendQuery(conn, paste0("update Incident join Date join Time on Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID ",
                                        "set IncidentDateTime=str_to_date(if(Incident.TimeID=-1, concat(Year, '-', Month, '-', Day, '-0-0-0'), ",
@@ -561,6 +575,17 @@ dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType_Date on Incide
 dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType_Agency on IncidentOptHourType (ReportingAgencyID)"))
 dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType_Town on IncidentOptHourType (TownID)"))
 dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType_Type on IncidentOptHourType (IncidentTypeID)"))
+
+dbClearResult(dbSendQuery(conn, "drop table if exists IncidentOptHourType2"))
+dbClearResult(dbSendQuery(conn, paste0("create table IncidentOptHourType2 as select DateID, ",
+                                       "if(TimeID=-1, -1, (TimeID div 10000)*10000) as HourTimeID, TownID, ReportingAgencyID, ",
+                                       "IncidentTypeID, count(IncidentTypeAssociationID) as IncidentCount ",
+                                       "from Incident, IncidentType2Association where Incident.IncidentID=IncidentType2Association.IncidentID ",
+                                       "group by DateID, HourTimeID, TownID, ReportingAgencyID, IncidentTypeID")))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType2_Date on IncidentOptHourType (DateID)"))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType2_Agency on IncidentOptHourType (ReportingAgencyID)"))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType2_Town on IncidentOptHourType (TownID)"))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType2_Type on IncidentOptHourType (IncidentTypeID)"))
 
 dbClearResult(dbSendQuery(conn, paste0("insert into LoadHistory (LoadID, LatestStagingUpdateTime, LoadStartTime, LoadEndTime) ",
                                        "values (1,",
