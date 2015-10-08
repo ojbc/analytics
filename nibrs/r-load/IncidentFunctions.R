@@ -3,25 +3,31 @@
 library(lubridate)
 library(dplyr)
 library(stringr)
+library(RMySQL)
 
-addIncidentID <- function(rawIncidentsDataFrame) {
-  IncidentID <- 1:(nrow(rawIncidentsDataFrame))
-  rawIncidentsDataFrame$IncidentID <- IncidentID
+addAdministrativeSegmentID <- function(rawIncidentsDataFrame) {
+  AdministrativeSegmentID <- 1:(nrow(rawIncidentsDataFrame))
+  rawIncidentsDataFrame$AdministrativeSegmentID <- AdministrativeSegmentID
   rawIncidentsDataFrame
 }
 
-writeIncidents <- function(conn, rawIncidentsDataFrame) {
+truncateIncidents <- function(conn) {
+  dbClearResult(dbSendQuery(conn, "truncate AdministrativeSegment"))
+}
+
+writeIncidents <- function(conn, rawIncidentsDataFrame, currentMonth, currentYear, segmentActionTypeTypeID) {
   
-  currentMonth <- formatC(month(Sys.Date()), width=2, flag="0")
-  currentYear <- year(Sys.Date())
+  writeLines(paste0("Processing ", nrow(rawIncidentsDataFrame), " raw incidents"))
   
   AdministrativeSegment <- rawIncidentsDataFrame %>%
-    select(IncidentID, ORI, IncidentNumber=INCNUM, INCDATE, IncidentHour=V1007, ClearedExceptionallyTypeID=V1013, ReportDateIndicator=V1006) %>%
+    select(AdministrativeSegmentID, ORI, IncidentNumber=INCNUM, INCDATE, IncidentHour=V1007, ClearedExceptionallyTypeID=V1013, ReportDateIndicator=V1006) %>%
     mutate(IncidentDate=as.Date(ifelse(INCDATE==-5, NA, as.Date(as.character(INCDATE), format="%Y%m%d")), origin="1970-01-01"),
-           MonthOfTape=currentMonth, YearOfTape=currentYear, CityIndicator=NA, SegmentActionTypeTypeID=9) %>%
+           MonthOfTape=currentMonth, YearOfTape=currentYear, CityIndicator=NA, SegmentActionTypeTypeID=segmentActionTypeTypeID) %>%
     select(-INCDATE)
   
-  # todo: write to db
+  writeLines(paste0("Writing ", nrow(AdministrativeSegment), " administrative segments to database"))
+  
+  dbWriteTable(conn=conn, name="AdministrativeSegment", value=data.table(AdministrativeSegment), append=TRUE, row.names = FALSE)
   
   AdministrativeSegment
   

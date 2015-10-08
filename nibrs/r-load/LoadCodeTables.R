@@ -19,7 +19,9 @@ loadCodeTables <- function(spreadsheetFile, conn) {
       }
       ct <- data.table(ct)
       codeTableName <- filter(TOC, Tab==codeTableName)[1,"Table"]
-      dbWriteTable(conn=conn, value=ct, name=codeTableName, append=FALSE, overwrite=TRUE, row.names = FALSE)
+      writeLines(paste0("Loading code table: ", codeTableName))
+      dbClearResult(dbSendQuery(conn, paste0("truncate ", codeTableName)))
+      dbWriteTable(conn=conn, value=ct, name=codeTableName, append=TRUE, row.names = FALSE)
       assign(codeTableName, ct, envir=.GlobalEnv)
     }
   }
