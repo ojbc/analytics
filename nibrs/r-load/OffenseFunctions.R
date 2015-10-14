@@ -190,7 +190,7 @@ writeOffenses <- function(conn, rawIncidentsDataFrame, segmentActionTypeTypeID) 
     mutate(MethodOfEntryTypeID=ifelse(MethodOfEntryTypeID < 0, 9, MethodOfEntryTypeID),
            NumberOfPremisesEntered=ifelse(NumberOfPremisesEntered < 0, NA, NumberOfPremisesEntered),
            LocationTypeTypeID=ifelse(LocationTypeTypeID < 0, 99, LocationTypeTypeID),
-           SegmentActionTypeTypeID=segmentActionTypeTypeID)
+           SegmentActionTypeTypeID=segmentActionTypeTypeID, UCROffenseCodeTypeID=OffenseCode)
   
   OffenseSegment$OffenseSegmentID = 1:nrow(OffenseSegment)
   

@@ -5,6 +5,8 @@ source("FileLoadingFunctions.R")
 source("IncidentFunctions.R")
 source("OffenseFunctions.R")
 source("PropertyFunctions.R")
+source("OffenderFunctions.R")
+source("VictimFunctions.R")
 source("CommonFunctions.R")
 
 options(stringsAsFactors = FALSE)
@@ -18,8 +20,10 @@ tryCatch({
   truncateIncidents(conn)
   truncateOffenses(conn)
   truncateProperty(conn)
+  truncateOffender(conn)
+  truncateVictim(conn)
   
-  loadCodeTables("NIBRSCodeTables.xlsx", conn)
+  #loadCodeTables("NIBRSCodeTables.xlsx", conn)
   rawIncidents <- loadIncidentFile(conn, "/opt/data/NIBRS/2013/ICPSR_36121/DS0001/Ohio.txt", maxRecords=1000)
   rawIncidents <- addAdministrativeSegmentID(rawIncidents)
   
@@ -35,6 +39,14 @@ tryCatch({
   
   PropertySegment <- writeProperty(conn, rawIncidents, 9)
   SuspectedDrugType <- writeSuspectedDrugType(conn, PropertySegment, rawIncidents)
+  
+  OffenderSegment <- writeOffenders(conn, rawIncidents, 9)
+  
+  VictimSegment <- writeVictims(conn, rawIncidents, 9)
+  TypeInjury <- writeVictimTypeInjury(conn, VictimSegment, rawIncidents)
+  VictimOffenseAssociation <- writeVictimOffenseAssociation(conn, VictimSegment, rawIncidents)
+  VictimOffenderAssociation <- writeVictimOffenderAssociation(conn, VictimSegment, rawIncidents)
+  AggravatedAssaultHomicideCircumstances <- writeAggravatedAssaultHomicideCircumstances(conn, VictimSegment, rawIncidents)
   
 }, finally = {
   

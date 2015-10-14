@@ -2,3 +2,4 @@
 .Rproj.user
 .architect~
 .RData
+*.Rout

@@ -7,7 +7,7 @@ library(stringr)
 loadIncidentFile <- function(conn, file, maxRecords = -1) {
   columnSpecs <- getColumnSpecs("IncidentFileFormat.txt")
   read_fwf(file=file, col_positions = fwf_positions(start = columnSpecs$start, end = columnSpecs$end, col_names = columnSpecs$name),
-           n_max = maxRecords)
+           col_types=paste(columnSpecs$type, collapse=""), n_max = maxRecords)
 }
 
 loadArresteeFile <- function(conn, file, maxRecords = -1) {
