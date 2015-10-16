@@ -4,16 +4,16 @@ library(readr)
 library(dplyr)
 library(stringr)
 
-loadIncidentFile <- function(conn, file, maxRecords = -1) {
+loadIncidentFile <- function(file, maxRecords = -1) {
   columnSpecs <- getColumnSpecs("IncidentFileFormat.txt")
   read_fwf(file=file, col_positions = fwf_positions(start = columnSpecs$start, end = columnSpecs$end, col_names = columnSpecs$name),
            col_types=paste(columnSpecs$type, collapse=""), n_max = maxRecords)
 }
 
-loadArresteeFile <- function(conn, file, maxRecords = -1) {
-  columnSpecs <- getColumnSpecs("ArresteeFileFormat.txt")
+loadAgencyFile <- function(file, maxRecords = -1) {
+  columnSpecs <- getColumnSpecs("AgencyFileFormat.txt")
   read_fwf(file=file, col_positions = fwf_positions(start = columnSpecs$start, end = columnSpecs$end, col_names = columnSpecs$name),
-           n_max = maxRecords)
+           col_types=paste(columnSpecs$type, collapse=""), n_max = maxRecords)
 }
 
 getColumnSpecs <- function(fileName) {

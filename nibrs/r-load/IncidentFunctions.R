@@ -15,7 +15,7 @@ truncateIncidents <- function(conn) {
   dbClearResult(dbSendQuery(conn, "truncate AdministrativeSegment"))
 }
 
-writeIncidents <- function(conn, rawIncidentsDataFrame, currentMonth, currentYear, segmentActionTypeTypeID) {
+writeIncidents <- function(conn, rawIncidentsDataFrame, currentMonth, currentYear, segmentActionTypeTypeID, agencyDataFrame) {
   
   writeLines(paste0("Processing ", nrow(rawIncidentsDataFrame), " raw incidents"))
   
@@ -24,6 +24,10 @@ writeIncidents <- function(conn, rawIncidentsDataFrame, currentMonth, currentYea
     mutate(IncidentDate=as.Date(ifelse(INCDATE==-5, NA, as.Date(as.character(INCDATE), format="%Y%m%d")), origin="1970-01-01"),
            MonthOfTape=currentMonth, YearOfTape=currentYear, CityIndicator=NA, SegmentActionTypeTypeID=segmentActionTypeTypeID) %>%
     select(-INCDATE)
+  
+  ORI_IDmap <- agencyDataFrame %>% select(AgencyID, ORI=AgencyORI)
+  
+  AdministrativeSegment <- left_join(AdministrativeSegment, ORI_IDmap)
   
   writeLines(paste0("Writing ", nrow(AdministrativeSegment), " administrative segments to database"))
   

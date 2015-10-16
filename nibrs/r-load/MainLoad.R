@@ -7,6 +7,7 @@ source("OffenseFunctions.R")
 source("PropertyFunctions.R")
 source("OffenderFunctions.R")
 source("VictimFunctions.R")
+source("AgencyFunctions.R")
 source("CommonFunctions.R")
 
 options(stringsAsFactors = FALSE)
@@ -24,13 +25,17 @@ tryCatch({
   truncateVictim(conn)
   
   #loadCodeTables("NIBRSCodeTables.xlsx", conn)
-  rawIncidents <- loadIncidentFile(conn, "/opt/data/NIBRS/2013/ICPSR_36121/DS0001/Ohio.txt", maxRecords=1000)
+  
+  agencies <- loadAgencyFile("/opt/data/ICPSR_35158/DS0001/35158-0001-Data.txt")
+  agencies <- addAgencyTable(conn, agencies)
+  
+  rawIncidents <- loadIncidentFile("/opt/data/NIBRS/2013/ICPSR_36121/DS0001/Ohio.txt", maxRecords=1000)
   rawIncidents <- addAdministrativeSegmentID(rawIncidents)
   
   currentMonth <- formatC(month(Sys.Date()), width=2, flag="0")
   currentYear <- year(Sys.Date())
   
-  AdministrativeSegment <- writeIncidents(conn, rawIncidents, currentMonth, currentYear, 9)
+  AdministrativeSegment <- writeIncidents(conn, rawIncidents, currentMonth, currentYear, 9, agencies)
   
   OffenseSegment <- writeOffenses(conn, rawIncidents, 9)
   OffenderSuspectedOfUsing <- writeOffenderSuspectedOfUsing(conn, OffenseSegment, rawIncidents)
