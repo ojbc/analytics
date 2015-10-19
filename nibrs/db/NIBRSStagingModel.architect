@@ -222,7 +222,7 @@
     <column id="COL62" populated="true" UUID="ee6ebf34-995a-4612-8c77-866dfbdf4d60" autoIncrement="false" autoIncrementSequenceName="TypeOfOfficerActivityCircumstanceType_TypeOfVictimTypeID_seq_1" defaultValue="" name="OfficerAssignmentTypeTypeID" nullable="0" physicalName="OfficerAssignmentTypeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL63" populated="true" UUID="82134449-0b64-4b26-aeb2-8c24b6b21ed1" autoIncrement="false" autoIncrementSequenceName="VictimSegment_AgeOfVictim_seq" defaultValue="" name="AgeOfVictim" nullable="0" physicalName="AgeOfVictim" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL63" populated="true" UUID="82134449-0b64-4b26-aeb2-8c24b6b21ed1" autoIncrement="false" autoIncrementSequenceName="VictimSegment_AgeOfVictim_seq" defaultValue="" name="AgeOfVictim" nullable="1" physicalName="AgeOfVictim" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL64" populated="true" UUID="08e27a7e-a888-4db4-8e45-0cdfa6f0d4dd" autoIncrement="false" autoIncrementSequenceName="VictimSegment_AgeNeonateIndicator_seq" defaultValue="" name="AgeNeonateIndicator" nullable="0" physicalName="AgeNeonateIndicator" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -298,7 +298,7 @@
     <column id="COL84" populated="true" UUID="c56887f9-c01c-4687-9777-46f4c23645ee" autoIncrement="false" autoIncrementSequenceName="OffenderSegment_OffenderSequenceNumber_seq" defaultValue="" name="OffenderSequenceNumber" nullable="1" physicalName="OffenderSequenceNumber" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL85" populated="true" UUID="b7948b70-96ea-421f-9245-4532f77f10c9" autoIncrement="false" autoIncrementSequenceName="OffenderSegment_AgeOfOffender_seq" defaultValue="" name="AgeOfOffender" nullable="1" physicalName="AgeOfOffender" precision="4" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL85" populated="true" UUID="b7948b70-96ea-421f-9245-4532f77f10c9" autoIncrement="false" autoIncrementSequenceName="OffenderSegment_AgeOfOffender_seq" defaultValue="" name="AgeOfOffender" nullable="1" physicalName="AgeOfOffender" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL86" populated="true" UUID="b5f6aedc-31bf-40ae-83fc-10cdff6299fb" autoIncrement="false" autoIncrementSequenceName="OffenderSegment_SexOfPersonTypeID_seq" defaultValue="" name="SexOfPersonTypeID" nullable="0" physicalName="SexOfPersonTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -1590,7 +1590,7 @@ FO, GL, DU, NP, and XX.</remarks>
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="0.6595236053843678" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">

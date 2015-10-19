@@ -65,7 +65,7 @@ writeAggravatedAssaultHomicideCircumstances <- function(conn, victimSegmentDataF
   
 }
 
-writeVictimOffenderAssociation <- function(conn, victimSegmentDataFrame, rawIncidentsDataFrame) {
+writeVictimOffenderAssociation <- function(conn, victimSegmentDataFrame, offenderSegmentDataFrame, rawIncidentsDataFrame) {
   
   tempDf <- cbind(
     bind_rows(
@@ -76,7 +76,7 @@ writeVictimOffenderAssociation <- function(conn, victimSegmentDataFrame, rawInci
         ) %>%
         filter(VictimSequenceNumber > 0) %>%
         gather(
-          V_Pivot, OffenderSegmentID, V40311, V40331, V40351, V40371, V40391,
+          V_Pivot, OffenderSequenceNumber, V40311, V40331, V40351, V40371, V40391,
           V40411, V40431, V40451, V40471, V40491
         ) %>%
         mutate(V_Pivot = as.character(V_Pivot)),
@@ -87,7 +87,7 @@ writeVictimOffenderAssociation <- function(conn, victimSegmentDataFrame, rawInci
         ) %>%
         filter(VictimSequenceNumber > 0) %>%
         gather(
-          V_Pivot, OffenderSegmentID, V40312, V40332, V40352, V40372, V40392,
+          V_Pivot, OffenderSequenceNumber, V40312, V40332, V40352, V40372, V40392,
           V40412, V40432, V40452, V40472, V40492
         ) %>%
         mutate(V_Pivot = as.character(V_Pivot)),
@@ -98,7 +98,7 @@ writeVictimOffenderAssociation <- function(conn, victimSegmentDataFrame, rawInci
         ) %>%
         filter(VictimSequenceNumber > 0) %>%
         gather(
-          V_Pivot, OffenderSegmentID, V40313, V40333, V40353, V40373, V40393,
+          V_Pivot, OffenderSequenceNumber, V40313, V40333, V40353, V40373, V40393,
           V40413, V40433, V40453, V40473, V40493
         ) %>%
         mutate(V_Pivot = as.character(V_Pivot))
@@ -138,7 +138,7 @@ writeVictimOffenderAssociation <- function(conn, victimSegmentDataFrame, rawInci
         ) %>%
         mutate(V_Pivot = as.character(V_Pivot))
     ) %>% select(-V_Pivot, -VictimSequenceNumber, -AdministrativeSegmentID)
-  ) %>% filter(OffenderSegmentID > 0)
+  ) %>% filter(OffenderSequenceNumber > 0)
   
   VictimOffenderAssociation <- left_join(
     tempDf,
@@ -146,6 +146,15 @@ writeVictimOffenderAssociation <- function(conn, victimSegmentDataFrame, rawInci
       victimSegmentDataFrame, AdministrativeSegmentID, VictimSequenceNumber, VictimSegmentID
     ),
     by = c("AdministrativeSegmentID", "VictimSequenceNumber")
+  ) %>%
+    select(VictimSegmentID, OffenderSequenceNumber, VictimOffenderRelationshipTypeID, AdministrativeSegmentID)
+  
+  VictimOffenderAssociation <- left_join(
+    VictimOffenderAssociation,
+    select(
+      offenderSegmentDataFrame, AdministrativeSegmentID, OffenderSequenceNumber, OffenderSegmentID
+    ),
+    by = c("AdministrativeSegmentID", "OffenderSequenceNumber")
   ) %>%
     select(VictimSegmentID, OffenderSegmentID, VictimOffenderRelationshipTypeID)
   
@@ -316,14 +325,14 @@ writeVictims <- function(conn, rawIncidentsDataFrame, segmentActionTypeTypeID) {
            OfficerActivityCircumstanceTypeID=ifelse(OfficerActivityCircumstanceTypeID < 0, 99, OfficerActivityCircumstanceTypeID),
            OfficerAssignmentTypeTypeID=ifelse(OfficerAssignmentTypeTypeID < 0, 9, OfficerAssignmentTypeTypeID),
            AdditionalJustifiableHomicideCircumstancesID=ifelse(AdditionalJustifiableHomicideCircumstancesID < 0, 9, AdditionalJustifiableHomicideCircumstancesID),
-           SegmentActionTypeTypeID=segmentActionTypeTypeID) %>%
+           SegmentActionTypeTypeID=segmentActionTypeTypeID)  %>%
     select(-AgeRaw)
   
   VictimSegment$VictimSegmentID = 1:nrow(VictimSegment)
   
   writeLines(paste0("Writing ", nrow(VictimSegment), " victim segments to database"))
   
-  #dbWriteTable(conn=conn, name="VictimSegment", value=data.table(VictimSegment), append=TRUE, row.names = FALSE)
+  dbWriteTable(conn=conn, name="VictimSegment", value=data.table(VictimSegment), append=TRUE, row.names = FALSE)
   
   VictimSegment
   

@@ -136,17 +136,19 @@ writeTypeCriminalActivity <- function(conn, offenseSegmentDataFrame, rawIncident
   TypeCriminalActivity <- left_join(tempDf,
                                         select(offenseSegmentDataFrame, AdministrativeSegmentID, OffenseCode, OffenseSegmentID),
                                         by=c("AdministrativeSegmentID", "OffenseCode")) %>%
-    select(OffenseSegmentID, TypeCriminalActivityTypeID=Pivot)
+    select(OffenseSegmentID, TypeOfCriminalActivityTypeID=Pivot)
   
   missingSegmentIDs <- setdiff(offenseSegmentDataFrame$OffenseSegmentID, TypeCriminalActivity$OffenseSegmentID)
   
   TypeCriminalActivity <- bind_rows(TypeCriminalActivity,
                                         data.frame(OffenseSegmentID=missingSegmentIDs,
-                                                   OffenderSuspectedOfUsingTypeID=rep(x=99, times=length(missingSegmentIDs))))
+                                                   TypeOfCriminalActivityTypeID=rep(x=99, times=length(missingSegmentIDs))))
   
   TypeCriminalActivity$TypeCriminalActivityID <- 1:nrow(TypeCriminalActivity)
   
   writeLines(paste0("Writing ", nrow(TypeCriminalActivity), " TypeCriminalActivity association rows to database"))
+  
+  dbWriteTable(conn=conn, name="TypeCriminalActivity", value=data.table(TypeCriminalActivity), append=TRUE, row.names = FALSE)
   
   TypeCriminalActivity
   

@@ -1,0 +1,390 @@
+<!--
+    
+    Unless explicitly acquired and licensed from Licensor under another license, the contents of
+    this file are subject to the Reciprocal Public License ("RPL") Version 1.5, or subsequent
+    versions as allowed by the RPL, and You may not copy or use this file in either source code
+    or executable form, except in compliance with the terms and conditions of the RPL
+    All software distributed under the RPL is provided strictly on an "AS IS" basis, WITHOUT
+    WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, AND LICENSOR HEREBY DISCLAIMS ALL SUCH
+    WARRANTIES, INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+    PARTICULAR PURPOSE, QUIET ENJOYMENT, OR NON-INFRINGEMENT. See the RPL for specific language
+    governing rights and limitations under the RPL.
+
+    http://opensource.org/licenses/RPL-1.5
+
+    Copyright 2012-2015 Open Justice Broker Consortium
+
+    -->
+<Schema name="NIBRS Analytics">
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="TypePropertyLossEtc">
+		<Hierarchy name="TypePropertyLossEtc" visible="true" hasAll="true" allMemberName="All Loss Types" allMemberCaption="All Loss Types" primaryKey="TypePropertyLossEtcTypeID">
+			<Table name="TypePropertyLossEtcType"/>
+			<Level name="TypePropertyLossEtc" visible="true" column="TypePropertyLossEtcDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="PropertyDescription">
+		<Hierarchy name="PropertyDescription" visible="true" hasAll="true" allMemberName="All Property Descriptions" allMemberCaption="All Property Descriptions" primaryKey="PropertyDescriptionTypeID">
+			<Table name="PropertyDescriptionType"/>
+			<Level name="PropertyDescription" visible="true" column="PropertyDescriptionDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="SuspectedDrugType">
+		<Hierarchy name="SuspectedDrugType" visible="true" hasAll="true" allMemberName="All Suspected Drug Types" allMemberCaption="All Suspected Drug Types" primaryKey="SuspectedDrugTypeTypeID">
+			<Table name="SuspectedDrugTypeType"/>
+			<Level name="SuspectedDrugType" visible="true" column="SuspectedDrugTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="VictimOffenderRelationship">
+		<Hierarchy name="VictimOffenderRelationship" visible="true" hasAll="true" allMemberName="All Victim Offender Relationships" allMemberCaption="All Victim Offender Relationships" primaryKey="VictimOffenderRelationshipTypeID">
+			<Table name="VictimOffenderRelationshipType"/>
+			<Level name="VictimOffenderRelationship" visible="true" column="VictimOffenderRelationshipTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="TypeOfVictim">
+		<Hierarchy name="TypeOfVictim" visible="true" hasAll="true" allMemberName="All Victim Types" allMemberCaption="All Victim Types" primaryKey="TypeOfVictimTypeID">
+			<Table name="TypeOfVictimType"/>
+			<Level name="TypeOfVictim" visible="true" column="TypeOfVictimDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="OfficerActivityCircumstance">
+		<Hierarchy name="OfficerActivityCircumstance" visible="true" hasAll="true" allMemberName="All Officer Activity Circumstances" allMemberCaption="All Officer Activity Circumstances" primaryKey="OfficerActivityCircumstanceTypeID">
+			<Table name="OfficerActivityCircumstanceType"/>
+			<Level name="OfficerActivityCircumstance" visible="true" column="OfficerActivityCircumstanceDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="OfficerAssignmentType">
+		<Hierarchy name="OfficerAssignmentType" visible="true" hasAll="true" allMemberName="All Officer Assignment Types" allMemberCaption="All Officer Assignment Types" primaryKey="OfficerAssignmentTypeTypeID">
+			<Table name="OfficerAssignmentTypeType"/>
+			<Level name="OfficerAssignmentType" visible="true" column="OfficerAssignmentTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="ResidentStatusOfPerson">
+		<Hierarchy name="ResidentStatusOfPerson" visible="true" hasAll="true" allMemberName="All Residence Statuses" allMemberCaption="All Residence Statuses" primaryKey="ResidentStatusOfPersonTypeID">
+			<Table name="ResidentStatusOfPersonType"/>
+			<Level name="ResidentStatusOfPerson" visible="true" column="ResidentStatusOfPersonDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="AggravatedAssaultHomicideCircumstances">
+		<Hierarchy name="AggravatedAssaultHomicideCircumstances" visible="true" hasAll="true" allMemberName="All Circumstances" allMemberCaption="All Circumstances" primaryKey="AggravatedAssaultHomicideCircumstancesTypeID">
+			<Table name="AggravatedAssaultHomicideCircumstancesType"/>
+			<Level name="AggravatedAssaultHomicideCircumstances" visible="true" column="AggravatedAssaultHomicideCircumstancesDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="AdditionalJustifiableHomicideCircumstances">
+		<Hierarchy name="AdditionalJustifiableHomicideCircumstances" visible="true" hasAll="true" allMemberName="All Additional Justifiable Homicide Circumstances" allMemberCaption="All Additional Justifiable Homicide Circumstances" primaryKey="AdditionalJustifiableHomicideCircumstancesID">
+			<Table name="AdditionalJustifiableHomicideCircumstancesType"/>
+			<Level name="AdditionalJustifiableHomicideCircumstances" visible="true" column="AdditionalJustifiableHomicideCircumstancesDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="TypeInjury">
+		<Hierarchy name="TypeInjury" visible="true" hasAll="true" allMemberName="All Injury Types" allMemberCaption="All Injury Types" primaryKey="TypeInjuryTypeID">
+			<Table name="TypeInjuryType"/>
+			<Level name="TypeInjury" visible="true" column="TypeInjuryDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="SexOfPerson">
+		<Hierarchy name="SexOfPerson" visible="true" hasAll="true" allMemberName="All Sexes" allMemberCaption="All Sexes" primaryKey="SexOfPersonTypeID">
+			<Table name="SexOfPersonType"/>
+			<Level name="SexOfPerson" visible="true" column="SexOfPersonDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="RaceOfPerson">
+		<Hierarchy name="RaceOfPerson" visible="true" hasAll="true" allMemberName="All Races" allMemberCaption="All Races" primaryKey="RaceOfPersonTypeID">
+			<Table name="RaceOfPersonType"/>
+			<Level name="RaceOfPerson" visible="true" column="RaceOfPersonDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="EthnicityOfPerson">
+		<Hierarchy name="EthnicityOfPerson" visible="true" hasAll="true" allMemberName="All Ethnicities" allMemberCaption="All Ethnicities" primaryKey="EthnicityOfPersonTypeID">
+			<Table name="EthnicityOfPersonType"/>
+			<Level name="EthnicityOfPerson" visible="true" column="EthnicityOfPersonDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="TypeOfCriminalActivity">
+		<Hierarchy name="TypeOfCriminalActivity" visible="true" hasAll="true" allMemberName="All Criminal Activity Types" allMemberCaption="All Criminal Activity Types" primaryKey="TypeOfCriminalActivityTypeID">
+			<Table name="TypeOfCriminalActivityType"/>
+			<Level name="TypeOfCriminalActivity" visible="true" column="TypeOfCriminalActivityDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="BiasMotivation">
+		<Hierarchy name="BiasMotivation" visible="true" hasAll="true" allMemberName="All Bias Motivations" allMemberCaption="All Bias Motivations" primaryKey="BiasMotivationTypeID">
+			<Table name="BiasMotivationType"/>
+			<Level name="BiasMotivation" visible="true" column="BiasMotivationDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="LocationType">
+		<Hierarchy name="LocationType" visible="true" hasAll="true" allMemberName="All Location Types" allMemberCaption="All Location Types" primaryKey="LocationTypeTypeID">
+			<Table name="LocationTypeType"/>
+			<Level name="LocationType" visible="true" column="LocationTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="MethodOfEntry">
+		<Hierarchy name="MethodOfEntry" visible="true" hasAll="true" allMemberName="All Methods Of Entry" allMemberCaption="All Methods Of Entry" primaryKey="MethodOfEntryTypeID">
+			<Table name="MethodOfEntryType"/>
+			<Level name="MethodOfEntry" visible="true" column="MethodOfEntryDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="UCROffenseCode">
+		<Hierarchy name="UCROffenseCode" visible="true" hasAll="true" allMemberName="All Offense Types" allMemberCaption="All Offense Types" primaryKey="UCROffenseCodeTypeID">
+			<Table name="UCROffenseCodeType"/>
+			<Level name="UCROffenseCode" visible="true" column="UCROffenseCodeDescription" caption="Offense Type" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="OffenderSuspectedOfUsing">
+		<Hierarchy name="OffenderSuspectedOfUsing" visible="true" hasAll="true" allMemberName="All Suspected Usages" allMemberCaption="All Suspected Usages" primaryKey="OffenderSuspectedOfUsingTypeID">
+			<Table name="OffenderSuspectedOfUsingType"/>
+			<Level name="OffenderSuspectedOfUsing" visible="true" column="OffenderSuspectedOfUsingDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Agency">
+		<Hierarchy name="Agency" visible="true" hasAll="true" allMemberName="All Agencies" allMemberCaption="All Agencies" primaryKey="AgencyID">
+			<Table name="Agency"/>
+			<Level name="Agency" visible="true" column="AgencyName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="TypeOfWeaponForceInvolved">
+		<Hierarchy name="TypeOfWeaponForceInvolved" visible="true" hasAll="true" allMemberName="All Weapon/Force Types" allMemberCaption="All Weapon/Force Types" primaryKey="TypeOfWeaponForceInvolvedTypeID">
+			<Table name="TypeOfWeaponForceInvolvedType"/>
+			<Level name="TypeOfWeaponForceInvolved" visible="true" column="TypeOfWeaponForceInvolvedDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="County">
+		<Hierarchy name="County" visible="true" hasAll="true" allMemberName="All Counties" allMemberCaption="All Counties" primaryKey="AgencyID">
+			<View alias="AgencyCounty">
+			<SQL dialect="mysql"><![CDATA[select AgencyID, CountyName from Agency]]></SQL>
+			</View>
+			<Level name="County" visible="true" column="CountyName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="ClearedExceptionally">
+		<Hierarchy name="ClearedExceptionally" visible="true" hasAll="true" allMemberName="All Exceptional Clearances" allMemberCaption="All Exceptional Clearances" primaryKey="ClearedExceptionallyTypeID">
+			<Table name="ClearedExceptionallyType"/>
+			<Level name="ClearedExceptionally" visible="true" column="ClearedExceptionallyDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Cube name="VictimOffender" caption="Victim-Offender Relationship" visible="true" enabled="true">
+		<View alias="VictimOffender">
+			<SQL dialect="mysql"><![CDATA[select VictimSegment.*,
+				OffenderSegment.AgeOfOffender, OffenderSegment.SexOfPersonTypeID as SexOfPersonTypeID_Offender,
+				OffenderSegment.RaceOfPersonTypeID as RaceOfPersonTypeID_Offender,
+				OffenderSegment.EthnicityOfPersonTypeID as EthnicityOfPersonTypeID_Offender,   
+				VictimOffenderAssociationID, VictimOffenderRelationshipTypeID, AdministrativeSegment.AgencyID, AdministrativeSegment.ClearedExceptionallyTypeID
+			from VictimSegment, OffenderSegment, AdministrativeSegment, VictimOffenderAssociation
+			where VictimSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and
+				OffenderSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and
+				VictimOffenderAssociation.OffenderSegmentID=OffenderSegment.OffenderSegmentID and
+				VictimOffenderAssociation.VictimSegmentID=VictimSegment.VictimSegmentID]]></SQL>
+		</View>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="ClearedExceptionally" name="ClearedExceptionally" caption="Exceptional Clearance" visible="true" foreignKey="ClearedExceptionallyTypeID" highCardinality="false"/>
+		<DimensionUsage source="SexOfPerson" name="SexOfPerson_Victim" caption="Victim Sex" visible="true" foreignKey="SexOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="RaceOfPerson" name="RaceOfPerson_Victim" caption="Victim Race" visible="true" foreignKey="RaceOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="EthnicityOfPerson" name="EthnicityOfPerson_Victim" caption="Victim Ethnicity" visible="true" foreignKey="EthnicityOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="ResidentStatusOfPerson" name="ResidentStatusOfPerson_Victim" caption="Victim Residence Status" visible="true" foreignKey="ResidentStatusOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="TypeOfVictim" name="TypeOfVictim" caption="Victim Type" visible="true" foreignKey="TypeOfVictimTypeID" highCardinality="false"/>
+		<Dimension name="AgeOfPerson_Victim" caption="Victim Age">
+			<Hierarchy hasAll="true">
+				<Level name="Victim Age" column="AgeOfVictim" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<DimensionUsage source="SexOfPerson" name="SexOfPerson_Offender" caption="Offender Sex" visible="true" foreignKey="SexOfPersonTypeID_Offender" highCardinality="false"/>
+		<DimensionUsage source="RaceOfPerson" name="RaceOfPerson_Offender" caption="Offender Race" visible="true" foreignKey="RaceOfPersonTypeID_Offender" highCardinality="false"/>
+		<DimensionUsage source="EthnicityOfPerson" name="EthnicityOfPerson_Offender" caption="Offender Ethnicity" visible="true" foreignKey="EthnicityOfPersonTypeID_Offender" highCardinality="false"/>
+		<Dimension name="AgeOfPerson_Offender" caption="Offender Age">
+			<Hierarchy hasAll="true">
+				<Level name="Offender Age" column="AgeOfOffender" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<DimensionUsage source="VictimOffenderRelationship" name="VictimOffenderRelationship" caption="Relationship" visible="true" foreignKey="VictimOffenderRelationshipTypeID" highCardinality="false"/>
+		<Measure name="VictimOffenderCount" column="VictimOffenderAssociationID" datatype="Integer" aggregator="count" caption="Victim-Offender Count" visible="true"/>
+	</Cube>
+	<Cube name="Victim" visible="true" enabled="true">
+		<View alias="Victim">
+			<SQL dialect="mysql"><![CDATA[select VictimSegment.*, AdministrativeSegment.AgencyID, AdministrativeSegment.ClearedExceptionallyTypeID from VictimSegment, AdministrativeSegment where VictimSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID]]></SQL>
+		</View>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="ClearedExceptionally" name="ClearedExceptionally" caption="Exceptional Clearance" visible="true" foreignKey="ClearedExceptionallyTypeID" highCardinality="false"/>
+		<DimensionUsage source="SexOfPerson" name="SexOfPerson" caption="Victim Sex" visible="true" foreignKey="SexOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="RaceOfPerson" name="RaceOfPerson" caption="Victim Race" visible="true" foreignKey="RaceOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="EthnicityOfPerson" name="EthnicityOfPerson" caption="Victim Ethnicity" visible="true" foreignKey="EthnicityOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="ResidentStatusOfPerson" name="ResidentStatusOfPerson" caption="Victim Residence Status" visible="true" foreignKey="ResidentStatusOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="TypeOfVictim" name="TypeOfVictim" caption="Victim Type" visible="true" foreignKey="TypeOfVictimTypeID" highCardinality="false"/>
+		<DimensionUsage source="OfficerActivityCircumstance" name="OfficerActivityCircumstance" caption="Officer Activity Circumstance" visible="true" foreignKey="OfficerActivityCircumstanceTypeID" highCardinality="false"/>
+		<DimensionUsage source="OfficerAssignmentType" name="OfficerAssignmentType" caption="Officer Assignment Type" visible="true" foreignKey="OfficerAssignmentTypeTypeID" highCardinality="false"/>
+		<DimensionUsage source="AdditionalJustifiableHomicideCircumstances" name="AdditionalJustifiableHomicideCircumstances" caption="Additional Justifiable Homicide Circumstances" visible="true" foreignKey="AdditionalJustifiableHomicideCircumstancesID" highCardinality="false"/>
+		<Dimension name="AgeOfPerson" caption="Victim Age">
+			<Hierarchy hasAll="true">
+				<Level name="Victim Age" column="AgeOfVictim" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<Measure name="VictimCount" column="VictimSegmentID" datatype="Integer" aggregator="count" caption="Victim Count" visible="true"/>
+	</Cube>
+	<Cube name="Victim Injury" visible="true" enabled="true">
+		<View alias="VictimInjury">
+			<SQL dialect="mysql"><![CDATA[select VictimSegment.*, TypeInjuryTypeID,
+				AdministrativeSegment.AgencyID, AdministrativeSegment.ClearedExceptionallyTypeID
+				from VictimSegment, AdministrativeSegment, TypeInjury
+				where VictimSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and
+					VictimSegment.VictimSegmentID=TypeInjury.VictimSegmentID]]></SQL>
+		</View>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="ClearedExceptionally" name="ClearedExceptionally" caption="Exceptional Clearance" visible="true" foreignKey="ClearedExceptionallyTypeID" highCardinality="false"/>
+		<DimensionUsage source="SexOfPerson" name="SexOfPerson" caption="Victim Sex" visible="true" foreignKey="SexOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="RaceOfPerson" name="RaceOfPerson" caption="Victim Race" visible="true" foreignKey="RaceOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="EthnicityOfPerson" name="EthnicityOfPerson" caption="Victim Ethnicity" visible="true" foreignKey="EthnicityOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="ResidentStatusOfPerson" name="ResidentStatusOfPerson" caption="Victim Residence Status" visible="true" foreignKey="ResidentStatusOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="TypeOfVictim" name="TypeOfVictim" caption="Victim Type" visible="true" foreignKey="TypeOfVictimTypeID" highCardinality="false"/>
+		<DimensionUsage source="TypeInjury" name="TypeInjury" caption="Injury Type" visible="true" foreignKey="TypeInjuryTypeID" highCardinality="false"/>
+		<Dimension name="AgeOfPerson" caption="Victim Age">
+			<Hierarchy hasAll="true">
+				<Level name="Victim Age" column="AgeOfVictim" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<Measure name="VictimCount" column="VictimSegmentID" datatype="Integer" aggregator="count" caption="Victim Count" visible="true"/>
+	</Cube>
+	<Cube name="Assault-Homicide Circumstances" visible="true" enabled="true">
+		<View alias="AHC">
+			<SQL dialect="mysql"><![CDATA[select VictimSegment.*, AggravatedAssaultHomicideCircumstancesTypeID,
+				AdministrativeSegment.AgencyID, AdministrativeSegment.ClearedExceptionallyTypeID
+				from VictimSegment, AdministrativeSegment, AggravatedAssaultHomicideCircumstances
+				where VictimSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and
+					VictimSegment.VictimSegmentID=AggravatedAssaultHomicideCircumstances.VictimSegmentID]]></SQL>
+		</View>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="ClearedExceptionally" name="ClearedExceptionally" caption="Exceptional Clearance" visible="true" foreignKey="ClearedExceptionallyTypeID" highCardinality="false"/>
+		<DimensionUsage source="SexOfPerson" name="SexOfPerson" caption="Victim Sex" visible="true" foreignKey="SexOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="RaceOfPerson" name="RaceOfPerson" caption="Victim Race" visible="true" foreignKey="RaceOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="EthnicityOfPerson" name="EthnicityOfPerson" caption="Victim Ethnicity" visible="true" foreignKey="EthnicityOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="ResidentStatusOfPerson" name="ResidentStatusOfPerson" caption="Victim Residence Status" visible="true" foreignKey="ResidentStatusOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="TypeOfVictim" name="TypeOfVictim" caption="Victim Type" visible="true" foreignKey="TypeOfVictimTypeID" highCardinality="false"/>
+		<DimensionUsage source="AggravatedAssaultHomicideCircumstances" name="AggravatedAssaultHomicideCircumstances" caption="Assault-Homicide Circumstances" visible="true" foreignKey="AggravatedAssaultHomicideCircumstancesTypeID" highCardinality="false"/>
+		<Dimension name="AgeOfPerson" caption="Victim Age">
+			<Hierarchy hasAll="true">
+				<Level name="Victim Age" column="AgeOfVictim" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<Measure name="CircumstancesCount" column="VictimSegmentID" datatype="Integer" aggregator="count" caption="Assault-Homicide Count" visible="true"/>
+	</Cube>
+	<Cube name="Offender" visible="true" enabled="true">
+		<View alias="Offender">
+			<SQL dialect="mysql"><![CDATA[select OffenderSegment.*, AdministrativeSegment.AgencyID, AdministrativeSegment.ClearedExceptionallyTypeID from OffenderSegment, AdministrativeSegment where OffenderSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID]]></SQL>
+		</View>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="ClearedExceptionally" name="ClearedExceptionally" caption="Exceptional Clearance" visible="true" foreignKey="ClearedExceptionallyTypeID" highCardinality="false"/>
+		<DimensionUsage source="SexOfPerson" name="SexOfPerson" caption="Offender Sex" visible="true" foreignKey="SexOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="RaceOfPerson" name="RaceOfPerson" caption="Offender Race" visible="true" foreignKey="RaceOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="EthnicityOfPerson" name="EthnicityOfPerson" caption="Offender Ethnicity" visible="true" foreignKey="EthnicityOfPersonTypeID" highCardinality="false"/>
+		<Dimension name="AgeOfPerson" caption="Offender Age">
+			<Hierarchy hasAll="true">
+				<Level name="Offender Age" column="AgeOfOffender" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<Measure name="OffenderCount" column="OffenderSegmentID" datatype="Integer" aggregator="count" caption="Offender Count" visible="true"/>
+	</Cube>
+	<Cube name="Offense" visible="true" enabled="true">
+		<View alias="Offense">
+			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*,
+			if(OffenseAttemptedCompleted='1', 'Y', 'N') as OffenseAttemptedCompletedYN,
+			AdministrativeSegment.AgencyID, AdministrativeSegment.ClearedExceptionallyTypeID from OffenseSegment, AdministrativeSegment where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID]]></SQL>
+		</View>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="ClearedExceptionally" name="ClearedExceptionally" caption="Exceptional Clearance"  visible="true" foreignKey="ClearedExceptionallyTypeID" highCardinality="false"/>
+		<DimensionUsage source="LocationType" name="LocationType" caption="Location Type" visible="true" foreignKey="LocationTypeTypeID" highCardinality="false"/>
+		<DimensionUsage source="MethodOfEntry" name="MethodOfEntry" caption="Method of Entry" visible="true" foreignKey="MethodOfEntryTypeID" highCardinality="false"/>
+		<DimensionUsage source="BiasMotivation" name="BiasMotivation" caption="Bias Motivation" visible="true" foreignKey="BiasMotivationTypeID" highCardinality="false"/>
+		<DimensionUsage source="UCROffenseCode" name="UCROffenseCode" caption="Offense Type" visible="true" foreignKey="UCROffenseCodeTypeID" highCardinality="false"/>
+		<Dimension name="Completed" caption="Offense Completed">
+			<Hierarchy hasAll="true">
+				<Level name="Offense Completed" column="OffenseAttemptedCompletedYN" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<Measure name="OffenseCount" column="OffenseSegmentID" datatype="Integer" aggregator="count" caption="Offense Count" visible="true"/>
+	</Cube>
+	<Cube name="OffenseOffenderSuspectedOfUsing" visible="true" enabled="true" caption="Offense - Offender Suspected Usage">
+		<View alias="OffenseOffenderSuspectedOfUsing">
+			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*, AdministrativeSegment.AgencyID, OffenderSuspectedOfUsingTypeID	from OffenseSegment, AdministrativeSegment, OffenderSuspectedOfUsing where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and	OffenseSegment.OffenseSegmentID=OffenderSuspectedOfUsing.OffenseSegmentID]]></SQL>
+		</View>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="LocationType" name="LocationType" caption="Location Type" visible="true" foreignKey="LocationTypeTypeID" highCardinality="false"/>
+		<DimensionUsage source="MethodOfEntry" name="MethodOfEntry" caption="Method of Entry" visible="true" foreignKey="MethodOfEntryTypeID" highCardinality="false"/>
+		<DimensionUsage source="BiasMotivation" name="BiasMotivation" caption="Bias Motivation" visible="true" foreignKey="BiasMotivationTypeID" highCardinality="false"/>
+		<DimensionUsage source="UCROffenseCode" name="UCROffenseCode" caption="Offense Type" visible="true" foreignKey="UCROffenseCodeTypeID" highCardinality="false"/>
+		<DimensionUsage source="OffenderSuspectedOfUsing" name="OffenderSuspectedOfUsing" caption="Offender Suspected Of Using" visible="true" foreignKey="OffenderSuspectedOfUsingTypeID" highCardinality="false"/>
+		<Dimension name="Completed" caption="Offense Completed">
+			<Hierarchy hasAll="true">
+				<Level name="Offense Completed" column="OffenseAttemptedCompletedYN" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<Measure name="OffenseCount" column="OffenseSegmentID" datatype="Integer" aggregator="count" caption="Offense Count" visible="true"/>
+	</Cube>
+	<Cube name="OffenseCriminalActivity" visible="true" enabled="true" caption="Offense - Criminal Activity">
+		<View alias="OffenseCriminalActivity">
+			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*, AdministrativeSegment.AgencyID, TypeOfCriminalActivityTypeID	from OffenseSegment, AdministrativeSegment, TypeCriminalActivity where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and	OffenseSegment.OffenseSegmentID=TypeCriminalActivity.OffenseSegmentID]]></SQL>
+		</View>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="LocationType" name="LocationType" caption="Location Type" visible="true" foreignKey="LocationTypeTypeID" highCardinality="false"/>
+		<DimensionUsage source="MethodOfEntry" name="MethodOfEntry" caption="Method of Entry" visible="true" foreignKey="MethodOfEntryTypeID" highCardinality="false"/>
+		<DimensionUsage source="BiasMotivation" name="BiasMotivation" caption="Bias Motivation" visible="true" foreignKey="BiasMotivationTypeID" highCardinality="false"/>
+		<DimensionUsage source="UCROffenseCode" name="UCROffenseCode" caption="Offense Type" visible="true" foreignKey="UCROffenseCodeTypeID" highCardinality="false"/>
+		<DimensionUsage source="TypeOfCriminalActivity" name="TypeOfCriminalActivity" caption="Criminal Activity Type" visible="true" foreignKey="TypeOfCriminalActivityTypeID" highCardinality="false"/>
+		<Dimension name="Completed" caption="Offense Completed">
+			<Hierarchy hasAll="true">
+				<Level name="Offense Completed" column="OffenseAttemptedCompletedYN" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<Measure name="OffenseCount" column="OffenseSegmentID" datatype="Integer" aggregator="count" caption="Offense Count" visible="true"/>
+	</Cube>
+	<Cube name="OffenseWeaponForce" visible="true" enabled="true" caption="Offense - Weapon/Force">
+		<View alias="OffenseWeaponForce">
+			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*, AdministrativeSegment.AgencyID, TypeOfWeaponForceInvolvedTypeID	from OffenseSegment, AdministrativeSegment, TypeOfWeaponForceInvolved where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and OffenseSegment.OffenseSegmentID=TypeOfWeaponForceInvolved.TypeOfWeaponForceInvolvedTypeID]]></SQL>
+		</View>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="LocationType" name="LocationType" caption="Location Type" visible="true" foreignKey="LocationTypeTypeID" highCardinality="false"/>
+		<DimensionUsage source="MethodOfEntry" name="MethodOfEntry" caption="Method of Entry" visible="true" foreignKey="MethodOfEntryTypeID" highCardinality="false"/>
+		<DimensionUsage source="BiasMotivation" name="BiasMotivation" caption="Bias Motivation" visible="true" foreignKey="BiasMotivationTypeID" highCardinality="false"/>
+		<DimensionUsage source="UCROffenseCode" name="UCROffenseCode" caption="Offense Type" visible="true" foreignKey="UCROffenseCodeTypeID" highCardinality="false"/>
+		<DimensionUsage source="TypeOfWeaponForceInvolved" name="TypeOfWeaponForceInvolved" caption="Type Weapon/Force Involved" visible="true" foreignKey="TypeOfWeaponForceInvolvedTypeID" highCardinality="false"/>
+		<Dimension name="Completed" caption="Offense Completed">
+			<Hierarchy hasAll="true">
+				<Level name="Offense Completed" column="OffenseAttemptedCompletedYN" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<Measure name="OffenseCount" column="OffenseSegmentID" datatype="Integer" aggregator="count" caption="Offense Count" visible="true"/>
+	</Cube>
+	<Cube name="Property" visible="true" enabled="true" caption="Property">
+		<View alias="Property">
+			<SQL dialect="mysql"><![CDATA[select PropertySegment.*, AdministrativeSegment.AgencyID from PropertySegment, AdministrativeSegment where PropertySegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID]]></SQL>
+		</View>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="TypePropertyLossEtc" name="TypePropertyLossEtc" caption="Type Property Loss" visible="true" foreignKey="TypePropertyLossEtcTypeID" highCardinality="false"/>
+		<DimensionUsage source="PropertyDescription" name="PropertyDescription" caption="Type Property" visible="true" foreignKey="PropertyDescriptionTypeID" highCardinality="false"/>
+		<Measure name="PropertyCount" column="PropertySegmentID" datatype="Integer" aggregator="count" caption="Property Item Count" visible="true"/>
+		<Measure name="PropertyValue" column="ValueOfProperty" datatype="Numeric" aggregator="sum" caption="Property Value Total" visible="true"/>
+		<Measure name="StolenMV" column="NumberOfStolenMotorVehicles" datatype="Integer" aggregator="sum" caption="# of Stolen Motor Vehicles" visible="true"/>
+		<Measure name="RecoveredMV" column="NumberOfRecoveredMotorVehicles" datatype="Integer" aggregator="sum" caption="# of Recovered Motor Vehicles" visible="true"/>
+	</Cube>
+	<Cube name="PropertyDrugType" visible="true" enabled="true" caption="Suspected Drug Type">
+		<View alias="PropertyDrugType">
+			<SQL dialect="mysql"><![CDATA[select PropertySegment.*, SuspectedDrugTypeTypeID, AdministrativeSegment.AgencyID
+			from PropertySegment, AdministrativeSegment, SuspectedDrugType
+			where PropertySegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and
+				PropertySegment.PropertySegmentID=SuspectedDrugType.PropertySegmentID]]></SQL>
+		</View>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="TypePropertyLossEtc" name="TypePropertyLossEtc" caption="Type Property Loss" visible="true" foreignKey="TypePropertyLossEtcTypeID" highCardinality="false"/>
+		<DimensionUsage source="PropertyDescription" name="PropertyDescription" caption="Type Property" visible="true" foreignKey="PropertyDescriptionTypeID" highCardinality="false"/>
+		<DimensionUsage source="SuspectedDrugType" name="SuspectedDrugType" caption="Drug Type" visible="true" foreignKey="SuspectedDrugTypeTypeID" highCardinality="false"/>
+		<Measure name="PropertyCount" column="PropertySegmentID" datatype="Integer" aggregator="count" caption="Property Item Count" visible="true"/>
+	</Cube>
+</Schema>

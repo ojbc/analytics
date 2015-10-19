@@ -29,7 +29,7 @@ tryCatch({
   agencies <- loadAgencyFile("/opt/data/ICPSR_35158/DS0001/35158-0001-Data.txt")
   agencies <- addAgencyTable(conn, agencies)
   
-  rawIncidents <- loadIncidentFile("/opt/data/NIBRS/2013/ICPSR_36121/DS0001/Ohio.txt", maxRecords=1000)
+  rawIncidents <- loadIncidentFile("/opt/data/NIBRS/2013/ICPSR_36121/DS0001/Ohio.txt") # , maxRecords=1000)
   rawIncidents <- addAdministrativeSegmentID(rawIncidents)
   
   currentMonth <- formatC(month(Sys.Date()), width=2, flag="0")
@@ -50,7 +50,7 @@ tryCatch({
   VictimSegment <- writeVictims(conn, rawIncidents, 9)
   TypeInjury <- writeVictimTypeInjury(conn, VictimSegment, rawIncidents)
   VictimOffenseAssociation <- writeVictimOffenseAssociation(conn, VictimSegment, rawIncidents)
-  VictimOffenderAssociation <- writeVictimOffenderAssociation(conn, VictimSegment, rawIncidents)
+  VictimOffenderAssociation <- writeVictimOffenderAssociation(conn, VictimSegment, OffenderSegment, rawIncidents)
   AggravatedAssaultHomicideCircumstances <- writeAggravatedAssaultHomicideCircumstances(conn, VictimSegment, rawIncidents)
   
 }, finally = {

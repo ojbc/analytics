@@ -23,6 +23,7 @@ loadCodeTables <- function(spreadsheetFile, conn) {
       dbClearResult(dbSendQuery(conn, paste0("truncate ", codeTableName)))
       dbWriteTable(conn=conn, value=ct, name=codeTableName, append=TRUE, row.names = FALSE)
       assign(codeTableName, ct, envir=.GlobalEnv)
+      names <- colnames(ct)
     }
   }
   
