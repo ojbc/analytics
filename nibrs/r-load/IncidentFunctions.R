@@ -20,9 +20,12 @@ writeIncidents <- function(conn, rawIncidentsDataFrame, currentMonth, currentYea
   writeLines(paste0("Processing ", nrow(rawIncidentsDataFrame), " raw incidents"))
   
   AdministrativeSegment <- rawIncidentsDataFrame %>%
-    select(AdministrativeSegmentID, ORI, IncidentNumber=INCNUM, INCDATE, IncidentHour=V1007, ClearedExceptionallyTypeID=V1013, ReportDateIndicator=V1006) %>%
+    select(AdministrativeSegmentID, ORI, IncidentNumber=INCNUM, INCDATE, IncidentHour=V1007,
+           ClearedExceptionallyTypeID=V1013,
+           ReportDateIndicator=V1006) %>%
     mutate(IncidentDate=as.Date(ifelse(INCDATE==-5, NA, as.Date(as.character(INCDATE), format="%Y%m%d")), origin="1970-01-01"),
-           MonthOfTape=currentMonth, YearOfTape=currentYear, CityIndicator=NA, SegmentActionTypeTypeID=segmentActionTypeTypeID) %>%
+           MonthOfTape=currentMonth, YearOfTape=currentYear, CityIndicator=NA, SegmentActionTypeTypeID=segmentActionTypeTypeID,
+           ClearedExceptionallyTypeID=ifelse(ClearedExceptionallyTypeID==-6, 6, ClearedExceptionallyTypeID)) %>%
     select(-INCDATE)
   
   ORI_IDmap <- agencyDataFrame %>% select(AgencyID, ORI=AgencyORI)
