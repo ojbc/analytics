@@ -37,7 +37,7 @@ writeProperty <- function(conn, rawIncidentsDataFrame, segmentActionTypeTypeID) 
       select(-AdministrativeSegmentID),
     
     rawIncidentsDataFrame %>%
-      select(AdministrativeSegmentID, V30101:V30103) %>%
+      select(AdministrativeSegmentID, V30111:V30113) %>%
       gather(V_RecoveredMV, NumberOfRecoveredMotorVehicles, V30111:V30113) %>%
       select(-AdministrativeSegmentID)
     
