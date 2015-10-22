@@ -130,6 +130,13 @@
 			<Level name="UCROffenseCode" visible="true" column="UCROffenseCodeDescription" caption="Offense Type" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="UCROffenseCodeGrouped">
+		<Hierarchy name="UCROffenseCode" visible="true" hasAll="true" allMemberName="All Offense Types" allMemberCaption="All Offense Types" primaryKey="UCROffenseCodeTypeID">
+			<Table name="UCROffenseCodeType"/>
+			<Level name="OffenseCategory1" visible="true" column="OffenseCategory1" caption="Offense Category" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="UCROffenseCode" visible="true" column="UCROffenseCodeDescription" caption="Offense Type" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="OffenderSuspectedOfUsing">
 		<Hierarchy name="OffenderSuspectedOfUsing" visible="true" hasAll="true" allMemberName="All Suspected Usages" allMemberCaption="All Suspected Usages" primaryKey="OffenderSuspectedOfUsingTypeID">
 			<Table name="OffenderSuspectedOfUsingType"/>
@@ -198,6 +205,36 @@
 		</Dimension>
 		<DimensionUsage source="VictimOffenderRelationship" name="VictimOffenderRelationship" caption="Relationship" visible="true" foreignKey="VictimOffenderRelationshipTypeID" highCardinality="false"/>
 		<Measure name="VictimOffenderCount" column="VictimOffenderAssociationID" datatype="Integer" aggregator="count" caption="Victim-Offender Count" visible="true"/>
+	</Cube>
+	<Cube name="VictimOffense" visible="true" enabled="true">
+		<View alias="VictimOffense">
+			<SQL dialect="mysql"><![CDATA[select VictimSegment.*, AdministrativeSegment.AgencyID, AdministrativeSegment.ClearedExceptionallyTypeID,
+				OffenseSegment.UCROffenseCodeTypeID
+				from VictimSegment, AdministrativeSegment, VictimOffenseAssociation, OffenseSegment
+				where VictimSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and
+				VictimSegment.VictimSegmentID=VictimOffenseAssociation.VictimSegmentID and
+				OffenseSegment.OffenseSegmentID=VictimOffenseAssociation.OffenseSegmentID]]></SQL>
+		</View>
+		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="ClearedExceptionally" name="ClearedExceptionally" caption="Exceptional Clearance" visible="true" foreignKey="ClearedExceptionallyTypeID" highCardinality="false"/>
+		<DimensionUsage source="SexOfPerson" name="SexOfPerson" caption="Victim Sex" visible="true" foreignKey="SexOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="RaceOfPerson" name="RaceOfPerson" caption="Victim Race" visible="true" foreignKey="RaceOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="EthnicityOfPerson" name="EthnicityOfPerson" caption="Victim Ethnicity" visible="true" foreignKey="EthnicityOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="ResidentStatusOfPerson" name="ResidentStatusOfPerson" caption="Victim Residence Status" visible="true" foreignKey="ResidentStatusOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="TypeOfVictim" name="TypeOfVictim" caption="Victim Type" visible="true" foreignKey="TypeOfVictimTypeID" highCardinality="false"/>
+		<DimensionUsage source="UCROffenseCodeGrouped" name="UCROffenseCodeGrouped" caption="Offense Type" visible="true" foreignKey="UCROffenseCodeTypeID" highCardinality="false"/>
+		<Dimension name="AgeOfPersonGroup" caption="Victim Age Range">
+			<Hierarchy hasAll="true">
+				<Level name="Victim Age Range" column="VictimAgeGroup1" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<Dimension name="AgeOfPerson" caption="Victim Age">
+			<Hierarchy hasAll="true">
+				<Level name="Victim Age" column="AgeOfVictim" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<Measure name="VictimCount" column="VictimSegmentID" datatype="Integer" aggregator="count" caption="Victim Count" visible="true"/>
 	</Cube>
 	<Cube name="Victim" visible="true" enabled="true">
 		<View alias="Victim">
@@ -288,7 +325,7 @@
 	</Cube>
 	<Cube name="Offense" visible="true" enabled="true">
 		<View alias="Offense">
-			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*,
+			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*, IncidentHour,
 			if(OffenseAttemptedCompleted='1', 'Y', 'N') as OffenseAttemptedCompletedYN,
 			AdministrativeSegment.AgencyID, AdministrativeSegment.ClearedExceptionallyTypeID from OffenseSegment, AdministrativeSegment where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID]]></SQL>
 		</View>
@@ -302,6 +339,11 @@
 		<Dimension name="Completed" caption="Offense Completed">
 			<Hierarchy hasAll="true">
 				<Level name="Offense Completed" column="OffenseAttemptedCompletedYN" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>
+		<Dimension name="Hour" caption="Hour of Day">
+			<Hierarchy hasAll="true">
+				<Level name="Hour of Day" column="IncidentHour" uniqueMembers="true"/>
 			</Hierarchy>
 		</Dimension>
 		<Measure name="OffenseCount" column="OffenseSegmentID" datatype="Integer" aggregator="count" caption="Offense Count" visible="true"/>
