@@ -39,7 +39,8 @@ writeIncidents <- function(conn, rawIncidentsDataFrame, currentMonth, currentYea
            ReportDateIndicator=V1006) %>%
     mutate(IncidentDate=as.Date(ifelse(INCDATE==-5, NA, as.Date(as.character(INCDATE), format="%Y%m%d")), origin="1970-01-01"),
            MonthOfTape=currentMonth, YearOfTape=currentYear, CityIndicator=NA, SegmentActionTypeTypeID=segmentActionTypeTypeID,
-           ClearedExceptionallyTypeID=ifelse(ClearedExceptionallyTypeID==-6, 6, ClearedExceptionallyTypeID)) %>%
+           ClearedExceptionallyTypeID=ifelse(ClearedExceptionallyTypeID==-6, 6, ClearedExceptionallyTypeID),
+           IncidentHour=ifelse(IncidentHour < 0, NA, IncidentHour)) %>%
     select(-INCDATE)
   
   ORI_IDmap <- agencyDataFrame %>% select(AgencyID, ORI=AgencyORI)
