@@ -65,7 +65,7 @@ tryCatch({
   
   VictimSegment <- writeVictims(conn, rawIncidents, 9)
   TypeInjury <- writeVictimTypeInjury(conn, VictimSegment, rawIncidents)
-  VictimOffenseAssociation <- writeVictimOffenseAssociation(conn, VictimSegment, rawIncidents)
+  VictimOffenseAssociation <- writeVictimOffenseAssociation(conn, VictimSegment, OffenseSegment, rawIncidents)
   VictimOffenderAssociation <- writeVictimOffenderAssociation(conn, VictimSegment, OffenderSegment, rawIncidents)
   AggravatedAssaultHomicideCircumstances <- writeAggravatedAssaultHomicideCircumstances(conn, VictimSegment, rawIncidents)
   

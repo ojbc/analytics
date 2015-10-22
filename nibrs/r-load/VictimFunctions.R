@@ -187,38 +187,53 @@ writeVictimOffenderAssociation <- function(conn, victimSegmentDataFrame, offende
   VictimOffenderAssociation
 }
 
-writeVictimOffenseAssociation <- function(conn, victimSegmentDataFrame, rawIncidentsDataFrame) {
+writeVictimOffenseAssociation <- function(conn, victimSegmentDataFrame, offenseSegmentDataFrame, rawIncidentsDataFrame) {
   tempDf <- bind_rows(
     rawIncidentsDataFrame %>%
       select(AdministrativeSegmentID, VictimSequenceNumber=V40061, V40071, V40081, V40091, V40101, V40111,
              V40121, V40131, V40141, V40151, V40161) %>%
       filter(VictimSequenceNumber > 0) %>%
-      gather(V_Pivot, Pivot, V40071, V40081, V40091, V40101, V40111,
+      gather(V_Pivot, OffenseCode, V40071, V40081, V40091, V40101, V40111,
              V40121, V40131, V40141, V40151, V40161) %>%
       mutate(V_Pivot=as.character(V_Pivot)) %>%
-      filter(Pivot > 0),
+      filter(OffenseCode > 0),
     rawIncidentsDataFrame %>%
       select(AdministrativeSegmentID, VictimSequenceNumber=V40062, V40072, V40082, V40092, V40102, V40112,
              V40122, V40132, V40142, V40152, V40162) %>%
       filter(VictimSequenceNumber > 0) %>%
-      gather(V_Pivot, Pivot, V40072, V40082, V40092, V40102, V40112,
+      gather(V_Pivot, OffenseCode, V40072, V40082, V40092, V40102, V40112,
              V40122, V40132, V40142, V40152, V40162) %>%
       mutate(V_Pivot=as.character(V_Pivot)) %>%
-      filter(Pivot > 0),
+      filter(OffenseCode > 0),
     rawIncidentsDataFrame %>%
       select(AdministrativeSegmentID, VictimSequenceNumber=V40063, V40073, V40083, V40093, V40103, V40113,
              V40123, V40133, V40143, V40153, V40163) %>%
       filter(VictimSequenceNumber > 0) %>%
-      gather(V_Pivot, Pivot, V40073, V40083, V40093, V40103, V40113,
+      gather(V_Pivot, OffenseCode, V40073, V40083, V40093, V40103, V40113,
              V40123, V40133, V40143, V40153, V40163) %>%
       mutate(V_Pivot=as.character(V_Pivot)) %>%
-      filter(Pivot > 0)
+      filter(OffenseCode > 0)
   )
   
-  VictimOffenseAssociation <- left_join(tempDf,
-                          select(victimSegmentDataFrame, AdministrativeSegmentID, VictimSequenceNumber, VictimSegmentID),
-                          by=c("AdministrativeSegmentID", "VictimSequenceNumber")) %>%
-    select(VictimSegmentID, OffenseSegmentID=Pivot)
+  VictimOffenseAssociation <- left_join(
+    tempDf,
+    select(
+      victimSegmentDataFrame, AdministrativeSegmentID, VictimSequenceNumber, VictimSegmentID
+    ),
+    by = c("AdministrativeSegmentID", "VictimSequenceNumber")
+  ) %>%
+    select(VictimSegmentID, OffenseCode, AdministrativeSegmentID)
+  
+  VictimOffenseAssociation <- left_join(
+    VictimOffenseAssociation,
+    select(
+      offenseSegmentDataFrame, AdministrativeSegmentID, OffenseCode, OffenseSegmentID
+    ),
+    by = c("AdministrativeSegmentID", "OffenseCode")
+  ) %>%
+    select(VictimSegmentID, OffenseSegmentID)
+  
+  
   
   VictimOffenseAssociation$VictimOffenseAssociationID <- 1:nrow(VictimOffenseAssociation)
   
@@ -331,6 +346,14 @@ writeVictims <- function(conn, rawIncidentsDataFrame, segmentActionTypeTypeID) {
            AgeNeonateIndicator=ifelse(AgeRaw == 0.1, 1, 0),
            AgeFirstWeekIndicator=ifelse(AgeRaw == 0.2, 1, 0),
            AgeFirstYearIndicator=ifelse(AgeRaw == 0.5, 1, 0),
+           VictimAgeGroup1=ifelse(AgeRaw < 0, NA,
+                                  ifelse(AgeRaw <= 11, "< 11",
+                                         ifelse(AgeRaw <= 17, "12-17",
+                                                ifelse(AgeRaw <= 24, "18-24",
+                                                       ifelse(AgeRaw <= 34, "25-34",
+                                                              ifelse(AgeRaw <= 49, "35-49",
+                                                                     ifelse(AgeRaw <= 64, "50-64", 
+                                                                            "65+"))))))),
            SexOfPersonTypeID=ifelse(SexOfPersonTypeID < 0, 9, SexOfPersonTypeID+1),
            TypeOfVictimTypeID=ifelse(TypeOfVictimTypeID < 0, 9, TypeOfVictimTypeID),
            RaceOfPersonTypeID=ifelse(RaceOfPersonTypeID < 0, 9, RaceOfPersonTypeID),
