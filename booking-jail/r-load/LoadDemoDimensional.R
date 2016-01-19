@@ -47,6 +47,12 @@ yesno <- c("Yes","No")
 YesNo <- data.table(YesNoID=1:length(yesno), YesNoDescription=yesno)
 dbWriteTable(conn, "YesNo", YesNo, append=TRUE, row.names=FALSE)
 
+facilityID <- 1:2
+facilityName <- paste("Facility", facilityID)
+facilityCapacity <- c(5000, 1000); 
+Facility <- data.table(FacilityID=facilityID, FacilityName=facilityName, Capacity=facilityCapacity)
+dbWriteTable(conn, "Facility", Facility, append=TRUE, row.names=FALSE)
+
 agencyID <- 1:11
 agencyName <- paste("Agency", agencyID)
 agencyName[11] <- "Unknown"
