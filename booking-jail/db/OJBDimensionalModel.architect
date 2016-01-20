@@ -495,10 +495,10 @@
     <column id="COL138" populated="true" UUID="b0fb5d63-9c65-4342-9f6d-cf7b99317436" autoIncrement="false" autoIncrementSequenceName="PersonAgeRange_PersonAgeRangeID_seq" defaultValue="" name="PersonAgeRangeID" nullable="0" physicalName="PersonAgeRangeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL139" populated="true" UUID="bdbc4881-eedb-480e-99d7-9fd51e2ef291" autoIncrement="false" autoIncrementSequenceName="PersonAgeRange_AgeRange5_seq" defaultValue="" name="AgeRange5" nullable="0" physicalName="AgeRange5" precision="7" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL139" populated="true" UUID="bdbc4881-eedb-480e-99d7-9fd51e2ef291" autoIncrement="false" autoIncrementSequenceName="PersonAgeRange_AgeRange_seq" defaultValue="" name="AgeRange" nullable="0" physicalName="AgeRange" precision="7" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL140" populated="true" UUID="6509ea87-1fda-4ad4-b125-ebbafe9a1065" autoIncrement="false" autoIncrementSequenceName="PersonAgeRange_AgeRange5Sort_seq" defaultValue="" name="AgeRange5Sort" nullable="0" physicalName="AgeRange5Sort" precision="7" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL140" populated="true" UUID="6509ea87-1fda-4ad4-b125-ebbafe9a1065" autoIncrement="false" autoIncrementSequenceName="PersonAgeRange_AgeRangeSort_seq" defaultValue="" name="AgeRangeSort" nullable="0" physicalName="AgeRangeSort" precision="7" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -794,7 +794,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="229" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="684" y="287" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB74" x="1334" y="42" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB89" x="655" y="929" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
