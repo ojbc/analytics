@@ -554,7 +554,6 @@ dbWriteTable(conn, "IncidentType2Association", data.table(IncidentType2Associati
 dbClearResult(dbSendQuery(conn, paste0("update Incident join Date join Time on Incident.DateID=Date.DateID and Incident.TimeID=Time.TimeID ",
                                        "set IncidentDateTime=str_to_date(if(Incident.TimeID=-1, concat(Year, '-', Month, '-', Day, '-0-0-0'), ",
                                        "concat(Year, '-', Month, '-', Day, '-', Hour, '-', Minute, '-', Second)), '%Y-%m-%d-%H-%i-%s')")))
-dbClearResult(dbSendQuery(conn, "create index Incident_IncidentDateTime on Incident (IncidentDateTime)"))
 
 dbClearResult(dbSendQuery(conn, "drop table if exists IncidentOptHour"))
 dbClearResult(dbSendQuery(conn, paste0("create table IncidentOptHour as select DateID, ",
@@ -582,10 +581,10 @@ dbClearResult(dbSendQuery(conn, paste0("create table IncidentOptHourType2 as sel
                                        "IncidentTypeID, count(IncidentTypeAssociationID) as IncidentCount ",
                                        "from Incident, IncidentType2Association where Incident.IncidentID=IncidentType2Association.IncidentID ",
                                        "group by DateID, HourTimeID, TownID, ReportingAgencyID, IncidentTypeID")))
-dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType2_Date on IncidentOptHourType (DateID)"))
-dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType2_Agency on IncidentOptHourType (ReportingAgencyID)"))
-dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType2_Town on IncidentOptHourType (TownID)"))
-dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType2_Type on IncidentOptHourType (IncidentTypeID)"))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType2_Date on IncidentOptHourType2 (DateID)"))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType2_Agency on IncidentOptHourType2 (ReportingAgencyID)"))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType2_Town on IncidentOptHourType2 (TownID)"))
+dbClearResult(dbSendQuery(conn, "create index IncidentOptHourType2_Type on IncidentOptHourType2 (IncidentTypeID)"))
 
 dbClearResult(dbSendQuery(conn, paste0("insert into LoadHistory (LoadID, LatestStagingUpdateTime, LoadStartTime, LoadEndTime) ",
                                        "values (1,",
