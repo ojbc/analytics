@@ -1,3 +1,3 @@
-CREATE INDEX `idx_incident_IncidentDateTime`  ON `ojbc_analytics`.`incident` (IncidentDateTime);
-CREATE INDEX `idx_agency_AgencyName`  ON `ojbc_analytics`.`agency` (AgencyName);
-CREATE INDEX `idx_town_TownDescription`  ON `ojbc_analytics`.`town` (TownDescription);
+CREATE INDEX idx_Incident_IncidentDateTime  ON Incident (IncidentDateTime);
+CREATE INDEX idx_Agency_AgencyName  ON Agency (AgencyName);
+CREATE INDEX idx_Town_TownDescription  ON Town (TownDescription);
