@@ -84,7 +84,7 @@ buildBookingRow<-function(bookingId){
   
   pretrialStatusID<-sample(PretrialStatus$PretrialStatusID, size=n, replace=TRUE)
   
-  defendantID<-sample(Person$PersonID, size=n, replace=TRUE)
+  defendantID<-personID
   
   # need to make release date. currently set it to be the same as supervisionReleaseDate. And 
   # need to populate more dateID to be able to have large lenght of stay. 
