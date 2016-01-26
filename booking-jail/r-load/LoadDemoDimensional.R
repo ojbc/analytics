@@ -157,7 +157,7 @@ createBehaviorHealthAssessment <- function(personId, bookingDate) {
   types <- sample(1:behaviorHealthTypeLength, size=behaviorHealthTypeCount, prob=c(rep(1/behaviorHealthTypeLength, behaviorHealthTypeLength)))
 
   bind_rows(Map(function(typeID) {
-    data.frame(PersonID=c(personId), BehaviorHealthTypeID=c(typeID), HealthScreeningDate=c(bookingDate), SerioursMentalHealthEncounterDate=c(bookingDate))
+    data.frame(PersonID=c(personId), BehaviorHealthTypeID=c(typeID), HealthScreeningDate=c(bookingDate))
   }, types))
 
 }
