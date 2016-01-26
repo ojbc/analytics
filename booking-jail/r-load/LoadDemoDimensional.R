@@ -93,13 +93,23 @@ buildBookingRow<-function(bookingId){
   
   bedTypeID<-sample(BedType$BedTypeID, size=n, replace=TRUE)
   sexID <- sample(1:3, size=n, replace=TRUE, prob=c(.91, .089, .001))
-  raceID<-sample(PersonRace$PersonRaceID, size=n, replace=TRUE, prob=c(.009, .43, .35, .06,.15, .001))
+  raceID<-sample(PersonRace$PersonRaceID, size=n, replace=TRUE, prob=c(.011, .401, .13, .36,.185, .03))
   populationTypeID<-sample(PopulationType$PopulationTypeID, size=n, replace=TRUE, prob=c(.68, .32))
   
   # https://www.bop.gov/about/statistics/statistics_inmate_age.jsp
   personAgeProbs<-c(.0025,.0025, .0030,.0031,.014,.014,.014,.015,rep(.026,5),rep(.036,5),rep(.0366,5),
                     rep(.0304,5),rep(.0218, 5),.177, 0)
   personAgeID<-sample(PersonAge$PersonAgeID, size=n, replace=TRUE, prob=personAgeProbs)
+  
+  housingStatusID<-sample(HousingStatus$HousingStatusID, size=n, replace=TRUE)
+  occupationID<-sample(Occupation$OccupationID, size=n, replace=TRUE)
+  
+  # need to work on the language sample to make more sense. correlation with race. 
+  languageID<-sample(Language$LanguageID, size=n, replace=TRUE)
+  
+  # http://www.bjs.gov/content/pub/pdf/pji02.pdf
+  incomeLevelID<-sample(IncomeLevel$IncomeLevelID, size=n, replace=TRUE, prob=c(.193,.106,.15,.142,.244,.164))
+  educationID<-sample(Education$EducationID, size=n, replace=TRUE, prob=c(.123,.316,.171,.259,.101,.029))
   
   df <- data.frame(BookingID=bookingId,
                    JurisdictionID=jurisdictionID,
@@ -121,7 +131,12 @@ buildBookingRow<-function(bookingId){
                    PopulationTypeID=populationTypeID,
                    PersonSexID=sexID,
                    PersonRaceID=raceID,
-                   PersonAgeID=personAgeID
+                   PersonAgeID=personAgeID,
+                   HousingStatusID=housingStatusID,
+                   OccupationID=occupationID,
+                   IncomeLevelID=incomeLevelID,
+                   EducationID=educationID,
+                   LanguageID=languageID
                    )
 }
 
