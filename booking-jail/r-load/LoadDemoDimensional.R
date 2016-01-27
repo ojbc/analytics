@@ -52,6 +52,24 @@ personID <- 1:demoBookingCount
 Person <- data.table(PersonID=personID, StagingPersonUniqueIdentifier=as.character(personID))
 dbWriteTable(adsConnection, "Person", Person, append=TRUE, row.names=FALSE)
 
+
+co_shp <- readOGR( "censusData/geoCensusBlocks", "gz_2010_08_150_00_500k")
+adams_county_shp <- subset(co_shp, COUNTY== "001")
+adamsBlockPopulation<-read.csv(file="censusData/DEC_10_SF1_P1_with_ann.csv", head=TRUE)
+adamsGeoBlockPop<-merge(adams_county_shp@data, adamsBlockPopulation)
+blockProbs<-adamsGeoBlockPop$Population/sum(adamsGeoBlockPop$Population)
+
+getRandomCoordsInCounty <- function(geoId) {
+    target_shp <- subset(adams_county_shp, GEO_ID == geoId)
+    df <- as.data.frame(coordinates(spsample(x=target_shp, n = 1, type = "regular", iter=50)))
+    df$GEO_ID <- geoId
+    return(select(mutate(sample_n(df, 1), lat=x2, long=x1, GeoID=geoId), GeoID, lat, long))
+}
+
+getRandomCoordsInBlocks <- function(geoIds) {
+  bind_rows(Map(getRandomCoordsInCounty, geoIds))
+}
+
 #Create Booking test data
 bookingId<-1:demoBookingCount
 
@@ -93,6 +111,8 @@ buildBookingRow<-function(bookingId){
   
   bedTypeID<-sample(BedType$BedTypeID, size=n, replace=TRUE)
   sexID <- sample(1:3, size=n, replace=TRUE, prob=c(.91, .089, .001))
+  
+  # http://www.prisonpolicy.org/graphs/2010rates/CO.html
   raceID<-sample(PersonRace$PersonRaceID, size=n, replace=TRUE, prob=c(.009, .43, .35, .06,.15, .001))
   populationTypeID<-sample(PopulationType$PopulationTypeID, size=n, replace=TRUE, prob=c(.68, .32))
   
@@ -111,6 +131,13 @@ buildBookingRow<-function(bookingId){
   incomeLevelID<-sample(IncomeLevel$IncomeLevelID, size=n, replace=TRUE, prob=c(.193,.106,.15,.142,.244,.164))
   educationID<-sample(Education$EducationID, size=n, replace=TRUE, prob=c(.123,.316,.171,.259,.101,.029))
   
+  # load lat/long
+  arresteeGeoID <- sample(adamsGeoBlockPop$GEO_ID, size=n, replace=TRUE, prob=blockProbs)
+  coords <- getRandomCoordsInBlocks(arresteeGeoID)
+  arrestLocationLatitude <- coords$lat
+  arrestLocationLongitude <- coords$long
+  
+
   df <- data.frame(BookingID=bookingId,
                    JurisdictionID=jurisdictionID,
                    SendingAgency=sendingAgencyID,
@@ -136,7 +163,9 @@ buildBookingRow<-function(bookingId){
                    OccupationID=occupationID,
                    IncomeLevelID=incomeLevelID,
                    EducationID=educationID,
-                   LanguageID=languageID
+                   LanguageID=languageID, 
+                   ArrestLocationLatitude=arrestLocationLatitude, 
+                   ArrestLocationLongitude=arrestLocationLongitude
                    )
 }
 
