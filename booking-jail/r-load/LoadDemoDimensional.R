@@ -93,7 +93,7 @@ buildBookingRow<-function(bookingId){
   
   bedTypeID<-sample(BedType$BedTypeID, size=n, replace=TRUE)
   sexID <- sample(1:3, size=n, replace=TRUE, prob=c(.91, .089, .001))
-  raceID<-sample(PersonRace$PersonRaceID, size=n, replace=TRUE, prob=c(.011, .401, .13, .36,.185, .03))
+  raceID<-sample(PersonRace$PersonRaceID, size=n, replace=TRUE, prob=c(.009, .43, .35, .06,.15, .001))
   populationTypeID<-sample(PopulationType$PopulationTypeID, size=n, replace=TRUE, prob=c(.68, .32))
   
   # https://www.bop.gov/about/statistics/statistics_inmate_age.jsp
