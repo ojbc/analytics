@@ -90,8 +90,12 @@ buildBookingRow<-function(bookingId){
   sendingAgencyID <-sample(Agency$AgencyID, size=n, replace=TRUE)
   caseStatusID<-sample(CaseStatus$StatusID, size=n, replace=TRUE)
   
-  recidivistIndicator<-sample(1:2, size=n, replace=TRUE, prob=c(0.49,0.51))
+  facilityCapacity<-as.integer(as.character(Facility$Capacity))
+  facilityProbs<-facilityCapacity/sum(facilityCapacity)
+  facilityID<-sample(Facility$FacilityID, size=n, replace=TRUE, prob = facilityProbs)
   
+  recidivistIndicator<-sample(1:2, size=n, replace=TRUE, prob=c(0.49,0.51))
+
   # Making up bond amount and bond amount probs. 
   bondAmountList<-c(0, 300, 500,2500, 10000, 20000, 40000, 50000, 100000, 500000, 503000, 
                     550000, 660000,750000, 800000, 900000, 1000000)
@@ -141,6 +145,7 @@ buildBookingRow<-function(bookingId){
   df <- data.frame(BookingID=bookingId,
                    JurisdictionID=jurisdictionID,
                    SendingAgency=sendingAgencyID,
+                   FacilityID=facilityID,
                    BookingDate=as.integer(bookingDateID),
                    TimeID=bookingTimeID,
                    BookingCaseNumber=as.character(bookingId),
