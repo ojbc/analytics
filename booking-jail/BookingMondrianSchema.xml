@@ -1,0 +1,193 @@
+<Schema name="ojbc_booking_analytics_demo">
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Age">
+		<Hierarchy name="PersonAge" visible="true" hasAll="true" primaryKey="PersonAgeID" primaryKeyTable="PersonAge" caption="Age">
+			<Join leftKey="PersonAgeRangeID" rightKey="PersonAgeRangeID">
+				<Table name="PersonAge"/>
+				<Table name="PersonAgeRange"/>
+			</Join>
+			<Level name="AgeRange" visible="true" column="AgeRange" table="PersonAgeRange" ordinalColumn="AgeRangeSort" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="AgeYears" visible="true" column="AgeInYears" table="PersonAge" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Age Range">
+		<Hierarchy name="AgeRange" visible="true" hasAll="true" allMemberName="All Ranges" allMemberCaption="All Ranges" primaryKey="PersonAgeRangeID" caption="Age Range">
+			<Table name="PersonAgeRange"/>
+			<Level name="Age Range" visible="true" table="PersonAgeRange" column="AgeRange" ordinalColumn="AgeRangeSort" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Agency">
+		<Hierarchy name="Agency" visible="true" hasAll="true" allMemberName="All Agencies" allMemberCaption="All Agencies" primaryKey="AgencyID">
+			<Table name="Agency"/>
+			<Level name="Agency" visible="true" table="Agency" column="AgencyName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Race">
+		<Hierarchy name="Race" visible="true" hasAll="true" primaryKey="PersonRaceID" caption="Race">
+			<Table name="PersonRace"/>
+			<Level name="Race" visible="true" table="PersonRace" column="PersonRaceDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Gender">
+		<Hierarchy name="Gender" visible="true" hasAll="true" allMemberName="All Sexes" allMemberCaption="All Sexes" caption="Sex" primaryKey="PersonSexID">
+			<Table name="PersonSex"/>
+			<Level name="Gender" visible="true" table="PersonSex" column="PersonSexID" nameColumn="PersonSexDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="YesNoIndicator">
+		<Hierarchy name="YesNoIndicator" visible="true" hasAll="true" allMemberName="All Options" allMemberCaption="All Options" primaryKey="YesNoID" caption="Yes/No">
+			<Table name="YesNo"/>
+			<Level name="YesNoIndicator" visible="true" table="YesNo" column="YesNoDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="PopulationType" >
+		<Hierarchy name="PopulationType" hasAll="true" viaible="true" allMemberName="All Population Type" primaryKey="PopulationTypeID" caption="Population Type">
+			<Table name="PopulationType"/>
+			<Level name="Population Type" table="PopulationType" column="PopulationType" uniqueMembers="true" type="String" levelType="Regular" hideMemberIf="Never" />
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Time Of Day">
+		<Hierarchy name="Time" visible="true" hasAll="true" allMemberName="All Times" allMemberCaption="All Times" primaryKey="TimeID" caption="Time Of Day">
+			<Table name="Time"/>
+			<Level name="Hour" visible="true" table="Time" column="Hour" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="TimeDimension" visible="true" highCardinality="false" name="Date">
+		<Hierarchy name="DateYMD" visible="true" hasAll="true" primaryKey="DateID" caption="Year/Month/Day" allMemberName="All Years" allMemberCaption="All Years" >
+			<Table name="Date"/>
+			<Level name="Year" visible="true" table="Date" column="YearLabel" type="String" uniqueMembers="false" levelType="TimeYears" hideMemberIf="Never"/>
+			<Level name="Quarter" visible="true" table="Date" column="CalendarQuarter" type="String" uniqueMembers="false" levelType="TimeQuarters" hideMemberIf="Never"/>
+			<Level name="Month" visible="true" column="FullMonth" ordinalColumn="Month" type="String" uniqueMembers="false" levelType="TimeMonths" hideMemberIf="Never"/>
+			<Level name="Day" visible="true" column="Day" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never"/>
+		</Hierarchy>
+		<Hierarchy name="CalDate" visible="true" hasAll="true" primaryKey="DateID" caption="Calendar Date">
+			<Table name="Date"/>
+			<Level name="Date" visible="true" column="CalendarDate" type="Date" uniqueMembers="true" levelType="TimeDays" hideMemberIf="Never"/>
+		</Hierarchy>
+		<Hierarchy name="Day of Week" visible="true" hasAll="true" primaryKey="DateID" caption="Day of Week">
+			<Table name="Date"/>
+			<Level name="Day of Week" visible="true" column="DayOfWeek" ordinalColumn="DayOfWeekSort" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Year">
+	    <Hierarchy name="Year" visible="true" hasAll="true" primaryKey="YearID">
+	        <View alias="Year">
+	            <SQL dialect="mysql">
+	            <![CDATA[select distinct Year as YearID, Year as YearLabel from Date]]>
+	            </SQL>
+	        </View>
+			<Level name="Year" visible="true" table="Year" column="YearLabel" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+	    </Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="CaseStatus">
+		<Hierarchy name="Case Status" visible="true" hasAll="true" allMemberName="All Statuses" allMemberCaption="All Statuses" caption="Statuses" primaryKey="StatusID">
+			<Table name="CaseStatus"/>
+			<Level name="Case Status" visible="true" table="CaseStatus" column="Status" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Pretrial Status">
+		<Hierarchy name="Pretrial Status" visible="true" hasAll="true" allMemberName="All Statuses" allMemberCaption="All Statuses" caption="Statuses" primaryKey="PretrialStatusID">
+			<Table name="PretrialStatus"/>
+			<Level name="Pretrial Status" visible="true" table="PretrialStatus" column="PretrialStatus" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Jurisdiction">
+		<Hierarchy name="Jurisdiction" visible="true" hasAll="true" allMemberName="All Jurisdictions" allMemberCaption="All Jurisdictions" caption="Jurisdiction" primaryKey="JurisdictionID">
+			<Table name="Jurisdiction"/>
+			<Level name="Jurisdiction" visible="true" table="Jurisdiction" column="JurisdictionName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Facility">
+		<Hierarchy name="Facility" visible="true" hasAll="true" allMemberName="All Facilities" allMemberCaption="All Facilities" caption="Facility" primaryKey="FacilityID">
+			<Table name="Facility"/>
+			<Level name="Facility" visible="true" table="Facility" column="FacilityName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+ -->	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Bed Type">
+		<Hierarchy name="Bed Type" visible="true" hasAll="true" allMemberName="All Bed Types" allMemberCaption="All Bed Types" caption="Bed Type" primaryKey="BedTypeID">
+			<Table name="BedType"/>
+			<Level name="Bed Type" visible="true" table="BedType" column="BedType" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Income Level">
+		<Hierarchy name="Income Level" visible="true" hasAll="true" allMemberName="All Income Levels" allMemberCaption="All Income Levels" caption="Income Level" primaryKey="IncomeLevelID">
+			<Table name="IncomeLevel"/>
+			<Level name="Income Level" visible="true" table="IncomeLevel" column="IncomeLevel" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Occupation">
+		<Hierarchy name="Occupation" visible="true" hasAll="true" allMemberName="All Occupations" allMemberCaption="All Occupations" caption="Occupation" primaryKey="OccupationID">
+			<Table name="Occupation"/>
+			<Level name="Occupation" visible="true" table="Occupation" column="Occupation" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Cube name="Booking">
+		<Table name="booking" />
+		<DimensionUsage source="Age" name="Age" caption="Age" visible="true" foreignKey="PersonAgeID" highCardinality="false"/>
+		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="PersonRaceID" highCardinality="false"/>
+		<DimensionUsage source="Gender" name="Gender" visible="true" foreignKey="PersonSexID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="SendingAgency" highCardinality="false"/>
+		<DimensionUsage source="CaseStatus" name="CaseStatus" visible="true" foreignKey="CaseStatusID" highCardinality="false"/>
+		<DimensionUsage source="Pretrial Status" name="Pretrial Status" visible="true" foreignKey="PretrialStatusID" highCardinality="false"/>
+		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
+<!-- 		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
+ -->		<DimensionUsage source="Bed Type" name="Bed Type" visible="true" foreignKey="BedTypeID" highCardinality="false"/>
+		<DimensionUsage source="Income Level" name="Income Level" visible="true" foreignKey="IncomeLevelID" highCardinality="false"/>
+		<DimensionUsage source="Occupation" name="Occupation" visible="true" foreignKey="OccupationID" highCardinality="false"/>
+		
+		<Dimension name="Facility" foreignKey="FacilityID">
+			<Hierarchy hasAll="true" allMemberName="All Facilities"
+				primaryKey="FacilityID">
+				<Table name="Facility" />
+				<Level name="Facility" column="FacilityName" uniqueMembers="true" />
+			</Hierarchy>
+		</Dimension><!-- 
+ 		<Dimension name="Bed Type" foreignKey="BedTypeID">
+			<Hierarchy hasAll="true" allMemberName="All Bed Types"
+				primaryKey="BedTypeID">
+				<Table name="BedType" />
+				<Level name="Bed Type" column="BedType" uniqueMembers="true" />
+			</Hierarchy>
+		</Dimension>
+
+		<Dimension name="Income Level" foreignKey="IncomeLevelID">
+			<Hierarchy hasAll="true" allMemberName="All Income Levels"
+				primaryKey="IncomeLevelID">
+				<Table name="IncomeLevel" />
+				<Level name="Income Level" column="IncomeLevel" uniqueMembers="true" />
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="Occupation" foreignKey="OccupationID">
+			<Hierarchy hasAll="true" allMemberName="All Occupations"
+				primaryKey="OccupationID">
+				<Table name="Occupation" />
+				<Level name="Occupation" column="Occupation" uniqueMembers="true" ordinalColumn="OccupationID"/>
+			</Hierarchy>
+		</Dimension>-->
+		<Dimension name="Education Level" foreignKey="EducationID">
+			<Hierarchy hasAll="true" allMemberName="All Education Levels"
+				primaryKey="EducationID">
+				<Table name="Education" />
+				<Level name="Education Level" column="EducationLevel" uniqueMembers="true" />
+			</Hierarchy>
+		</Dimension>
+		<Dimension name="Language" foreignKey="LanguageID">
+			<Hierarchy hasAll="true" allMemberName="All Education Levels"
+				primaryKey="LanguageID">
+				<Table name="Language" />
+				<Level name="Language" column="Language" uniqueMembers="true" />
+			</Hierarchy>
+		</Dimension>
+		<Dimension name="Housing Status" foreignKey="HousingStatusID">
+			<Hierarchy hasAll="true" allMemberName="All Housing Statuses"
+				primaryKey="HousingStatusID">
+				<Table name="HousingStatus" />
+				<Level name="Housing Status" column="HousingStatusDescription" uniqueMembers="true" />
+			</Hierarchy>
+		</Dimension>
+		<Measure name="Defendant Count" column="bookingId" aggregator="count"
+			formatString="#,###" />
+		<Measure name="Bond Amount" column="BondAmount" aggregator="sum"
+			formatString="#,###.##" />
+	</Cube>
+</Schema>
