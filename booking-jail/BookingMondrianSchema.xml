@@ -96,13 +96,13 @@
 			<Level name="Jurisdiction" visible="true" table="Jurisdiction" column="JurisdictionName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Facility">
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Facility">
 		<Hierarchy name="Facility" visible="true" hasAll="true" allMemberName="All Facilities" allMemberCaption="All Facilities" caption="Facility" primaryKey="FacilityID">
 			<Table name="Facility"/>
 			<Level name="Facility" visible="true" table="Facility" column="FacilityName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
- -->	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Bed Type">
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Bed Type">
 		<Hierarchy name="Bed Type" visible="true" hasAll="true" allMemberName="All Bed Types" allMemberCaption="All Bed Types" caption="Bed Type" primaryKey="BedTypeID">
 			<Table name="BedType"/>
 			<Level name="Bed Type" visible="true" table="BedType" column="BedType" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
@@ -120,6 +120,24 @@
 			<Level name="Occupation" visible="true" table="Occupation" column="Occupation" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Education Level">
+		<Hierarchy name="Education Level" visible="true" hasAll="true" allMemberName="All Education Levels" allMemberCaption="All Education Levels" caption="Education Level" primaryKey="EducationID">
+			<Table name="Education"/>
+			<Level name="Education Level" visible="true" table="Education" column="EducationLevel" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Language">
+		<Hierarchy name="Language" visible="true" hasAll="true" allMemberName="All Languages" allMemberCaption="All Languages" caption="Language" primaryKey="LanguageID">
+			<Table name="Language"/>
+			<Level name="Language" visible="true" table="Language" column="Language" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Housing Status">
+		<Hierarchy name="Housing Status" visible="true" hasAll="true" allMemberName="All Housing Statuses" allMemberCaption="All Housing Statuses" caption="Housing Status" primaryKey="HousingStatusID">
+			<Table name="HousingStatus"/>
+			<Level name="Housing Status" visible="true" table="HousingStatus" column="HousingStatusDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
 	<Cube name="Booking">
 		<Table name="booking" />
 		<DimensionUsage source="Age" name="Age" caption="Age" visible="true" foreignKey="PersonAgeID" highCardinality="false"/>
@@ -129,63 +147,15 @@
 		<DimensionUsage source="CaseStatus" name="CaseStatus" visible="true" foreignKey="CaseStatusID" highCardinality="false"/>
 		<DimensionUsage source="Pretrial Status" name="Pretrial Status" visible="true" foreignKey="PretrialStatusID" highCardinality="false"/>
 		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
-<!-- 		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
- -->		<DimensionUsage source="Bed Type" name="Bed Type" visible="true" foreignKey="BedTypeID" highCardinality="false"/>
+		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
+		<DimensionUsage source="Bed Type" name="Bed Type" visible="true" foreignKey="BedTypeID" highCardinality="false"/>
 		<DimensionUsage source="Income Level" name="Income Level" visible="true" foreignKey="IncomeLevelID" highCardinality="false"/>
 		<DimensionUsage source="Occupation" name="Occupation" visible="true" foreignKey="OccupationID" highCardinality="false"/>
+		<DimensionUsage source="Education Level" name="Education Level" visible="true" foreignKey="EducationID" highCardinality="false"/>
+		<DimensionUsage source="Language" name="Language" visible="true" foreignKey="LanguageID" highCardinality="false"/>
+		<DimensionUsage source="Housing Status" name="Housing Status" visible="true" foreignKey="HousingStatusID" highCardinality="false"/>
 		
-		<Dimension name="Facility" foreignKey="FacilityID">
-			<Hierarchy hasAll="true" allMemberName="All Facilities"
-				primaryKey="FacilityID">
-				<Table name="Facility" />
-				<Level name="Facility" column="FacilityName" uniqueMembers="true" />
-			</Hierarchy>
-		</Dimension><!-- 
- 		<Dimension name="Bed Type" foreignKey="BedTypeID">
-			<Hierarchy hasAll="true" allMemberName="All Bed Types"
-				primaryKey="BedTypeID">
-				<Table name="BedType" />
-				<Level name="Bed Type" column="BedType" uniqueMembers="true" />
-			</Hierarchy>
-		</Dimension>
-
-		<Dimension name="Income Level" foreignKey="IncomeLevelID">
-			<Hierarchy hasAll="true" allMemberName="All Income Levels"
-				primaryKey="IncomeLevelID">
-				<Table name="IncomeLevel" />
-				<Level name="Income Level" column="IncomeLevel" uniqueMembers="true" />
-			</Hierarchy>
-		</Dimension>
-		
-		<Dimension name="Occupation" foreignKey="OccupationID">
-			<Hierarchy hasAll="true" allMemberName="All Occupations"
-				primaryKey="OccupationID">
-				<Table name="Occupation" />
-				<Level name="Occupation" column="Occupation" uniqueMembers="true" ordinalColumn="OccupationID"/>
-			</Hierarchy>
-		</Dimension>-->
-		<Dimension name="Education Level" foreignKey="EducationID">
-			<Hierarchy hasAll="true" allMemberName="All Education Levels"
-				primaryKey="EducationID">
-				<Table name="Education" />
-				<Level name="Education Level" column="EducationLevel" uniqueMembers="true" />
-			</Hierarchy>
-		</Dimension>
-		<Dimension name="Language" foreignKey="LanguageID">
-			<Hierarchy hasAll="true" allMemberName="All Education Levels"
-				primaryKey="LanguageID">
-				<Table name="Language" />
-				<Level name="Language" column="Language" uniqueMembers="true" />
-			</Hierarchy>
-		</Dimension>
-		<Dimension name="Housing Status" foreignKey="HousingStatusID">
-			<Hierarchy hasAll="true" allMemberName="All Housing Statuses"
-				primaryKey="HousingStatusID">
-				<Table name="HousingStatus" />
-				<Level name="Housing Status" column="HousingStatusDescription" uniqueMembers="true" />
-			</Hierarchy>
-		</Dimension>
-		<Measure name="Defendant Count" column="bookingId" aggregator="count"
+ 		<Measure name="Defendant Count" column="bookingId" aggregator="count"
 			formatString="#,###" />
 		<Measure name="Bond Amount" column="BondAmount" aggregator="sum"
 			formatString="#,###.##" />
