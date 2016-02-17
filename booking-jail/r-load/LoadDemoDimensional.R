@@ -15,7 +15,7 @@
 # Loads the dimensional database with dummy/demo data
 
 COUNTY <- "Adams"
-demoBookingCount = 100
+demoBookingCount = 2000
 library(RMySQL)
 library(data.table)
 library(dplyr)
@@ -42,6 +42,7 @@ dbSendQuery(adsConnection, "delete from JailEpisodeChargeType")
 dbSendQuery(adsConnection, "delete from JailEpisode")
 dbSendQuery(adsConnection, "delete from BehaviorHealthAssessment")
 dbSendQuery(adsConnection, "delete from Person")
+dbSendQuery(adsConnection, "delete from DailyPopulation")
 
 # clear out dimension tables
 #dbSendQuery(conn, "delete from YesNo")
@@ -229,14 +230,15 @@ personTableRows<-booking[,c("PersonID", "RecidivistIndicator", "PersonAgeID", "P
 StagingPersonUniqueIdentifier<-personTableRows$PersonID
 personTableRows<-cbind(personTableRows, StagingPersonUniqueIdentifier)
 
+# Generate JailEpisodeChargeType test data
 ChargeTypeAssociation <- bind_rows(Map(createChargeTypeAssociationForBooking, booking$BookingID))
-
 jailEpisode<-bind_rows(Map(createJailEpisodesForBooking, booking$BookingID, booking$BookingLengthOfStay, booking$LastDaysAgo))
 JailEpisodeID<-1:nrow(jailEpisode)
 jailEpisode<-cbind(jailEpisode, JailEpisodeID)
 jailEpisodeChargeType<-join(ChargeTypeAssociation, jailEpisode, by=NULL, type="left", match="all")
 jailEpisodeChargeType<-select(jailEpisodeChargeType, -BookingID, -DaysAgo, -LengthOfStay)
 
+# Generate JailEpisode Table test data
 jailEpisodeRows<-join(booking, jailEpisode, type="left", match="all")
 jailEpisodeTableRows<-jailEpisodeRows[,
     c("JailEpisodeID", "JurisdictionID", "SendingAgency", "DaysAgo", "LengthOfStay",
@@ -256,8 +258,30 @@ maleBooking<-booking %>% filter(PersonSexID==1)
 maleBookingWithMentalProblems<-getBookingWithMentalProblems(maleBooking, .59)
 maleBehaviorAssessment<-bind_rows(Map(createBehaviorHealthAssessment, maleBookingWithMentalProblems$PersonID))
 
-dbWriteTable(adsConnection, "BehaviorHealthAssessment", data.table(femaleBehaviorAssessment), append=TRUE, row.names=FALSE)
-dbWriteTable(adsConnection, "BehaviorHealthAssessment", data.table(maleBehaviorAssessment), append=TRUE, row.names=FALSE)
+behaviorHealthAssessment <- rbind(femaleBehaviorAssessment, maleBehaviorAssessment)
+dbWriteTable(adsConnection, "BehaviorHealthAssessment", data.table(behaviorHealthAssessment), append=TRUE, row.names=FALSE)
 
+# Generate DailyPopulation test data
+personJailEpisode <- left_join(jailEpisodeTableRows, personTableRows)
+dailyPopulation <- count(personJailEpisode, DaysAgo, JurisdictionID, SendingAgency, PretrialStatusID,
+                         CaseStatusID, FacilityID, HousingStatusID, BedTypeID, IncomeLevelID, 
+                         OccupationID, EducationID, LanguageID, PopulationTypeID, PersonRaceID, 
+                         PersonSexID, PersonAgeID)
+dailyPopulation <- rename(dailyPopulation, EpisodeCount = n)
+dbWriteTable(adsConnection, "DailyPopulation", data.table(dailyPopulation), append=TRUE, row.names=FALSE)
+
+# Generate ChargedDailyPopulation data
+chargedJailEpisode <-left_join(personJailEpisode, jailEpisodeChargeType)
+chargedDailyPopulation <- count(chargedJailEpisode, DaysAgo, JurisdictionID, SendingAgency, FacilityID, 
+                         PopulationTypeID, ChargeTypeID)
+chargedDailyPopulation <- rename(chargedDailyPopulation, EpisodeCount = n, AgencyID = SendingAgency)
+dbWriteTable(adsConnection, "ChargedDailyPopulation", data.table(chargedDailyPopulation), append=TRUE, row.names=FALSE)
+
+# Generate BehaviorHealthDailyPopulation data
+behaviorHealthJailEpisode <-left_join(behaviorHealthAssessment, personJailEpisode)
+behaviorHealthDailyPopulation <- count(behaviorHealthJailEpisode, DaysAgo, JurisdictionID, SendingAgency, FacilityID, 
+                         PopulationTypeID, BehaviorHealthTypeID)
+behaviorHealthDailyPopulation <- rename(behaviorHealthDailyPopulation, EpisodeCount = n, AgencyID = SendingAgency)
+dbWriteTable(adsConnection, "BehaviorHealthDailyPopulation", data.table(behaviorHealthDailyPopulation), append=TRUE, row.names=FALSE)
 
 dbDisconnect(adsConnection)
