@@ -14,11 +14,12 @@
 
 # Loads the dimensional database with dummy/demo data
 
-STATE <- "VT"
+COUNTY <- "Adams"
 demoBookingCount = 100
 library(RMySQL)
 library(data.table)
 library(dplyr)
+library(plyr)
 library(rgdal)
 library(sp)
 library(readr)
@@ -27,7 +28,6 @@ library(Hmisc)
 library(stringr)
 library(xlsx)
 
-source("LoadDateTimeDimensionTables.R")
 source("LoadCodeTables.R")
 
 loadStartTime <- Sys.time()
@@ -38,20 +38,16 @@ adsConnection <- dbConnect(MySQL(), host="localhost", dbname="ojbc_booking_analy
 dbSendQuery(adsConnection, "set foreign_key_checks=0")
 
 # clear out fact tables
-#dbSendQuery(conn, "delete from Booking")
+dbSendQuery(adsConnection, "delete from Person")
 
 # clear out dimension tables
 #dbSendQuery(conn, "delete from YesNo")
 
 loadCodeTables("AnalyticsCodeTables.xlsx", adsConnection)
-loadDateDimensionTable(adsConnection)
-loadTimeDimensionTable(adsConnection)
 
 # extremely simplifies the person test data
 personID <- 1:demoBookingCount
 Person <- data.table(PersonID=personID, StagingPersonUniqueIdentifier=as.character(personID))
-dbWriteTable(adsConnection, "Person", Person, append=TRUE, row.names=FALSE)
-
 
 co_shp <- readOGR( "censusData/geoCensusBlocks", "gz_2010_08_150_00_500k")
 adams_county_shp <- subset(co_shp, COUNTY== "001")
@@ -77,15 +73,6 @@ buildBookingRow<-function(bookingId){
 
   recidivismBookingID <- sample(bookingId, size = length(bookingId)*.49)
   
-  n <- length(bookingId)
-  bookingDate <- runif(n=n, min=0, max=364) + as.Date("2013-01-01")
-  bookingDateID <- format(bookingDate, DATE_ID_FORMAT)
-  
-  hours <- sample(0:23, size=n, replace=TRUE)
-  minutes <- sample(0:59, size=n, replace=TRUE)
-  seconds <- sample(0:59, size=n, replace=TRUE)
-  bookingTimeID <- makeTimeID(hours, minutes, seconds)
-  
   jurisdictionID <- sample(Jurisdiction$JurisdictionID, size=n, replace=TRUE)
   sendingAgencyID <-sample(Agency$AgencyID, size=n, replace=TRUE)
   caseStatusID<-sample(CaseStatus$StatusID, size=n, replace=TRUE)
@@ -94,7 +81,7 @@ buildBookingRow<-function(bookingId){
   facilityProbs<-facilityCapacity/sum(facilityCapacity)
   facilityID<-sample(Facility$FacilityID, size=n, replace=TRUE, prob = facilityProbs)
   
-  recidivistIndicator<-sample(1:2, size=n, replace=TRUE, prob=c(0.49,0.51))
+  recidivistIndicator<-sample(0:1, size=n, replace=TRUE, prob=c(0.51,0.49))
 
   # Making up bond amount and bond amount probs. 
   bondAmountList<-c(0, 300, 500,2500, 10000, 20000, 40000, 50000, 100000, 500000, 503000, 
@@ -105,8 +92,6 @@ buildBookingRow<-function(bookingId){
   bondTypeID<-sample(BondType$BondTypeID, size=n, replace=TRUE, prob=c(.10, .66, .04, .20))
   
   pretrialStatusID<-sample(PretrialStatus$PretrialStatusID, size=n, replace=TRUE)
-  
-  defendantID<-personID
   
   # need to make release date. currently set it to be the same as supervisionReleaseDate. And 
   # need to populate more dateID to be able to have large lenght of stay. 
@@ -141,13 +126,17 @@ buildBookingRow<-function(bookingId){
   arrestLocationLatitude <- coords$lat
   arrestLocationLongitude <- coords$long
   
-
+  # http://www.correction.org/Secondary%20Pages/AverageLengthOfStay.html
+  lengthOfStay<-1:549
+  lengthOfStayProbs<-c(.645, .089, .027, .018, .013, rep(.007, 5), rep(.00265, 20), rep(.00143, 30), rep(.00083, 30), rep(.0006, 30), 
+                       rep(.0003, 30), rep(.00023, 30), rep(.00008, 185), rep(.000005,184))
+  bookingLengthOfStay<-sample(lengthOfStay, size=n, replace=TRUE, prob=lengthOfStayProbs)
+  lastDaysAgo<-sample(c(1:180), size=n, replace=TRUE)
+  
   df <- data.frame(BookingID=bookingId,
                    JurisdictionID=jurisdictionID,
                    SendingAgency=sendingAgencyID,
                    FacilityID=facilityID,
-                   BookingDate=as.integer(bookingDateID),
-                   TimeID=bookingTimeID,
                    BookingCaseNumber=as.character(bookingId),
                    StagingRecordID=bookingId,
                    CaseStatusID=caseStatusID,
@@ -155,10 +144,7 @@ buildBookingRow<-function(bookingId){
                    BondAmount=bondAmount,
                    BondTypeID=bondTypeID,
                    PretrialStatusID=pretrialStatusID,
-                   DefendantID=defendantID,
-                   DententionStartDate=as.integer(bookingDateID),
-                   ReleaseDate=as.integer(supervisionReleaseDateID),
-                   SupervisionReleaseDate=as.integer(supervisionReleaseDateID), 
+                   PersonID=personID,
                    BedTypeID=bedTypeID,
                    PopulationTypeID=populationTypeID,
                    PersonSexID=sexID,
@@ -170,7 +156,9 @@ buildBookingRow<-function(bookingId){
                    EducationID=educationID,
                    LanguageID=languageID, 
                    ArrestLocationLatitude=arrestLocationLatitude, 
-                   ArrestLocationLongitude=arrestLocationLongitude
+                   ArrestLocationLongitude=arrestLocationLongitude,
+                   BookingLengthOfStay=bookingLengthOfStay,
+                   LastDaysAgo=lastDaysAgo
                    )
 }
 
@@ -191,7 +179,23 @@ createChargeTypeAssociationForBooking <- function(bookingId) {
   }, types))
 }
 
-createBehaviorHealthAssessment <- function(personId, bookingDate) {
+createJailEpisodesForBooking <- function(bookingId, bookingLengthOfStay, lastDaysAgo) {
+  chargeTypeLength = length(ChargeType$ChargeTypeID)
+  
+  if (180-lastDaysAgo + 1 >= bookingLengthOfStay){
+    lengthOfStay<-bookingLengthOfStay:1;  
+    daysAgo<-lastDaysAgo:(lastDaysAgo + length(lengthOfStay) -1)
+  }
+  else{
+    daysAgo<-lastDaysAgo:180
+    lengthOfStay<-bookingLengthOfStay:(bookingLengthOfStay - length(daysAgo) + 1)
+  }
+  bind_rows(Map(function(daysAgo, lengthOfStay) {
+    data.frame(BookingID=c(bookingId), DaysAgo=c(daysAgo), LengthOfStay=c(lengthOfStay))
+  }, daysAgo, lengthOfStay))
+}
+
+createBehaviorHealthAssessment <- function(personId) {
 
   behaviorHealthTypeLength = length(BehaviorHealthType$BehaviorHealthTypeID)
   
@@ -206,7 +210,7 @@ createBehaviorHealthAssessment <- function(personId, bookingDate) {
   types <- sample(1:behaviorHealthTypeLength, size=behaviorHealthTypeCount, prob=c(rep(1/behaviorHealthTypeLength, behaviorHealthTypeLength)))
 
   bind_rows(Map(function(typeID) {
-    data.frame(PersonID=c(personId), BehaviorHealthTypeID=c(typeID), HealthScreeningDate=c(bookingDate))
+    data.frame(PersonID=c(personId), BehaviorHealthTypeID=c(typeID))
   }, types))
 
 }
@@ -217,20 +221,38 @@ getBookingWithMentalProblems<-function(booking, mentalHealthProblemRate){
 }
 
 booking <- buildBookingRow(bookingId)
+Person<-join(Person, booking)
+personTableRows<-booking[,c("PersonID", "RecidivistIndicator", "PersonAgeID", "PersonSexID", "PopulationTypeID", "PersonRaceID", "IncomeLevelID", "OccupationID", "EducationID", "LanguageID" )]
+StagingPersonUniqueIdentifier<-personTableRows$PersonID
+personTableRows<-cbind(personTableRows, StagingPersonUniqueIdentifier)
+
+ChargeTypeAssociation <- bind_rows(Map(createChargeTypeAssociationForBooking, booking$BookingID))
+
+jailEpisode<-bind_rows(Map(createJailEpisodesForBooking, booking$BookingID, booking$BookingLengthOfStay, booking$LastDaysAgo))
+JailEpisodeID<-1:nrow(jailEpisode)
+jailEpisode<-cbind(jailEpisode, JailEpisodeID)
+jailEpisodeChargeType<-join(ChargeTypeAssociation, jailEpisode, by=NULL, type="left", match="all")
+jailEpisodeChargeType<-select(jailEpisodeChargeType, -BookingID, -DaysAgo, -LengthOfStay)
+
+jailEpisodeRows<-join(booking, jailEpisode, type="left", match="all")
+jailEpisodeTableRows<-jailEpisodeRows[,
+    c("JailEpisodeID", "JurisdictionID", "SendingAgency", "DaysAgo", "LengthOfStay",
+      "CaseStatusID", "BondAmount", "BondTypeID", "PretrialStatusID", "PersonID", 
+      "FacilityID","BedTypeID", "HousingStatusID", "ArrestLocationLatitude", "ArrestLocationLongitude" )]
+
+dbWriteTable(adsConnection, "Person", personTableRows, append=TRUE, row.names=FALSE)
+dbWriteTable(adsConnection, "JailEpisode", jailEpisodeTableRows, append=TRUE, row.names=FALSE)
+dbWriteTable(adsConnection, "JailEpisodeChargeType", jailEpisodeChargeType, append=TRUE, row.names=FALSE)
+
 femaleBooking<-booking %>% filter(PersonSexID==2)
 femaleBookingWithMentalProblems<-getBookingWithMentalProblems(femaleBooking, .74)
-femaleBehaviorAssessment<-bind_rows(Map(createBehaviorHealthAssessment, femaleBookingWithMentalProblems$DefendantID, femaleBookingWithMentalProblems$BookingDate))
+femaleBehaviorAssessment<-bind_rows(Map(createBehaviorHealthAssessment, femaleBookingWithMentalProblems$PersonID))
 
 
 maleBooking<-booking %>% filter(PersonSexID==1)
 maleBookingWithMentalProblems<-getBookingWithMentalProblems(maleBooking, .59)
-maleBehaviorAssessment<-bind_rows(Map(createBehaviorHealthAssessment, maleBookingWithMentalProblems$DefendantID, maleBookingWithMentalProblems$BookingDate))
+maleBehaviorAssessment<-bind_rows(Map(createBehaviorHealthAssessment, maleBookingWithMentalProblems$PersonID))
 
-
-ChargeTypeAssociation <- bind_rows(Map(createChargeTypeAssociationForBooking, booking$BookingID))
-
-dbWriteTable(adsConnection, "Booking", booking, append=TRUE, row.names=FALSE)
-dbWriteTable(adsConnection, "ChargeTypeBookingAssociation", data.table(ChargeTypeAssociation), append=TRUE, row.names=FALSE)
 dbWriteTable(adsConnection, "BehaviorHealthAssessment", data.table(femaleBehaviorAssessment), append=TRUE, row.names=FALSE)
 dbWriteTable(adsConnection, "BehaviorHealthAssessment", data.table(maleBehaviorAssessment), append=TRUE, row.names=FALSE)
 
