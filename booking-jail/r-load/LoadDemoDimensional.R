@@ -38,6 +38,9 @@ adsConnection <- dbConnect(MySQL(), host="localhost", dbname="ojbc_booking_analy
 dbSendQuery(adsConnection, "set foreign_key_checks=0")
 
 # clear out fact tables
+dbSendQuery(adsConnection, "delete from JailEpisodeChargeType")
+dbSendQuery(adsConnection, "delete from JailEpisode")
+dbSendQuery(adsConnection, "delete from BehaviorHealthAssessment")
 dbSendQuery(adsConnection, "delete from Person")
 
 # clear out dimension tables
