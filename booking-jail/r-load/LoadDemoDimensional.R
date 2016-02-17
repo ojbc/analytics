@@ -43,6 +43,8 @@ dbSendQuery(adsConnection, "delete from JailEpisode")
 dbSendQuery(adsConnection, "delete from BehaviorHealthAssessment")
 dbSendQuery(adsConnection, "delete from Person")
 dbSendQuery(adsConnection, "delete from DailyPopulation")
+dbSendQuery(adsConnection, "delete from ChargedPopulation")
+dbSendQuery(adsConnection, "delete from BehaviorHealthPopulation")
 
 # clear out dimension tables
 #dbSendQuery(conn, "delete from YesNo")
