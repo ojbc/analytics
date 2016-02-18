@@ -33,50 +33,11 @@
 			<Level name="Gender" visible="true" table="PersonSex" column="PersonSexID" nameColumn="PersonSexDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
-	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="YesNoIndicator">
-		<Hierarchy name="YesNoIndicator" visible="true" hasAll="true" allMemberName="All Options" allMemberCaption="All Options" primaryKey="YesNoID" caption="Yes/No">
-			<Table name="YesNo"/>
-			<Level name="YesNoIndicator" visible="true" table="YesNo" column="YesNoDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-		</Hierarchy>
-	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="PopulationType" >
 		<Hierarchy name="PopulationType" hasAll="true" viaible="true" allMemberName="All Population Type" primaryKey="PopulationTypeID" caption="Population Type">
 			<Table name="PopulationType"/>
 			<Level name="Population Type" table="PopulationType" column="PopulationType" uniqueMembers="true" type="String" levelType="Regular" hideMemberIf="Never" />
 		</Hierarchy>
-	</Dimension>
-	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Time Of Day">
-		<Hierarchy name="Time" visible="true" hasAll="true" allMemberName="All Times" allMemberCaption="All Times" primaryKey="TimeID" caption="Time Of Day">
-			<Table name="Time"/>
-			<Level name="Hour" visible="true" table="Time" column="Hour" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-		</Hierarchy>
-	</Dimension>
-	<Dimension type="TimeDimension" visible="true" highCardinality="false" name="Date">
-		<Hierarchy name="DateYMD" visible="true" hasAll="true" primaryKey="DateID" caption="Year/Month/Day" allMemberName="All Years" allMemberCaption="All Years" >
-			<Table name="Date"/>
-			<Level name="Year" visible="true" table="Date" column="YearLabel" type="String" uniqueMembers="false" levelType="TimeYears" hideMemberIf="Never"/>
-			<Level name="Quarter" visible="true" table="Date" column="CalendarQuarter" type="String" uniqueMembers="false" levelType="TimeQuarters" hideMemberIf="Never"/>
-			<Level name="Month" visible="true" column="FullMonth" ordinalColumn="Month" type="String" uniqueMembers="false" levelType="TimeMonths" hideMemberIf="Never"/>
-			<Level name="Day" visible="true" column="Day" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never"/>
-		</Hierarchy>
-		<Hierarchy name="CalDate" visible="true" hasAll="true" primaryKey="DateID" caption="Calendar Date">
-			<Table name="Date"/>
-			<Level name="Date" visible="true" column="CalendarDate" type="Date" uniqueMembers="true" levelType="TimeDays" hideMemberIf="Never"/>
-		</Hierarchy>
-		<Hierarchy name="Day of Week" visible="true" hasAll="true" primaryKey="DateID" caption="Day of Week">
-			<Table name="Date"/>
-			<Level name="Day of Week" visible="true" column="DayOfWeek" ordinalColumn="DayOfWeekSort" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never"/>
-		</Hierarchy>
-	</Dimension>
-	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Year">
-	    <Hierarchy name="Year" visible="true" hasAll="true" primaryKey="YearID">
-	        <View alias="Year">
-	            <SQL dialect="mysql">
-	            <![CDATA[select distinct Year as YearID, Year as YearLabel from Date]]>
-	            </SQL>
-	        </View>
-			<Level name="Year" visible="true" table="Year" column="YearLabel" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-	    </Hierarchy>
 	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="CaseStatus">
 		<Hierarchy name="Case Status" visible="true" hasAll="true" allMemberName="All Statuses" allMemberCaption="All Statuses" caption="Statuses" primaryKey="StatusID">
@@ -138,26 +99,61 @@
 			<Level name="Housing Status" visible="true" table="HousingStatus" column="HousingStatusDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
-	<Cube name="Booking">
-		<Table name="booking" />
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Bond Type">
+		<Hierarchy name="Bond Type" visible="true" hasAll="true" allMemberName="All Bond Types" allMemberCaption="All Bond Types" caption="Bond Type" primaryKey="BondTypeID">
+			<Table name="BondType"/>
+			<Level name="Bond Type" visible="true" table="BondType" column="BondType" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Population Type">
+		<Hierarchy name="Population Type" visible="true" hasAll="true" allMemberName="All Population Types" allMemberCaption="All Population Types" caption="Population Type" primaryKey="PopulationTypeID">
+			<Table name="PopulationType"/>
+			<Level name="Population Type" visible="true" table="PopulationType" column="PopulationType" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Cube name="JailEpisodeSnapshot">
+		<View alias="jailEpisodeSnapshot">
+		    <SQL dialect="mysql">
+        <![CDATA[ select JailEpisodeID, JurisdictionID, SendingAgency, LengthOfStay, CaseStatusID, BondAmount, BondTypeID, PretrialStatusID, FacilityID,  
+        	 		 BedTypeID, HousingStatusID, ArrestLocationLatitude, ArrestLocationLongitude, RecidivistIndicator, PersonAgeID, PersonRaceID, PersonSexID, PopulationTypeID,  
+        	 		 IncomeLevelID, OccupationID, EducationID, LanguageID
+        	 	  from JailEpisode t left join Person p on p.PersonID = t.PersonID where t.DaysAgo = 1]]>
+			</SQL>
+		</View>
+		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="SendingAgency" highCardinality="false"/>
+		<DimensionUsage source="CaseStatus" name="CaseStatus" visible="true" foreignKey="CaseStatusID" highCardinality="false"/>
+		<DimensionUsage source="Bond Type" name="Bond Type" visible="true" foreignKey="BondTypeID" highCardinality="false"/>
+		<DimensionUsage source="Pretrial Status" name="Pretrial Status" visible="true" foreignKey="PretrialStatusID" highCardinality="false"/>
+		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
+		<DimensionUsage source="Housing Status" name="Housing Status" visible="true" foreignKey="HousingStatusID" highCardinality="false"/>
+		<DimensionUsage source="Bed Type" name="Bed Type" visible="true" foreignKey="BedTypeID" highCardinality="false"/>
 		<DimensionUsage source="Age" name="Age" caption="Age" visible="true" foreignKey="PersonAgeID" highCardinality="false"/>
 		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="PersonRaceID" highCardinality="false"/>
 		<DimensionUsage source="Gender" name="Gender" visible="true" foreignKey="PersonSexID" highCardinality="false"/>
-		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="SendingAgency" highCardinality="false"/>
-		<DimensionUsage source="CaseStatus" name="CaseStatus" visible="true" foreignKey="CaseStatusID" highCardinality="false"/>
-		<DimensionUsage source="Pretrial Status" name="Pretrial Status" visible="true" foreignKey="PretrialStatusID" highCardinality="false"/>
-		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
-		<DimensionUsage source="Bed Type" name="Bed Type" visible="true" foreignKey="BedTypeID" highCardinality="false"/>
+		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
 		<DimensionUsage source="Income Level" name="Income Level" visible="true" foreignKey="IncomeLevelID" highCardinality="false"/>
 		<DimensionUsage source="Occupation" name="Occupation" visible="true" foreignKey="OccupationID" highCardinality="false"/>
 		<DimensionUsage source="Education Level" name="Education Level" visible="true" foreignKey="EducationID" highCardinality="false"/>
 		<DimensionUsage source="Language" name="Language" visible="true" foreignKey="LanguageID" highCardinality="false"/>
-		<DimensionUsage source="Housing Status" name="Housing Status" visible="true" foreignKey="HousingStatusID" highCardinality="false"/>
 		
- 		<Measure name="Defendant Count" column="bookingId" aggregator="count"
+ 		<Measure name="Defendant Count" column="JailEpisodeID" aggregator="count" 
 			formatString="#,###" />
-		<Measure name="Bond Amount" column="BondAmount" aggregator="sum"
-			formatString="#,###.##" />
+ 		<Measure name="Bond Amount" column="BondAmount" aggregator="sum"
+			formatString="#,###.00" />
+ 		<Measure name="Total Length Of Stay" column="LengthOfStay" aggregator="sum"
+			formatString="#,###" />
+ 		<Measure name="Total Recidivist Count" column="RecidivistIndicator" aggregator="sum"
+			formatString="#,###" visible="false"/>
+			
+		<CalculatedMember name="Average Length Of Stay" caption="Average Length Of Stay" dimension="Measures">
+			<Formula>[Measures].[Total Length Of Stay] / [Measures].[Defendant Count]</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,###"/>
+		</CalculatedMember>
+		<CalculatedMember name="Recidivist Rate" caption="Recidivist Rate" dimension="Measures">
+			<Formula>[Measures].[Total Recidivist Count] / [Measures].[Defendant Count]</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+		</CalculatedMember>
+			
 	</Cube>
 </Schema>
