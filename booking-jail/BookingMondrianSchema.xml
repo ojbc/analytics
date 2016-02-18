@@ -281,8 +281,8 @@
 			formatString="#,###" />
 	</Cube>
 	
-	<Cube name="BehaviorHealthPopulationSnapshot">
-		<View alias="behaviorHealthPopulationSnapshot">
+	<Cube name="BehaviorHealthDailyPopulationSnapshot">
+		<View alias="behaviorHealthDailyPopulationSnapshot">
 		    <SQL dialect="mysql">
 		        <![CDATA[ select BehaviorHealthDailyPopulationID, EpisodeCount, BehaviorHealthTypeID, JurisdictionID, AgencyID, FacilityID, PopulationTypeID  
         	 	  	 from BehaviorHealthDailyPopulation where DaysAgo = 1]]>
