@@ -15,7 +15,7 @@
 # Loads the dimensional database with dummy/demo data
 
 COUNTY <- "Adams"
-demoBookingCount = 2000
+demoBookingCount = 10000
 library(RMySQL)
 library(data.table)
 library(dplyr)
@@ -47,7 +47,25 @@ dbSendQuery(adsConnection, "delete from ChargedPopulation")
 dbSendQuery(adsConnection, "delete from BehaviorHealthPopulation")
 
 # clear out dimension tables
-#dbSendQuery(conn, "delete from YesNo")
+dbSendQuery(adsConnection, "delete from Jurisdiction")
+dbSendQuery(adsConnection, "delete from CaseStatus")
+dbSendQuery(adsConnection, "delete from ChargeType")
+dbSendQuery(adsConnection, "delete from BondType")
+dbSendQuery(adsConnection, "delete from PersonAgeRange")
+dbSendQuery(adsConnection, "delete from PersonAge")
+dbSendQuery(adsConnection, "delete from PersonSex")
+dbSendQuery(adsConnection, "delete from PersonRace")
+dbSendQuery(adsConnection, "delete from PersonPopulationType")
+dbSendQuery(adsConnection, "delete from BehaviorHealthType")
+dbSendQuery(adsConnection, "delete from Language")
+dbSendQuery(adsConnection, "delete from Education")
+dbSendQuery(adsConnection, "delete from Occupation")
+dbSendQuery(adsConnection, "delete from IncomeLevel")
+dbSendQuery(adsConnection, "delete from BedType")
+dbSendQuery(adsConnection, "delete from HousingStatus")
+dbSendQuery(adsConnection, "delete from Facility")
+dbSendQuery(adsConnection, "delete from PretrialStatus")
+dbSendQuery(adsConnection, "delete from Agency")
 
 loadCodeTables("AnalyticsCodeTables.xlsx", adsConnection)
 
@@ -74,6 +92,7 @@ getRandomCoordsInBlocks <- function(geoIds) {
 
 #Create Booking test data
 bookingId<-1:demoBookingCount
+n<-demoBookingCount
 
 buildBookingRow<-function(bookingId){
 
@@ -98,11 +117,6 @@ buildBookingRow<-function(bookingId){
   bondTypeID<-sample(BondType$BondTypeID, size=n, replace=TRUE, prob=c(.10, .66, .04, .20))
   
   pretrialStatusID<-sample(PretrialStatus$PretrialStatusID, size=n, replace=TRUE)
-  
-  # need to make release date. currently set it to be the same as supervisionReleaseDate. And 
-  # need to populate more dateID to be able to have large lenght of stay. 
-  supervisionReleaseDate<-runif(n=n, min=10, max=364) + bookingDate
-  supervisionReleaseDateID <- format(supervisionReleaseDate, DATE_ID_FORMAT)
   
   bedTypeID<-sample(BedType$BedTypeID, size=n, replace=TRUE)
   sexID <- sample(1:3, size=n, replace=TRUE, prob=c(.91, .089, .001))
@@ -265,25 +279,25 @@ dbWriteTable(adsConnection, "BehaviorHealthAssessment", data.table(behaviorHealt
 
 # Generate DailyPopulation test data
 personJailEpisode <- left_join(jailEpisodeTableRows, personTableRows)
-dailyPopulation <- count(personJailEpisode, DaysAgo, JurisdictionID, SendingAgency, PretrialStatusID,
+dailyPopulation <- dplyr::count(personJailEpisode, DaysAgo, JurisdictionID, SendingAgency, PretrialStatusID,
                          CaseStatusID, FacilityID, HousingStatusID, BedTypeID, IncomeLevelID, 
                          OccupationID, EducationID, LanguageID, PopulationTypeID, PersonRaceID, 
                          PersonSexID, PersonAgeID)
-dailyPopulation <- rename(dailyPopulation, EpisodeCount = n)
+dailyPopulation <- dplyr::rename(dailyPopulation, EpisodeCount = n)
 dbWriteTable(adsConnection, "DailyPopulation", data.table(dailyPopulation), append=TRUE, row.names=FALSE)
 
 # Generate ChargedDailyPopulation data
 chargedJailEpisode <-left_join(personJailEpisode, jailEpisodeChargeType)
-chargedDailyPopulation <- count(chargedJailEpisode, DaysAgo, JurisdictionID, SendingAgency, FacilityID, 
+chargedDailyPopulation <- dplyr::count(chargedJailEpisode, DaysAgo, JurisdictionID, SendingAgency, FacilityID, 
                          PopulationTypeID, ChargeTypeID)
-chargedDailyPopulation <- rename(chargedDailyPopulation, EpisodeCount = n, AgencyID = SendingAgency)
+chargedDailyPopulation <- dplyr::rename(chargedDailyPopulation, EpisodeCount = n, AgencyID = SendingAgency)
 dbWriteTable(adsConnection, "ChargedDailyPopulation", data.table(chargedDailyPopulation), append=TRUE, row.names=FALSE)
 
 # Generate BehaviorHealthDailyPopulation data
 behaviorHealthJailEpisode <-left_join(behaviorHealthAssessment, personJailEpisode)
-behaviorHealthDailyPopulation <- count(behaviorHealthJailEpisode, DaysAgo, JurisdictionID, SendingAgency, FacilityID, 
+behaviorHealthDailyPopulation <- dplyr::count(behaviorHealthJailEpisode, DaysAgo, JurisdictionID, SendingAgency, FacilityID, 
                          PopulationTypeID, BehaviorHealthTypeID)
-behaviorHealthDailyPopulation <- rename(behaviorHealthDailyPopulation, EpisodeCount = n, AgencyID = SendingAgency)
+behaviorHealthDailyPopulation <- dplyr::rename(behaviorHealthDailyPopulation, EpisodeCount = n, AgencyID = SendingAgency)
 dbWriteTable(adsConnection, "BehaviorHealthDailyPopulation", data.table(behaviorHealthDailyPopulation), append=TRUE, row.names=FALSE)
 
 dbDisconnect(adsConnection)
