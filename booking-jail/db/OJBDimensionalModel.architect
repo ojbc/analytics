@@ -547,7 +547,7 @@
     <column id="COL147" populated="true" UUID="c5cf9783-3055-4d52-a0a5-5c85debcb546" autoIncrement="false" autoIncrementSequenceName="Jail_Custody_StagingPersonUniqueIdentifier_seq" defaultValue="" name="StagingPersonUniqueIdentifier" nullable="0" physicalName="StagingPersonUniqueIdentifier" precision="36" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL148" populated="true" UUID="8e160ec0-e495-4cf3-8d88-a041ffba4fdf" autoIncrement="false" autoIncrementSequenceName="Person_RecidivistIndicator_seq" defaultValue="" name="RecidivistIndicator" nullable="0" physicalName="RecidivistIndicator" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="5" userDefinedTypeUUID="69fb547f-e14c-4748-9746-4c0e9e94eb52" >
+    <column id="COL148" populated="true" UUID="8e160ec0-e495-4cf3-8d88-a041ffba4fdf" autoIncrement="false" autoIncrementSequenceName="Person_RecidivistIndicator_seq" defaultValue="0" name="RecidivistIndicator" nullable="0" physicalName="RecidivistIndicator" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="5" userDefinedTypeUUID="69fb547f-e14c-4748-9746-4c0e9e94eb52" >
      <remarks></remarks>
     </column>
     <column id="COL149" populated="true" UUID="d92a555c-3844-40ca-b74c-703d6ba1f96a" autoIncrement="false" autoIncrementSequenceName="PersonAge_PersonAgeID_seq_1_1" defaultValue="" name="PersonAgeID" nullable="0" physicalName="PersonAgeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -996,10 +996,10 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="110" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="156" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="565" y="328" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB66" x="403" y="30" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB71" x="99" y="90" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
