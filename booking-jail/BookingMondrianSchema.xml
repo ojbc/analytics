@@ -1,16 +1,4 @@
 <Schema name="ojbc_booking_analytics_demo">
-<!-- The commented dimensions when shared in multiple cubes not working -->	
-<!-- <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Days Ago">
-		<Hierarchy hasAll="true">
-			<Level name="Days Ago" column="DaysAgo" uniqueMembers="true"/>
-		</Hierarchy>
-	</Dimension>		
-	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Days Ago Filter">
-		<Hierarchy hasAll="true">
-			<Level name="Days Ago Filter" column="DaysAgo" uniqueMembers="true"/>
-		</Hierarchy>
-	</Dimension>		
- -->
  	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Age">
 		<Hierarchy name="PersonAge" visible="true" hasAll="true" primaryKey="PersonAgeID" primaryKeyTable="PersonAge" caption="Age">
 			<Join leftKey="PersonAgeRangeID" rightKey="PersonAgeRangeID">
@@ -335,8 +323,6 @@
 		<DimensionUsage source="Occupation" name="Occupation" visible="true" foreignKey="OccupationID" highCardinality="false"/>
 		<DimensionUsage source="Education Level" name="Education Level" visible="true" foreignKey="EducationID" highCardinality="false"/>
 		<DimensionUsage source="Language" name="Language" visible="true" foreignKey="LanguageID" highCardinality="false"/>
-<!--  		<DimensionUsage source="Days Ago" name="Days Ago" visible="true" highCardinality="false"/> 
- 		<DimensionUsage source="Days Ago Filter" name="Days Ago Filter" visible="true" highCardinality="false"/> -->
 		<Dimension visible="true" name="Days Ago">
 			<Hierarchy hasAll="true">
 				<Level name="Days Ago" column="DaysAgo" uniqueMembers="true"/>
