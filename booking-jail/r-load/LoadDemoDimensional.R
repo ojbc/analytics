@@ -151,7 +151,6 @@ buildBookingRow<-function(bookingId){
   lengthOfStayProbs<-c(.645, .089, .027, .018, .013, rep(.007, 5), rep(.00265, 20), rep(.00143, 30), rep(.00083, 30), rep(.0006, 30), 
                        rep(.0003, 30), rep(.00023, 30), rep(.00008, 185), rep(.000005,184))
   bookingLengthOfStay<-sample(lengthOfStay, size=n, replace=TRUE, prob=lengthOfStayProbs)
-  lastDaysAgo<-sample(c(1:180), size=n, replace=TRUE)
   
   df <- data.frame(BookingID=bookingId,
                    JurisdictionID=jurisdictionID,
@@ -177,8 +176,7 @@ buildBookingRow<-function(bookingId){
                    LanguageID=languageID, 
                    ArrestLocationLatitude=arrestLocationLatitude, 
                    ArrestLocationLongitude=arrestLocationLongitude,
-                   BookingLengthOfStay=bookingLengthOfStay,
-                   LastDaysAgo=lastDaysAgo
+                   BookingLengthOfStay=bookingLengthOfStay
                    )
 }
 
@@ -199,16 +197,31 @@ createChargeTypeAssociationForBooking <- function(bookingId) {
   }, types))
 }
 
-createJailEpisodesForBooking <- function(bookingId, bookingLengthOfStay, lastDaysAgo) {
-  chargeTypeLength = length(ChargeType$ChargeTypeID)
+createJailEpisodesForBooking <- function(bookingId, bookingLengthOfStay) {
+  lastDaysAgo<-sample((2-bookingLengthOfStay):180, size=1, replace=TRUE)
   
-  if (180-lastDaysAgo + 1 >= bookingLengthOfStay){
-    lengthOfStay<-bookingLengthOfStay:1;  
-    daysAgo<-lastDaysAgo:(lastDaysAgo + length(lengthOfStay) -1)
+  if (lastDaysAgo < 1){
+    lengthOfStayAsOfYesterday <- bookingLengthOfStay + lastDaysAgo -1
+    
+    if (lengthOfStayAsOfYesterday <=180){
+      lengthOfStay <- (lengthOfStayAsOfYesterday) : 1
+      
+      daysAgo <-1: (bookingLengthOfStay + lastDaysAgo -1)
+    }
+    else {
+      lengthOfStay <- lengthOfStayAsOfYesterday : (lengthOfStayAsOfYesterday - 179)
+      daysAgo <- 1:180
+    }
   }
-  else{
-    daysAgo<-lastDaysAgo:180
-    lengthOfStay<-bookingLengthOfStay:(bookingLengthOfStay - length(daysAgo) + 1)
+  else {
+    if (180-lastDaysAgo + 1 >= bookingLengthOfStay){
+      lengthOfStay<-bookingLengthOfStay:1  
+      daysAgo<-lastDaysAgo:(lastDaysAgo + length(lengthOfStay) -1)
+    }
+    else{
+      daysAgo<-lastDaysAgo:180
+      lengthOfStay<-bookingLengthOfStay:(bookingLengthOfStay - length(daysAgo) + 1)
+    }
   }
   bind_rows(Map(function(daysAgo, lengthOfStay) {
     data.frame(BookingID=c(bookingId), DaysAgo=c(daysAgo), LengthOfStay=c(lengthOfStay))
@@ -248,7 +261,7 @@ personTableRows<-cbind(personTableRows, StagingPersonUniqueIdentifier)
 
 # Generate JailEpisodeChargeType test data
 ChargeTypeAssociation <- bind_rows(Map(createChargeTypeAssociationForBooking, booking$BookingID))
-jailEpisode<-bind_rows(Map(createJailEpisodesForBooking, booking$BookingID, booking$BookingLengthOfStay, booking$LastDaysAgo))
+jailEpisode<-bind_rows(Map(createJailEpisodesForBooking, booking$BookingID, booking$BookingLengthOfStay))
 JailEpisodeID<-1:nrow(jailEpisode)
 jailEpisode<-cbind(jailEpisode, JailEpisodeID)
 jailEpisodeChargeType<-join(ChargeTypeAssociation, jailEpisode, by=NULL, type="left", match="all")
