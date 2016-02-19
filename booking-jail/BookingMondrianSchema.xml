@@ -1,5 +1,17 @@
 <Schema name="ojbc_booking_analytics_demo">
-	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Age">
+<!-- The commented dimensions when shared in multiple cubes not working -->	
+<!-- <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Days Ago">
+		<Hierarchy hasAll="true">
+			<Level name="Days Ago" column="DaysAgo" uniqueMembers="true"/>
+		</Hierarchy>
+	</Dimension>		
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Days Ago Filter">
+		<Hierarchy hasAll="true">
+			<Level name="Days Ago Filter" column="DaysAgo" uniqueMembers="true"/>
+		</Hierarchy>
+	</Dimension>		
+ -->
+ 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Age">
 		<Hierarchy name="PersonAge" visible="true" hasAll="true" primaryKey="PersonAgeID" primaryKeyTable="PersonAge" caption="Age">
 			<Join leftKey="PersonAgeRangeID" rightKey="PersonAgeRangeID">
 				<Table name="PersonAge"/>
@@ -297,4 +309,239 @@
  		<Measure name="DailyPopulation" column="EpisodeCount" aggregator="sum" 
 			formatString="#,###" />
 	</Cube>
+	
+	<Cube name="JailEpisode">
+		<View alias="jailEpisode">
+		    <SQL dialect="mysql">
+		        <![CDATA[ select JailEpisodeID, DaysAgo, JurisdictionID, SendingAgency, LengthOfStay, CaseStatusID, BondAmount, BondTypeID, PretrialStatusID, FacilityID,  
+        	 		 BedTypeID, HousingStatusID, ArrestLocationLatitude, ArrestLocationLongitude, RecidivistIndicator, PersonAgeID, PersonRaceID, PersonSexID, PopulationTypeID,  
+        	 		 IncomeLevelID, OccupationID, EducationID, LanguageID
+        	 	  	 from JailEpisode t left join Person p on p.PersonID = t.PersonID order by DaysAgo desc]]>
+			</SQL>
+		</View>
+		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="SendingAgency" highCardinality="false"/>
+		<DimensionUsage source="CaseStatus" name="CaseStatus" visible="true" foreignKey="CaseStatusID" highCardinality="false"/>
+		<DimensionUsage source="Bond Type" name="Bond Type" visible="true" foreignKey="BondTypeID" highCardinality="false"/>
+		<DimensionUsage source="Pretrial Status" name="Pretrial Status" visible="true" foreignKey="PretrialStatusID" highCardinality="false"/>
+		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
+		<DimensionUsage source="Housing Status" name="Housing Status" visible="true" foreignKey="HousingStatusID" highCardinality="false"/>
+		<DimensionUsage source="Bed Type" name="Bed Type" visible="true" foreignKey="BedTypeID" highCardinality="false"/>
+		<DimensionUsage source="Age" name="Age" caption="Age" visible="true" foreignKey="PersonAgeID" highCardinality="false"/>
+		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="PersonRaceID" highCardinality="false"/>
+		<DimensionUsage source="Gender" name="Gender" visible="true" foreignKey="PersonSexID" highCardinality="false"/>
+		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
+		<DimensionUsage source="Income Level" name="Income Level" visible="true" foreignKey="IncomeLevelID" highCardinality="false"/>
+		<DimensionUsage source="Occupation" name="Occupation" visible="true" foreignKey="OccupationID" highCardinality="false"/>
+		<DimensionUsage source="Education Level" name="Education Level" visible="true" foreignKey="EducationID" highCardinality="false"/>
+		<DimensionUsage source="Language" name="Language" visible="true" foreignKey="LanguageID" highCardinality="false"/>
+<!--  		<DimensionUsage source="Days Ago" name="Days Ago" visible="true" highCardinality="false"/> 
+ 		<DimensionUsage source="Days Ago Filter" name="Days Ago Filter" visible="true" highCardinality="false"/> -->
+		<Dimension visible="true" name="Days Ago">
+			<Hierarchy hasAll="true">
+				<Level name="Days Ago" column="DaysAgo" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>		
+		<Dimension visible="true" name="Days Ago filter">
+			<Hierarchy hasAll="true">
+				<Level name="Days Ago filter" column="DaysAgo" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>		
+		
+ 		<Measure name="Defendant Count" column="JailEpisodeID" aggregator="count" 
+			formatString="#,###" />
+ 		<Measure name="Bond Amount" column="BondAmount" aggregator="sum"
+			formatString="#,###.00" />
+ 		<Measure name="Total Length Of Stay" column="LengthOfStay" aggregator="sum"
+			formatString="#,###" />
+ 		<Measure name="Total Recidivist Count" column="RecidivistIndicator" aggregator="sum"
+			formatString="#,###" visible="false"/>
+			
+		<CalculatedMember name="Average Length Of Stay" caption="Average Length Of Stay" dimension="Measures">
+			<Formula>[Measures].[Total Length Of Stay] / [Measures].[Defendant Count]</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,###"/>
+		</CalculatedMember>
+		<CalculatedMember name="Recidivist Rate" caption="Recidivist Rate" dimension="Measures">
+			<Formula>[Measures].[Total Recidivist Count] / [Measures].[Defendant Count]</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+		</CalculatedMember>
+	</Cube>
+			
+ 	<Cube name="JailEpisodeChargeType">
+		<View alias="jailEpisodeChargeType">
+		    <SQL dialect="mysql">
+		        <![CDATA[ select t.JailEpisodeID, DaysAgo, LengthOfStay, RecidivistIndicator, ChargeTypeID, FacilityID, JurisdictionID, SendingAgency, PopulationTypeID
+					from JailEpisode t
+					left join Person p on p.PersonID = t.PersonID
+					left join JailEpisodeChargeType c on c.JailEpisodeID = t.JailEpisodeID ]]>
+			</SQL>
+		</View>
+		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
+		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="SendingAgency" highCardinality="false"/>
+		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
+		<DimensionUsage source="Charge Type" name="Charge Type" visible="true" foreignKey="ChargeTypeID" highCardinality="false"/>
+		<Dimension visible="true" name="Days Ago">
+			<Hierarchy hasAll="true">
+				<Level name="Days Ago" column="DaysAgo" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>		
+		<Dimension visible="true" name="Days Ago filter">
+			<Hierarchy hasAll="true">
+				<Level name="Days Ago filter" column="DaysAgo" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>		
+		
+ 		<Measure name="Defendant Count" column="JailEpisodeID" aggregator="count" 
+			formatString="#,###" />
+ 		<Measure name="Total Length Of Stay" column="LengthOfStay" aggregator="sum"
+			formatString="#,###" />
+ 		<Measure name="Total Recidivist Count" column="RecidivistIndicator" aggregator="sum"
+			formatString="#,###" visible="false"/>
+			
+		<CalculatedMember name="Average Length Of Stay" caption="Average Length Of Stay" dimension="Measures">
+			<Formula>[Measures].[Total Length Of Stay] / [Measures].[Defendant Count]</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,###"/>
+		</CalculatedMember>
+		<CalculatedMember name="Recidivist Rate" caption="Recidivist Rate" dimension="Measures">
+			<Formula>[Measures].[Total Recidivist Count] / [Measures].[Defendant Count]</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+		</CalculatedMember>
+	</Cube>
+
+	<Cube name="JailEpisodeBehaviorHealth">
+		<View alias="jailEpisodeBehaviorHealth">
+		    <SQL dialect="mysql">
+		        <![CDATA[ select t.JailEpisodeID, DaysAgo, LengthOfStay,FacilityID, RecidivistIndicator, BehaviorHealthTypeID,JurisdictionID, SendingAgency, PopulationTypeID
+					from JailEpisode t
+					left join Person p on p.PersonID = t.PersonID
+					right join BehaviorHealthAssessment b on b.PersonID = t.PersonID ]]>
+			</SQL>
+		</View>
+		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
+		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="SendingAgency" highCardinality="false"/>
+		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
+		<DimensionUsage source="Behavior Health Type" name="Behavior Health Type" visible="true" foreignKey="BehaviorHealthTypeID" highCardinality="false"/>
+		<Dimension visible="true" name="Days Ago">
+			<Hierarchy hasAll="true">
+				<Level name="Days Ago" column="DaysAgo" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>		
+		<Dimension visible="true" name="Days Ago filter">
+			<Hierarchy hasAll="true">
+				<Level name="Days Ago filter" column="DaysAgo" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>		
+		
+ 		<Measure name="Defendant Count" column="JailEpisodeID" aggregator="count" 
+			formatString="#,###" />
+ 		<Measure name="Total Length Of Stay" column="LengthOfStay" aggregator="sum"
+			formatString="#,###" />
+ 		<Measure name="Total Recidivist Count" column="RecidivistIndicator" aggregator="sum"
+			formatString="#,###" visible="false"/>
+			
+		<CalculatedMember name="Average Length Of Stay" caption="Average Length Of Stay" dimension="Measures">
+			<Formula>[Measures].[Total Length Of Stay] / [Measures].[Defendant Count]</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,###"/>
+		</CalculatedMember>
+		<CalculatedMember name="Recidivist Rate" caption="Recidivist Rate" dimension="Measures">
+			<Formula>[Measures].[Total Recidivist Count] / [Measures].[Defendant Count]</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+		</CalculatedMember>
+	</Cube>
+
+	<Cube name="DailyPopulation">
+		<View alias="dailyPopulation">
+		    <SQL dialect="mysql">
+		        <![CDATA[ select DailyPopulationID, DaysAgo, EpisodeCount, JurisdictionID, SendingAgency, CaseStatusID, PretrialStatusID, FacilityID,  
+        	 		 BedTypeID, HousingStatusID, PersonAgeID, PersonRaceID, PersonSexID, PopulationTypeID,  
+        	 		 IncomeLevelID, OccupationID, EducationID, LanguageID
+        	 	  	 from DailyPopulation]]>
+			</SQL>
+		</View>
+		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="SendingAgency" highCardinality="false"/>
+		<DimensionUsage source="CaseStatus" name="CaseStatus" visible="true" foreignKey="CaseStatusID" highCardinality="false"/>
+		<DimensionUsage source="Bond Type" name="Bond Type" visible="true" foreignKey="BondTypeID" highCardinality="false"/>
+		<DimensionUsage source="Pretrial Status" name="Pretrial Status" visible="true" foreignKey="PretrialStatusID" highCardinality="false"/>
+		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
+		<DimensionUsage source="Housing Status" name="Housing Status" visible="true" foreignKey="HousingStatusID" highCardinality="false"/>
+		<DimensionUsage source="Bed Type" name="Bed Type" visible="true" foreignKey="BedTypeID" highCardinality="false"/>
+		<DimensionUsage source="Age" name="Age" caption="Age" visible="true" foreignKey="PersonAgeID" highCardinality="false"/>
+		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="PersonRaceID" highCardinality="false"/>
+		<DimensionUsage source="Gender" name="Gender" visible="true" foreignKey="PersonSexID" highCardinality="false"/>
+		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
+		<DimensionUsage source="Income Level" name="Income Level" visible="true" foreignKey="IncomeLevelID" highCardinality="false"/>
+		<DimensionUsage source="Occupation" name="Occupation" visible="true" foreignKey="OccupationID" highCardinality="false"/>
+		<DimensionUsage source="Education Level" name="Education Level" visible="true" foreignKey="EducationID" highCardinality="false"/>
+		<DimensionUsage source="Language" name="Language" visible="true" foreignKey="LanguageID" highCardinality="false"/>
+		<Dimension visible="true" name="Days Ago">
+			<Hierarchy hasAll="true">
+				<Level name="Days Ago" column="DaysAgo" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>		
+		<Dimension visible="true" name="Days Ago filter">
+			<Hierarchy hasAll="true">
+				<Level name="Days Ago filter" column="DaysAgo" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>		
+		
+ 		<Measure name="DailyPopulation" column="EpisodeCount" aggregator="sum" 
+			formatString="#,###" />
+	</Cube>
+	<Cube name="ChargedDailyPopulation">
+		<View alias="chargedDailyPopulation">
+		    <SQL dialect="mysql">
+		        <![CDATA[ select ChargedDailyPopulationID, DaysAgo, EpisodeCount, ChargeTypeID, JurisdictionID, AgencyID, FacilityID, PopulationTypeID  
+        	 	  	 from ChargedDailyPopulation]]>
+			</SQL>
+		</View>
+		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
+		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
+		<DimensionUsage source="Charge Type" name="Charge Type" visible="true" foreignKey="ChargeTypeID" highCardinality="false"/>
+		<Dimension visible="true" name="Days Ago">
+			<Hierarchy hasAll="true">
+				<Level name="Days Ago" column="DaysAgo" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>		
+		<Dimension visible="true" name="Days Ago filter">
+			<Hierarchy hasAll="true">
+				<Level name="Days Ago filter" column="DaysAgo" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>		
+		
+ 		<Measure name="DailyPopulation" column="EpisodeCount" aggregator="sum" 
+			formatString="#,###" />
+	</Cube>
+	
+	<Cube name="BehaviorHealthDailyPopulation">
+		<View alias="behaviorHealthDailyPopulation">
+		    <SQL dialect="mysql">
+		        <![CDATA[ select BehaviorHealthDailyPopulationID, DaysAgo, EpisodeCount, BehaviorHealthTypeID, JurisdictionID, AgencyID, FacilityID, PopulationTypeID  
+        	 	  	 from BehaviorHealthDailyPopulation]]>
+			</SQL>
+		</View>
+		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
+		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
+		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
+		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
+		<DimensionUsage source="Behavior Health Type" name="Behavior Health Type" visible="true" foreignKey="BehaviorHealthTypeID" highCardinality="false"/>
+		<Dimension visible="true" name="Days Ago">
+			<Hierarchy hasAll="true">
+				<Level name="Days Ago" column="DaysAgo" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>		
+		<Dimension visible="true" name="Days Ago filter">
+			<Hierarchy hasAll="true">
+				<Level name="Days Ago filter" column="DaysAgo" uniqueMembers="true"/>
+			</Hierarchy>
+		</Dimension>		
+		
+ 		<Measure name="DailyPopulation" column="EpisodeCount" aggregator="sum" 
+			formatString="#,###" />
+	</Cube>
+	
 </Schema>
