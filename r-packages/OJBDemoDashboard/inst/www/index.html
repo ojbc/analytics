@@ -1,0 +1,173 @@
+<html>
+
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.2.1.min.js"></script>
+    <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//www.opencpu.org/js/archive/opencpu-0.4.js"></script>
+
+    <script>
+
+      drawPanel = function(panelLabel, args) {
+        ocpu.call("chart_" + panelLabel, args, function(session) {
+          $("#img_" + panelLabel).attr("src", session.getLoc() + "files/chart_" + panelLabel + ".svg");
+        }).fail(function(req){
+          alert("Error: " + req.responseText);
+        });
+      }
+
+        initAndShowPanel_r1c1 = function() {
+          drawPanel("r1c1", {});
+        }
+
+        initAndShowPanel_r1c2 = function() {
+          $('#league-select-dropdown').on('click', '.dropdown-menu li a', function() {
+            setSelectedLeague($(this).parent("li").attr("id"));
+          });
+          setSelectedLeague("league-select-option-al");
+        }
+
+         initAndShowPanel_r1c3 = function() {
+          drawPanel("r1c3", {});
+        }
+
+         initAndShowPanel_r2c1 = function() {
+          drawPanel("r2c1", {});
+        }
+
+         initAndShowPanel_r2c2 = function() {
+          drawPanel("r2c2", {});
+        }
+
+       setSelectedLeague = function(leagueID) {
+          //console.log("selected " + leagueID);
+          var dropdownDiv = $("#league-select-dropdown");
+          dropdownDiv.find("li").removeClass("active");
+          var selectedItem = dropdownDiv.find("#" + leagueID);
+          selectedItem.addClass("active");
+          dropdownDiv.find('.dropdown-toggle').html(selectedItem.find("a").html() + ' <span class="caret"></span>');
+          var leagueParam = leagueID == "league-select-option-al" ? "al" : "nl";
+          drawPanel("r1c2", {league : leagueParam});
+        }
+
+        $(document).ready(function() {
+
+          $("div .panel-control-spacer").each(function() {
+            $(this).height($("#league-select-dropdown").height());
+          }); 
+
+          initAndShowPanel_r1c1();
+          initAndShowPanel_r1c2();
+          initAndShowPanel_r1c3();
+          initAndShowPanel_r2c1();
+          initAndShowPanel_r2c2();
+
+        });
+
+    </script>
+
+    <style type="text/css">
+      <!-- This tweaks the padding around the bootstrap panels -->
+      [class*="col-"] {
+        padding-left: 1;
+        padding-right: 1;
+      }
+      .row {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .container-fluid {
+        margin: 0;
+        padding: 5;
+      }
+      .full-width {
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+      }
+    </style>
+    
+  </head>
+
+  <body>
+
+    <div class="page-header">
+      <h1>Sample R Dashboard</h1>
+    </div>
+
+    <div class="container container-fluid full-width">
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Average and Strikeout Rate over Time</h3>
+            </div>
+            <div id="panel_r1c1" class="panel-body">
+              <div class="panel-control-spacer"></div>
+              <img id="img_r1c1" width="100%"/>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Average Against, AL 2015</h3>
+            </div>
+            <div class="panel-body">
+              <div id="league-select-dropdown" class="dropdown dropdown-select"><b>League:</b>
+                <button class="btn btn-default dropdown-toggle" type="button" id="league-select-dropdown-menu" data-toggle="dropdown" aria-expanded="true">
+                  Dropdown
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="league-select-dropdown-menu">
+                  <li id="league-select-option-al" class="active"><a href="#">American League</a></li>
+                  <li id="league-select-option-nl"><a href="#">National League</a></li>
+                </ul>
+              </div>
+              <div id="panel_r1c2">
+                <img id="img_r1c2" width="100%"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Wins vs. Run Differential, 2015</h3>
+            </div>
+            <div id="panel_r1c3" class="panel-body">
+                <div class="panel-control-spacer"></div>
+                <img id="img_r1c3" width="100%"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Distribution of Runs Per Game, 2015</h3>
+            </div>
+            <div id="panel_r2c1" class="panel-body">
+              <div class="panel-control-spacer"></div>
+              <img id="img_r2c1" width="100%"/>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">25 Best HR Seasons, Compared to 95 %ile HR</h3>
+            </div>
+            <div id="panel_r2c2" class="panel-body">
+              <div class="panel-control-spacer"></div>
+              <img id="img_r2c2" width="100%"/>
+            </div>
+          </div>
+        </div>
+    </div>    
+  </body>
+
+</html>
