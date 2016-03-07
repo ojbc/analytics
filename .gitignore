@@ -5,3 +5,4 @@
 *.Rout
 r-packages/OJBDashboardDemo_0.1.tar.gz
 r-packages/OJBDemoDashboard/man
+r-packages/OJBDashboardDemo.Rcheck

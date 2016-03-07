@@ -8,6 +8,6 @@ Authors@R: person("Scott", "Came", email = "scott@search.org",
 Description: More about what it does (maybe more than one line)
 License: RPL
 LazyData: TRUE
-Imports:
-    ggplot2
 RoxygenNote: 5.0.1
+Imports: ggplot2,
+    ggthemes
