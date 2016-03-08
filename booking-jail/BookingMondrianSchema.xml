@@ -57,12 +57,6 @@
 			<Level name="Jurisdiction" visible="true" table="Jurisdiction" column="JurisdictionName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
-	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Facility">
-		<Hierarchy name="Facility" visible="true" hasAll="true" allMemberName="All Facilities" allMemberCaption="All Facilities" caption="Facility" primaryKey="FacilityID">
-			<Table name="Facility"/>
-			<Level name="Facility" visible="true" table="Facility" column="FacilityName" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-		</Hierarchy>
-	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Bed Type">
 		<Hierarchy name="Bed Type" visible="true" hasAll="true" allMemberName="All Bed Types" allMemberCaption="All Bed Types" caption="Bed Type" primaryKey="BedTypeID">
 			<Table name="BedType"/>
@@ -117,17 +111,17 @@
 			<Level name="Charge Type" visible="true" table="ChargeType" column="ChargeType" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
-	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Behavior Health Type">
-		<Hierarchy name="Behavior Health Type" visible="true" hasAll="true" allMemberName="All Behavior Health Types" allMemberCaption="All Behavior Health Types" caption="Behavior Health Type" primaryKey="BehaviorHealthTypeID">
-			<Table name="BehaviorHealthType"/>
-			<Level name="Behavior Health Type" visible="true" table="BehaviorHealthType" column="BehaviorHealthDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Behavioral Health Type">
+		<Hierarchy name="Behavioral Health Type" visible="true" hasAll="true" allMemberName="All Behavioral Health Types" allMemberCaption="All Behavioral Health Types" caption="Behavioral Health Type" primaryKey="BehavioralHealthTypeID">
+			<Table name="BehavioralHealthType"/>
+			<Level name="Behavioral Health Type" visible="true" table="BehavioralHealthType" column="BehavioralHealthDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
 	<Cube name="JailEpisodeSnapshot">
 		<View alias="jailEpisodeSnapshot">
 		    <SQL dialect="mysql">
-		        <![CDATA[ select JailEpisodeID, JurisdictionID, SendingAgency, LengthOfStay, CaseStatusID, BondAmount, BondTypeID, PretrialStatusID, FacilityID,  
+		        <![CDATA[ select JailEpisodeID, JurisdictionID, SendingAgency, LengthOfStay, CaseStatusID, BondAmount, BondTypeID, PretrialStatusID,  
         	 		 BedTypeID, HousingStatusID, ArrestLocationLatitude, ArrestLocationLongitude, RecidivistIndicator, PersonAgeID, PersonRaceID, PersonSexID, PopulationTypeID,  
         	 		 IncomeLevelID, OccupationID, EducationID, LanguageID
         	 	  	 from JailEpisode t left join Person p on p.PersonID = t.PersonID where t.DaysAgo = 1]]>
@@ -138,7 +132,6 @@
 		<DimensionUsage source="CaseStatus" name="CaseStatus" visible="true" foreignKey="CaseStatusID" highCardinality="false"/>
 		<DimensionUsage source="Bond Type" name="Bond Type" visible="true" foreignKey="BondTypeID" highCardinality="false"/>
 		<DimensionUsage source="Pretrial Status" name="Pretrial Status" visible="true" foreignKey="PretrialStatusID" highCardinality="false"/>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="Housing Status" name="Housing Status" visible="true" foreignKey="HousingStatusID" highCardinality="false"/>
 		<DimensionUsage source="Bed Type" name="Bed Type" visible="true" foreignKey="BedTypeID" highCardinality="false"/>
 		<DimensionUsage source="Age" name="Age" caption="Age" visible="true" foreignKey="PersonAgeID" highCardinality="false"/>
@@ -172,14 +165,13 @@
 	<Cube name="JailEpisodeChargeTypeSnapshot">
 		<View alias="jailEpisodeChargeTypeSnapshot">
 		    <SQL dialect="mysql">
-		        <![CDATA[ select t.JailEpisodeID, LengthOfStay, RecidivistIndicator, ChargeTypeID, FacilityID, JurisdictionID, SendingAgency, PopulationTypeID
+		        <![CDATA[ select t.JailEpisodeID, LengthOfStay, RecidivistIndicator, ChargeTypeID, JurisdictionID, SendingAgency, PopulationTypeID
 					from JailEpisode t
 					left join Person p on p.PersonID = t.PersonID
 					left join JailEpisodeChargeType c on c.JailEpisodeID = t.JailEpisodeID 
 					where t.DaysAgo = 1]]>
 			</SQL>
 		</View>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="SendingAgency" highCardinality="false"/>
 		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
@@ -202,21 +194,20 @@
 		</CalculatedMember>
 	</Cube>
 
-	<Cube name="JailEpisodeBehaviorHealthSnapshot">
-		<View alias="jailEpisodeBehaviorHealthSnapshot">
+	<Cube name="JailEpisodeBehavioralHealthSnapshot">
+		<View alias="jailEpisodeBehavioralHealthSnapshot">
 		    <SQL dialect="mysql">
-		        <![CDATA[ select t.JailEpisodeID, LengthOfStay,FacilityID, RecidivistIndicator, BehaviorHealthTypeID,JurisdictionID, SendingAgency, PopulationTypeID
+		        <![CDATA[ select t.JailEpisodeID, LengthOfStay, RecidivistIndicator, BehavioralHealthTypeID,JurisdictionID, SendingAgency, PopulationTypeID
 					from JailEpisode t
 					left join Person p on p.PersonID = t.PersonID
-					right join BehaviorHealthAssessment b on b.PersonID = t.PersonID 
+					right join BehavioralHealthAssessment b on b.PersonID = t.PersonID 
 					where t.DaysAgo = 1]]>
 			</SQL>
 		</View>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="SendingAgency" highCardinality="false"/>
 		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
-		<DimensionUsage source="Behavior Health Type" name="Behavior Health Type" visible="true" foreignKey="BehaviorHealthTypeID" highCardinality="false"/>
+		<DimensionUsage source="Behavioral Health Type" name="Behavioral Health Type" visible="true" foreignKey="BehavioralHealthTypeID" highCardinality="false"/>
 		
  		<Measure name="Defendant Count" column="JailEpisodeID" aggregator="count" 
 			formatString="#,###" />
@@ -238,7 +229,7 @@
 	<Cube name="DailyPopulationSnapshot">
 		<View alias="dailyPopulationSnapshot">
 		    <SQL dialect="mysql">
-		        <![CDATA[ select DailyPopulationID, EpisodeCount, JurisdictionID, SendingAgency, CaseStatusID, PretrialStatusID, FacilityID,  
+		        <![CDATA[ select DailyPopulationID, EpisodeCount, JurisdictionID, SendingAgency, CaseStatusID, PretrialStatusID,   
         	 		 BedTypeID, HousingStatusID, PersonAgeID, PersonRaceID, PersonSexID, PopulationTypeID,  
         	 		 IncomeLevelID, OccupationID, EducationID, LanguageID
         	 	  	 from DailyPopulation where DaysAgo = 1]]>
@@ -249,7 +240,6 @@
 		<DimensionUsage source="CaseStatus" name="CaseStatus" visible="true" foreignKey="CaseStatusID" highCardinality="false"/>
 		<DimensionUsage source="Bond Type" name="Bond Type" visible="true" foreignKey="BondTypeID" highCardinality="false"/>
 		<DimensionUsage source="Pretrial Status" name="Pretrial Status" visible="true" foreignKey="PretrialStatusID" highCardinality="false"/>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="Housing Status" name="Housing Status" visible="true" foreignKey="HousingStatusID" highCardinality="false"/>
 		<DimensionUsage source="Bed Type" name="Bed Type" visible="true" foreignKey="BedTypeID" highCardinality="false"/>
 		<DimensionUsage source="Age" name="Age" caption="Age" visible="true" foreignKey="PersonAgeID" highCardinality="false"/>
@@ -267,13 +257,12 @@
 	<Cube name="ChargedDailyPopulationSnapshot">
 		<View alias="chargedDailyPopulationSnapshot">
 		    <SQL dialect="mysql">
-		        <![CDATA[ select ChargedDailyPopulationID, EpisodeCount, ChargeTypeID, JurisdictionID, AgencyID, FacilityID, PopulationTypeID  
+		        <![CDATA[ select ChargedDailyPopulationID, EpisodeCount, ChargeTypeID, JurisdictionID, AgencyID, PopulationTypeID  
         	 	  	 from ChargedDailyPopulation where DaysAgo = 1]]>
 			</SQL>
 		</View>
 		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
 		<DimensionUsage source="Charge Type" name="Charge Type" visible="true" foreignKey="ChargeTypeID" highCardinality="false"/>
 		
@@ -281,18 +270,17 @@
 			formatString="#,###" />
 	</Cube>
 	
-	<Cube name="BehaviorHealthDailyPopulationSnapshot">
-		<View alias="behaviorHealthDailyPopulationSnapshot">
+	<Cube name="BehavioralHealthDailyPopulationSnapshot">
+		<View alias="behavioralHealthDailyPopulationSnapshot">
 		    <SQL dialect="mysql">
-		        <![CDATA[ select BehaviorHealthDailyPopulationID, EpisodeCount, BehaviorHealthTypeID, JurisdictionID, AgencyID, FacilityID, PopulationTypeID  
-        	 	  	 from BehaviorHealthDailyPopulation where DaysAgo = 1]]>
+		        <![CDATA[ select BehavioralHealthDailyPopulationID, EpisodeCount, BehavioralHealthTypeID, JurisdictionID, AgencyID, PopulationTypeID  
+        	 	  	 from BehavioralHealthDailyPopulation where DaysAgo = 1]]>
 			</SQL>
 		</View>
 		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
-		<DimensionUsage source="Behavior Health Type" name="Behavior Health Type" visible="true" foreignKey="BehaviorHealthTypeID" highCardinality="false"/>
+		<DimensionUsage source="Behavioral Health Type" name="Behavioral Health Type" visible="true" foreignKey="BehavioralHealthTypeID" highCardinality="false"/>
 		
  		<Measure name="DailyPopulation" column="EpisodeCount" aggregator="sum" 
 			formatString="#,###" />
@@ -301,7 +289,7 @@
 	<Cube name="JailEpisode">
 		<View alias="jailEpisode">
 		    <SQL dialect="mysql">
-		        <![CDATA[ select JailEpisodeID, DaysAgo, JurisdictionID, SendingAgency, LengthOfStay, CaseStatusID, BondAmount, BondTypeID, PretrialStatusID, FacilityID,  
+		        <![CDATA[ select JailEpisodeID, DaysAgo, JurisdictionID, SendingAgency, LengthOfStay, CaseStatusID, BondAmount, BondTypeID, PretrialStatusID,   
         	 		 BedTypeID, HousingStatusID, ArrestLocationLatitude, ArrestLocationLongitude, RecidivistIndicator, PersonAgeID, PersonRaceID, PersonSexID, PopulationTypeID,  
         	 		 IncomeLevelID, OccupationID, EducationID, LanguageID
         	 	  	 from JailEpisode t left join Person p on p.PersonID = t.PersonID order by DaysAgo desc]]>
@@ -312,7 +300,6 @@
 		<DimensionUsage source="CaseStatus" name="CaseStatus" visible="true" foreignKey="CaseStatusID" highCardinality="false"/>
 		<DimensionUsage source="Bond Type" name="Bond Type" visible="true" foreignKey="BondTypeID" highCardinality="false"/>
 		<DimensionUsage source="Pretrial Status" name="Pretrial Status" visible="true" foreignKey="PretrialStatusID" highCardinality="false"/>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="Housing Status" name="Housing Status" visible="true" foreignKey="HousingStatusID" highCardinality="false"/>
 		<DimensionUsage source="Bed Type" name="Bed Type" visible="true" foreignKey="BedTypeID" highCardinality="false"/>
 		<DimensionUsage source="Age" name="Age" caption="Age" visible="true" foreignKey="PersonAgeID" highCardinality="false"/>
@@ -356,13 +343,12 @@
  	<Cube name="JailEpisodeChargeType">
 		<View alias="jailEpisodeChargeType">
 		    <SQL dialect="mysql">
-		        <![CDATA[ select t.JailEpisodeID, DaysAgo, LengthOfStay, RecidivistIndicator, ChargeTypeID, FacilityID, JurisdictionID, SendingAgency, PopulationTypeID
+		        <![CDATA[ select t.JailEpisodeID, DaysAgo, LengthOfStay, RecidivistIndicator, ChargeTypeID, JurisdictionID, SendingAgency, PopulationTypeID
 					from JailEpisode t
 					left join Person p on p.PersonID = t.PersonID
 					left join JailEpisodeChargeType c on c.JailEpisodeID = t.JailEpisodeID ]]>
 			</SQL>
 		</View>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="SendingAgency" highCardinality="false"/>
 		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
@@ -395,20 +381,19 @@
 		</CalculatedMember>
 	</Cube>
 
-	<Cube name="JailEpisodeBehaviorHealth">
-		<View alias="jailEpisodeBehaviorHealth">
+	<Cube name="JailEpisodeBehavioralHealth">
+		<View alias="jailEpisodeBehavioralHealth">
 		    <SQL dialect="mysql">
-		        <![CDATA[ select t.JailEpisodeID, DaysAgo, LengthOfStay,FacilityID, RecidivistIndicator, BehaviorHealthTypeID,JurisdictionID, SendingAgency, PopulationTypeID
+		        <![CDATA[ select t.JailEpisodeID, DaysAgo, LengthOfStay, RecidivistIndicator, BehavioralHealthTypeID,JurisdictionID, SendingAgency, PopulationTypeID
 					from JailEpisode t
 					left join Person p on p.PersonID = t.PersonID
-					right join BehaviorHealthAssessment b on b.PersonID = t.PersonID ]]>
+					right join BehavioralHealthAssessment b on b.PersonID = t.PersonID ]]>
 			</SQL>
 		</View>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="SendingAgency" highCardinality="false"/>
 		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
-		<DimensionUsage source="Behavior Health Type" name="Behavior Health Type" visible="true" foreignKey="BehaviorHealthTypeID" highCardinality="false"/>
+		<DimensionUsage source="Behavioral Health Type" name="Behavioral Health Type" visible="true" foreignKey="BehavioralHealthTypeID" highCardinality="false"/>
 		<Dimension visible="true" name="Days Ago">
 			<Hierarchy hasAll="true">
 				<Level name="Days Ago" column="DaysAgo" uniqueMembers="true"/>
@@ -440,7 +425,7 @@
 	<Cube name="DailyPopulation">
 		<View alias="dailyPopulation">
 		    <SQL dialect="mysql">
-		        <![CDATA[ select DailyPopulationID, DaysAgo, EpisodeCount, JurisdictionID, SendingAgency, CaseStatusID, PretrialStatusID, FacilityID,  
+		        <![CDATA[ select DailyPopulationID, DaysAgo, EpisodeCount, JurisdictionID, SendingAgency, CaseStatusID, PretrialStatusID,  
         	 		 BedTypeID, HousingStatusID, PersonAgeID, PersonRaceID, PersonSexID, PopulationTypeID,  
         	 		 IncomeLevelID, OccupationID, EducationID, LanguageID
         	 	  	 from DailyPopulation]]>
@@ -451,7 +436,6 @@
 		<DimensionUsage source="CaseStatus" name="CaseStatus" visible="true" foreignKey="CaseStatusID" highCardinality="false"/>
 		<DimensionUsage source="Bond Type" name="Bond Type" visible="true" foreignKey="BondTypeID" highCardinality="false"/>
 		<DimensionUsage source="Pretrial Status" name="Pretrial Status" visible="true" foreignKey="PretrialStatusID" highCardinality="false"/>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="Housing Status" name="Housing Status" visible="true" foreignKey="HousingStatusID" highCardinality="false"/>
 		<DimensionUsage source="Bed Type" name="Bed Type" visible="true" foreignKey="BedTypeID" highCardinality="false"/>
 		<DimensionUsage source="Age" name="Age" caption="Age" visible="true" foreignKey="PersonAgeID" highCardinality="false"/>
@@ -479,13 +463,12 @@
 	<Cube name="ChargedDailyPopulation">
 		<View alias="chargedDailyPopulation">
 		    <SQL dialect="mysql">
-		        <![CDATA[ select ChargedDailyPopulationID, DaysAgo, EpisodeCount, ChargeTypeID, JurisdictionID, AgencyID, FacilityID, PopulationTypeID  
+		        <![CDATA[ select ChargedDailyPopulationID, DaysAgo, EpisodeCount, ChargeTypeID, JurisdictionID, AgencyID, PopulationTypeID  
         	 	  	 from ChargedDailyPopulation]]>
 			</SQL>
 		</View>
 		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
 		<DimensionUsage source="Charge Type" name="Charge Type" visible="true" foreignKey="ChargeTypeID" highCardinality="false"/>
 		<Dimension visible="true" name="Days Ago">
@@ -503,18 +486,17 @@
 			formatString="#,###" />
 	</Cube>
 	
-	<Cube name="BehaviorHealthDailyPopulation">
-		<View alias="behaviorHealthDailyPopulation">
+	<Cube name="BehavioralHealthDailyPopulation">
+		<View alias="behavioralHealthDailyPopulation">
 		    <SQL dialect="mysql">
-		        <![CDATA[ select BehaviorHealthDailyPopulationID, DaysAgo, EpisodeCount, BehaviorHealthTypeID, JurisdictionID, AgencyID, FacilityID, PopulationTypeID  
-        	 	  	 from BehaviorHealthDailyPopulation]]>
+		        <![CDATA[ select BehavioralHealthDailyPopulationID, DaysAgo, EpisodeCount, BehavioralHealthTypeID, JurisdictionID, AgencyID, PopulationTypeID  
+        	 	  	 from BehavioralHealthDailyPopulation]]>
 			</SQL>
 		</View>
 		<DimensionUsage source="Jurisdiction" name="Jurisdiction" visible="true" foreignKey="JurisdictionID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
-		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="Population Type" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
-		<DimensionUsage source="Behavior Health Type" name="Behavior Health Type" visible="true" foreignKey="BehaviorHealthTypeID" highCardinality="false"/>
+		<DimensionUsage source="Behavioral Health Type" name="Behavioral Health Type" visible="true" foreignKey="BehavioralHealthTypeID" highCardinality="false"/>
 		<Dimension visible="true" name="Days Ago">
 			<Hierarchy hasAll="true">
 				<Level name="Days Ago" column="DaysAgo" uniqueMembers="true"/>

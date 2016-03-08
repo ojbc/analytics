@@ -40,11 +40,11 @@ dbSendQuery(adsConnection, "set foreign_key_checks=0")
 # clear out fact tables
 dbSendQuery(adsConnection, "delete from JailEpisodeChargeType")
 dbSendQuery(adsConnection, "delete from JailEpisode")
-dbSendQuery(adsConnection, "delete from BehaviorHealthAssessment")
+dbSendQuery(adsConnection, "delete from BehavioralHealthAssessment")
 dbSendQuery(adsConnection, "delete from Person")
 dbSendQuery(adsConnection, "delete from DailyPopulation")
 dbSendQuery(adsConnection, "delete from ChargedDailyPopulation")
-dbSendQuery(adsConnection, "delete from BehaviorHealthDailyPopulation")
+dbSendQuery(adsConnection, "delete from BehavioralHealthDailyPopulation")
 
 # clear out dimension tables
 dbSendQuery(adsConnection, "delete from Jurisdiction")
@@ -56,14 +56,13 @@ dbSendQuery(adsConnection, "delete from PersonAge")
 dbSendQuery(adsConnection, "delete from PersonSex")
 dbSendQuery(adsConnection, "delete from PersonRace")
 dbSendQuery(adsConnection, "delete from PopulationType")
-dbSendQuery(adsConnection, "delete from BehaviorHealthType")
+dbSendQuery(adsConnection, "delete from BehavioralHealthType")
 dbSendQuery(adsConnection, "delete from Language")
 dbSendQuery(adsConnection, "delete from Education")
 dbSendQuery(adsConnection, "delete from Occupation")
 dbSendQuery(adsConnection, "delete from IncomeLevel")
 dbSendQuery(adsConnection, "delete from BedType")
 dbSendQuery(adsConnection, "delete from HousingStatus")
-dbSendQuery(adsConnection, "delete from Facility")
 dbSendQuery(adsConnection, "delete from PretrialStatus")
 dbSendQuery(adsConnection, "delete from Agency")
 
@@ -101,10 +100,6 @@ buildBookingRow<-function(bookingId){
   jurisdictionID <- sample(Jurisdiction$JurisdictionID, size=n, replace=TRUE)
   sendingAgencyID <-sample(Agency$AgencyID, size=n, replace=TRUE)
   caseStatusID<-sample(CaseStatus$StatusID, size=n, replace=TRUE)
-  
-  facilityCapacity<-as.integer(as.character(Facility$Capacity))
-  facilityProbs<-facilityCapacity/sum(facilityCapacity)
-  facilityID<-sample(Facility$FacilityID, size=n, replace=TRUE, prob = facilityProbs)
   
   recidivistIndicator<-sample(0:1, size=n, replace=TRUE, prob=c(0.51,0.49))
 
@@ -155,7 +150,6 @@ buildBookingRow<-function(bookingId){
   df <- data.frame(BookingID=bookingId,
                    JurisdictionID=jurisdictionID,
                    SendingAgency=sendingAgencyID,
-                   FacilityID=facilityID,
                    BookingCaseNumber=as.character(bookingId),
                    StagingRecordID=bookingId,
                    CaseStatusID=caseStatusID,
@@ -228,22 +222,22 @@ createJailEpisodesForBooking <- function(bookingId, bookingLengthOfStay) {
   }, daysAgo, lengthOfStay))
 }
 
-createBehaviorHealthAssessment <- function(personId) {
+createBehavioralHealthAssessment <- function(personId) {
 
-  behaviorHealthTypeLength = length(BehaviorHealthType$BehaviorHealthTypeID)
+  behavioralHealthTypeLength = length(BehavioralHealthType$BehavioralHealthTypeID)
   
-  behaviorHealthTypeCount <- rpois(n=1, lambda=1)
+  behavioralHealthTypeCount <- rpois(n=1, lambda=1)
   # reasonable limit...no more than five different types with one incident
-  if (behaviorHealthTypeCount > behaviorHealthTypeLength) {
-    behaviorHealthTypeCount <- behaviorHealthTypeLength
+  if (behavioralHealthTypeCount > behavioralHealthTypeLength) {
+    behavioralHealthTypeCount <- behavioralHealthTypeLength
   }
-  if (behaviorHealthTypeCount == 0) {
-    behaviorHealthTypeCount <- 1
+  if (behavioralHealthTypeCount == 0) {
+    behavioralHealthTypeCount <- 1
   }
-  types <- sample(1:behaviorHealthTypeLength, size=behaviorHealthTypeCount, prob=c(rep(1/behaviorHealthTypeLength, behaviorHealthTypeLength)))
+  types <- sample(1:behavioralHealthTypeLength, size=behavioralHealthTypeCount, prob=c(rep(1/behavioralHealthTypeLength, behavioralHealthTypeLength)))
 
   bind_rows(Map(function(typeID) {
-    data.frame(PersonID=c(personId), BehaviorHealthTypeID=c(typeID))
+    data.frame(PersonID=c(personId), BehavioralHealthTypeID=c(typeID))
   }, types))
 
 }
@@ -272,7 +266,7 @@ jailEpisodeRows<-join(booking, jailEpisode, type="left", match="all")
 jailEpisodeTableRows<-jailEpisodeRows[,
     c("JailEpisodeID", "JurisdictionID", "SendingAgency", "DaysAgo", "LengthOfStay",
       "CaseStatusID", "BondAmount", "BondTypeID", "PretrialStatusID", "PersonID", 
-      "FacilityID","BedTypeID", "HousingStatusID", "ArrestLocationLatitude", "ArrestLocationLongitude" )]
+      "BedTypeID", "HousingStatusID", "ArrestLocationLatitude", "ArrestLocationLongitude" )]
 
 dbWriteTable(adsConnection, "Person", personTableRows, append=TRUE, row.names=FALSE)
 dbWriteTable(adsConnection, "JailEpisode", jailEpisodeTableRows, append=TRUE, row.names=FALSE)
@@ -280,20 +274,20 @@ dbWriteTable(adsConnection, "JailEpisodeChargeType", jailEpisodeChargeType, appe
 
 femaleBooking<-booking %>% filter(PersonSexID==2)
 femaleBookingWithMentalProblems<-getBookingWithMentalProblems(femaleBooking, .74)
-femaleBehaviorAssessment<-bind_rows(Map(createBehaviorHealthAssessment, femaleBookingWithMentalProblems$PersonID))
+femaleBehavioralAssessment<-bind_rows(Map(createBehavioralHealthAssessment, femaleBookingWithMentalProblems$PersonID))
 
 
 maleBooking<-booking %>% filter(PersonSexID==1)
 maleBookingWithMentalProblems<-getBookingWithMentalProblems(maleBooking, .59)
-maleBehaviorAssessment<-bind_rows(Map(createBehaviorHealthAssessment, maleBookingWithMentalProblems$PersonID))
+maleBehavioralAssessment<-bind_rows(Map(createBehavioralHealthAssessment, maleBookingWithMentalProblems$PersonID))
 
-behaviorHealthAssessment <- rbind(femaleBehaviorAssessment, maleBehaviorAssessment)
-dbWriteTable(adsConnection, "BehaviorHealthAssessment", data.table(behaviorHealthAssessment), append=TRUE, row.names=FALSE)
+behavioralHealthAssessment <- rbind(femaleBehavioralAssessment, maleBehavioralAssessment)
+dbWriteTable(adsConnection, "BehavioralHealthAssessment", data.table(behavioralHealthAssessment), append=TRUE, row.names=FALSE)
 
 # Generate DailyPopulation test data
 personJailEpisode <- left_join(jailEpisodeTableRows, personTableRows)
 dailyPopulation <- dplyr::count(personJailEpisode, DaysAgo, JurisdictionID, SendingAgency, PretrialStatusID,
-                         CaseStatusID, FacilityID, HousingStatusID, BedTypeID, IncomeLevelID, 
+                         CaseStatusID, HousingStatusID, BedTypeID, IncomeLevelID, 
                          OccupationID, EducationID, LanguageID, PopulationTypeID, PersonRaceID, 
                          PersonSexID, PersonAgeID)
 dailyPopulation <- dplyr::rename(dailyPopulation, EpisodeCount = n)
@@ -301,16 +295,16 @@ dbWriteTable(adsConnection, "DailyPopulation", data.table(dailyPopulation), appe
 
 # Generate ChargedDailyPopulation data
 chargedJailEpisode <-left_join(personJailEpisode, jailEpisodeChargeType)
-chargedDailyPopulation <- dplyr::count(chargedJailEpisode, DaysAgo, JurisdictionID, SendingAgency, FacilityID, 
+chargedDailyPopulation <- dplyr::count(chargedJailEpisode, DaysAgo, JurisdictionID, SendingAgency,  
                          PopulationTypeID, ChargeTypeID)
 chargedDailyPopulation <- dplyr::rename(chargedDailyPopulation, EpisodeCount = n, AgencyID = SendingAgency)
 dbWriteTable(adsConnection, "ChargedDailyPopulation", data.table(chargedDailyPopulation), append=TRUE, row.names=FALSE)
 
-# Generate BehaviorHealthDailyPopulation data
-behaviorHealthJailEpisode <-left_join(behaviorHealthAssessment, personJailEpisode)
-behaviorHealthDailyPopulation <- dplyr::count(behaviorHealthJailEpisode, DaysAgo, JurisdictionID, SendingAgency, FacilityID, 
-                         PopulationTypeID, BehaviorHealthTypeID)
-behaviorHealthDailyPopulation <- dplyr::rename(behaviorHealthDailyPopulation, EpisodeCount = n, AgencyID = SendingAgency)
-dbWriteTable(adsConnection, "BehaviorHealthDailyPopulation", data.table(behaviorHealthDailyPopulation), append=TRUE, row.names=FALSE)
+# Generate BehavioralHealthDailyPopulation data
+behavioralHealthJailEpisode <-left_join(behavioralHealthAssessment, personJailEpisode)
+behavioralHealthDailyPopulation <- dplyr::count(behavioralHealthJailEpisode, DaysAgo, JurisdictionID, SendingAgency, 
+                         PopulationTypeID, BehavioralHealthTypeID)
+behavioralHealthDailyPopulation <- dplyr::rename(behavioralHealthDailyPopulation, EpisodeCount = n, AgencyID = SendingAgency)
+dbWriteTable(adsConnection, "BehavioralHealthDailyPopulation", data.table(behavioralHealthDailyPopulation), append=TRUE, row.names=FALSE)
 
 dbDisconnect(adsConnection)
