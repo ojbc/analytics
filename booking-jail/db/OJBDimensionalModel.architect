@@ -170,10 +170,10 @@
     <column id="COL48" populated="true" UUID="b6519e0b-5bd4-4d68-b2f0-2ba90693933b" autoIncrement="true" autoIncrementSequenceName="JailEpisode_JailEpisodeID_seq" defaultValue="" name="JailEpisodeID" nullable="0" physicalName="JailEpisodeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="-5" userDefinedTypeUUID="433cc8af-284d-4abb-8ef7-08ebcb34dbf1" >
      <remarks></remarks>
     </column>
-    <column id="COL49" populated="true" UUID="20643d4a-060d-4cca-bccd-f05dc8e8efd9" autoIncrement="false" autoIncrementSequenceName="JailEpisode_JurisdictionID_seq" defaultValue="" name="JurisdictionID" nullable="0" physicalName="JurisdictionID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL49" populated="true" UUID="20643d4a-060d-4cca-bccd-f05dc8e8efd9" autoIncrement="false" autoIncrementSequenceName="JailEpisode_JurisdictionID_seq" defaultValue="" name="JurisdictionTypeID" nullable="0" physicalName="JurisdictionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL50" populated="true" UUID="bbbef626-91b4-4d45-bccd-97d90f36df58" autoIncrement="false" autoIncrementSequenceName="Agency_AgencyID_seq" defaultValue="" name="SendingAgency" nullable="0" physicalName="SendingAgency" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL50" populated="true" UUID="bbbef626-91b4-4d45-bccd-97d90f36df58" autoIncrement="false" autoIncrementSequenceName="Agency_AgencyID_seq" defaultValue="" name="AgencyTypeID" nullable="0" physicalName="AgencyTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL51" populated="true" UUID="745e74c5-675e-4e7f-9ae9-05acad9671a7" autoIncrement="false" autoIncrementSequenceName="JailEpisode_DaysAgo_seq" defaultValue="" name="DaysAgo" nullable="0" physicalName="DaysAgo" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -223,13 +223,13 @@
     </index>
    </folder>
   </table>
-  <table id="TAB65" populated="true" UUID="445d56fa-ef21-48cf-bca7-e2806a92d3ed" name="Agency" objectType="TABLE" physicalName="Agency" >
+  <table id="TAB65" populated="true" UUID="445d56fa-ef21-48cf-bca7-e2806a92d3ed" name="AgencyType" objectType="TABLE" physicalName="AgencyType" >
    <remarks></remarks>
    <folder id="FOLTAB651" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL66" populated="true" UUID="71e926c7-72b3-4c46-a96c-9419908e117b" autoIncrement="true" autoIncrementSequenceName="Agency_AgencyID_seq_1" defaultValue="" name="AgencyID" nullable="0" physicalName="AgencyID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL66" populated="true" UUID="71e926c7-72b3-4c46-a96c-9419908e117b" autoIncrement="true" autoIncrementSequenceName="AgencyType_AgencyTypeID_seq" defaultValue="" name="AgencyTypeID" nullable="0" physicalName="AgencyTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL67" populated="true" UUID="a6a08f9d-4c90-4109-874c-c939988483ee" autoIncrement="false" autoIncrementSequenceName="Agency_AgencyName_seq" defaultValue="" name="AgencyName" nullable="0" physicalName="AgencyName" precision="40" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL67" populated="true" UUID="a6a08f9d-4c90-4109-874c-c939988483ee" autoIncrement="false" autoIncrementSequenceName="AgencyType_AgencyTypeDescription_seq" defaultValue="" name="AgencyTypeDescription " nullable="0" physicalName="AgencyTypeDescription" precision="40" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -238,18 +238,18 @@
     <folder id="FOLTAB652" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB654" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX68" populated="true" UUID="42986351-6469-4002-abf2-01876dd8d4a5" clustered="false" name="AgencyID" physicalName="agencyid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC69" populated="true" UUID="7d2db8ea-388d-436b-8164-ba2d7f5f030d" ascendingOrDescending="UNSPECIFIED" column-ref="COL66" name="AgencyID" physicalName="AgencyID" />
+    <index id="IDX68" populated="true" UUID="42986351-6469-4002-abf2-01876dd8d4a5" clustered="false" name="AgencyTypeID" physicalName="agencytypeid" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC69" populated="true" UUID="7d2db8ea-388d-436b-8164-ba2d7f5f030d" ascendingOrDescending="UNSPECIFIED" column-ref="COL66" name="AgencyTypeID" physicalName="AgencyTypeID" />
     </index>
    </folder>
   </table>
-  <table id="TAB70" populated="true" UUID="2d39fa2c-67ab-42e7-af41-201ec350c9e6" name="Jurisdiction" objectType="TABLE" physicalName="Jurisdiction" >
+  <table id="TAB70" populated="true" UUID="2d39fa2c-67ab-42e7-af41-201ec350c9e6" name="JurisdictionType" objectType="TABLE" physicalName="JurisdictionType" >
    <remarks></remarks>
    <folder id="FOLTAB701" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL71" populated="true" UUID="d5ba76df-e73a-4dfa-89bf-19bb5f7d7fe7" autoIncrement="true" autoIncrementSequenceName="Jurisdiction_JurisdictionID_seq_1" defaultValue="" name="JurisdictionID" nullable="0" physicalName="JurisdictionID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL71" populated="true" UUID="d5ba76df-e73a-4dfa-89bf-19bb5f7d7fe7" autoIncrement="true" autoIncrementSequenceName="JurisdictionType_JurisdictionTypeID_seq" defaultValue="" name="JurisdictionTypeID" nullable="0" physicalName="JurisdictionTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL72" populated="true" UUID="91aca2f6-a48a-4f64-af7d-4ea9ad7c19a3" autoIncrement="false" autoIncrementSequenceName="Jurisdiction_JurisdictionName_seq" defaultValue="" name="JurisdictionName" nullable="0" physicalName="JurisdictionName" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL72" populated="true" UUID="91aca2f6-a48a-4f64-af7d-4ea9ad7c19a3" autoIncrement="false" autoIncrementSequenceName="JurisdictionType_JurisdictionTypeDescription_seq" defaultValue="" name="JurisdictionTypeDescription" nullable="0" physicalName="JurisdictionTypeDescription" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -258,8 +258,8 @@
     <folder id="FOLTAB702" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB704" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX73" populated="true" UUID="c9259717-47b7-44a0-8d42-a005e7f37c37" clustered="false" name="JurisdictionID" physicalName="jurisdictionid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC74" populated="true" UUID="3e7f961c-854c-4468-b59a-4f1477055b33" ascendingOrDescending="UNSPECIFIED" column-ref="COL71" name="JurisdictionID" physicalName="JurisdictionID" />
+    <index id="IDX73" populated="true" UUID="c9259717-47b7-44a0-8d42-a005e7f37c37" clustered="false" name="JurisdictionTypeID" physicalName="jurisdictiontypeid" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC74" populated="true" UUID="3e7f961c-854c-4468-b59a-4f1477055b33" ascendingOrDescending="UNSPECIFIED" column-ref="COL71" name="JurisdictionTypeID" physicalName="JurisdictionTypeID" />
     </index>
    </folder>
   </table>
@@ -565,7 +565,7 @@
     <column id="COL153" populated="true" UUID="c0262375-c329-4ab8-9708-d4019644a747" autoIncrement="false" autoIncrementSequenceName="Occupation_OccupationID_seq_1" defaultValue="" name="OccupationTypeID" nullable="0" physicalName="OccupationTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL154" populated="true" UUID="c7269524-2b87-433c-992e-ae630768c57d" autoIncrement="false" autoIncrementSequenceName="Education_EducationID_seq" defaultValue="" name="EducationTypeID" nullable="0" physicalName="EducationTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL154" populated="true" UUID="c7269524-2b87-433c-992e-ae630768c57d" autoIncrement="false" autoIncrementSequenceName="Education_EducationID_seq" defaultValue="" name="EducationLevelTypeID" nullable="0" physicalName="EducationLevelTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL155" populated="true" UUID="bb0e9b8a-17ae-4d15-a5a6-bf00627467fb" autoIncrement="false" autoIncrementSequenceName="Language_LanguageID_seq_1" defaultValue="" name="LanguageTypeID" nullable="0" physicalName="LanguageTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -642,13 +642,13 @@
     </index>
    </folder>
   </table>
-  <table id="TAB173" populated="true" UUID="8ed96f2a-4f56-4dc3-9970-40f7a4d2dfb8" name="EducationType" objectType="TABLE" physicalName="EducationType" >
+  <table id="TAB173" populated="true" UUID="8ed96f2a-4f56-4dc3-9970-40f7a4d2dfb8" name="EducationLevelType" objectType="TABLE" physicalName="EducationLevelType" >
    <remarks></remarks>
    <folder id="FOLTAB1731" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL174" populated="true" UUID="b41d3865-bcae-46c7-bf59-35c1a2ccc034" autoIncrement="true" autoIncrementSequenceName="EducationType_EducationTypeID_seq" defaultValue="" name="EducationTypeID" nullable="0" physicalName="EducationTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL174" populated="true" UUID="b41d3865-bcae-46c7-bf59-35c1a2ccc034" autoIncrement="true" autoIncrementSequenceName="EducationLevelType_EducationLevelTypeID_seq" defaultValue="" name="EducationLevelTypeID" nullable="0" physicalName="EducationLevelTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL175" populated="true" UUID="a478b93f-4ce7-4ea1-9e8a-433fe7aec6be" autoIncrement="false" autoIncrementSequenceName="EducationType_EducationLevel_seq" defaultValue="" name="EducationLevel" nullable="0" physicalName="EducationLevel" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL175" populated="true" UUID="a478b93f-4ce7-4ea1-9e8a-433fe7aec6be" autoIncrement="false" autoIncrementSequenceName="EducationLevelType_EducationLevelTypeDescription_seq" defaultValue="" name="EducationLevelTypeDescription" nullable="0" physicalName="EducationLevelTypeDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -657,8 +657,8 @@
     <folder id="FOLTAB1732" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB1734" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX176" populated="true" UUID="7f3995e3-43ad-4781-909a-f339a8fedced" clustered="false" name="EducationTypeID" physicalName="educationtypeid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC177" populated="true" UUID="f248223d-5b9c-446c-84db-23a312707311" ascendingOrDescending="UNSPECIFIED" column-ref="COL174" name="EducationTypeID" physicalName="EducationTypeID" />
+    <index id="IDX176" populated="true" UUID="7f3995e3-43ad-4781-909a-f339a8fedced" clustered="false" name="EducationLevelTypeID" physicalName="educationleveltypeid" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC177" populated="true" UUID="f248223d-5b9c-446c-84db-23a312707311" ascendingOrDescending="UNSPECIFIED" column-ref="COL174" name="EducationLevelTypeID" physicalName="EducationLevelTypeID" />
     </index>
    </folder>
   </table>
@@ -694,10 +694,10 @@
     <column id="COL186" populated="true" UUID="7f01cdcb-e15c-4308-b747-60db048a2dc1" autoIncrement="false" autoIncrementSequenceName="DailyPopulation_EpisodeCount_seq" defaultValue="" name="EpisodeCount" nullable="0" physicalName="EpisodeCount" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL187" populated="true" UUID="cf64dcbf-76d0-4948-9253-a1a94ce6ebd1" autoIncrement="false" autoIncrementSequenceName="DailyPopulation_JurisdictionID_seq" defaultValue="" name="JurisdictionID" nullable="0" physicalName="JurisdictionID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL187" populated="true" UUID="cf64dcbf-76d0-4948-9253-a1a94ce6ebd1" autoIncrement="false" autoIncrementSequenceName="DailyPopulation_JurisdictionID_seq" defaultValue="" name="JurisdictionTypeID" nullable="0" physicalName="JurisdictionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL188" populated="true" UUID="15bffbb1-838a-497d-adaf-f3b64b084757" autoIncrement="false" autoIncrementSequenceName="DailyPopulation_SendingAgency_seq" defaultValue="" name="SendingAgency" nullable="0" physicalName="SendingAgency" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL188" populated="true" UUID="15bffbb1-838a-497d-adaf-f3b64b084757" autoIncrement="false" autoIncrementSequenceName="DailyPopulation_AgencyTypeID_seq" defaultValue="" name="AgencyTypeID" nullable="0" physicalName="AgencyTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL189" populated="true" UUID="234631be-b14e-484a-8a60-7e50ebb9a661" autoIncrement="false" autoIncrementSequenceName="DailyPopulation_PretrialStatusID_seq" defaultValue="" name="PretrialStatusTypeID" nullable="0" physicalName="PretrialStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -718,7 +718,7 @@
     <column id="COL194" populated="true" UUID="967f9868-cbe8-4995-acbd-2805e2b69edb" autoIncrement="false" autoIncrementSequenceName="DailyPopulation_OccupationID_seq" defaultValue="" name="OccupationTypeID" nullable="0" physicalName="OccupationTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL195" populated="true" UUID="17f9e3b3-1de4-4f01-b758-5fca38de9002" autoIncrement="false" autoIncrementSequenceName="DailyPopulation_EducationID_seq" defaultValue="" name="EducationTypeID" nullable="0" physicalName="EducationTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL195" populated="true" UUID="17f9e3b3-1de4-4f01-b758-5fca38de9002" autoIncrement="false" autoIncrementSequenceName="DailyPopulation_EducationID_seq" defaultValue="" name="EducationLevelTypeID" nullable="0" physicalName="EducationLevelTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL196" populated="true" UUID="1a56ba3b-50f1-4287-872e-3c34328e8583" autoIncrement="false" autoIncrementSequenceName="DailyPopulation_LanguageID_seq" defaultValue="" name="LanguageTypeID" nullable="0" physicalName="LanguageTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -762,10 +762,10 @@
     <column id="COL207" populated="true" UUID="d612823c-036f-4cfe-aaef-1ce48a6daa2c" autoIncrement="false" autoIncrementSequenceName="DailyPopulationCharges_ChargeTypeID_seq" defaultValue="" name="ChargeTypeID" nullable="0" physicalName="ChargeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL208" populated="true" UUID="fc79f3a8-fd0a-4906-9ed5-ea4c3a525c7c" autoIncrement="false" autoIncrementSequenceName="DailyPopulationCharges_JurisdictionID_seq" defaultValue="" name="JurisdictionID" nullable="0" physicalName="JurisdictionID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL208" populated="true" UUID="fc79f3a8-fd0a-4906-9ed5-ea4c3a525c7c" autoIncrement="false" autoIncrementSequenceName="DailyPopulationCharges_JurisdictionID_seq" defaultValue="" name="JurisdictionTypeID" nullable="0" physicalName="JurisdictionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL209" populated="true" UUID="6511c321-03d1-4ab6-9f80-1135388084e3" autoIncrement="false" autoIncrementSequenceName="DailyPopulationCharges_AgencyID_seq" defaultValue="" name="AgencyID" nullable="0" physicalName="AgencyID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL209" populated="true" UUID="6511c321-03d1-4ab6-9f80-1135388084e3" autoIncrement="false" autoIncrementSequenceName="DailyPopulationCharges_AgencyID_seq" defaultValue="" name="AgencyTypeID" nullable="0" physicalName="AgencyTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL210" populated="true" UUID="3acd5091-0619-47ee-bfce-8aafbea5d415" autoIncrement="false" autoIncrementSequenceName="DailyPopulationCharges_PopulationTypeID_seq" defaultValue="" name="PopulationTypeID" nullable="0" physicalName="PopulationTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -797,10 +797,10 @@
     <column id="COL217" populated="true" UUID="e2b21f09-bfe7-4eba-b23c-c8989dfb6134" autoIncrement="false" autoIncrementSequenceName="BehaviorHealthType_BehaviorHealthTypeID_seq_1" defaultValue="" name="BehavioralHealthTypeID" nullable="0" physicalName="BehavioralHealthTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL218" populated="true" UUID="147fec84-8419-41da-973c-8c7afc93dde7" autoIncrement="false" autoIncrementSequenceName="DailyPopulationBehavioralHealth_JurisdictionID_seq" defaultValue="" name="JurisdictionID" nullable="0" physicalName="JurisdictionID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL218" populated="true" UUID="147fec84-8419-41da-973c-8c7afc93dde7" autoIncrement="false" autoIncrementSequenceName="DailyPopulationBehavioralHealth_JurisdictionID_seq" defaultValue="" name="JurisdictionTypeID" nullable="0" physicalName="JurisdictionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL219" populated="true" UUID="c7b6e312-1780-4028-95e3-d5df0c799955" autoIncrement="false" autoIncrementSequenceName="DailyPopulationBehavioralHealth_AgencyID_seq" defaultValue="" name="AgencyID" nullable="0" physicalName="AgencyID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL219" populated="true" UUID="c7b6e312-1780-4028-95e3-d5df0c799955" autoIncrement="false" autoIncrementSequenceName="DailyPopulationBehavioralHealth_AgencyID_seq" defaultValue="" name="AgencyTypeID" nullable="0" physicalName="AgencyTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL220" populated="true" UUID="ceff5171-5b93-488c-a5f0-9ff845dabedc" autoIncrement="false" autoIncrementSequenceName="DailyPopulationBehavioralHealth_PopulationTypeID_seq" defaultValue="" name="PopulationTypeID" nullable="0" physicalName="PopulationTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -954,7 +954,7 @@
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="565" y="328" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB65" x="403" y="30" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB65" x="346" y="29" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB70" x="99" y="90" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB75" x="100" y="180" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB80" x="102" y="256" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
