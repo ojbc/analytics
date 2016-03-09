@@ -48,7 +48,7 @@ dbSendQuery(adsConnection, "delete from DailyPopulationBehavioralHealth")
 
 # clear out dimension tables
 dbSendQuery(adsConnection, "delete from Jurisdiction")
-dbSendQuery(adsConnection, "delete from CaseStatus")
+dbSendQuery(adsConnection, "delete from CaseStatusType")
 dbSendQuery(adsConnection, "delete from ChargeType")
 dbSendQuery(adsConnection, "delete from BondType")
 dbSendQuery(adsConnection, "delete from PersonAgeRange")
@@ -57,13 +57,13 @@ dbSendQuery(adsConnection, "delete from PersonSex")
 dbSendQuery(adsConnection, "delete from PersonRace")
 dbSendQuery(adsConnection, "delete from PopulationType")
 dbSendQuery(adsConnection, "delete from BehavioralHealthType")
-dbSendQuery(adsConnection, "delete from Language")
-dbSendQuery(adsConnection, "delete from Education")
-dbSendQuery(adsConnection, "delete from Occupation")
-dbSendQuery(adsConnection, "delete from IncomeLevel")
+dbSendQuery(adsConnection, "delete from LanguageType")
+dbSendQuery(adsConnection, "delete from EducationType")
+dbSendQuery(adsConnection, "delete from OccupationType")
+dbSendQuery(adsConnection, "delete from IncomeLevelType")
 dbSendQuery(adsConnection, "delete from BedType")
-dbSendQuery(adsConnection, "delete from HousingStatus")
-dbSendQuery(adsConnection, "delete from PretrialStatus")
+dbSendQuery(adsConnection, "delete from HousingStatusType")
+dbSendQuery(adsConnection, "delete from PretrialStatusType")
 dbSendQuery(adsConnection, "delete from Agency")
 
 loadCodeTables("AnalyticsCodeTables.xlsx", adsConnection)
@@ -99,7 +99,7 @@ buildBookingRow<-function(bookingId){
 
   jurisdictionID <- sample(Jurisdiction$JurisdictionID, size=n, replace=TRUE)
   sendingAgencyID <-sample(Agency$AgencyID, size=n, replace=TRUE)
-  caseStatusID<-sample(CaseStatus$StatusID, size=n, replace=TRUE)
+  caseStatusTypeID<-sample(CaseStatusType$CaseStatusTypeID, size=n, replace=TRUE)
 
   recidivistIndicator<-sample(0:1, size=n, replace=TRUE, prob=c(0.51,0.49))
 
@@ -111,7 +111,7 @@ buildBookingRow<-function(bookingId){
 
   bondTypeID<-sample(BondType$BondTypeID, size=n, replace=TRUE, prob=c(.10, .66, .04, .20))
 
-  pretrialStatusID<-sample(PretrialStatus$PretrialStatusID, size=n, replace=TRUE)
+  pretrialStatusTypeID<-sample(PretrialStatusType$PretrialStatusTypeID, size=n, replace=TRUE)
 
   bedTypeID<-sample(BedType$BedTypeID, size=n, replace=TRUE)
   sexID <- sample(1:3, size=n, replace=TRUE, prob=c(.91, .089, .001))
@@ -125,15 +125,15 @@ buildBookingRow<-function(bookingId){
                     rep(.0304,5),rep(.0218, 5),.177, 0)
   personAgeID<-sample(PersonAge$PersonAgeID, size=n, replace=TRUE, prob=personAgeProbs)
 
-  housingStatusID<-sample(HousingStatus$HousingStatusID, size=n, replace=TRUE)
-  occupationID<-sample(Occupation$OccupationID, size=n, replace=TRUE)
+  housingStatusTypeID<-sample(HousingStatusType$HousingStatusTypeID, size=n, replace=TRUE)
+  occupationTypeID<-sample(OccupationType$OccupationTypeID, size=n, replace=TRUE)
 
   # need to work on the language sample to make more sense. correlation with race.
-  languageID<-sample(Language$LanguageID, size=n, replace=TRUE)
+  languageTypeID<-sample(LanguageType$LanguageTypeID, size=n, replace=TRUE)
 
   # http://www.bjs.gov/content/pub/pdf/pji02.pdf
-  incomeLevelID<-sample(IncomeLevel$IncomeLevelID, size=n, replace=TRUE, prob=c(.193,.106,.15,.142,.244,.164))
-  educationID<-sample(Education$EducationID, size=n, replace=TRUE, prob=c(.123,.316,.171,.259,.101,.029))
+  incomeLevelTypeID<-sample(IncomeLevelType$IncomeLevelTypeID, size=n, replace=TRUE, prob=c(.193,.106,.15,.142,.244,.164))
+  educationTypeID<-sample(EducationType$EducationTypeID, size=n, replace=TRUE, prob=c(.123,.316,.171,.259,.101,.029))
 
   # load lat/long
   arresteeGeoID <- sample(adamsGeoBlockPop$GEO_ID, size=n, replace=TRUE, prob=blockProbs)
@@ -152,22 +152,22 @@ buildBookingRow<-function(bookingId){
                    SendingAgency=sendingAgencyID,
                    BookingCaseNumber=as.character(bookingId),
                    StagingRecordID=bookingId,
-                   CaseStatusID=caseStatusID,
+                   CaseStatusTypeID=caseStatusTypeID,
                    RecidivistIndicator=recidivistIndicator,
                    BondAmount=bondAmount,
                    BondTypeID=bondTypeID,
-                   PretrialStatusID=pretrialStatusID,
+                   PretrialStatusTypeID=pretrialStatusTypeID,
                    PersonID=personID,
                    BedTypeID=bedTypeID,
                    PopulationTypeID=populationTypeID,
                    PersonSexID=sexID,
                    PersonRaceID=raceID,
                    PersonAgeID=personAgeID,
-                   HousingStatusID=housingStatusID,
-                   OccupationID=occupationID,
-                   IncomeLevelID=incomeLevelID,
-                   EducationID=educationID,
-                   LanguageID=languageID,
+                   HousingStatusTypeID=housingStatusTypeID,
+                   OccupationTypeID=occupationTypeID,
+                   IncomeLevelTypeID=incomeLevelTypeID,
+                   EducationTypeID=educationTypeID,
+                   LanguageTypeID=languageTypeID,
                    ArrestLocationLatitude=arrestLocationLatitude,
                    ArrestLocationLongitude=arrestLocationLongitude,
                    BookingLengthOfStay=bookingLengthOfStay
@@ -249,7 +249,7 @@ getBookingWithMentalProblems<-function(booking, mentalHealthProblemRate){
 
 booking <- buildBookingRow(bookingId)
 Person<-join(Person, booking)
-personTableRows<-booking[,c("PersonID", "RecidivistIndicator", "PersonAgeID", "PersonSexID", "PopulationTypeID", "PersonRaceID", "IncomeLevelID", "OccupationID", "EducationID", "LanguageID" )]
+personTableRows<-booking[,c("PersonID", "RecidivistIndicator", "PersonAgeID", "PersonSexID", "PopulationTypeID", "PersonRaceID", "IncomeLevelTypeID", "OccupationTypeID", "EducationTypeID", "LanguageTypeID" )]
 StagingPersonUniqueIdentifier<-personTableRows$PersonID
 personTableRows<-cbind(personTableRows, StagingPersonUniqueIdentifier)
 
@@ -265,8 +265,8 @@ jailEpisodeCharge<-select(jailEpisodeCharge, -BookingID, -DaysAgo, -LengthOfStay
 jailEpisodeRows<-join(booking, jailEpisode, type="left", match="all")
 jailEpisodeTableRows<-jailEpisodeRows[,
     c("JailEpisodeID", "JurisdictionID", "SendingAgency", "DaysAgo", "LengthOfStay",
-      "CaseStatusID", "BondAmount", "BondTypeID", "PretrialStatusID", "PersonID",
-      "BedTypeID", "HousingStatusID", "ArrestLocationLatitude", "ArrestLocationLongitude" )]
+      "CaseStatusTypeID", "BondAmount", "BondTypeID", "PretrialStatusTypeID", "PersonID",
+      "BedTypeID", "HousingStatusTypeID", "ArrestLocationLatitude", "ArrestLocationLongitude" )]
 
 dbWriteTable(adsConnection, "Person", personTableRows, append=TRUE, row.names=FALSE)
 dbWriteTable(adsConnection, "JailEpisode", jailEpisodeTableRows, append=TRUE, row.names=FALSE)
@@ -286,9 +286,9 @@ dbWriteTable(adsConnection, "BehavioralHealthAssessment", data.table(behavioralH
 
 # Generate DailyPopulation test data
 personJailEpisode <- left_join(jailEpisodeTableRows, personTableRows)
-dailyPopulation <- dplyr::count(personJailEpisode, DaysAgo, JurisdictionID, SendingAgency, PretrialStatusID,
-                         CaseStatusID, HousingStatusID, BedTypeID, IncomeLevelID,
-                         OccupationID, EducationID, LanguageID, PopulationTypeID, PersonRaceID,
+dailyPopulation <- dplyr::count(personJailEpisode, DaysAgo, JurisdictionID, SendingAgency, PretrialStatusTypeID,
+                         CaseStatusTypeID, HousingStatusTypeID, BedTypeID, IncomeLevelTypeID,
+                         OccupationTypeID, EducationTypeID, LanguageTypeID, PopulationTypeID, PersonRaceID,
                          PersonSexID, PersonAgeID)
 dailyPopulation <- dplyr::rename(dailyPopulation, EpisodeCount = n)
 dbWriteTable(adsConnection, "DailyPopulation", data.table(dailyPopulation), append=TRUE, row.names=FALSE)
