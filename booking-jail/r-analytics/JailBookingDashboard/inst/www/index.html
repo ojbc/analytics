@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Adams County Dashboard</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.1.1/bootstrap-slider.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.1.1/bootstrap-slider.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.1.1/css/bootstrap-slider.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.1.1/css/bootstrap-slider.min.css">
+
+	<script language="javascript">
+	  jQuery(document).ready(function () {
+
+			jQuery('.yearslider').hide();
+
+	  		var sliderStops = ['30','60','90','180','365','730'];
+
+			jQuery("#slider").slider({ticks_labels: sliderStops});
+            
+            jQuery('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                if (($("#myTab1")[0].className=='active') || ($("#myTab2")[0].className=='active'))
+                    jQuery('.yearslider').show();
+                else
+                    jQuery('.yearslider').hide();
+            });
+
+            jQuery('#slider').on('slideStop', function(e) {
+            	var t = e.value;
+            	var v = sliderStops[t-1];
+            	
+            	console.log(v);
+            });
+            
+		})
+	</script>
+	<style type="text/css">
+		.row { padding-bottom: 40px; }
+		.filters { float: left; margin-right: 15px; }
+		.radio { margin-top: 0; margin-bottom: 5px; }
+		.dashmenu { float: right; margin-top: 25px; }
+		.export { float: right; }
+		.dropdown-menu>.active>a:focus { color: #333; background-color: #fff; }
+		.placeholder { width: 100%; height: 300px; background-color: #ececec; }
+	</style>
+</head>
+<body>
+
+<div class="container-fluid">
+  	<div class="row">
+		<div class="col-sm-10">
+			<h1>Adams County, Colorado - Jail Dashboard</h1>
+		</div>
+		<div class="col-sm-2">		
+			<ul class="nav nav-pills dashmenu">
+				<li class="dropdown pull-right"> <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select a Dashboard <span class="caret"></span></button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="#jail1" data-toggle="tab">Jail Dashboard - Static</a></li>
+						<li id="myTab1"><a href="#jail2" data-toggle="tab">Jail Dashboard - Timeline</a></li>
+						<li><a href="#demo1" data-toggle="tab">Demographics Dashboard - Static</a></li>
+						<li id="myTab2"><a href="#demo2" data-toggle="tab">Demographics Dashboard - Timeline</a></li>
+					</ul>
+				</li>
+			</ul>
+	
+			
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="dropdown filters">
+				<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Metrics <span class="caret"></span></button>
+				<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+					<li><a href="#">Population Count</a></li>
+					<li><a href="#">Length of Stay</a></li>
+					<li><a href="#">Average Daily Population</a></li>
+					<li><a href="#">Recidivism Rate</a></li>
+				</ul>
+			</div>
+			<div class="dropdown filters">
+				<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Jurisdictions <span class="caret"></span></button>
+				<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+					<li><a href="#">All Courts</a></li>
+					<li><a href="#">District Court</a></li>
+					<li><a href="#">County Court</a></li>
+					<li><a href="#">Muni 1</a></li>
+					<li><a href="#">Etc</a></li>
+				</ul>
+			</div>
+			<div class="dropdown filters">
+				<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Originating Agencies <span class="caret"></span></button>
+				<ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
+					<li><a href="#">All</a></li>
+					<li><a href="#">Adams County SO</a></li>
+					<li><a href="#">Thorton PD</a></li>
+					<li><a href="#">Brighton PD</a></li>
+					<li><a href="#">Etc</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="yearslider">
+				<input id="slider" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5, 6]" data-slider-min="1" data-slider-max="6" data-slider-step="1" data-slider-value="1" data-slider-tooltip="hide" />
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<div class="radio">
+				<label><input type="radio" name="optradio">General Pop</label>
+			</div>
+			<div class="radio">
+				<label><input type="radio" name="optradio">Target Pop</label>
+			</div>
+		</div>
+		<div class="col-sm-1">
+			<button type="button" class="btn btn-primary export">Export</button>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="tab-content">
+				<div id="jail1" class="tab-pane active">
+					<h2>Jail Dashboard - Static</h2>
+					<div class="row">					
+						<div class="col-sm-4">
+							<div class="placeholder"></div>
+						</div>
+						<div class="col-sm-4">
+							<div class="placeholder"></div>
+						</div>
+						<div class="col-sm-4">
+							<div class="placeholder"></div>
+						</div>
+					</div>
+				</div>
+				<div id="jail2" class="tab-pane">
+				<h2>Jail Dashboard - Timeline</h2>
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="placeholder"></div>
+						</div>
+						<div class="col-sm-4">
+							<div class="placeholder"></div>
+						</div>
+						<div class="col-sm-4">
+							<div class="placeholder"></div>
+						</div>
+					</div>
+				</div>
+				<div id="demo1" class="tab-pane">
+				<h2>Demographics Dashboard - Static</h2>
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="placeholder"></div>
+						</div>
+						<div class="col-sm-4">
+							<div class="placeholder"></div>
+						</div>
+						<div class="col-sm-4">
+							<div class="placeholder"></div>
+						</div>
+					</div>
+				</div>
+				<div id="demo2" class="tab-pane">
+				<h2>Demographics Dashboard - Timeline</h2>
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="placeholder"></div>
+						</div>
+						<div class="col-sm-4">
+							<div class="placeholder"></div>
+						</div>
+						<div class="col-sm-4">
+							<div class="placeholder"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+</body>
+</html>
