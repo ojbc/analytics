@@ -13,22 +13,24 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.1.1/css/bootstrap-slider.min.css">
 
 	<script language="javascript">
-	  jQuery(document).ready(function () {
-
-			jQuery('.yearslider').hide();
+	  $(document).ready(function () {
+$
+			$('.yearslider').hide();
 
 	  		var sliderStops = ['30','60','90','180','365','730'];
 
-			jQuery("#slider").slider({ticks_labels: sliderStops});
+			$("#slider").slider({ticks_labels: sliderStops});
             
-            jQuery('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                if (($("#myTab1")[0].className=='active') || ($("#myTab2")[0].className=='active'))
-                    jQuery('.yearslider').show();
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                if (($("#myTab1")[0].className=='active') || ($("#myTab2")[0].className=='active')) {
+                    $('.yearslider').show();
+                    $("#slider").slider('refresh');
+                }
                 else
-                    jQuery('.yearslider').hide();
+                    $('.yearslider').hide();
             });
 
-            jQuery('#slider').on('slideStop', function(e) {
+            $('#slider').on('slideStop', function(e) {
             	var t = e.value;
             	var v = sliderStops[t-1];
             	
