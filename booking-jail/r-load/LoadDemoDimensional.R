@@ -118,7 +118,8 @@ buildBookingRow<-function(bookingId){
 
   # http://www.prisonpolicy.org/graphs/2010rates/CO.html
   raceID<-sample(PersonRace$PersonRaceID, size=n, replace=TRUE, prob=c(.009, .43, .35, .06,.15, .001))
-  populationTypeID<-sample(PopulationType$PopulationTypeID, size=n, replace=TRUE, prob=c(.68, .32))
+
+  populationTypeID<-sample(c(2,1), size=n, replace=TRUE, prob=c(.68, .32))
 
   # https://www.bop.gov/about/statistics/statistics_inmate_age.jsp
   personAgeProbs<-c(.0025,.0025, .0030,.0031,.014,.014,.014,.015,rep(.026,5),rep(.036,5),rep(.0366,5),
@@ -131,9 +132,8 @@ buildBookingRow<-function(bookingId){
   # need to work on the language sample to make more sense. correlation with race.
   languageTypeID<-sample(LanguageType$LanguageTypeID, size=n, replace=TRUE)
 
-  # http://www.bjs.gov/content/pub/pdf/pji02.pdf
-  incomeLevelTypeID<-sample(IncomeLevelType$IncomeLevelTypeID, size=n, replace=TRUE, prob=c(.193,.106,.15,.142,.244,.164))
-  educationLevelTypeID<-sample(EducationLevelType$EducationLevelTypeID, size=n, replace=TRUE, prob=c(.123,.316,.171,.259,.101,.029))
+  incomeLevelTypeID<-sample(IncomeLevelType$IncomeLevelTypeID, size=n, replace=TRUE)
+  educationLevelTypeID<-sample(EducationLevelType$EducationLevelTypeID, size=n, replace=TRUE)
 
   # load lat/long
   arresteeGeoID <- sample(adamsGeoBlockPop$GEO_ID, size=n, replace=TRUE, prob=blockProbs)
@@ -185,7 +185,7 @@ createChargeTypeAssociationForBooking <- function(bookingId) {
   if (typeCount == 0) {
     typeCount <- 1
   }
-  types <- sample(1:chargeTypeLength, size=typeCount, prob=c(rep(.19, 5), .05))
+  types <- sample(1:chargeTypeLength, size=typeCount, prob=c(rep(.19, 4), .05))
   bind_rows(Map(function(typeID) {
     data.frame(BookingID=c(bookingId), ChargeTypeID=c(typeID))
   }, types))
