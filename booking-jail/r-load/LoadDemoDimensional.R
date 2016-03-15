@@ -15,7 +15,9 @@
 # Loads the dimensional database with dummy/demo data
 
 COUNTY <- "Adams"
-demoBookingCount = 10000
+demoBookingCount = 110000
+maxDaysAgo=730
+
 library(RMySQL)
 library(data.table)
 library(dplyr)
@@ -192,28 +194,28 @@ createChargeTypeAssociationForBooking <- function(bookingId) {
 }
 
 createJailEpisodesForBooking <- function(bookingId, bookingLengthOfStay) {
-  lastDaysAgo<-sample((2-bookingLengthOfStay):180, size=1, replace=TRUE)
+  lastDaysAgo<-sample((2-bookingLengthOfStay):maxDaysAgo, size=1, replace=TRUE)
 
   if (lastDaysAgo < 1){
     lengthOfStayAsOfYesterday <- bookingLengthOfStay + lastDaysAgo -1
 
-    if (lengthOfStayAsOfYesterday <=180){
+    if (lengthOfStayAsOfYesterday <=maxDaysAgo){
       lengthOfStay <- (lengthOfStayAsOfYesterday) : 1
 
       daysAgo <-1: (bookingLengthOfStay + lastDaysAgo -1)
     }
     else {
-      lengthOfStay <- lengthOfStayAsOfYesterday : (lengthOfStayAsOfYesterday - 179)
-      daysAgo <- 1:180
+      lengthOfStay <- lengthOfStayAsOfYesterday : (lengthOfStayAsOfYesterday - maxDaysAgo + 1)
+      daysAgo <- 1:maxDaysAgo
     }
   }
   else {
-    if (180-lastDaysAgo + 1 >= bookingLengthOfStay){
+    if (maxDaysAgo-lastDaysAgo + 1 >= bookingLengthOfStay){
       lengthOfStay<-bookingLengthOfStay:1
       daysAgo<-lastDaysAgo:(lastDaysAgo + length(lengthOfStay) -1)
     }
     else{
-      daysAgo<-lastDaysAgo:180
+      daysAgo<-lastDaysAgo:maxDaysAgo
       lengthOfStay<-bookingLengthOfStay:(bookingLengthOfStay - length(daysAgo) + 1)
     }
   }
