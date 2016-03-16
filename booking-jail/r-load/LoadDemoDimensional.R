@@ -15,8 +15,9 @@
 # Loads the dimensional database with dummy/demo data
 
 COUNTY <- "Adams"
-demoBookingCount = 110000
+demoBookingCount = 113000
 maxDaysAgo=730
+jailCapacity=2000
 
 library(RMySQL)
 library(data.table)
@@ -258,6 +259,32 @@ personTableRows<-cbind(personTableRows, StagingPersonUniqueIdentifier)
 # Generate JailEpisodeChargeType test data
 ChargeTypeAssociation <- bind_rows(Map(createChargeTypeAssociationForBooking, booking$BookingID))
 jailEpisode<-bind_rows(Map(createJailEpisodesForBooking, booking$BookingID, booking$BookingLengthOfStay))
+
+# Modify DaysAgo value to make dailyPopulation within the jail capacity. 
+jailEpisodeCount<-count(jailEpisode$DaysAgo)
+colnames(jailEpisodeCount) <-c("DaysAgo", "EpisodeCount")
+minDailyEpisodeCount<-min(jailEpisodeCount$EpisodeCount)
+minDaysAgo <- jailEpisodeCount%>%filter(EpisodeCount==minDailyEpisodeCount)
+beyondDaysAgo <- jailEpisodeCount%>%filter(EpisodeCount > jailCapacity)
+
+for (r in 1:nrow(beyondDaysAgo)){
+  row = beyondDaysAgo[r,]
+  numberOfRowsToMove = row$EpisodeCount - jailCapacity
+  
+  jailEpisodeOfBeyondDaysAgo = filter(jailEpisode, DaysAgo == row$DaysAgo, LengthOfStay == 1)
+  jailEpisodeBookingIdsofBeyondDaysAgo = filter(jailEpisode, BookingID %in% jailEpisodeOfBeyondDaysAgo$BookingID)
+  
+  bookingIDCount = count(jailEpisodeBookingIdsofBeyondDaysAgo, "BookingID")
+  bookingIdsToMove = filter(bookingIDCount, freq==1)$BookingID[1:numberOfRowsToMove]
+  
+  jailEpisode$DaysAgo[jailEpisode$BookingID %in% bookingIdsToMove]  <- minDaysAgo$DaysAgo[1]
+  
+  jailEpisodeCount<-count(jailEpisode$DaysAgo)
+  colnames(jailEpisodeCount) <-c("DaysAgo", "EpisodeCount")
+  minDailyEpisodeCount<-min(jailEpisodeCount$EpisodeCount)
+  minDaysAgo <- jailEpisodeCount%>%filter(EpisodeCount==minDailyEpisodeCount)
+}
+# End of shifting DaysAgo
 JailEpisodeID<-1:nrow(jailEpisode)
 jailEpisode<-cbind(jailEpisode, JailEpisodeID)
 jailEpisodeCharge<-join(ChargeTypeAssociation, jailEpisode, by=NULL, type="left", match="all")
