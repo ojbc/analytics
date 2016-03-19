@@ -52,6 +52,10 @@
 				$("#infoModal").modal();
 			});
 
+			$("#pop-button-group .btn").on("click", function() {
+				$("#pop-button-group .btn").button("toggle");
+			});
+
 		})	  	
 	</script>
 	<style type="text/css">
@@ -63,6 +67,8 @@
 		.glyphicon { float: right; }
 		.toprow .dashboard { text-align: right; margin-top: 25px;}
 		.timeline-slider { display: none; }
+		.navli {margin: 6px; }
+		.slider-label {margin-right: 15px; }
 	</style>
 </head>
 <body>
@@ -100,57 +106,70 @@
 				</select>		
 			</div>
 		</div>
-		<div class="row filterrow">
-			<div class="col-sm-8 filters">
-				Metrics:
-				<select class="selectpicker" data-width="auto">
-					<option>Population Count</option>
-					<option>Length of Stay</option>
-					<option>Average Daily Population</option>
-					<option>Recidivism Rate</option>
-				</select>
-
-				Jurisdictions:
-				<select class="selectpicker" data-width="auto">
-					<option>All Jurisdictions</option>
-					<option>District Court</option>
-					<option>County Court</option>
-					<option>Muni 1</option>
-					<option>Etc</option>
-				</select>
-
-				Originating Agencies:
-				<select class="selectpicker" data-width="auto">
-					<option>All Agencies</option>
-					<option>Adams County SO</option>
-					<option>Thorton PD</option>
-					<option>Brighton PD</option>
-					<option>Etc</option>
-				</select>
+		<nav class="navbar navbar-default">
+			<div class="container-fluid navbar-form form-group">
+				<ul class="nav navbar-nav">
+					<li class="navli">
+						<label class="control-label" for="metric-select">Metric:</label>
+						<select id="metric-select" class="selectpicker show-tick" data-width="195px">
+							<option>Population Count</option>
+							<option>Length of Stay</option>
+							<option>Average Daily Population</option>
+							<option>Recidivism Rate</option>
+						</select>
+					</li>
+					<li class="navli">
+						<label class="control-label" for="jurisdiction-select">Jurisdiction:</label>
+						<select id="jurisdiction-select" class="selectpicker show-tick" data-width="140px">
+							<option>State Court</option>
+							<option>County Court</option>
+							<option>Municipal Court</option>
+						</select>
+					</li>
+					<li class="navli">
+						<label class="control-label" for="agency-select">Agency:</label>
+						<select id="agency-select" class="selectpicker show-tick" data-width="160px">
+							<option>Adams County SO</option>
+							<option>Arvada PD</option>
+							<option>Aurora PD</option>
+							<option>Brighton PD</option>
+							<option>Commerce City PD</option>
+							<option>Federal Heights PD</option>
+							<option>Northglenn PD</option>
+							<option>Thornton PD</option>
+							<option>Westminster PD</option>
+						</select>
+					</li>
+					<li class="navli">
+						<div class="btn-group-sm" role="group" id="pop-button-group">
+							<label class="control-label" for="pop-button-group">Population:</label>
+							<button type="button" class="btn btn-default active" id="target-pop-button">Target</button>
+							<button type="button" class="btn btn-default" id="general-pop-button">General</button>
+						</div>
+					</li>
+				</ul>
 			</div>
-			<div class="col-sm-2">
-				<div class="timeline-slider">
-					<input id="slider" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5, 6]" data-slider-min="1" data-slider-max="6" data-slider-step="1" data-slider-value="1" data-slider-tooltip="hide" />
-				</div>
+			<div class="container-fluid navbar-form form-group">
+				<ul class="nav navbar-nav">
+					<li class="navli">
+						<div class="timeline-slider">
+							<label class="control-label slider-label" for="slider">Time Period:</label>
+							<input id="slider" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5, 6]" data-slider-min="1" 	data-slider-max="6" data-slider-step="1" data-slider-value="1" data-slider-tooltip="hide"/>
+						</div>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="navli">
+						<button type="button" class="btn btn-primary export">Export Raw Data</button>
+					</li>
+				</ul>
 			</div>
-			<div class="col-sm-1">
-				<div class="radio">
-					<label><input type="radio" name="optradio">General Pop</label>
-				</div>
-				<div class="radio">
-					<label><input type="radio" name="optradio">Target Pop</label>
-				</div>
-			</div>
-			<div class="col-sm-1">
-				<button type="button" class="btn btn-primary export">Export</button>
-			</div>
-		</div>
+		</nav>
 
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="tab-content">
 					<div id="jail-static" class="tab-pane active">
-						<h2>Jail Dashboard - Static</h2>
 						<div class="row">					
 							<div class="col-sm-4">
 								<div class="panel panel-primary">
@@ -212,7 +231,6 @@
 						</div>
 					</div>
 					<div id="jail-timeline" class="tab-pane">
-						<h2>Jail Dashboard - Timeline</h2>
 						<div class="row">
 							<div class="col-sm-6">
 								<div class="panel panel-primary">
