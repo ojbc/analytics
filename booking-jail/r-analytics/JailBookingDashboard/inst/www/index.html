@@ -13,59 +13,49 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 
 	<script language="javascript">
-	  $(document).ready(function () {	
 
-	  		var sliderStops = ['30','60','90','180','365','730'];
+		drawPanel = function(panelLabel, args) {
+			ocpu.call("chart_" + panelLabel, args, function(session) {
+				$("#img_" + panelLabel).attr("src", session.getLoc() + "files/chart_" + panelLabel + ".svg");
+			}).fail(function(req){
+				alert("Error: " + req.responseText);
+			});
+		}
+
+		$(document).ready(function () {	
+
+			var sliderStops = ['30','60','90','180','365','730'];
 
 			$("#slider").slider({ticks_labels: sliderStops});
-            
-            $('#slider').on('slideStop', function(e) {
-            	var t = e.value;
-            	var v = sliderStops[t-1];
-            	console.log(v);
-            });
+
+			$('#slider').on('slideStop', function(e) {
+				var t = e.value;
+				var v = sliderStops[t-1];
+				console.log(v);
+			});
 			
 			$('select.dashselect').on('change', function () {
 				$(':selected', this).tab('show');
 				if (( this.value == 'jail-timeline') || ( this.value == 'demo-timeline')) {
-       			 	$(".timeline-slider").show();
+					$(".timeline-slider").show();
 					$("#slider").slider('refresh');
-      			}
-     			else {
-        			$(".timeline-slider").hide();
-      			}
+				}
+				else {
+					$(".timeline-slider").hide();
+				}
 			});
 			
-			$("#info-icon-1").click(function() {
-    			console.log("My message here");
+			$("#info-icon-r1c1").click(function() {
+				$(".modal-title").text("About Case Status")
+				$(".modal-body").html("<p>This is the description of the Case Status graphic.</p><p>Here we will define " +
+					"what it means, etc.</p>")
+				$("#infoModal").modal();
 			});
-			$("#info-icon-2").click(function() {
-    			console.log("My message here");
+
+			$("#pop-button-group .btn").on("click", function() {
+				$("#pop-button-group .btn").button("toggle");
 			});
-			$("#info-icon-3").click(function() {
-    			console.log("My message here");
-			});
-			$("#info-icon-4").click(function() {
-    			console.log("My message here");
-			});
-			$("#info-icon-5").click(function() {
-    			console.log("My message here");
-			});
-			$("#info-icon-6").click(function() {
-    			console.log("My message here");
-			});
-			$("#info-icon-7").click(function() {
-    			console.log("My message here");
-			});
-			$("#info-icon-8").click(function() {
-    			console.log("My message here");
-			});
-			$("#info-icon-9").click(function() {
-    			console.log("My message here");
-			});
-			$("#info-icon-10").click(function() {
-    			console.log("My message here");
-			});            
+
 		})	  	
 	</script>
 	<style type="text/css">
@@ -77,224 +67,274 @@
 		.glyphicon { float: right; }
 		.toprow .dashboard { text-align: right; margin-top: 25px;}
 		.timeline-slider { display: none; }
+		.navli {margin: 6px; }
+		.slider-label {margin-right: 15px; }
 	</style>
 </head>
 <body>
 
-<div class="container-fluid">
-  	<div class="row toprow">
-		<div class="col-sm-8">
-			<h1>Adams County, Colorado - Jail Dashboard</h1>
-		</div>
-		<div class="col-sm-4 dashboard">		
-			Dashboard:
-			<select class="selectpicker dashselect" data-width="auto">
-				<option data-target="#jail-static" value="jail-static">Jail Dashboard - Static</option>
-				<option data-target="#jail-timeline" value="jail-timeline">Jail Dashboard - Timeline</option>
-				<option data-target="#demo-static" value="demo-static">Demographics Dashboard - Static</option>
-				<option data-target="#demo-timeline" value="demo-timeline">Demographics Dashboard - Timeline</option>
-			</select>		
-		</div>
-	</div>
-	<div class="row filterrow">
-		<div class="col-sm-8 filters">
-			Metrics:
-			<select class="selectpicker" data-width="auto">
-				<option>Population Count</option>
-				<option>Length of Stay</option>
-				<option>Average Daily Population</option>
-				<option>Recidivism Rate</option>
-			</select>
-		
-			Jurisdictions:
-			<select class="selectpicker" data-width="auto">
-				<option>All Jurisdictions</option>
-				<option>District Court</option>
-				<option>County Court</option>
-				<option>Muni 1</option>
-				<option>Etc</option>
-			</select>
-		
-			Originating Agencies:
-			<select class="selectpicker" data-width="auto">
-				<option>All Agencies</option>
-				<option>Adams County SO</option>
-				<option>Thorton PD</option>
-				<option>Brighton PD</option>
-				<option>Etc</option>
-			</select>
-		</div>
-		<div class="col-sm-2">
-			<div class="timeline-slider">
-				<input id="slider" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5, 6]" data-slider-min="1" data-slider-max="6" data-slider-step="1" data-slider-value="1" data-slider-tooltip="hide" />
+	<div class="modal fade" id="infoModal" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Modal Header</h4>
+				</div>
+				<div class="modal-body">
+					<p>Some text in the modal.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
 			</div>
-		</div>
-		<div class="col-sm-1">
-			<div class="radio">
-				<label><input type="radio" name="optradio">General Pop</label>
-			</div>
-			<div class="radio">
-				<label><input type="radio" name="optradio">Target Pop</label>
-			</div>
-		</div>
-		<div class="col-sm-1">
-			<button type="button" class="btn btn-primary export">Export</button>
+
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="tab-content">
-				<div id="jail-static" class="tab-pane active">
-					<h2>Jail Dashboard - Static</h2>
-					<div class="row">					
-						<div class="col-sm-4">
-							<div class="panel panel-primary">
-								<div class="panel-heading">
-									<span id="info-icon-1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-							  		<h3 class="panel-title">Average and Strikeout Rate over Time</h3>
-								</div>
-								<div id="panel_r1c1" class="panel-body">
-							  		<div class="panel-control-spacer"></div>
-							  		<img id="img_r1c1" width="100%"/>
-								</div>
-						  	</div>
+	<div class="container-fluid">
+		<div class="row toprow">
+			<div class="col-sm-8">
+				<h1>Adams County, Colorado - Jail Dashboard</h1>
+			</div>
+			<div class="col-sm-4 dashboard">		
+				Dashboard:
+				<select class="selectpicker dashselect" data-width="auto">
+					<option data-target="#jail-static" value="jail-static">Jail Dashboard - Static</option>
+					<option data-target="#jail-timeline" value="jail-timeline">Jail Dashboard - Timeline</option>
+					<option data-target="#demo-static" value="demo-static">Demographics Dashboard - Static</option>
+					<option data-target="#demo-timeline" value="demo-timeline">Demographics Dashboard - Timeline</option>
+				</select>		
+			</div>
+		</div>
+		<nav class="navbar navbar-default">
+			<div class="container-fluid navbar-form form-group">
+				<ul class="nav navbar-nav">
+					<li class="navli">
+						<label class="control-label" for="metric-select">Metric:</label>
+						<select id="metric-select" class="selectpicker show-tick" data-width="195px">
+							<option>Population Count</option>
+							<option>Length of Stay</option>
+							<option>Average Daily Population</option>
+							<option>Recidivism Rate</option>
+						</select>
+					</li>
+					<li class="navli">
+						<label class="control-label" for="jurisdiction-select">Jurisdiction:</label>
+						<select id="jurisdiction-select" class="selectpicker show-tick" data-width="140px">
+							<option>State Court</option>
+							<option>County Court</option>
+							<option>Municipal Court</option>
+						</select>
+					</li>
+					<li class="navli">
+						<label class="control-label" for="agency-select">Agency:</label>
+						<select id="agency-select" class="selectpicker show-tick" data-width="160px">
+							<option>Adams County SO</option>
+							<option>Arvada PD</option>
+							<option>Aurora PD</option>
+							<option>Brighton PD</option>
+							<option>Commerce City PD</option>
+							<option>Federal Heights PD</option>
+							<option>Northglenn PD</option>
+							<option>Thornton PD</option>
+							<option>Westminster PD</option>
+						</select>
+					</li>
+					<li class="navli">
+						<div class="btn-group-sm" role="group" id="pop-button-group">
+							<label class="control-label" for="pop-button-group">Population:</label>
+							<button type="button" class="btn btn-default active" id="target-pop-button">Target</button>
+							<button type="button" class="btn btn-default" id="general-pop-button">General</button>
 						</div>
-						<div class="col-sm-4">
-							<div class="panel panel-primary">
-            					<div class="panel-heading">
-              						<span id="info-icon-2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-									<h3 class="panel-title">Average Against, AL 2015</h3>
-            					</div>
-            					<div class="panel-body">
-									League:
-									<select class="selectpicker">
-										<option>American League</option>
-										<option>National League</option>
-									</select>
+					</li>
+				</ul>
+			</div>
+			<div class="container-fluid navbar-form form-group">
+				<ul class="nav navbar-nav">
+					<li class="navli">
+						<div class="timeline-slider">
+							<label class="control-label slider-label" for="slider">Time Period:</label>
+							<input id="slider" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5, 6]" data-slider-min="1" 	data-slider-max="6" data-slider-step="1" data-slider-value="1" data-slider-tooltip="hide"/>
+						</div>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="navli">
+						<button type="button" class="btn btn-primary export">Export Raw Data</button>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="tab-content">
+					<div id="jail-static" class="tab-pane active">
+						<div class="row">					
+							<div class="col-sm-4">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<span id="info-icon-r1c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										<h3 class="panel-title">Case Status</h3>
+									</div>
+									<div id="panel_r1c1" class="panel-body">
+										<img id="img_r1c1" width="100%"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<span id="info-icon-r1c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										<h3 class="panel-title">Illnesses and Disorders</h3>
+									</div>
+									<div id="panel_r1c2" class="panel-body">
+										<img id="img_r1c2" width="100%"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<span id="info-icon-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										<h3 class="panel-title">Charge Types</h3>
+									</div>
+									<div id="panel_r1c3" class="panel-body">
+										<img id="img_r1c3" width="100%"/>
+									</div>
 								</div>
 							</div>
 						</div>
-          				<div class="col-sm-4">
-							<div class="panel panel-primary">
-            					<div class="panel-heading">
-              						<span id="info-icon-3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-									<h3 class="panel-title">Wins vs. Run Differential, 2015</h3>
-            					</div>
-            					<div id="panel_r1c3" class="panel-body">
-                					<div class="panel-control-spacer"></div>
-                					<img id="img_r1c3" width="100%"/>
-            					</div>
-          					</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<span id="info-icon-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										<h3 class="panel-title">Jail Utilization</h3>
+									</div>
+									<div id="panel_r2c1" class="panel-body">
+										<img id="img_r2c1" width="100%"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<span id="info-icon-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										<h3 class="panel-title">Pretrial Status</h3>
+									</div>
+									<div id="panel_r2c2" class="panel-body">
+										<img id="img_r2c2" width="100%"/>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div id="jail-timeline" class="tab-pane">
-				<h2>Jail Dashboard - Timeline</h2>
-					<div class="row">
-						<div class="col-sm-6">
-							<div class="panel panel-primary">
-            					<div class="panel-heading">
-              						<span id="info-icon-4" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-									<h3 class="panel-title">Distribution of Runs Per Game, 2015</h3>
-            					</div>
-								<div id="panel_r2c1" class="panel-body">
-									<div class="panel-control-spacer"></div>
-									<img id="img_r2c1" width="100%"/>
+					<div id="jail-timeline" class="tab-pane">
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<span id="info-icon-4" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										<h3 class="panel-title">Distribution of Runs Per Game, 2015</h3>
+									</div>
+									<div id="panel_r2c1" class="panel-body">
+										<div class="panel-control-spacer"></div>
+										<img id="img_r2c1" width="100%"/>
+									</div>
 								</div>
 							</div>
-         			 	</div>
-						<div class="col-sm-6">
-							<div class="panel panel-primary">
-            					<div class="panel-heading">
-              						<span id="info-icon-5" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-									<h3 class="panel-title">25 Best HR Seasons, Compared to 95 %ile HR</h3>
-            					</div>
-            					<div id="panel_r2c2" class="panel-body">
-              						<div class="panel-control-spacer"></div>
-              						<img id="img_r2c2" width="100%"/>
-            					</div>
-          					</div>
+							<div class="col-sm-6">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<span id="info-icon-5" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										<h3 class="panel-title">25 Best HR Seasons, Compared to 95 %ile HR</h3>
+									</div>
+									<div id="panel_r2c2" class="panel-body">
+										<div class="panel-control-spacer"></div>
+										<img id="img_r2c2" width="100%"/>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div id="demo-static" class="tab-pane">
-				<h2>Demographics Dashboard - Static</h2>
-					<div class="row">					
-						<div class="col-sm-4">
-							<div class="panel panel-primary">
-								<div class="panel-heading">
-							  		<span id="info-icon-6" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-									<h3 class="panel-title">Average and Strikeout Rate over Time</h3>
-								</div>
-								<div id="panel_r1c1" class="panel-body">
-							  		<div class="panel-control-spacer"></div>
-							  		<img id="img_r1c1" width="100%"/>
-								</div>
-						  	</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="panel panel-primary">
-            					<div class="panel-heading">
-              						<span id="info-icon-7" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-									<h3 class="panel-title">Average Against, AL 2015</h3>
-            					</div>
-            					<div class="panel-body">
-									League:
-									<select class="selectpicker">
-										<option>American League</option>
-										<option>National League</option>
-									</select>
+					<div id="demo-static" class="tab-pane">
+						<h2>Demographics Dashboard - Static</h2>
+						<div class="row">					
+							<div class="col-sm-4">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<span id="info-icon-6" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										<h3 class="panel-title">Average and Strikeout Rate over Time</h3>
+									</div>
+									<div id="panel_r1c1" class="panel-body">
+										<div class="panel-control-spacer"></div>
+										<img id="img_r1c1" width="100%"/>
+									</div>
 								</div>
 							</div>
-						</div>
-          				<div class="col-sm-4">
-							<div class="panel panel-primary">
-            					<div class="panel-heading">
-              						<span id="info-icon-8" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-									<h3 class="panel-title">Wins vs. Run Differential, 2015</h3>
-            					</div>
-            					<div id="panel_r1c3" class="panel-body">
-                					<div class="panel-control-spacer"></div>
-                					<img id="img_r1c3" width="100%"/>
-            					</div>
-          					</div>
+							<div class="col-sm-4">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<span id="info-icon-7" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										<h3 class="panel-title">Average Against, AL 2015</h3>
+									</div>
+									<div class="panel-body">
+										League:
+										<select class="selectpicker">
+											<option>American League</option>
+											<option>National League</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<span id="info-icon-8" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										<h3 class="panel-title">Wins vs. Run Differential, 2015</h3>
+									</div>
+									<div id="panel_r1c3" class="panel-body">
+										<div class="panel-control-spacer"></div>
+										<img id="img_r1c3" width="100%"/>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div id="demo-timeline" class="tab-pane">
-				<h2>Demographics Dashboard - Timeline</h2>
-					<div class="row">
-						<div class="col-sm-6">
-							<div class="panel panel-primary">
-            					<div class="panel-heading">
-              						<span id="info-icon-9" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-									<h3 class="panel-title">Distribution of Runs Per Game, 2015</h3>
-            					</div>
-								<div id="panel_r2c1" class="panel-body">
-									<div class="panel-control-spacer"></div>
-									<img id="img_r2c1" width="100%"/>
+					<div id="demo-timeline" class="tab-pane">
+						<h2>Demographics Dashboard - Timeline</h2>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<span id="info-icon-9" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										<h3 class="panel-title">Distribution of Runs Per Game, 2015</h3>
+									</div>
+									<div id="panel_r2c1" class="panel-body">
+										<div class="panel-control-spacer"></div>
+										<img id="img_r2c1" width="100%"/>
+									</div>
 								</div>
 							</div>
-         			 	</div>
-						<div class="col-sm-6">
-							<div class="panel panel-primary">
-            					<div class="panel-heading">
-              						<span id="info-icon-10" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-									<h3 class="panel-title">25 Best HR Seasons, Compared to 95 %ile HR</h3>
-            					</div>
-            					<div id="panel_r2c2" class="panel-body">
-              						<div class="panel-control-spacer"></div>
-              						<img id="img_r2c2" width="100%"/>
-            					</div>
-          					</div>
+							<div class="col-sm-6">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<span id="info-icon-10" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										<h3 class="panel-title">25 Best HR Seasons, Compared to 95 %ile HR</h3>
+									</div>
+									<div id="panel_r2c2" class="panel-body">
+										<div class="panel-control-spacer"></div>
+										<img id="img_r2c2" width="100%"/>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
 </body>
 </html>
