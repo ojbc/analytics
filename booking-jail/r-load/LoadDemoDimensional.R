@@ -83,7 +83,7 @@ blockProbs<-adamsGeoBlockPop$Population/sum(adamsGeoBlockPop$Population)
 
 getRandomCoordsInCounty <- function(geoId) {
     target_shp <- subset(adams_county_shp, GEO_ID == geoId)
-    df <- as.data.frame(coordinates(spsample(x=target_shp, n = 1, type = "regular", iter=50)))
+    df <- as.data.frame(coordinates(spsample(x=target_shp, n = 1, type = "regular", iter=80)))
     df$GEO_ID <- geoId
     return(select(mutate(sample_n(df, 1), lat=x2, long=x1, GeoID=geoId), GeoID, lat, long))
 }
@@ -240,7 +240,8 @@ createBehavioralHealthAssessment <- function(personId) {
   types <- sample(1:behavioralHealthTypeLength, size=behavioralHealthTypeCount, prob=c(rep(1/behavioralHealthTypeLength, behavioralHealthTypeLength)))
 
   bind_rows(Map(function(typeID) {
-    data.frame(PersonID=c(personId), BehavioralHealthTypeID=c(typeID))
+    data.frame(PersonID=c(personId), BehavioralHealthTypeID=c(typeID),
+               SevereMentalIllnessIndicator=rbinom(n=1, size=1, prob=.4))
   }, types))
 
 }
@@ -260,7 +261,7 @@ personTableRows<-cbind(personTableRows, StagingPersonUniqueIdentifier)
 ChargeTypeAssociation <- bind_rows(Map(createChargeTypeAssociationForBooking, booking$BookingID))
 jailEpisode<-bind_rows(Map(createJailEpisodesForBooking, booking$BookingID, booking$BookingLengthOfStay))
 
-# Modify DaysAgo value to make dailyPopulation within the jail capacity. 
+# Modify DaysAgo value to make dailyPopulation within the jail capacity.
 jailEpisodeCount<-count(jailEpisode$DaysAgo)
 colnames(jailEpisodeCount) <-c("DaysAgo", "EpisodeCount")
 minDailyEpisodeCount<-min(jailEpisodeCount$EpisodeCount)
@@ -270,15 +271,15 @@ beyondDaysAgo <- jailEpisodeCount%>%filter(EpisodeCount > jailCapacity)
 for (r in 1:nrow(beyondDaysAgo)){
   row = beyondDaysAgo[r,]
   numberOfRowsToMove = row$EpisodeCount - jailCapacity
-  
+
   jailEpisodeOfBeyondDaysAgo = filter(jailEpisode, DaysAgo == row$DaysAgo, LengthOfStay == 1)
   jailEpisodeBookingIdsofBeyondDaysAgo = filter(jailEpisode, BookingID %in% jailEpisodeOfBeyondDaysAgo$BookingID)
-  
+
   bookingIDCount = count(jailEpisodeBookingIdsofBeyondDaysAgo, "BookingID")
   bookingIdsToMove = filter(bookingIDCount, freq==1)$BookingID[1:numberOfRowsToMove]
-  
+
   jailEpisode$DaysAgo[jailEpisode$BookingID %in% bookingIdsToMove]  <- minDaysAgo$DaysAgo[1]
-  
+
   jailEpisodeCount<-count(jailEpisode$DaysAgo)
   colnames(jailEpisodeCount) <-c("DaysAgo", "EpisodeCount")
   minDailyEpisodeCount<-min(jailEpisodeCount$EpisodeCount)
@@ -332,7 +333,7 @@ dbWriteTable(adsConnection, "DailyPopulationCharges", data.table(chargedDailyPop
 # Generate BehavioralHealthDailyPopulation data
 behavioralHealthJailEpisode <-left_join(behavioralHealthAssessment, personJailEpisode)
 behavioralHealthDailyPopulation <- dplyr::count(behavioralHealthJailEpisode, DaysAgo, JurisdictionTypeID, AgencyTypeID,
-                         PopulationTypeID, BehavioralHealthTypeID)
+                         PopulationTypeID, BehavioralHealthTypeID, SevereMentalIllnessIndicator)
 behavioralHealthDailyPopulation <- dplyr::rename(behavioralHealthDailyPopulation, EpisodeCount = n)
 dbWriteTable(adsConnection, "DailyPopulationBehavioralHealth", data.table(behavioralHealthDailyPopulation), append=TRUE, row.names=FALSE)
 
