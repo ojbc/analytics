@@ -8,3 +8,5 @@ r-packages/OJBDemoDashboard/man
 r-packages/OJBDashboardDemo.Rcheck
 booking-jail/r-analytics/JailBookingDashboard/man
 booking-jail/r-analytics/JailBookingDashboard/*.svg
+JailBookingDashboard_0.1.tar.gz
+**/sysdata.rda

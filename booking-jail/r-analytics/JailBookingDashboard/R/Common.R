@@ -24,16 +24,20 @@ getFillScheme <- function() {
 #' Print a plot to an SVG file
 #'
 #' @import svglite
-svgPrint <- function(plot, filename) {
-  svglite(filename, width=5, height=3.1)
+svgPrint <- function(plot, filename, width, height) {
+  w <- width
+  h <- height
+  svglite(filename, width=w, height=h)
   print(plot)
   dev.off()
   invisible()
 }
 
 AllOriginatingAgenciesLabel <- "All Agencies"
-AllCourtsLabel <- "All Courts"
+AllCourtsLabel <- "All Jurisdictions"
 TargetPopulationLabel <- "Target Population"
 
 DefaultOriginatingAgenciesLabel <- AllOriginatingAgenciesLabel
 DefaultJurisdictionLabel <- AllCourtsLabel
+
+JailCapacity <- 2005

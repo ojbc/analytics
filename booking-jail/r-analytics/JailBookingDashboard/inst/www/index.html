@@ -11,18 +11,120 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.1.1/bootstrap-slider.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+    <script src="https://www.opencpu.org/js/archive/opencpu-0.4.js"></script>
 
 	<script language="javascript">
 
-		drawPanel = function(panelLabel, args) {
-			ocpu.call("chart_" + panelLabel, args, function(session) {
-				$("#img_" + panelLabel).attr("src", session.getLoc() + "files/chart_" + panelLabel + ".svg");
-			}).fail(function(req){
-				alert("Error: " + req.responseText);
+		var localTesting = false;
+
+		var chartNameRFunctionLookup = new Array();
+		chartNameRFunctionLookup["r1c1"] = "plotCaseStatus";
+		chartNameRFunctionLookup["r1c2"] = "plotIllnessDisorder";
+		chartNameRFunctionLookup["r1c2_SMI"] = "plotSMI";
+		chartNameRFunctionLookup["r1c3"] = "plotChargeType";
+		chartNameRFunctionLookup["r2c1_left"] = "plotOriginatingAgency";
+		chartNameRFunctionLookup["r2c1_right"] = "plotBedType";
+		chartNameRFunctionLookup["r2c1_util"] = "plotJailUtilization";
+		chartNameRFunctionLookup["r2c2"] = "plotPretrialStatus";
+
+		var RFunctionChartNameLookup = new Array();
+		for (var chartName in chartNameRFunctionLookup) {
+			RFunctionChartNameLookup[chartNameRFunctionLookup[chartName]] = chartName;
+		}
+
+		var ocpuCallStack = new Array();
+
+		drawImages = function(opencpuSession) {
+			opencpuSession.getObject(function(rReturnValue) {
+				for (i=0; i < rReturnValue.length; i++) {
+					rFunction = rReturnValue[i];
+					panelLabel = RFunctionChartNameLookup[rFunction];
+					image = $("#img_" + panelLabel);
+					image.hide();
+					image.attr("src", opencpuSession.getLoc() + "files/" + rFunction + ".svg");
+					image.fadeIn(1000);
+				}
 			});
 		}
 
-		$(document).ready(function () {	
+		drawPanel = function(panelLabel, args) {
+
+			fn = chartNameRFunctionLookup[panelLabel];
+
+			//console.log("Drawing panel, panelLabel=" + panelLabel + ", args=" + JSON.stringify(args) + ", function=" + fn)
+
+			if (!localTesting) {
+				//console.log("Stack length = " + ocpuCallStack.length);
+				if (!ocpuCallStack.length) {
+					//console.log("Showing wait pane");
+					showWaitPane();
+				}
+				ocpuCallStack.push(panelLabel);
+				ocpu.call(fn, args, drawImages)
+				.fail(function(req) {
+					alert("Error: " + req.responseText);
+				})
+				.always(function(req) {
+					ocpuCallStack.pop();
+					//console.log("Call complete, stack length=" + ocpuCallStack.length);
+					if (!ocpuCallStack.length) {
+						hideWaitPane();
+					}
+				});
+			} else {
+				console.log("Skipping call to opencpu, disabled in code.")
+			}
+		}
+
+		drawAllPanels = function(args) {
+
+			if (!localTesting) {
+
+				showWaitPane();
+
+				ocpu.call("allOperationalDashboardPlots", args, drawImages)
+				.fail(function(req) {
+					alert("Error: " + req.responseText);
+				})
+				.always(function(req) {
+					if (!ocpuCallStack.length) {
+						hideWaitPane();
+					}
+				});
+
+
+			} else {
+				console.log("Skipping call to opencpu, disabled in code.")
+			}
+
+		}
+
+		showWaitPane = function() {
+
+			var waitPaneDiv =  $("#wait-pane");
+
+			waitPaneDiv.height($(window).height());
+			waitPaneDiv.width($(window).width());
+
+			waitPaneDiv.show();
+
+		}
+
+		hideWaitPane = function() {
+			$("#wait-pane").hide();
+		}
+
+		collectQueryArgs = function() {
+			ret = {
+				jurisdiction : $("#jurisdiction-select").val(),
+				originatingAgency : $("#agency-select").val(),
+				targetPopulationOnly : ($('#pop-button-group button.btn.active').attr('id') == "target-pop-button")
+			};
+			console.log("Query controls updated, values=" + JSON.stringify(ret));
+			return ret;
+		}
+
+		$(document).ready(function () {
 
 			var sliderStops = ['30','60','90','180','365','730'];
 
@@ -31,7 +133,7 @@
 			$('#slider').on('slideStop', function(e) {
 				var t = e.value;
 				var v = sliderStops[t-1];
-				console.log(v);
+				//console.log(v);
 			});
 			
 			$('select.dashselect').on('change', function () {
@@ -47,28 +149,63 @@
 			
 			$("#info-icon-r1c1").click(function() {
 				$(".modal-title").text("About Case Status")
-				$(".modal-body").html("<p>This is the description of the Case Status graphic.</p><p>Here we will define " +
-					"what it means, etc.</p>")
+				$(".modal-body").html("<p>This is the description of the Case Status measure.</p><p>Here we will define " +
+					"what it means, any data anomalies, guide to interpretation, etc.  We can do any kind of html formatting " + 
+					"in here, like <b>bold</b> and <i>italics</i></p>")
 				$("#infoModal").modal();
 			});
 
 			$("#pop-button-group .btn").on("click", function() {
 				$("#pop-button-group .btn").button("toggle");
+  				drawAllPanels(collectQueryArgs());
 			});
+
+			$('.query-control').on('changed.bs.select', function (e) {
+  				drawAllPanels(collectQueryArgs());
+			});
+
+			$("#img_r1c2_SMI").on("load", function() {
+				$("div .row1-panel-control-spacer").each(function() {
+            		$(this).height($("#smi-widget-div").height());
+          		}); 
+			})
+
+			$("#img_r2c1_util").on("load", function() {
+				$("div .row2-panel-control-spacer").each(function() {
+            		$(this).height($("#jail-util-widget-div").height());
+          		}); 
+			})
+
+			drawAllPanels(collectQueryArgs());
 
 		})	  	
 	</script>
 	<style type="text/css">
-		.row { padding-bottom: 40px; }
 		.filterrow div select { float: left; }
 		.filterrow .filters div { margin-right: 20px; }
 		.radio { margin-top: 0; margin-bottom: 5px; }
 		.export { float: right; }
 		.glyphicon { float: right; }
-		.toprow .dashboard { text-align: right; margin-top: 25px;}
+		.toprow .dashboard { text-align: right; margin-top: 10px;}
 		.timeline-slider { display: none; }
 		.navli {margin: 6px; }
 		.slider-label {margin-right: 15px; }
+		#wait-pane {
+			position: absolute;
+			background-color: #7e7e7e;
+			opacity: 0.75;
+			filter: alpha(opacity=75);
+			background-image: url('loading.gif');
+			background-position: center;
+			background-repeat: no-repeat;
+			z-index: 10000;
+			display: none;
+		}
+		[class*="col-"] {
+        	padding-left: 1;
+        	padding-right: 1;
+      	}
+      	.multi-widget-td { padding: 5px; }
 	</style>
 </head>
 <body>
@@ -91,13 +228,14 @@
 		</div>
 	</div>
 
-	<div class="container-fluid">
+	<div id="wait-pane"></div>
+
+	<div id="main-content" class="container-fluid">
 		<div class="row toprow">
 			<div class="col-sm-8">
-				<h1>Adams County, Colorado - Jail Dashboard</h1>
+				<h3>Adams County, Colorado - Jail Dashboard</h3>
 			</div>
 			<div class="col-sm-4 dashboard">		
-				Dashboard:
 				<select class="selectpicker dashselect" data-width="auto">
 					<option data-target="#jail-static" value="jail-static">Jail Dashboard - Static</option>
 					<option data-target="#jail-timeline" value="jail-timeline">Jail Dashboard - Timeline</option>
@@ -111,7 +249,7 @@
 				<ul class="nav navbar-nav">
 					<li class="navli">
 						<label class="control-label" for="metric-select">Metric:</label>
-						<select id="metric-select" class="selectpicker show-tick" data-width="195px">
+						<select id="metric-select" class="selectpicker show-tick query-control" data-width="195px">
 							<option>Population Count</option>
 							<option>Length of Stay</option>
 							<option>Average Daily Population</option>
@@ -120,7 +258,8 @@
 					</li>
 					<li class="navli">
 						<label class="control-label" for="jurisdiction-select">Jurisdiction:</label>
-						<select id="jurisdiction-select" class="selectpicker show-tick" data-width="140px">
+						<select id="jurisdiction-select" class="selectpicker show-tick query-control" data-width="150px">
+							<option>All Jurisdictions</option>
 							<option>State Court</option>
 							<option>County Court</option>
 							<option>Municipal Court</option>
@@ -128,7 +267,8 @@
 					</li>
 					<li class="navli">
 						<label class="control-label" for="agency-select">Agency:</label>
-						<select id="agency-select" class="selectpicker show-tick" data-width="160px">
+						<select id="agency-select" class="selectpicker show-tick query-control" data-width="160px">
+							<option>All Agencies</option>
 							<option>Adams County SO</option>
 							<option>Arvada PD</option>
 							<option>Aurora PD</option>
@@ -141,10 +281,10 @@
 						</select>
 					</li>
 					<li class="navli">
-						<div class="btn-group-sm" role="group" id="pop-button-group">
+						<div class="btn-group-sm query-control" role="group" id="pop-button-group">
 							<label class="control-label" for="pop-button-group">Population:</label>
-							<button type="button" class="btn btn-default active" id="target-pop-button">Target</button>
-							<button type="button" class="btn btn-default" id="general-pop-button">General</button>
+							<button type="button" class="btn btn-default active query-control" id="target-pop-button">Target</button>
+							<button type="button" class="btn btn-default query-control" id="general-pop-button">General</button>
 						</div>
 					</li>
 				</ul>
@@ -166,7 +306,7 @@
 			</div>
 		</nav>
 
-		<div class="row">
+		<div class="row row1">
 			<div class="col-sm-12">
 				<div class="tab-content">
 					<div id="jail-static" class="tab-pane active">
@@ -178,7 +318,8 @@
 										<h3 class="panel-title">Case Status</h3>
 									</div>
 									<div id="panel_r1c1" class="panel-body">
-										<img id="img_r1c1" width="100%"/>
+              							<div class="row1-panel-control-spacer"></div>
+										<div><img id="img_r1c1" width="100%"/></div>
 									</div>
 								</div>
 							</div>
@@ -189,7 +330,14 @@
 										<h3 class="panel-title">Illnesses and Disorders</h3>
 									</div>
 									<div id="panel_r1c2" class="panel-body">
-										<img id="img_r1c2" width="100%"/>
+										<div id="smi-widget-div">
+											<table width="100%"><tr>
+												<td>%SMI: </td><td><img id="img_r1c2_SMI" width="100%"/></td>
+											</tr></table>
+										</div>
+										<div>
+											<img id="img_r1c2" width="100%"/>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -200,30 +348,40 @@
 										<h3 class="panel-title">Charge Types</h3>
 									</div>
 									<div id="panel_r1c3" class="panel-body">
-										<img id="img_r1c3" width="100%"/>
+              							<div class="row1-panel-control-spacer"></div>
+										<div><img id="img_r1c3" width="100%"/></div>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-sm-7">
 								<div class="panel panel-primary">
 									<div class="panel-heading">
 										<span id="info-icon-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
 										<h3 class="panel-title">Jail Utilization</h3>
 									</div>
 									<div id="panel_r2c1" class="panel-body">
-										<img id="img_r2c1" width="100%"/>
+										<div id="jail-util-widget-div">
+											<img id="img_r2c1_util" width="100%"/>
+										</div>
+										<table width="100%">
+										<tr>
+										<th>Originating Agency</th><th>Bed Type</th></tr><tr>
+										<td class="multi-widget-td"><img id="img_r2c1_left" width="100%"/></td>
+										<td class="multi-widget-td"><img id="img_r2c1_right" width="100%"/></td>
+										</tr></table>
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-5">
 								<div class="panel panel-primary">
 									<div class="panel-heading">
 										<span id="info-icon-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
 										<h3 class="panel-title">Pretrial Status</h3>
 									</div>
 									<div id="panel_r2c2" class="panel-body">
+              							<div class="row2-panel-control-spacer"></div>
 										<img id="img_r2c2" width="100%"/>
 									</div>
 								</div>
@@ -239,7 +397,7 @@
 										<h3 class="panel-title">Distribution of Runs Per Game, 2015</h3>
 									</div>
 									<div id="panel_r2c1" class="panel-body">
-										<div class="panel-control-spacer"></div>
+										<div class="row1-panel-control-spacer"></div>
 										<img id="img_r2c1" width="100%"/>
 									</div>
 								</div>
@@ -251,7 +409,7 @@
 										<h3 class="panel-title">25 Best HR Seasons, Compared to 95 %ile HR</h3>
 									</div>
 									<div id="panel_r2c2" class="panel-body">
-										<div class="panel-control-spacer"></div>
+										<div class="row1-panel-control-spacer"></div>
 										<img id="img_r2c2" width="100%"/>
 									</div>
 								</div>
@@ -268,7 +426,7 @@
 										<h3 class="panel-title">Average and Strikeout Rate over Time</h3>
 									</div>
 									<div id="panel_r1c1" class="panel-body">
-										<div class="panel-control-spacer"></div>
+										<div class="row1-panel-control-spacer"></div>
 										<img id="img_r1c1" width="100%"/>
 									</div>
 								</div>
@@ -295,7 +453,7 @@
 										<h3 class="panel-title">Wins vs. Run Differential, 2015</h3>
 									</div>
 									<div id="panel_r1c3" class="panel-body">
-										<div class="panel-control-spacer"></div>
+										<div class="row1-panel-control-spacer"></div>
 										<img id="img_r1c3" width="100%"/>
 									</div>
 								</div>
@@ -312,7 +470,7 @@
 										<h3 class="panel-title">Distribution of Runs Per Game, 2015</h3>
 									</div>
 									<div id="panel_r2c1" class="panel-body">
-										<div class="panel-control-spacer"></div>
+										<div class="row1-panel-control-spacer"></div>
 										<img id="img_r2c1" width="100%"/>
 									</div>
 								</div>
@@ -324,7 +482,7 @@
 										<h3 class="panel-title">25 Best HR Seasons, Compared to 95 %ile HR</h3>
 									</div>
 									<div id="panel_r2c2" class="panel-body">
-										<div class="panel-control-spacer"></div>
+										<div class="row1-panel-control-spacer"></div>
 										<img id="img_r2c2" width="100%"/>
 									</div>
 								</div>
