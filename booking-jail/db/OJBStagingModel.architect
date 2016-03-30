@@ -179,7 +179,7 @@
     <column id="COL51" populated="true" UUID="6e83a8b7-87da-4fdd-8610-4ffd31fc989b" autoIncrement="false" autoIncrementSequenceName="Booking_BookingReportID_seq" defaultValue="" name="BookingReportID" nullable="0" physicalName="BookingReportID" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL52" populated="true" UUID="bbbef626-91b4-4d45-bccd-97d90f36df58" autoIncrement="false" autoIncrementSequenceName="Agency_AgencyID_seq" defaultValue="" name="SendingAgency" nullable="0" physicalName="SendingAgency" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL52" populated="true" UUID="bbbef626-91b4-4d45-bccd-97d90f36df58" autoIncrement="false" autoIncrementSequenceName="Agency_AgencyID_seq" defaultValue="" name="SendingAgencyID" nullable="0" physicalName="SendingAgencyID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL53" populated="true" UUID="e757a0ac-c8b5-4815-92c3-8d8875c71bb2" autoIncrement="false" autoIncrementSequenceName="Booking_CaseStatusID_seq" defaultValue="" name="CaseStatusID" nullable="0" physicalName="CaseStatusID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -481,13 +481,13 @@
     <column id="COL130" populated="true" UUID="3f665399-08ae-4c54-ade8-fdfbb75c8950" autoIncrement="true" autoIncrementSequenceName="Person_PersonID_seq_1" defaultValue="" name="PersonID" nullable="0" physicalName="PersonID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL131" populated="true" UUID="c5cf9783-3055-4d52-a0a5-5c85debcb546" autoIncrement="false" autoIncrementSequenceName="Jail_Custody_StagingPersonUniqueIdentifier_seq" defaultValue="" name="StagingPersonUniqueIdentifier" nullable="0" physicalName="StagingPersonUniqueIdentifier" precision="36" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL131" populated="true" UUID="c5cf9783-3055-4d52-a0a5-5c85debcb546" autoIncrement="false" autoIncrementSequenceName="Jail_Custody_PersonUniqueIdentifier_seq" defaultValue="" name="PersonUniqueIdentifier" nullable="0" physicalName="PersonUniqueIdentifier" precision="36" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL132" populated="true" UUID="efa629b1-f811-4a8b-bafa-3db71927336b" autoIncrement="false" autoIncrementSequenceName="PersonSex_PersonSexID_seq_1_1" defaultValue="" name="PersonSexID" nullable="0" physicalName="PersonSexID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL133" populated="true" UUID="f487cac2-668d-4aeb-8a4e-91a73edf1437" autoIncrement="false" autoIncrementSequenceName="Person_DOB_seq" defaultValue="" name="DOB" nullable="0" physicalName="DOB" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+    <column id="COL133" populated="true" UUID="f487cac2-668d-4aeb-8a4e-91a73edf1437" autoIncrement="false" autoIncrementSequenceName="Person_PersonBirthDate_seq" defaultValue="" name="PersonBirthDate" nullable="0" physicalName="PersonBirthDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
      <remarks></remarks>
     </column>
     <column id="COL134" populated="true" UUID="3d5d4c8b-f1e4-4ab7-9bb8-2880de2833c8" autoIncrement="false" autoIncrementSequenceName="PersonRace_PersonRaceID_seq_1_1" defaultValue="" name="PersonRaceID" nullable="0" physicalName="PersonRaceID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -590,13 +590,13 @@
     </index>
    </folder>
   </table>
-  <table id="TAB159" populated="true" UUID="8ed96f2a-4f56-4dc3-9970-40f7a4d2dfb8" name="Education" objectType="TABLE" physicalName="Education" >
+  <table id="TAB159" populated="true" UUID="8ed96f2a-4f56-4dc3-9970-40f7a4d2dfb8" name="EducationLevel" objectType="TABLE" physicalName="EducationLevel" >
    <remarks></remarks>
    <folder id="FOLTAB1591" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL160" populated="true" UUID="b41d3865-bcae-46c7-bf59-35c1a2ccc034" autoIncrement="true" autoIncrementSequenceName="Education_EducationID_seq_1" defaultValue="" name="EducationID" nullable="0" physicalName="EducationID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL160" populated="true" UUID="b41d3865-bcae-46c7-bf59-35c1a2ccc034" autoIncrement="true" autoIncrementSequenceName="EducationLevel_EducationLevelID_seq" defaultValue="" name="EducationLevelID" nullable="0" physicalName="EducationLevelID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL161" populated="true" UUID="a478b93f-4ce7-4ea1-9e8a-433fe7aec6be" autoIncrement="false" autoIncrementSequenceName="Education_EducationLevel_seq" defaultValue="" name="EducationLevel" nullable="0" physicalName="EducationLevel" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL161" populated="true" UUID="a478b93f-4ce7-4ea1-9e8a-433fe7aec6be" autoIncrement="false" autoIncrementSequenceName="EducationLevel_EducationLevel_seq" defaultValue="" name="EducationLevel" nullable="0" physicalName="EducationLevel" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -605,8 +605,8 @@
     <folder id="FOLTAB1592" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB1594" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX162" populated="true" UUID="7f3995e3-43ad-4781-909a-f339a8fedced" clustered="false" name="EducationID" physicalName="educationid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC163" populated="true" UUID="f248223d-5b9c-446c-84db-23a312707311" ascendingOrDescending="UNSPECIFIED" column-ref="COL160" name="EducationID" physicalName="EducationID" />
+    <index id="IDX162" populated="true" UUID="7f3995e3-43ad-4781-909a-f339a8fedced" clustered="false" name="EducationLevelID" physicalName="educationid" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC163" populated="true" UUID="f248223d-5b9c-446c-84db-23a312707311" ascendingOrDescending="UNSPECIFIED" column-ref="COL160" name="EducationLevelID" physicalName="EducationLevelID" />
     </index>
    </folder>
   </table>
@@ -645,10 +645,10 @@
     <column id="COL173" populated="true" UUID="60e8e865-8554-4928-bf0a-2f409f1de2a0" autoIncrement="false" autoIncrementSequenceName="BookingSubject_BookingNumber_seq" defaultValue="" name="BookingNumber" nullable="0" physicalName="BookingNumber" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL174" populated="true" UUID="72a27194-86ce-40fd-ab43-e037e99abde8" autoIncrement="false" autoIncrementSequenceName="BookingSubject_Age_seq" defaultValue="" name="Age" nullable="0" physicalName="Age" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL174" populated="true" UUID="72a27194-86ce-40fd-ab43-e037e99abde8" autoIncrement="false" autoIncrementSequenceName="BookingSubject_PersonAge_seq" defaultValue="" name="PersonAge" nullable="0" physicalName="PersonAge" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL175" populated="true" UUID="a8cc2d53-db48-430e-b913-dffce37e6ad4" autoIncrement="false" autoIncrementSequenceName="Education_EducationID_seq_1_1" defaultValue="" name="EducationID" nullable="0" physicalName="EducationID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL175" populated="true" UUID="a8cc2d53-db48-430e-b913-dffce37e6ad4" autoIncrement="false" autoIncrementSequenceName="Education_EducationLevelID_seq_1_1" defaultValue="" name="EducationLevelID" nullable="0" physicalName="EducationLevelID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL176" populated="true" UUID="cddc3c37-db74-4844-8f45-7600424af1e4" autoIncrement="false" autoIncrementSequenceName="Occupation_OccupationID_seq_1_1_1" defaultValue="" name="OccupationID" nullable="0" physicalName="OccupationID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -737,7 +737,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.LiquibaseDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="111" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="571" y="288" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB64" x="406" y="30" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB69" x="102" y="90" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
