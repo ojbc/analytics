@@ -1,6 +1,10 @@
 library(RMySQL)
 library(dplyr)
 
+maxDaysAgo <- " and DaysAgo <= 90"
+# uncomment the following line to load a full two years of data
+#maxDaysAgo <- " "
+
 adsConnection <- dbConnect(MySQL(), host="localhost", dbname="ojbc_booking_analytics_demo", username="root")
 
 populationCountSql <- paste0("select EpisodeCount, JurisdictionTypeDescription, AgencyTypeDescription, PretrialStatusTypeDescription, ",
@@ -25,7 +29,7 @@ populationCountSql <- paste0("select EpisodeCount, JurisdictionTypeDescription, 
                              "DailyPopulation.IncomeLevelTypeID=IncomeLevelType.IncomeLevelTypeID and ",
                              "DailyPopulation.PopulationTypeID=PopulationType.PopulationTypeID and ",
                              "DailyPopulation.HousingStatusTypeID=HousingStatusType.HousingStatusTypeID and ",
-                             "DailyPopulation.PersonRaceID=PersonRace.PersonRaceID")
+                             "DailyPopulation.PersonRaceID=PersonRace.PersonRaceID", maxDaysAgo)
 
 PopulationCount <- dbGetQuery(adsConnection, populationCountSql)
 CurrentPopulationCount <- filter(PopulationCount, DaysAgo==1)
@@ -36,19 +40,20 @@ populationChargeCountSql <- paste0("select EpisodeCount, ChargeTypeDescription, 
                                    "where DailyPopulationCharges.JurisdictionTypeID=JurisdictionType.JurisdictionTypeID and ",
                                    "DailyPopulationCharges.AgencyTypeID=AgencyType.AgencyTypeID and ",
                                    "DailyPopulationCharges.PopulationTypeID=PopulationType.PopulationTypeID and ",
-                                   "DailyPopulationCharges.ChargeTypeID=ChargeType.ChargeTypeID")
+                                   "DailyPopulationCharges.ChargeTypeID=ChargeType.ChargeTypeID", maxDaysAgo)
 
 PopulationChargeCount <- dbGetQuery(adsConnection, populationChargeCountSql)
 CurrentPopulationChargeCount <- filter(PopulationChargeCount, DaysAgo==1)
 
 populationBehavioralHealthCountSql <- paste0("select EpisodeCount, ",
                                              "BehavioralHealthDescription as BehavioralHealthTypeDescription, JurisdictionTypeDescription, ",
-                                             "AgencyTypeDescription, PopulationTypeDescription, DaysAgo ",
+                                             "AgencyTypeDescription, PopulationTypeDescription, DaysAgo, SevereMentalIllnessIndicator ",
                                              "from DailyPopulationBehavioralHealth, JurisdictionType, AgencyType, PopulationType, BehavioralHealthType ",
                                              "where DailyPopulationBehavioralHealth.JurisdictionTypeID=JurisdictionType.JurisdictionTypeID and ",
                                              "DailyPopulationBehavioralHealth.AgencyTypeID=AgencyType.AgencyTypeID and ",
                                              "DailyPopulationBehavioralHealth.PopulationTypeID=PopulationType.PopulationTypeID and ",
-                                             "DailyPopulationBehavioralHealth.BehavioralHealthTypeID=BehavioralHealthType.BehavioralHealthTypeID")
+                                             "DailyPopulationBehavioralHealth.BehavioralHealthTypeID=BehavioralHealthType.BehavioralHealthTypeID",
+                                             maxDaysAgo)
 
 PopulationBehavioralHealthCount <- dbGetQuery(adsConnection, populationBehavioralHealthCountSql)
 CurrentPopulationBehavioralHealthCount <- filter(PopulationBehavioralHealthCount, DaysAgo==1)
