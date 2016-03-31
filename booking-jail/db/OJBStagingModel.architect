@@ -438,10 +438,10 @@
     <column id="COL119" populated="true" UUID="feb0abbe-91ae-44b1-8705-0ce5a2a63d82" autoIncrement="false" autoIncrementSequenceName="BookingCharge_ChargeTypeID_seq" defaultValue="" name="ChargeTypeID" nullable="0" physicalName="ChargeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL120" populated="true" UUID="e4383444-7488-400c-a9ca-3e4e8555ca9a" autoIncrement="false" autoIncrementSequenceName="Booking_BondAmount_seq" defaultValue="0" name="BondAmount" nullable="0" physicalName="BondAmount" precision="12" referenceCount="1" scale="2" sourceDataTypeName="UserDefinedSQLType" type="3" userDefinedTypeUUID="cc1304ea-628a-4fc5-a84a-06ba14759152" >
+    <column id="COL120" populated="true" UUID="e4383444-7488-400c-a9ca-3e4e8555ca9a" autoIncrement="false" autoIncrementSequenceName="Booking_BondAmount_seq" defaultValue="" name="BondAmount" nullable="1" physicalName="BondAmount" precision="10" referenceCount="1" scale="2" sourceDataTypeName="UserDefinedSQLType" type="2" userDefinedTypeUUID="115245ce-612c-4d6a-b559-6dd903dd959a" >
      <remarks></remarks>
     </column>
-    <column id="COL121" populated="true" UUID="4691394b-a2d3-467a-b248-57d41394acec" autoIncrement="false" autoIncrementSequenceName="BondType_BondTypeID_seq_1" defaultValue="" name="BondTypeID" nullable="0" physicalName="BondTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL121" populated="true" UUID="4691394b-a2d3-467a-b248-57d41394acec" autoIncrement="false" autoIncrementSequenceName="BondType_BondTypeID_seq_1" defaultValue="" name="BondTypeID" nullable="1" physicalName="BondTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -734,10 +734,10 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.LiquibaseDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="168" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="571" y="288" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB64" x="406" y="30" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB69" x="102" y="90" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
