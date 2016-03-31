@@ -484,16 +484,16 @@
     <column id="COL131" populated="true" UUID="c5cf9783-3055-4d52-a0a5-5c85debcb546" autoIncrement="false" autoIncrementSequenceName="Jail_Custody_PersonUniqueIdentifier_seq" defaultValue="" name="PersonUniqueIdentifier" nullable="0" physicalName="PersonUniqueIdentifier" precision="36" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL132" populated="true" UUID="efa629b1-f811-4a8b-bafa-3db71927336b" autoIncrement="false" autoIncrementSequenceName="PersonSex_PersonSexID_seq_1_1" defaultValue="" name="PersonSexID" nullable="0" physicalName="PersonSexID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL132" populated="true" UUID="efa629b1-f811-4a8b-bafa-3db71927336b" autoIncrement="false" autoIncrementSequenceName="PersonSex_PersonSexID_seq_1_1" defaultValue="" name="PersonSexID" nullable="1" physicalName="PersonSexID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL133" populated="true" UUID="f487cac2-668d-4aeb-8a4e-91a73edf1437" autoIncrement="false" autoIncrementSequenceName="Person_PersonBirthDate_seq" defaultValue="" name="PersonBirthDate" nullable="0" physicalName="PersonBirthDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+    <column id="COL133" populated="true" UUID="f487cac2-668d-4aeb-8a4e-91a73edf1437" autoIncrement="false" autoIncrementSequenceName="Person_PersonBirthDate_seq" defaultValue="" name="PersonBirthDate" nullable="1" physicalName="PersonBirthDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
      <remarks></remarks>
     </column>
-    <column id="COL134" populated="true" UUID="3d5d4c8b-f1e4-4ab7-9bb8-2880de2833c8" autoIncrement="false" autoIncrementSequenceName="PersonRace_PersonRaceID_seq_1_1" defaultValue="" name="PersonRaceID" nullable="0" physicalName="PersonRaceID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL134" populated="true" UUID="3d5d4c8b-f1e4-4ab7-9bb8-2880de2833c8" autoIncrement="false" autoIncrementSequenceName="PersonRace_PersonRaceID_seq_1_1" defaultValue="" name="PersonRaceID" nullable="1" physicalName="PersonRaceID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL135" populated="true" UUID="bb0e9b8a-17ae-4d15-a5a6-bf00627467fb" autoIncrement="false" autoIncrementSequenceName="Language_LanguageID_seq_1" defaultValue="" name="LanguageID" nullable="0" physicalName="LanguageID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL135" populated="true" UUID="bb0e9b8a-17ae-4d15-a5a6-bf00627467fb" autoIncrement="false" autoIncrementSequenceName="Language_LanguageID_seq_1" defaultValue="" name="LanguageID" nullable="1" physicalName="LanguageID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -605,7 +605,7 @@
     <folder id="FOLTAB1592" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB1594" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX162" populated="true" UUID="7f3995e3-43ad-4781-909a-f339a8fedced" clustered="false" name="EducationLevelID" physicalName="educationid" primaryKeyIndex="true" unique="false" >
+    <index id="IDX162" populated="true" UUID="7f3995e3-43ad-4781-909a-f339a8fedced" clustered="false" name="EducationLevelID" physicalName="educationlevelid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC163" populated="true" UUID="f248223d-5b9c-446c-84db-23a312707311" ascendingOrDescending="UNSPECIFIED" column-ref="COL160" name="EducationLevelID" physicalName="EducationLevelID" />
     </index>
    </folder>
@@ -734,10 +734,10 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.LiquibaseDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="111" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="168" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="571" y="288" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB64" x="406" y="30" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB69" x="102" y="90" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
