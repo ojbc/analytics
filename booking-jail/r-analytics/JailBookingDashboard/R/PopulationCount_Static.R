@@ -63,7 +63,7 @@ plot <- function(dataFrameName, dataFrameFieldName, xAxisLabel,
 #'
 #' @import dplyr
 #' @export
-plotJailUtilization <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticJailUtilization <- function(jurisdiction = DefaultJurisdictionLabel,
                    originatingAgency = DefaultOriginatingAgenciesLabel,
                    targetPopulationOnly = FALSE) {
 
@@ -85,9 +85,9 @@ plotJailUtilization <- function(jurisdiction = DefaultJurisdictionLabel,
     scale_fill_grey(start=.6, end=.8) +
     coord_flip() + theme_void() + theme(legend.position="none")
 
-  svgPrint(plot, "plotJailUtilization.svg", width=10, height=.35)
+  svgPrint(plot, "plotStaticJailUtilization.svg", width=10, height=.35)
 
-  "plotJailUtilization"
+  "plotStaticJailUtilization"
 
 }
 
@@ -95,7 +95,7 @@ plotJailUtilization <- function(jurisdiction = DefaultJurisdictionLabel,
 #'
 #' @import dplyr
 #' @export
-plotSMI <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticSMI <- function(jurisdiction = DefaultJurisdictionLabel,
                     originatingAgency = DefaultOriginatingAgenciesLabel,
                     targetPopulationOnly = FALSE) {
 
@@ -112,16 +112,16 @@ plotSMI <- function(jurisdiction = DefaultJurisdictionLabel,
     scale_fill_grey(start=.6, end=.8) +
     coord_flip() + theme_void() + theme(legend.position="none")
 
-  svgPrint(plot, "plotSMI.svg", width=5, height=.35)
+  svgPrint(plot, "plotStaticSMI.svg", width=5, height=.35)
 
-  "plotSMI"
+  "plotStaticSMI"
 
 }
 
 #' Case Status Plot
 #'
 #' @export
-plotCaseStatus <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticCaseStatus <- function(jurisdiction = DefaultJurisdictionLabel,
                            originatingAgency = DefaultOriginatingAgenciesLabel,
                            targetPopulationOnly = FALSE) {
 
@@ -133,47 +133,47 @@ plotCaseStatus <- function(jurisdiction = DefaultJurisdictionLabel,
 #' Pretrial Status Plot
 #'
 #' @export
-plotPretrialStatus <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticPretrialStatus <- function(jurisdiction = DefaultJurisdictionLabel,
                                originatingAgency = DefaultOriginatingAgenciesLabel,
                                targetPopulationOnly = FALSE) {
 
   plot("CurrentPopulationCount", "PretrialStatusTypeDescription", "Pretrial Status",
-       jurisdiction, originatingAgency, targetPopulationOnly, width=5, height=3.5)
+       jurisdiction, originatingAgency, targetPopulationOnly, width=5, height=2.5)
 
 }
 
 #' Pretrial Status Plot
 #'
 #' @export
-plotOriginatingAgency <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticOriginatingAgency <- function(jurisdiction = DefaultJurisdictionLabel,
                                originatingAgency = DefaultOriginatingAgenciesLabel,
                                targetPopulationOnly = FALSE) {
 
   plot("CurrentPopulationCount", "AgencyTypeDescription", "Originating Agency",
-       jurisdiction, originatingAgency, targetPopulationOnly, height=5, width=5, horizontal = FALSE)
+       jurisdiction, originatingAgency, targetPopulationOnly, height=3.5, width=5, horizontal = FALSE)
 
 }
 
 #' Bed Type Plot
 #'
 #' @export
-plotBedType <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticBedType <- function(jurisdiction = DefaultJurisdictionLabel,
                         originatingAgency = DefaultOriginatingAgenciesLabel,
                         targetPopulationOnly = FALSE) {
 
   plot("CurrentPopulationCount", "BedTypeDescription", "Bed Type",
-       jurisdiction, originatingAgency, targetPopulationOnly, height=5, width=5, horizontal = FALSE)
+       jurisdiction, originatingAgency, targetPopulationOnly, height=3.5, width=5, horizontal = FALSE)
 
 }
 
 #' Gender Plot
 #'
 #' @export
-plotGender <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticGender <- function(jurisdiction = DefaultJurisdictionLabel,
                         originatingAgency = DefaultOriginatingAgenciesLabel,
                         targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "PersonSexDescription", "Gender", "GenderPlot.svg",
+  plot("CurrentPopulationCount", "PersonSexDescription", "Gender",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -181,11 +181,11 @@ plotGender <- function(jurisdiction = DefaultJurisdictionLabel,
 #' Race Plot
 #'
 #' @export
-plotRace <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticRace <- function(jurisdiction = DefaultJurisdictionLabel,
                         originatingAgency = DefaultOriginatingAgenciesLabel,
                         targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "PersonRaceDescription", "Race", "RacePlot.svg",
+  plot("CurrentPopulationCount", "PersonRaceDescription", "Race",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -193,11 +193,11 @@ plotRace <- function(jurisdiction = DefaultJurisdictionLabel,
 #' Age Plot
 #'
 #' @export
-plotAge <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticAge <- function(jurisdiction = DefaultJurisdictionLabel,
                     originatingAgency = DefaultOriginatingAgenciesLabel,
                     targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "AgeRange", "Age", "AgePlot.svg",
+  plot("CurrentPopulationCount", "AgeRange", "Age",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -205,11 +205,11 @@ plotAge <- function(jurisdiction = DefaultJurisdictionLabel,
 #' Income Plot
 #'
 #' @export
-plotIncome <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticIncome <- function(jurisdiction = DefaultJurisdictionLabel,
                        originatingAgency = DefaultOriginatingAgenciesLabel,
                        targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "IncomeLevelTypeDescription", "Income", "IncomePlot.svg",
+  plot("CurrentPopulationCount", "IncomeLevelTypeDescription", "Income",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -217,11 +217,11 @@ plotIncome <- function(jurisdiction = DefaultJurisdictionLabel,
 #' Housing Status Plot
 #'
 #' @export
-plotHousingStatus <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticHousingStatus <- function(jurisdiction = DefaultJurisdictionLabel,
                               originatingAgency = DefaultOriginatingAgenciesLabel,
                               targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "HousingStatusTypeDescription", "Housing Status", "HousingStatusPlot.svg",
+  plot("CurrentPopulationCount", "HousingStatusTypeDescription", "Housing Status",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -229,11 +229,11 @@ plotHousingStatus <- function(jurisdiction = DefaultJurisdictionLabel,
 #' Language Plot
 #'
 #' @export
-plotLanguage <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticLanguage <- function(jurisdiction = DefaultJurisdictionLabel,
                          originatingAgency = DefaultOriginatingAgenciesLabel,
                          targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "LanguageTypeDescription", "Language", "LanguagePlot.svg",
+  plot("CurrentPopulationCount", "LanguageTypeDescription", "Language",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -241,11 +241,11 @@ plotLanguage <- function(jurisdiction = DefaultJurisdictionLabel,
 #' Education Plot
 #'
 #' @export
-plotEducation <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticEducation <- function(jurisdiction = DefaultJurisdictionLabel,
                          originatingAgency = DefaultOriginatingAgenciesLabel,
                          targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "EducationLevelTypeDescription", "Education Level", "EducationPlot.svg",
+  plot("CurrentPopulationCount", "EducationLevelTypeDescription", "Education Level",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -253,7 +253,7 @@ plotEducation <- function(jurisdiction = DefaultJurisdictionLabel,
 #' Charge Type Plot
 #'
 #' @export
-plotChargeType <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticChargeType <- function(jurisdiction = DefaultJurisdictionLabel,
                            originatingAgency = DefaultOriginatingAgenciesLabel,
                            targetPopulationOnly = FALSE) {
 
@@ -265,7 +265,7 @@ plotChargeType <- function(jurisdiction = DefaultJurisdictionLabel,
 #' Illness/Disorder Plot
 #'
 #' @export
-plotIllnessDisorder <- function(jurisdiction = DefaultJurisdictionLabel,
+plotStaticIllnessDisorder <- function(jurisdiction = DefaultJurisdictionLabel,
                            originatingAgency = DefaultOriginatingAgenciesLabel,
                            targetPopulationOnly = FALSE) {
 
@@ -277,17 +277,34 @@ plotIllnessDisorder <- function(jurisdiction = DefaultJurisdictionLabel,
 #' Generate all static Current Population plots
 #'
 #' @export
-allOperationalDashboardPlots <- function(jurisdiction = DefaultJurisdictionLabel,
+allStaticOperationalDashboardPlots <- function(jurisdiction = DefaultJurisdictionLabel,
                      originatingAgency = DefaultOriginatingAgenciesLabel,
                      targetPopulationOnly = FALSE) {
   c(
-    plotBedType(jurisdiction, originatingAgency, targetPopulationOnly),
-    plotOriginatingAgency(jurisdiction, originatingAgency, targetPopulationOnly),
-    plotPretrialStatus(jurisdiction, originatingAgency, targetPopulationOnly),
-    plotCaseStatus(jurisdiction, originatingAgency, targetPopulationOnly),
-    plotChargeType(jurisdiction, originatingAgency, targetPopulationOnly),
-    plotIllnessDisorder(jurisdiction, originatingAgency, targetPopulationOnly),
-    plotSMI(jurisdiction, originatingAgency, targetPopulationOnly),
-    plotJailUtilization(jurisdiction, originatingAgency, targetPopulationOnly)
+    plotStaticBedType(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticOriginatingAgency(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticPretrialStatus(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticCaseStatus(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticChargeType(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticIllnessDisorder(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticSMI(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticJailUtilization(jurisdiction, originatingAgency, targetPopulationOnly)
+  )
+}
+
+#' Generate all demographic Current Population plots
+#'
+#' @export
+allStaticDemographicDashboardPlots <- function(jurisdiction = DefaultJurisdictionLabel,
+                                               originatingAgency = DefaultOriginatingAgenciesLabel,
+                                               targetPopulationOnly = FALSE) {
+  c(
+    plotStaticGender(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticRace(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticAge(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticLanguage(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticIncome(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticHousingStatus(jurisdiction, originatingAgency, targetPopulationOnly),
+    plotStaticEducation(jurisdiction, originatingAgency, targetPopulationOnly)
   )
 }

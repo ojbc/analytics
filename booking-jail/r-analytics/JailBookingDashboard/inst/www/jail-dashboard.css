@@ -1,0 +1,25 @@
+.filterrow div select { float: left; }
+.filterrow .filters div { margin-right: 20px; }
+.radio { margin-top: 0; margin-bottom: 5px; }
+.export { float: right; }
+.glyphicon { float: right; }
+.toprow .dashboard { text-align: right; margin-top: 10px;}
+.timeline-slider { display: none; }
+.navli {margin: 6px; }
+.slider-label {margin-right: 15px; }
+#wait-pane {
+	position: absolute;
+	background-color: #7e7e7e;
+	opacity: 0.75;
+	filter: alpha(opacity=75);
+	background-image: url('loading.gif');
+	background-position: center;
+	background-repeat: no-repeat;
+	z-index: 10000;
+	display: none;
+}
+[class*="col-"] {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+.multi-widget-td { padding: 5px; }
