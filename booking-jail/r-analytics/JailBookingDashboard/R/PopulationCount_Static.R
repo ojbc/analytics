@@ -2,27 +2,6 @@
 #   View:  Static
 #   Metric: Population Count
 
-#' @import dplyr
-filterDataFrame <- function(dataFrame, jurisdiction, originatingAgency, targetPopulationOnly) {
-
-  df <- dataFrame
-
-  if (targetPopulationOnly) {
-    df <- filter(df, PopulationTypeDescription == TargetPopulationLabel)
-  }
-
-  if (jurisdiction != AllCourtsLabel) {
-    df <- filter(df, JurisdictionTypeDescription == jurisdiction)
-  }
-
-  if (originatingAgency != AllOriginatingAgenciesLabel) {
-    df <- filter(df, AgencyTypeDescription == originatingAgency)
-  }
-
-  df
-
-}
-
 #' @import ggplot2
 #' @import scales
 plot <- function(dataFrameName, dataFrameFieldName, xAxisLabel,
