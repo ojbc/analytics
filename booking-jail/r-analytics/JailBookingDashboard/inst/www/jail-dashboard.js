@@ -149,11 +149,16 @@ $(document).ready(function () {
 		}
 	});
 	
-	$("#info-icon-operations-static-r1c1").click(function() {
-		$(".modal-title").text("About Case Status")
-		$(".modal-body").html("<p>This is the description of the Case Status measure.</p><p>Here we will define " +
-			"what it means, any data anomalies, guide to interpretation, etc.  We can do any kind of html formatting " + 
-			"in here, like <b>bold</b> and <i>italics</i></p>")
+	$(".glyphicon-info-sign").click(function() {
+		var iconSpan = $(this);
+		var helpFile = iconSpan.data("help-file");
+		var title = $(".panel-title", iconSpan.parent()).text();
+		$(".modal-title").text("About " + title);
+		if (helpFile) {
+			$(".modal-body").load(helpFile);
+		} else {
+			$(".modal-body").html("<p>Help content to be determined...</p>");
+		}
 		$("#infoModal").modal();
 	});
 
