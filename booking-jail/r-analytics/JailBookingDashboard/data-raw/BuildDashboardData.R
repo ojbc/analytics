@@ -1,35 +1,29 @@
 library(RMySQL)
 library(dplyr)
 
-maxDaysAgo <- " and DaysAgo <= 90"
+maxDaysAgo <- " where DaysAgo <= 90"
 # uncomment the following line to load a full two years of data
-#maxDaysAgo <- " "
+maxDaysAgo <- " "
 
 adsConnection <- dbConnect(MySQL(), host="localhost", dbname="ojbc_booking_analytics_demo", username="root")
 
-populationCountSql <- paste0("select EpisodeCount, JurisdictionTypeDescription, AgencyTypeDescription, PretrialStatusTypeDescription, ",
-                             "CaseStatusTypeDescription, LanguageTypeDescription, BedTypeDescription, ",
-                             "AgeInYears, AgeRangeSort as AgeRange, PersonSexDescription, OccupationTypeDescription, ",
-                             "EducationLevelTypeDescription, IncomeLevelTypeDescription, PopulationTypeDescription, ",
-                             "HousingStatusTypeDescription, PersonRaceDescription, DaysAgo ",
-                             "from DailyPopulation, JurisdictionType, AgencyType, PretrialStatusType, CaseStatusType, ",
-                             "LanguageType, BedType, PersonAge, PersonAgeRange, PersonSex, OccupationType, ",
-                             "EducationLevelType, IncomeLevelType, PopulationType, HousingStatusType, PersonRace ",
-                             "where DailyPopulation.JurisdictionTypeID=JurisdictionType.JurisdictionTypeID and ",
-                             "DailyPopulation.AgencyTypeID=AgencyType.AgencyTypeID and ",
-                             "DailyPopulation.PretrialStatusTypeID=PretrialStatusType.PretrialStatusTypeID and ",
-                             "DailyPopulation.CaseStatusTypeID=CaseStatusType.CaseStatusTypeID and ",
-                             "DailyPopulation.LanguageTypeID=LanguageType.LanguageTypeID and ",
-                             "DailyPopulation.BedTypeID=BedType.BedTypeID and ",
-                             "DailyPopulation.PersonAgeID=PersonAge.PersonAgeID and ",
-                             "PersonAge.PersonAgeRangeID=PersonAgeRange.PersonAgeRangeID and ",
-                             "DailyPopulation.PersonSexID=PersonSex.PersonSexID and ",
-                             "DailyPopulation.OccupationTypeID=OccupationType.OccupationTypeID and ",
-                             "DailyPopulation.EducationLevelTypeID=EducationLevelType.EducationLevelTypeID and " ,
-                             "DailyPopulation.IncomeLevelTypeID=IncomeLevelType.IncomeLevelTypeID and ",
-                             "DailyPopulation.PopulationTypeID=PopulationType.PopulationTypeID and ",
-                             "DailyPopulation.HousingStatusTypeID=HousingStatusType.HousingStatusTypeID and ",
-                             "DailyPopulation.PersonRaceID=PersonRace.PersonRaceID", maxDaysAgo)
+populationCountSql <- paste0("select EpisodeCount, DaysAgo, ",
+                             "(select JurisdictionTypeDescription from JurisdictionType where DailyPopulation.JurisdictionTypeID=JurisdictionType.JurisdictionTypeID), ",
+                             "(select PretrialStatusTypeDescription from PretrialStatusType where DailyPopulation.PretrialStatusTypeID=PretrialStatusType.PretrialStatusTypeID),",
+                             "(select CaseStatusTypeDescription from CaseStatusType where DailyPopulation.CaseStatusTypeID=CaseStatusType.CaseStatusTypeID),",
+                             "(select LanguageTypeDescription from LanguageType where DailyPopulation.LanguageTypeID=LanguageType.LanguageTypeID),",
+                             "(select BedTypeDescription from BedType where DailyPopulation.BedTypeID=BedType.BedTypeID),",
+                             "(select AgeInYears from PersonAge where DailyPopulation.PersonAgeID=PersonAge.PersonAgeID),",
+                             "(select AgeRangeSort as AgeRange from PersonAge, PersonAgeRange where DailyPopulation.PersonAgeID=PersonAge.PersonAgeID and PersonAge.PersonAgeRangeID=PersonAgeRange.PersonAgeRangeID),",
+                             "(select PersonSexDescription from PersonSex where DailyPopulation.PersonSexID=PersonSex.PersonSexID),",
+                             "(select OccupationTypeDescription from OccupationType where DailyPopulation.OccupationTypeID=OccupationType.OccupationTypeID),",
+                             "(select EducationLevelTypeDescription from EducationLevelType where DailyPopulation.EducationLevelTypeID=EducationLevelType.EducationLevelTypeID),",
+                             "(select IncomeLevelTypeDescription from IncomeLevelType where DailyPopulation.IncomeLevelTypeID=IncomeLevelType.IncomeLevelTypeID),",
+                             "(select PopulationTypeDescription from PopulationType where DailyPopulation.PopulationTypeID=PopulationType.PopulationTypeID),",
+                             "(select HousingStatusTypeDescription from HousingStatusType where DailyPopulation.HousingStatusTypeID=HousingStatusType.HousingStatusTypeID),",
+                             "(select PersonRaceDescription from PersonRace where DailyPopulation.PersonRaceID=PersonRace.PersonRaceID),",
+                             "(select AgencyTypeDescription from AgencyType where DailyPopulation.AgencyTypeID=AgencyType.AgencyTypeID) ",
+                             "from DailyPopulation ", maxDaysAgo)
 
 PopulationCount <- dbGetQuery(adsConnection, populationCountSql)
 CurrentPopulationCount <- filter(PopulationCount, DaysAgo==1)
