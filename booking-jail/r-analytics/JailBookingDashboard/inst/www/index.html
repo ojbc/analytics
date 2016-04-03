@@ -107,7 +107,7 @@
 					<li class="navli">
 						<div class="timeline-slider">
 							<label class="control-label slider-label" for="slider">Time Period:</label>
-							<input id="slider" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5, 6]" data-slider-min="1" 	data-slider-max="6" data-slider-step="1" data-slider-value="1" data-slider-tooltip="hide"/>
+							<input id="slider" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5, 6]" data-slider-min="1" data-slider-max="6" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide"/>
 						</div>
 					</li>
 				</ul>
@@ -288,16 +288,162 @@
 			</div> <!-- End static demographics tab pane -->
 
 			<div id="jail-timeline" class="tab-pane">
-				<h2>Operational Dashboard - Timeline</h2>
 				<div class="row">
-					
+					<div class="col-sm-4">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-operations-timeline-r1c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"
+									data-help-file="case-status-help.html"></span>
+								<h3 class="panel-title">Case Status</h3>
+							</div>
+							<div class="panel-body">
+								<div><img id="img_operations_timeline_r1c1" width="100%"/></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-operations-timeline-r1c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Illnesses and Disorders</h3>
+							</div>
+							<div class="panel-body">
+								<div>
+									<img id="img_operations_timeline_r1c2" width="100%"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-operations-timeline-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Charge Types</h3>
+							</div>
+							<div class="panel-body">
+								<div><img id="img_operations_timeline_r1c3" width="100%"/></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-operations-timeline-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Jail Utilization - Originating Agency</h3>
+							</div>
+							<div class="panel-body">
+								<img id="img_operations_timeline_r2c1" width="100%"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-operations-timeline-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Jail Utilization - Bed Type</h3>
+							</div>
+							<div class="panel-body">
+								<img id="img_operations_timeline_r2c2" width="100%"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-operations-timeline-r2c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Pretrial Status</h3>
+							</div>
+							<div class="panel-body">
+								<img id="img_operations_timeline_r2c3" width="100%"/>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
-			<div id="demo-timeline" class="tab-pane">
-				<h2>Demographics Dashboard - Timeline</h2>
+			<div id="demographics-timeline" class="tab-pane">
 				<div class="row">
-					
+					<div class="col-sm-3">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-demographics-timeline-r1c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Gender</h3>
+							</div>
+							<div class="panel-body">
+								<img id="img_demographics_timeline_r1c1" width="100%"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-demographics-timeline-r1c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Race</h3>
+							</div>
+							<div class="panel-body">
+								<img id="img_demographics_timeline_r1c2" width="100%"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-demographics-timeline-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Age</h3>
+							</div>
+							<div class="panel-body">
+								<img id="img_demographics_timeline_r1c3" width="100%"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-demographics-timeline-r1c4" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Language</h3>
+							</div>
+							<div class="panel-body">
+								<img id="img_demographics_timeline_r1c4" width="100%"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-demographics-timeline-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Income Level</h3>
+							</div>
+							<div class="panel-body">
+								<img id="img_demographics_timeline_r2c1" width="100%"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-demographics-timeline-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Education Level</h3>
+							</div>
+							<div class="panel-body">
+								<img id="img_demographics_timeline_r2c2" width="100%"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-demographics-timeline-r2c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Housing Status</h3>
+							</div>
+							<div class="panel-body">
+								<img id="img_demographics_timeline_r2c3" width="100%"/>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 

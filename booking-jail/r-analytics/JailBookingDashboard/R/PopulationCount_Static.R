@@ -4,7 +4,7 @@
 
 #' @import ggplot2
 #' @import scales
-plot <- function(dataFrameName, dataFrameFieldName, xAxisLabel,
+plotBar <- function(dataFrameName, dataFrameFieldName, xAxisLabel,
                  jurisdiction = DefaultJurisdictionLabel,
                  originatingAgency = DefaultOriginatingAgenciesLabel,
                  targetPopulationOnly = FALSE, width=5, height=2, horizontal = TRUE) {
@@ -104,7 +104,7 @@ plotStaticCaseStatus <- function(jurisdiction = DefaultJurisdictionLabel,
                            originatingAgency = DefaultOriginatingAgenciesLabel,
                            targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "CaseStatusTypeDescription", "Case Status",
+  plotBar("CurrentPopulationCount", "CaseStatusTypeDescription", "Case Status",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -116,7 +116,7 @@ plotStaticPretrialStatus <- function(jurisdiction = DefaultJurisdictionLabel,
                                originatingAgency = DefaultOriginatingAgenciesLabel,
                                targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "PretrialStatusTypeDescription", "Pretrial Status",
+  plotBar("CurrentPopulationCount", "PretrialStatusTypeDescription", "Pretrial Status",
        jurisdiction, originatingAgency, targetPopulationOnly, width=5, height=2.5)
 
 }
@@ -128,7 +128,7 @@ plotStaticOriginatingAgency <- function(jurisdiction = DefaultJurisdictionLabel,
                                originatingAgency = DefaultOriginatingAgenciesLabel,
                                targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "AgencyTypeDescription", "Originating Agency",
+  plotBar("CurrentPopulationCount", "AgencyTypeDescription", "Originating Agency",
        jurisdiction, originatingAgency, targetPopulationOnly, height=3.5, width=5, horizontal = FALSE)
 
 }
@@ -140,7 +140,7 @@ plotStaticBedType <- function(jurisdiction = DefaultJurisdictionLabel,
                         originatingAgency = DefaultOriginatingAgenciesLabel,
                         targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "BedTypeDescription", "Bed Type",
+  plotBar("CurrentPopulationCount", "BedTypeDescription", "Bed Type",
        jurisdiction, originatingAgency, targetPopulationOnly, height=3.5, width=5, horizontal = FALSE)
 
 }
@@ -152,7 +152,7 @@ plotStaticGender <- function(jurisdiction = DefaultJurisdictionLabel,
                         originatingAgency = DefaultOriginatingAgenciesLabel,
                         targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "PersonSexDescription", "Gender",
+  plotBar("CurrentPopulationCount", "PersonSexDescription", "Gender",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -164,7 +164,7 @@ plotStaticRace <- function(jurisdiction = DefaultJurisdictionLabel,
                         originatingAgency = DefaultOriginatingAgenciesLabel,
                         targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "PersonRaceDescription", "Race",
+  plotBar("CurrentPopulationCount", "PersonRaceDescription", "Race",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -176,7 +176,7 @@ plotStaticAge <- function(jurisdiction = DefaultJurisdictionLabel,
                     originatingAgency = DefaultOriginatingAgenciesLabel,
                     targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "AgeRange", "Age",
+  plotBar("CurrentPopulationCount", "AgeRange", "Age",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -188,7 +188,7 @@ plotStaticIncome <- function(jurisdiction = DefaultJurisdictionLabel,
                        originatingAgency = DefaultOriginatingAgenciesLabel,
                        targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "IncomeLevelTypeDescription", "Income",
+  plotBar("CurrentPopulationCount", "IncomeLevelTypeDescription", "Income",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -200,7 +200,7 @@ plotStaticHousingStatus <- function(jurisdiction = DefaultJurisdictionLabel,
                               originatingAgency = DefaultOriginatingAgenciesLabel,
                               targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "HousingStatusTypeDescription", "Housing Status",
+  plotBar("CurrentPopulationCount", "HousingStatusTypeDescription", "Housing Status",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -212,7 +212,7 @@ plotStaticLanguage <- function(jurisdiction = DefaultJurisdictionLabel,
                          originatingAgency = DefaultOriginatingAgenciesLabel,
                          targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "LanguageTypeDescription", "Language",
+  plotBar("CurrentPopulationCount", "LanguageTypeDescription", "Language",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -224,7 +224,7 @@ plotStaticEducation <- function(jurisdiction = DefaultJurisdictionLabel,
                          originatingAgency = DefaultOriginatingAgenciesLabel,
                          targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationCount", "EducationLevelTypeDescription", "Education Level",
+  plotBar("CurrentPopulationCount", "EducationLevelTypeDescription", "Education Level",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -236,7 +236,7 @@ plotStaticChargeType <- function(jurisdiction = DefaultJurisdictionLabel,
                            originatingAgency = DefaultOriginatingAgenciesLabel,
                            targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationChargeCount", "ChargeTypeDescription", "Charge Type",
+  plotBar("CurrentPopulationChargeCount", "ChargeTypeDescription", "Charge Type",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }
@@ -248,7 +248,7 @@ plotStaticIllnessDisorder <- function(jurisdiction = DefaultJurisdictionLabel,
                            originatingAgency = DefaultOriginatingAgenciesLabel,
                            targetPopulationOnly = FALSE) {
 
-  plot("CurrentPopulationBehavioralHealthCount", "BehavioralHealthTypeDescription", "Illness/Disorder",
+  plotBar("CurrentPopulationBehavioralHealthCount", "BehavioralHealthTypeDescription", "Illness/Disorder",
        jurisdiction, originatingAgency, targetPopulationOnly)
 
 }

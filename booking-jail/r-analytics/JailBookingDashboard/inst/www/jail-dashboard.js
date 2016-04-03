@@ -1,5 +1,7 @@
 var localTesting = false;
 
+var sliderStops = ['30','60','90','180','365','730'];
+
 var chartNameRFunctionLookup = new Array();
 chartNameRFunctionLookup["operations_static_r1c1"] = "plotStaticCaseStatus";
 chartNameRFunctionLookup["operations_static_r1c2"] = "plotStaticIllnessDisorder";
@@ -17,6 +19,21 @@ chartNameRFunctionLookup["demographics_static_r1c4"] = "plotStaticLanguage";
 chartNameRFunctionLookup["demographics_static_r2c1"] = "plotStaticIncome";
 chartNameRFunctionLookup["demographics_static_r2c2"] = "plotStaticEducation";
 chartNameRFunctionLookup["demographics_static_r2c3"] = "plotStaticHousingStatus";
+
+chartNameRFunctionLookup["operations_timeline_r1c1"] = "plotTimelineCaseStatus";
+chartNameRFunctionLookup["operations_timeline_r1c2"] = "plotTimelineIllnessDisorder";
+chartNameRFunctionLookup["operations_timeline_r1c3"] = "plotTimelineChargeType";
+chartNameRFunctionLookup["operations_timeline_r2c1"] = "plotTimelineOriginatingAgency";
+chartNameRFunctionLookup["operations_timeline_r2c2"] = "plotTimelineBedType";
+chartNameRFunctionLookup["operations_timeline_r2c3"] = "plotTimelinePretrialStatus";
+
+chartNameRFunctionLookup["demographics_timeline_r1c1"] = "plotTimelineGender";
+chartNameRFunctionLookup["demographics_timeline_r1c2"] = "plotTimelineRace";
+chartNameRFunctionLookup["demographics_timeline_r1c3"] = "plotTimelineAge";
+chartNameRFunctionLookup["demographics_timeline_r1c4"] = "plotTimelineLanguage";
+chartNameRFunctionLookup["demographics_timeline_r2c1"] = "plotTimelineIncome";
+chartNameRFunctionLookup["demographics_timeline_r2c2"] = "plotTimelineEducation";
+chartNameRFunctionLookup["demographics_timeline_r2c3"] = "plotTimelineHousingStatus";
 
 var RFunctionChartNameLookup = new Array();
 for (var chartName in chartNameRFunctionLookup) {
@@ -117,36 +134,27 @@ hideWaitPane = function() {
 }
 
 collectQueryArgs = function() {
-	ret = {
-		jurisdiction : $("#jurisdiction-select").val(),
-		originatingAgency : $("#agency-select").val(),
-		targetPopulationOnly : ($('#pop-button-group button.btn.active').attr('id') == "target-pop-button")
-	};
+	ret = new Object();
+	ret.jurisdiction = $("#jurisdiction-select").val();
+	ret.originatingAgency = $("#agency-select").val();
+	ret.targetPopulationOnly = ($('#pop-button-group button.btn.active').attr('id') == "target-pop-button");
+	var selectedDashboardLabel = $("#dashboard-select").val();
+	if (selectedDashboardLabel.includes("timeline")) {
+		stop = $("#slider").val();
+		ret.periodFilterDays = Number.parseInt(sliderStops[stop-1]);
+	}
 	console.log("Query controls updated, values=" + JSON.stringify(ret));
 	return ret;
 }
 
 $(document).ready(function () {
 
-	var sliderStops = ['30','60','90','180','365','730'];
-
 	$("#slider").slider({ticks_labels: sliderStops});
 
 	$('#slider').on('slideStop', function(e) {
 		var t = e.value;
 		var v = sliderStops[t-1];
-		//console.log(v);
-	});
-	
-	$('select.dashselect').on('change', function () {
-		$(':selected', this).tab('show');
-		if (( this.value == 'jail-timeline') || ( this.value == 'demo-timeline')) {
-			$(".timeline-slider").show();
-			$("#slider").slider('refresh');
-		}
-		else {
-			$(".timeline-slider").hide();
-		}
+		drawAllPanels(collectQueryArgs());
 	});
 	
 	$(".glyphicon-info-sign").click(function() {
@@ -172,6 +180,16 @@ $(document).ready(function () {
 	});
 
 	$('#dashboard-select').on('changed.bs.select', function (e) {
+		$(':selected', this).tab('show');
+		if (this.value.includes("timeline")) {
+			$(".timeline-slider").show();
+			v = $("#slider").val();
+			$("#slider").slider('refresh');
+			$("#slider").slider('setValue', Number.parseInt(v));
+		}
+		else {
+			$(".timeline-slider").hide();
+		}
 		drawAllPanels(collectQueryArgs());
 	});
 
