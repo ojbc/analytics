@@ -1,5 +1,28 @@
 # R script of functions shared across the package
 
+#' Filter a data frame for the common filtering dimensions
+#'
+#' @import dplyr
+filterDataFrame <- function(dataFrame, jurisdiction, originatingAgency, targetPopulationOnly) {
+
+  df <- dataFrame
+
+  if (targetPopulationOnly) {
+    df <- filter(df, PopulationTypeDescription == TargetPopulationLabel)
+  }
+
+  if (jurisdiction != AllCourtsLabel) {
+    df <- filter(df, JurisdictionTypeDescription == jurisdiction)
+  }
+
+  if (originatingAgency != AllOriginatingAgenciesLabel) {
+    df <- filter(df, AgencyTypeDescription == originatingAgency)
+  }
+
+  df
+
+}
+
 #' Get the theme for graphics on the dashboard
 #'
 #' @import ggthemes
