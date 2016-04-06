@@ -366,7 +366,7 @@
   <table id="TAB100" populated="true" UUID="7ed2b657-1811-41ec-8c85-d54eead07a60" name="BehavioralHealthAssessment" objectType="TABLE" physicalName="BehavioralHealthAssessment" >
    <remarks></remarks>
    <folder id="FOLTAB1001" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL101" populated="true" UUID="06b8cd25-8e32-4072-af05-46a491083c12" autoIncrement="true" autoIncrementSequenceName="BehavioralHealthAssessment_BehaviorHealtBehavioralHealthAssessmentIDhAssessmentID_seq" defaultValue="" name="BehavioralHealthAssessmentID" nullable="0" physicalName="BehaviorHealtBehavioralHealthAssessmentIDhAssessmentID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL101" populated="true" UUID="06b8cd25-8e32-4072-af05-46a491083c12" autoIncrement="true" autoIncrementSequenceName="BehavioralHealthAssessmentID_seq" defaultValue="" name="BehavioralHealthAssessmentID" nullable="0" physicalName="BehavioralHealthAssessmentID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL102" populated="true" UUID="3d5f82c1-b3dc-4bdb-abda-9abb9c0b06a9" autoIncrement="false" autoIncrementSequenceName="BehaviorHealthAssessment_HealthIssueID_seq" defaultValue="" name="BehavioralHealthTypeID" nullable="0" physicalName="BehavioralHealthTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -385,7 +385,7 @@
     </folder>
     <folder id="FOLTAB1004" populated="true" name="Indices" physicalName="Indices" type="4">
     <index id="IDX105" populated="true" UUID="31dd134f-96fb-4b74-81aa-2f8dd0ad2ca5" clustered="false" name="BehavioralHealthAssessmentID" physicalName="behavioralhealthassessmentid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC106" populated="true" UUID="43fa5785-077d-4a1f-ab48-3e21abcc4256" ascendingOrDescending="UNSPECIFIED" column-ref="COL101" name="BehavioralHealthAssessmentID" physicalName="BehaviorHealtBehavioralHealthAssessmentIDhAssessmentID" />
+     <index-column id="IDC106" populated="true" UUID="43fa5785-077d-4a1f-ab48-3e21abcc4256" ascendingOrDescending="UNSPECIFIED" column-ref="COL101" name="BehavioralHealthAssessmentID" physicalName="BehavioralHealthAssessmentID" />
     </index>
    </folder>
   </table>
@@ -740,7 +740,7 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="0.8408964152537146" viewportX="129" viewportY="168" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
