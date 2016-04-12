@@ -114,7 +114,7 @@ buildBookingRow<-function(bookingId){
 
   bondTypeID<-sample(BondType$BondTypeID, size=n, replace=TRUE, prob=c(.10, .66, .04, .20))
 
-  pretrialStatusTypeID<-sample(PretrialStatusType$PretrialStatusTypeID, size=n, replace=TRUE)
+  pretrialStatusTypeID<-sample(PretrialStatusType$PretrialStatusTypeID, size=n, replace=TRUE, prob=c(.05, .2, .25, .25, .25))
 
   bedTypeID<-sample(BedType$BedTypeID, size=n, replace=TRUE)
   sexID <- sample(1:3, size=n, replace=TRUE, prob=c(.91, .089, .001))
