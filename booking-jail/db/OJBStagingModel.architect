@@ -734,7 +734,7 @@
     <folder id="FOLTAB1822" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB1824" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX200" populated="true" UUID="6dbaf77b-034f-49dd-b2b9-57495a04861f" clustered="false" name="CustodyStatusChangeID" physicalName="bookingid" primaryKeyIndex="true" unique="false" >
+    <index id="IDX200" populated="true" UUID="6dbaf77b-034f-49dd-b2b9-57495a04861f" clustered="false" name="CustodyStatusChangeID" physicalName="custodystatuschangeid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC201" populated="true" UUID="2de36e0d-e52e-445e-a1ad-17b730c8cf1c" ascendingOrDescending="UNSPECIFIED" column-ref="COL183" name="CustodyStatusChangeID" physicalName="CustodyStatusChangeID" />
     </index>
    </folder>
@@ -748,7 +748,7 @@
     <column id="COL204" populated="true" UUID="f6bfce54-133c-4576-b8d1-fcf461a57175" autoIncrement="false" autoIncrementSequenceName="Custody_Status_Change_CustodyStatusChangeID_seq" defaultValue="" name="CustodyStatusChangeID" nullable="0" physicalName="CustodyStatusChangeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="-5" userDefinedTypeUUID="433cc8af-284d-4abb-8ef7-08ebcb34dbf1" >
      <remarks></remarks>
     </column>
-    <column id="COL205" populated="true" UUID="a00ea8b5-d911-4a68-a26e-528e337d0ff1" autoIncrement="false" autoIncrementSequenceName="ChargeType_ChargeTypeID_seq" defaultValue="" name="ChargeTypeID" nullable="0" physicalName="ChargeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL205" populated="true" UUID="a00ea8b5-d911-4a68-a26e-528e337d0ff1" autoIncrement="false" autoIncrementSequenceName="ChargeType_ChargeTypeID_seq_1" defaultValue="" name="ChargeTypeID" nullable="0" physicalName="ChargeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -757,21 +757,21 @@
     <folder id="FOLTAB2022" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB2024" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX206" populated="true" UUID="ccf83eb3-7411-4949-a234-842c1ecaab54" clustered="false" name="CustodyStatusChangeChargeID" physicalName="CustodyStatusChangeChargeID" primaryKeyIndex="true" unique="false" >
+    <index id="IDX206" populated="true" UUID="ccf83eb3-7411-4949-a234-842c1ecaab54" clustered="false" name="CustodyStatusChangeChargeID" physicalName="custodystatuschangechargeid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC207" populated="true" UUID="3a58926e-66a0-42c0-bd05-08eb337f6d3c" ascendingOrDescending="UNSPECIFIED" column-ref="COL203" name="CustodyStatusChangeChargeID" physicalName="CustodyStatusChangeChargeID" />
     </index>
    </folder>
   </table>
-  <table id="TAB208" populated="true" UUID="4b96a6ac-9282-4923-ab5b-b4d6ed8f03ae" name="Release" objectType="TABLE" physicalName="Release" >
+  <table id="TAB208" populated="true" UUID="4b96a6ac-9282-4923-ab5b-b4d6ed8f03ae" name="CustodyRelease" objectType="TABLE" physicalName="CustodyRelease" >
    <remarks></remarks>
    <folder id="FOLTAB2081" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL209" populated="true" UUID="18da6579-1206-43b3-840f-e7949e878cff" autoIncrement="true" autoIncrementSequenceName="Release_ReleaseID_seq" defaultValue="" name="ReleaseID" nullable="0" physicalName="ReleaseID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="-5" userDefinedTypeUUID="433cc8af-284d-4abb-8ef7-08ebcb34dbf1" >
+    <column id="COL209" populated="true" UUID="18da6579-1206-43b3-840f-e7949e878cff" autoIncrement="true" autoIncrementSequenceName="CustodyRelease_CustodyReleaseID_seq" defaultValue="" name="CustodyReleaseID" nullable="0" physicalName="CustodyReleaseID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="-5" userDefinedTypeUUID="433cc8af-284d-4abb-8ef7-08ebcb34dbf1" >
      <remarks></remarks>
     </column>
-    <column id="COL210" populated="true" UUID="1d758c5c-0840-4f35-8e15-9ef65cba781d" autoIncrement="false" autoIncrementSequenceName="Release_BookingNumber_seq" defaultValue="" name="BookingNumber" nullable="0" physicalName="BookingNumber" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL210" populated="true" UUID="1d758c5c-0840-4f35-8e15-9ef65cba781d" autoIncrement="false" autoIncrementSequenceName="CustodyRelease_BookingNumber_seq" defaultValue="" name="BookingNumber" nullable="0" physicalName="BookingNumber" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL211" populated="true" UUID="c7d4f7c2-fcdd-4422-ba19-a6b9592e6089" autoIncrement="false" autoIncrementSequenceName="Release_ReleaseDate_seq" defaultValue="" name="ReleaseDate" nullable="0" physicalName="ReleaseDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL211" populated="true" UUID="c7d4f7c2-fcdd-4422-ba19-a6b9592e6089" autoIncrement="false" autoIncrementSequenceName="CustodyRelease_ReleaseDate_seq" defaultValue="" name="ReleaseDate" nullable="0" physicalName="ReleaseDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     </folder>
@@ -780,37 +780,37 @@
     <folder id="FOLTAB2082" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB2084" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX212" populated="true" UUID="62d3d40c-fea8-4559-88fe-697b599aa4d3" clustered="false" name="ReleaseID" physicalName="ReleaseID" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC213" populated="true" UUID="56267f6f-3ddb-4319-8861-5f4f47b05f15" ascendingOrDescending="UNSPECIFIED" column-ref="COL209" name="ReleaseID" physicalName="ReleaseID" />
+    <index id="IDX212" populated="true" UUID="62d3d40c-fea8-4559-88fe-697b599aa4d3" clustered="false" name="CustodyReleaseID" physicalName="releaseid" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC213" populated="true" UUID="56267f6f-3ddb-4319-8861-5f4f47b05f15" ascendingOrDescending="UNSPECIFIED" column-ref="COL209" name="CustodyReleaseID" physicalName="CustodyReleaseID" />
     </index>
    </folder>
   </table>
   <relationships>
-   <relationship id="REL214" populated="true" UUID="106bea4d-25a9-4558-bc82-593fbdacd1a0" deferrability="7" deleteRule="3" fk-table-ref="TAB119" fkCardinality="7" identifying="false" name="Booking_Charge_fk" physicalName="Booking_Charge_fk" pk-table-ref="TAB47" pkCardinality="2" updateRule="3" >
+   <relationship id="REL214" populated="true" UUID="106bea4d-25a9-4558-bc82-593fbdacd1a0" deferrability="7" deleteRule="3" fk-table-ref="TAB119" fkCardinality="7" identifying="false" name="Booking_Charge_fk" physicalName="booking_charge_fk" pk-table-ref="TAB47" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP215" populated="true" UUID="620204ef-8df9-48b8-a4e1-875a8ce5aceb" fk-column-ref="COL121" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL48" />
    </relationship>
    <relationship id="REL216" populated="true" UUID="f8da393f-b1eb-4b4e-929a-25fe3771eaed" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="7" identifying="false" name="Agency_Booking_fk" physicalName="agency_booking_fk" pk-table-ref="TAB67" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP217" populated="true" UUID="7c40d2d2-e61d-4d4a-b9d0-33c87fcb9573" fk-column-ref="COL52" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL68" />
    </relationship>
-   <relationship id="REL218" populated="true" UUID="13fcb05b-ba8d-4da0-b240-237e5e3dbcd7" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="Agency_Custody_Status_Change_fk" physicalName="Agency_Custody_Status_Change_fk" pk-table-ref="TAB67" pkCardinality="2" updateRule="3" >
+   <relationship id="REL218" populated="true" UUID="13fcb05b-ba8d-4da0-b240-237e5e3dbcd7" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="Agency_Custody_Status_Change_fk" physicalName="agency_custody_status_change_fk" pk-table-ref="TAB67" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP219" populated="true" UUID="afe57319-2189-45f6-9c6b-e2246463eeec" fk-column-ref="COL197" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL68" />
    </relationship>
    <relationship id="REL220" populated="true" UUID="97744d4b-fd1b-45dd-b5b3-913deebed846" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="7" identifying="false" name="Jurisdiction_Booking_fk" physicalName="jurisdiction_booking_fk" pk-table-ref="TAB72" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP221" populated="true" UUID="db53b0e4-6439-40b8-9c6a-56d0869abff6" fk-column-ref="COL49" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL73" />
    </relationship>
-   <relationship id="REL222" populated="true" UUID="025fce0b-d526-4604-8f93-84ebd3debbc0" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="Jurisdiction_Custody_Status_Change_fk" physicalName="Jurisdiction_Custody_Status_Change_fk" pk-table-ref="TAB72" pkCardinality="2" updateRule="3" >
+   <relationship id="REL222" populated="true" UUID="025fce0b-d526-4604-8f93-84ebd3debbc0" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="Jurisdiction_Custody_Status_Change_fk" physicalName="jurisdiction_custody_status_change_fk" pk-table-ref="TAB72" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP223" populated="true" UUID="7ac51537-4ee4-4f51-8dfe-782a5b44c3c9" fk-column-ref="COL196" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL73" />
    </relationship>
    <relationship id="REL224" populated="true" UUID="52ffcb31-979b-4f0f-abf2-bcf01d4a0ffe" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="7" identifying="false" name="Status_Booking_fk" physicalName="status_booking_fk" pk-table-ref="TAB77" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP225" populated="true" UUID="3ad5e665-d182-4054-9ed5-a56bed2edbc8" fk-column-ref="COL53" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL78" />
    </relationship>
-   <relationship id="REL226" populated="true" UUID="b6b9a6cb-0712-4099-b3e9-430ac96422f1" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="CaseStatus_Custody_Status_Change_fk" physicalName="CaseStatus_Custody_Status_Change_fk" pk-table-ref="TAB77" pkCardinality="2" updateRule="3" >
+   <relationship id="REL226" populated="true" UUID="b6b9a6cb-0712-4099-b3e9-430ac96422f1" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="CaseStatus_Custody_Status_Change_fk" physicalName="casestatus_custody_status_change_fk" pk-table-ref="TAB77" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP227" populated="true" UUID="5e26d50e-14af-47c6-b22b-5b6eb73d6a2f" fk-column-ref="COL195" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL78" />
    </relationship>
-   <relationship id="REL228" populated="true" UUID="06c08505-92de-4468-a74f-84c2e0826e56" deferrability="7" deleteRule="3" fk-table-ref="TAB119" fkCardinality="7" identifying="false" name="ChargeType_Charge_fk" physicalName="ChargeType_Charge_fk" pk-table-ref="TAB82" pkCardinality="2" updateRule="3" >
+   <relationship id="REL228" populated="true" UUID="06c08505-92de-4468-a74f-84c2e0826e56" deferrability="7" deleteRule="3" fk-table-ref="TAB119" fkCardinality="7" identifying="false" name="ChargeType_Charge_fk" physicalName="chargetype_charge_fk" pk-table-ref="TAB82" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP229" populated="true" UUID="e70d1ea3-490a-4dc3-bdec-a3084784a888" fk-column-ref="COL122" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL83" />
    </relationship>
-   <relationship id="REL230" populated="true" UUID="b09d8f5b-d699-42c1-91c2-53eb19e4b47e" deferrability="7" deleteRule="3" fk-table-ref="TAB202" fkCardinality="7" identifying="false" name="ChargeType_CustodyStatusChangeCharge_fk" physicalName="ChargeType_CustodyStatusChangeCharge_fk" pk-table-ref="TAB82" pkCardinality="2" updateRule="3" >
+   <relationship id="REL230" populated="true" UUID="b09d8f5b-d699-42c1-91c2-53eb19e4b47e" deferrability="7" deleteRule="3" fk-table-ref="TAB202" fkCardinality="7" identifying="false" name="ChargeType_CustodyStatusChangeCharge_fk" physicalName="chargetype_custodystatuschangecharge_fk" pk-table-ref="TAB82" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP231" populated="true" UUID="047195de-9513-4cc2-8297-108f01f8e427" fk-column-ref="COL205" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL83" />
    </relationship>
    <relationship id="REL232" populated="true" UUID="3791b583-1cf6-4140-84d5-e5146ee92b6b" deferrability="7" deleteRule="3" fk-table-ref="TAB130" fkCardinality="7" identifying="false" name="PersonSex_Person_fk" physicalName="personsex_person_fk" pk-table-ref="TAB87" pkCardinality="2" updateRule="3" >
@@ -825,19 +825,19 @@
    <relationship id="REL238" populated="true" UUID="1390f83b-ffa7-48c1-a9a1-429b5f851714" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="7" identifying="false" name="PretrialStatus_Booking_fk" physicalName="pretrialstatus_booking_fk" pk-table-ref="TAB109" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP239" populated="true" UUID="02892584-3d7e-4d2f-8d66-66198a7e5132" fk-column-ref="COL56" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL110" />
    </relationship>
-   <relationship id="REL240" populated="true" UUID="70a167a2-95fa-4ab6-8909-0af202f1412d" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="PretrialStatus_Custody_Status_Change_fk" physicalName="PretrialStatus_Custody_Status_Change_fk" pk-table-ref="TAB109" pkCardinality="2" updateRule="3" >
+   <relationship id="REL240" populated="true" UUID="70a167a2-95fa-4ab6-8909-0af202f1412d" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="PretrialStatus_Custody_Status_Change_fk" physicalName="pretrialstatus_custody_status_change_fk" pk-table-ref="TAB109" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP241" populated="true" UUID="07515044-350c-4e2d-86c2-845cf121ecd2" fk-column-ref="COL198" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL110" />
    </relationship>
    <relationship id="REL242" populated="true" UUID="4f74c397-b789-4dc1-bcd0-ccf54d3df56e" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="7" identifying="false" name="BedType_Booking_fk" physicalName="bedtype_booking_fk" pk-table-ref="TAB114" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP243" populated="true" UUID="2dd0f009-df98-4709-8749-8405abda93b7" fk-column-ref="COL58" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL115" />
    </relationship>
-   <relationship id="REL244" populated="true" UUID="d7c535e3-9a59-4472-a665-58d71b8500c6" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="BedType_Custody_Status_Change_fk" physicalName="BedType_Custody_Status_Change_fk" pk-table-ref="TAB114" pkCardinality="2" updateRule="3" >
+   <relationship id="REL244" populated="true" UUID="d7c535e3-9a59-4472-a665-58d71b8500c6" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="BedType_Custody_Status_Change_fk" physicalName="bedtype_custody_status_change_fk" pk-table-ref="TAB114" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP245" populated="true" UUID="a5db237e-c4bd-456d-ac34-23cf45f17c88" fk-column-ref="COL194" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL115" />
    </relationship>
    <relationship id="REL246" populated="true" UUID="ee14c3ca-1e42-4af7-a61e-95b86f0d0c08" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="7" identifying="false" name="BondType_Booking_fk" physicalName="bondtype_booking_fk" pk-table-ref="TAB125" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP247" populated="true" UUID="86cb3aa8-23ca-4af8-9645-dc7c031b19f2" fk-column-ref="COL64" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL126" />
    </relationship>
-   <relationship id="REL248" populated="true" UUID="ba954453-d99d-44e3-8fce-492269b64b4e" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="BondType_Custody_Status_Change_fk" physicalName="BondType_Custody_Status_Change_fk" pk-table-ref="TAB125" pkCardinality="2" updateRule="3" >
+   <relationship id="REL248" populated="true" UUID="ba954453-d99d-44e3-8fce-492269b64b4e" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="BondType_Custody_Status_Change_fk" physicalName="bondtype_custody_status_change_fk" pk-table-ref="TAB125" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP249" populated="true" UUID="3520f084-6965-4e21-ac3b-47f5bcf54fe5" fk-column-ref="COL192" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL126" />
    </relationship>
    <relationship id="REL250" populated="true" UUID="b0fc43fc-2846-437b-89cf-b0f441937578" deferrability="7" deleteRule="3" fk-table-ref="TAB102" fkCardinality="7" identifying="false" name="Person_BehaviorHealthAssessment_fk" physicalName="person_behaviorhealthassessment_fk" pk-table-ref="TAB130" pkCardinality="2" updateRule="3" >
@@ -849,7 +849,7 @@
    <relationship id="REL254" populated="true" UUID="862397a5-47bb-4ce0-bc13-330761739c56" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="7" identifying="false" name="Facility_Booking_fk" physicalName="facility_booking_fk" pk-table-ref="TAB140" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP255" populated="true" UUID="2cb0a5fd-f274-4fb1-a14d-338f484f9ee6" fk-column-ref="COL57" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL141" />
    </relationship>
-   <relationship id="REL256" populated="true" UUID="50e8e84b-1f30-4e03-ab70-e3212aa0d61d" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="Facility_Custody_Status_Change_fk" physicalName="Facility_Custody_Status_Change_fk" pk-table-ref="TAB140" pkCardinality="2" updateRule="3" >
+   <relationship id="REL256" populated="true" UUID="50e8e84b-1f30-4e03-ab70-e3212aa0d61d" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="Facility_Custody_Status_Change_fk" physicalName="facility_custody_status_change_fk" pk-table-ref="TAB140" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP257" populated="true" UUID="9866c1e7-c90d-417c-b39c-3a3ad524becd" fk-column-ref="COL199" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL141" />
    </relationship>
    <relationship id="REL258" populated="true" UUID="b4e6945d-ecf7-4ba0-bdee-96ac0420c25b" deferrability="7" deleteRule="3" fk-table-ref="TAB171" fkCardinality="7" identifying="false" name="HousingStatus_BookingSubject_fk" physicalName="housingstatus_bookingsubject_fk" pk-table-ref="TAB146" pkCardinality="2" updateRule="3" >
@@ -870,18 +870,18 @@
    <relationship id="REL268" populated="true" UUID="786312de-dbcd-40b4-ba10-ca9448a649d0" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="3" identifying="false" name="BookingSubject_Booking_fk" physicalName="bookingsubject_booking_fk" pk-table-ref="TAB171" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP269" populated="true" UUID="805ab9d5-cbc8-4408-86c6-0d6ad882617f" fk-column-ref="COL63" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL172" />
    </relationship>
-   <relationship id="REL270" populated="true" UUID="9346779b-a01a-49ab-9475-e5ba75f52d28" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="BookingSubject_Custody_Status_Change_fk" physicalName="BookingSubject_Custody_Status_Change_fk" pk-table-ref="TAB171" pkCardinality="2" updateRule="3" >
+   <relationship id="REL270" populated="true" UUID="9346779b-a01a-49ab-9475-e5ba75f52d28" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="BookingSubject_Custody_Status_Change_fk" physicalName="bookingsubject_custody_status_change_fk" pk-table-ref="TAB171" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP271" populated="true" UUID="7a0199cc-999d-45af-b047-1f6a6ed114c6" fk-column-ref="COL193" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL172" />
    </relationship>
-   <relationship id="REL272" populated="true" UUID="1fd3ace7-4f3e-4e53-b890-527b86c8f7e9" deferrability="7" deleteRule="3" fk-table-ref="TAB202" fkCardinality="7" identifying="false" name="Custody_Status_Change_CustodyStatusChangeCharge_fk" physicalName="Custody_Status_Change_CustodyStatusChangeCharge_fk" pk-table-ref="TAB182" pkCardinality="2" updateRule="3" >
+   <relationship id="REL272" populated="true" UUID="1fd3ace7-4f3e-4e53-b890-527b86c8f7e9" deferrability="7" deleteRule="3" fk-table-ref="TAB202" fkCardinality="7" identifying="false" name="Custody_Status_Change_CustodyStatusChangeCharge_fk" physicalName="custody_status_change_custodystatuschangecharge_fk" pk-table-ref="TAB182" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP273" populated="true" UUID="5dad5d0a-b32d-43c0-abd1-ecefa0e882fe" fk-column-ref="COL204" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL183" />
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="9" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="564" y="233" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB67" x="406" y="30" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB72" x="102" y="90" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
