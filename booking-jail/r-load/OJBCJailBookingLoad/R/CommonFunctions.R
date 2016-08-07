@@ -1,10 +1,21 @@
-# Common functions for Vermont load
+# Unless explicitly acquired and licensed from Licensor under another license, the contents of
+# this file are subject to the Reciprocal Public License ("RPL") Version 1.5, or subsequent
+# versions as allowed by the RPL, and You may not copy or use this file in either source code
+# or executable form, except in compliance with the terms and conditions of the RPL
+# All software distributed under the RPL is provided strictly on an "AS IS" basis, WITHOUT
+# WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, AND LICENSOR HEREBY DISCLAIMS ALL SUCH
+# WARRANTIES, INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE, QUIET ENJOYMENT, OR NON-INFRINGEMENT. See the RPL for specific language
+# governing rights and limitations under the RPL.
+#
+# http://opensource.org/licenses/RPL-1.5
+#
+# Copyright 2012-2016 Open Justice Broker Consortium
 
-library(dplyr)
-library(data.table)
-library(stringr)
-library(RMySQL)
+# Common functions for package
 
+#' @import stringr
+#' @import RMySQL
 writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE) {
   # replacing dbWriteTable with our own, because found it to be buggy and inconsistent across platforms...
   #dbWriteTable(conn, tableName, x, row.names=FALSE, append=append)
@@ -48,6 +59,7 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE) {
   invisible()
 }
 
+#' @import stringr
 lookupMapping <- function(stagingDataFrame, stagingColumnName, mappingDataFrame) {
   if(any(duplicated(mappingDataFrame$Staging))) stop(paste0("Illegal mapping for ", stagingColumnName, ", duplicated values: ",
                                                             mappingDataFrame$Staging[duplicated(mappingDataFrame$Staging)]))
@@ -61,6 +73,7 @@ lookupMapping <- function(stagingDataFrame, stagingColumnName, mappingDataFrame)
   as.character(df$ADS)
 }
 
+#' @import stringr
 startsWithVectorMatch <- function(x, table) {
   ret <- logical()
   patternTable <- paste0("^", table)
@@ -79,6 +92,7 @@ startsWithVectorMatch <- function(x, table) {
   ret
 }
 
+#' @import stringr
 formatRValueAsSqlValue <- function(v, isCharacter = FALSE) {
   ret <- "null"
   if (!is.na(v)){
@@ -90,4 +104,3 @@ formatRValueAsSqlValue <- function(v, isCharacter = FALSE) {
   }
   ret
 }
-
