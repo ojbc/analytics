@@ -101,6 +101,7 @@ popData <- data.table(bind_rows(
   getCountyPopulationData("/opt/data/CC-EST2012-Alldata.csv", 2012, stateFips),
   getCountyPopulationData("/opt/data/CC-EST2013-Alldata.csv", 2013, stateFips),
   getCountyPopulationData("/opt/data/CC-EST2014-Alldata.csv", 2014, stateFips)))
+popData$PopulationID <- c(1:nrow(popData))
 dbWriteTable(conn, "Population", popData, append=TRUE, row.names=FALSE)
 
 getCountyProbs <- function() {
