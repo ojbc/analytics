@@ -32,3 +32,70 @@ loadCodeTables <- function(conn, codeTableFileName) {
     assign(codeTableName, ct, envir=.GlobalEnv)
   }
 }
+
+#' Generate a code table spreadsheet template with random number of rows and sequential content, reading the
+#' code table names from a specified database.  We assume that code tables follow the OJBC database conventions; specifically:
+#' each code table ends in the suffix "Type", the PK column of that table
+#' ends in a suffix "ID", and the text column ends in a suffix "Description".  Specify additional tables (that don't
+#' end in Type) via the additionalTables parameter.
+#' @param conn the database containing the tables
+#' @param spreadsheetFile the spreadsheet into which the code table content is written
+#' @param additionalTables names of additional tables in the database (other than those ending in Type) to create
+#' @import RMySQL
+#' @import openxlsx
+#' @export
+generateCodeTableSpreadsheetTemplate <- function(conn, spreadsheetFile="CodeTables.xlsx", additionalTables=character()) {
+
+  codeTableNames <- dbListTables(conn)
+  codeTableNames <- c(additionalTables, codeTableNames[endsWith(codeTableNames, "Type")])
+
+  dfs <- list()
+
+  for (ctn in codeTableNames) {
+
+    res <- dbSendQuery(stagingConnection, paste0("select * from ", ctn))
+    columnInfo <- dbColumnInfo(res)
+    dbClearResult(res)
+
+    rowsToGenerate <- sample(1:12, size=1) # max of 12 rows in code tables
+
+    columnVectors <- list()
+
+    for (c in seq(nrow(columnInfo))) {
+      cn <- columnInfo[c, 'name']
+      cc <- columnInfo[c, 'Sclass']
+      colVals <- list(rep(NA, times=rowsToGenerate)) # default is all null values for a particular column
+      if (cn == paste0(ctn, "ID")) {
+        colVals <- list(seq(rowsToGenerate))
+
+      } else if (cn == paste0(ctn, "Description")) {
+        colVals <- list(paste(ctn, seq(rowsToGenerate)))
+      } else {
+        if ("integer" == cc) {
+          colVals <- list(sample(seq(rowsToGenerate), size=rowsToGenerate))
+        } else if ("character" == cc) {
+          colVals <- list(sample(LETTERS, size=rowsToGenerate))
+        }
+      }
+      names(colVals) <- cn
+      columnVectors <- c(columnVectors, colVals)
+    }
+
+    df <- list(data.frame(columnVectors))
+    names(df) <- ctn
+
+    dfs <- c(dfs, df)
+
+  }
+
+  write.xlsx(x=dfs, file=spreadsheetFile)
+
+  wb <- loadWorkbook(spreadsheetFile)
+
+  for (ctn in codeTableNames) {
+    setColWidths(wb, ctn, widths="auto", cols=1:(ncol(dfs[[ctn]])))
+  }
+
+  saveWorkbook(wb, file=spreadsheetFile, overwrite=TRUE)
+
+}
