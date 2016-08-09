@@ -17,9 +17,9 @@
 
 #' @import RMySQL
 #' @import openxlsx
-loadCodeTables <- function(conn) {
+loadCodeTables <- function(conn, codeTableFileName) {
 
-  spreadsheetFile <- system.file("raw", "AnalyticsCodeTables.xlsx", package=getPackageName())
+  spreadsheetFile <- system.file("raw", codeTableFileName, package=getPackageName())
   sheetNames <- getSheetNames(spreadsheetFile)
 
   for (codeTableName in sheetNames) {
