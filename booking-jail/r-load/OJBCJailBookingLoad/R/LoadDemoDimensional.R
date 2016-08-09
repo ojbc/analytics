@@ -72,7 +72,7 @@ loadDemoDimensional <- function(bookingCount, lookback, jailCapacity, databaseNa
   dbSendQuery(adsConnection, "truncate PretrialStatusType")
   dbSendQuery(adsConnection, "truncate AgencyType")
 
-  loadCodeTables(adsConnection)
+  loadCodeTables(adsConnection, "AnalyticsCodeTables.xlsx")
 
   # extremely simplifies the person test data
   personID <- 1:bookingCount
