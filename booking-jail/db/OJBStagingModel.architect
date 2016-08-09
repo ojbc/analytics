@@ -294,16 +294,16 @@
     </index>
    </folder>
   </table>
-  <table id="TAB82" populated="true" UUID="946b9347-b5a3-4927-8ef7-df3c06dc641a" name="PersonSex" objectType="TABLE" physicalName="PersonSex" >
+  <table id="TAB82" populated="true" UUID="946b9347-b5a3-4927-8ef7-df3c06dc641a" name="PersonSexType" objectType="TABLE" physicalName="PersonSexType" >
    <remarks></remarks>
    <folder id="FOLTAB821" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL83" populated="true" UUID="586a0f32-1309-4591-a68a-2e57d05d7d88" autoIncrement="true" autoIncrementSequenceName="PersonSex_PersonSexID_seq" defaultValue="" name="PersonSexID" nullable="0" physicalName="PersonSexID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL83" populated="true" UUID="586a0f32-1309-4591-a68a-2e57d05d7d88" autoIncrement="true" autoIncrementSequenceName="PersonSexType_PersonSexTypeID_seq" defaultValue="" name="PersonSexTypeID" nullable="0" physicalName="PersonSexTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL84" populated="true" UUID="6745e2b0-838e-41c2-9130-6ef98401ac8b" autoIncrement="false" autoIncrementSequenceName="PersonSex_PersonSexCode_seq_1" defaultValue="" name="PersonSexCode" nullable="0" physicalName="PersonSexCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL84" populated="true" UUID="6745e2b0-838e-41c2-9130-6ef98401ac8b" autoIncrement="false" autoIncrementSequenceName="PersonSexType_PersonSexTypeCode_seq" defaultValue="" name="PersonSexTypeCode" nullable="0" physicalName="PersonSexTypeCode" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL85" populated="true" UUID="4a1dbe0c-0c15-45e2-a7be-28d24e72193a" autoIncrement="false" autoIncrementSequenceName="PersonSex_PersonSexDescription_seq" defaultValue="" name="PersonSexDescription" nullable="0" physicalName="PersonSexDescription" precision="7" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL85" populated="true" UUID="4a1dbe0c-0c15-45e2-a7be-28d24e72193a" autoIncrement="false" autoIncrementSequenceName="PersonSexType_PersonSexTypeDescription_seq" defaultValue="" name="PersonSexTypeDescription" nullable="0" physicalName="PersonSexTypeDescription" precision="7" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -312,21 +312,21 @@
     <folder id="FOLTAB822" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB824" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX86" populated="true" UUID="51d9fcdf-0fd6-4d88-83c9-cf16ab1ceb8b" clustered="false" name="PersonSexID" physicalName="personsexid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC87" populated="true" UUID="6540dcd9-eebd-4b83-8bae-0ab687793aca" ascendingOrDescending="UNSPECIFIED" column-ref="COL83" name="PersonSexID" physicalName="PersonSexID" />
+    <index id="IDX86" populated="true" UUID="51d9fcdf-0fd6-4d88-83c9-cf16ab1ceb8b" clustered="false" name="PersonSexTypeID" physicalName="personsexid" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC87" populated="true" UUID="6540dcd9-eebd-4b83-8bae-0ab687793aca" ascendingOrDescending="UNSPECIFIED" column-ref="COL83" name="PersonSexTypeID" physicalName="PersonSexTypeID" />
     </index>
    </folder>
   </table>
-  <table id="TAB88" populated="true" UUID="3ac94cec-10db-4263-9f45-70eb5e9b2196" name="PersonRace" objectType="TABLE" physicalName="PersonRace" >
+  <table id="TAB88" populated="true" UUID="3ac94cec-10db-4263-9f45-70eb5e9b2196" name="PersonRaceType" objectType="TABLE" physicalName="PersonRaceType" >
    <remarks></remarks>
    <folder id="FOLTAB881" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL89" populated="true" UUID="7cd24043-6dea-40a4-8af9-d442c9efa9a1" autoIncrement="true" autoIncrementSequenceName="PersonRace_PersonRaceID_seq" defaultValue="" name="PersonRaceID" nullable="0" physicalName="PersonRaceID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL89" populated="true" UUID="7cd24043-6dea-40a4-8af9-d442c9efa9a1" autoIncrement="true" autoIncrementSequenceName="PersonRaceType_PersonRaceTypeID_seq" defaultValue="" name="PersonRaceTypeID" nullable="0" physicalName="PersonRaceTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL90" populated="true" UUID="41ce523f-af02-429c-84aa-f924a135aa80" autoIncrement="false" autoIncrementSequenceName="PersonRace_PersonRaceCode_seq_1" defaultValue="" name="PersonRaceCode" nullable="0" physicalName="PersonRaceCode" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL90" populated="true" UUID="41ce523f-af02-429c-84aa-f924a135aa80" autoIncrement="false" autoIncrementSequenceName="PersonRaceType_PersonRaceTypeCode_seq" defaultValue="" name="PersonRaceTypeCode" nullable="0" physicalName="PersonRaceTypeCode" precision="10" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL91" populated="true" UUID="05a7dc6f-5295-4b18-9faf-ba256d029232" autoIncrement="false" autoIncrementSequenceName="PersonRace_PersonRaceDescription_seq" defaultValue="" name="PersonRaceDescription" nullable="0" physicalName="PersonRaceDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL91" populated="true" UUID="05a7dc6f-5295-4b18-9faf-ba256d029232" autoIncrement="false" autoIncrementSequenceName="PersonRaceType_PersonRaceTypeDescription_seq" defaultValue="" name="PersonRaceTypeDescription" nullable="0" physicalName="PersonRaceTypeDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -335,8 +335,8 @@
     <folder id="FOLTAB882" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB884" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX92" populated="true" UUID="608042c3-ed9f-44cb-85a5-485a791b98ee" clustered="false" name="PersonRaceID" physicalName="personraceid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC93" populated="true" UUID="9e3acac9-236e-4770-a803-217b4c95153b" ascendingOrDescending="UNSPECIFIED" column-ref="COL89" name="PersonRaceID" physicalName="PersonRaceID" />
+    <index id="IDX92" populated="true" UUID="608042c3-ed9f-44cb-85a5-485a791b98ee" clustered="false" name="PersonRaceTypeID" physicalName="personraceid" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC93" populated="true" UUID="9e3acac9-236e-4770-a803-217b4c95153b" ascendingOrDescending="UNSPECIFIED" column-ref="COL89" name="PersonRaceTypeID" physicalName="PersonRaceTypeID" />
     </index>
    </folder>
   </table>
@@ -527,10 +527,10 @@
     <column id="COL147" populated="true" UUID="c6c6e909-bc8a-4fd4-9b9e-d7c7cf092b52" autoIncrement="false" autoIncrementSequenceName="Person_CreationDate_seq" defaultValue="now()" name="CreationDate" nullable="0" physicalName="CreationDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
-    <column id="COL148" populated="true" UUID="6ba3fe2e-3207-4f30-9f8c-91962fce2466" autoIncrement="false" autoIncrementSequenceName="PersonSex_PersonSexID_seq_1" defaultValue="" name="PersonSexID" nullable="1" physicalName="PersonSexID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL148" populated="true" UUID="6ba3fe2e-3207-4f30-9f8c-91962fce2466" autoIncrement="false" autoIncrementSequenceName="PersonSex_PersonSexID_seq_1" defaultValue="" name="PersonSexTypeID" nullable="1" physicalName="PersonSexTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL149" populated="true" UUID="967a88fd-ff84-4aba-9d5b-10a596fca9fa" autoIncrement="false" autoIncrementSequenceName="PersonRace_PersonRaceID_seq_1" defaultValue="" name="PersonRaceID" nullable="1" physicalName="PersonRaceID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL149" populated="true" UUID="967a88fd-ff84-4aba-9d5b-10a596fca9fa" autoIncrement="false" autoIncrementSequenceName="PersonRace_PersonRaceID_seq_1" defaultValue="" name="PersonRaceTypeID" nullable="1" physicalName="PersonRaceTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -947,16 +947,16 @@
     </index>
    </folder>
   </table>
-  <table id="TAB263" populated="true" UUID="3784b470-7662-4971-8a3e-35e3172877b7" name="Medication" objectType="TABLE" physicalName="Medication" >
+  <table id="TAB263" populated="true" UUID="3784b470-7662-4971-8a3e-35e3172877b7" name="MedicationType" objectType="TABLE" physicalName="MedicationType" >
    <remarks></remarks>
    <folder id="FOLTAB2631" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL264" populated="true" UUID="f3819d81-4b50-45f5-ac32-b09bed15939c" autoIncrement="true" autoIncrementSequenceName="Medication_MedicationID_seq" defaultValue="" name="MedicationID" nullable="0" physicalName="MedicationID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL264" populated="true" UUID="f3819d81-4b50-45f5-ac32-b09bed15939c" autoIncrement="true" autoIncrementSequenceName="MedicationType_MedicationTypeID_seq" defaultValue="" name="MedicationTypeID" nullable="0" physicalName="MedicationTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL265" populated="true" UUID="b3cb59c7-39fc-4320-872a-cfc5ac04094e" autoIncrement="false" autoIncrementSequenceName="Medication_GeneralProductID_seq" defaultValue="" name="GeneralProductID" nullable="1" physicalName="GeneralProductID" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL265" populated="true" UUID="b3cb59c7-39fc-4320-872a-cfc5ac04094e" autoIncrement="false" autoIncrementSequenceName="MedicationType_GenericProductIdentification_seq" defaultValue="" name="GenericProductIdentification" nullable="1" physicalName="GenericProductIdentification" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL266" populated="true" UUID="7e09d85b-6057-40b1-8a97-617b040a66da" autoIncrement="false" autoIncrementSequenceName="Medication_ItemName_seq" defaultValue="" name="ItemName" nullable="1" physicalName="ItemName" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL266" populated="true" UUID="7e09d85b-6057-40b1-8a97-617b040a66da" autoIncrement="false" autoIncrementSequenceName="MedicationType_MedicationTypeDescription_seq" defaultValue="" name="MedicationTypeDescription" nullable="1" physicalName="MedicationTypeDescription" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -965,8 +965,8 @@
     <folder id="FOLTAB2632" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB2634" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX267" populated="true" UUID="c4b8bfde-2122-4091-9247-32148458bc1d" clustered="false" name="MedicationID" physicalName="medicationid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC268" populated="true" UUID="1f1a982e-c7ec-4fbf-8a80-6d43df995c8b" ascendingOrDescending="UNSPECIFIED" column-ref="COL264" name="MedicationID" physicalName="MedicationID" />
+    <index id="IDX267" populated="true" UUID="c4b8bfde-2122-4091-9247-32148458bc1d" clustered="false" name="MedicationTypeID" physicalName="medicationid" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC268" populated="true" UUID="1f1a982e-c7ec-4fbf-8a80-6d43df995c8b" ascendingOrDescending="UNSPECIFIED" column-ref="COL264" name="MedicationTypeID" physicalName="MedicationTypeID" />
     </index>
    </folder>
   </table>
@@ -979,7 +979,7 @@
     <column id="COL271" populated="true" UUID="8b3d5c49-c0b8-40e8-beda-2aa4a5a30e5d" autoIncrement="false" autoIncrementSequenceName="BehavioralHealthAssessment_BehavioralHealthAssessmentID_seq_1" defaultValue="" name="BehavioralHealthAssessmentID" nullable="0" physicalName="BehavioralHealthAssessmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL272" populated="true" UUID="6481eaa2-9153-4ddc-aa47-263dfd9fa372" autoIncrement="false" autoIncrementSequenceName="Medication_MedicationID_seq_1" defaultValue="" name="MedicationID" nullable="0" physicalName="MedicationID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL272" populated="true" UUID="6481eaa2-9153-4ddc-aa47-263dfd9fa372" autoIncrement="false" autoIncrementSequenceName="Medication_MedicationID_seq_1" defaultValue="" name="MedicationTypeID" nullable="0" physicalName="MedicationTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL273" populated="true" UUID="77a531ca-1d74-4c2c-a6b7-d855a65c3ec3" autoIncrement="false" autoIncrementSequenceName="PrescribedMedication_MedicationDispensingDate_seq" defaultValue="" name="MedicationDispensingDate" nullable="1" physicalName="MedicationDispensingDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
@@ -1055,7 +1055,7 @@
     <folder id="FOLTAB2892" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB2894" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX292" populated="true" UUID="abc134c5-f6f6-4f91-a0f4-fc88549f4592" clustered="false" name="MilitaryServiceStatusTypeID" physicalName="MilitaryServiceStatusTypeID" primaryKeyIndex="true" unique="false" >
+    <index id="IDX292" populated="true" UUID="abc134c5-f6f6-4f91-a0f4-fc88549f4592" clustered="false" name="MilitaryServiceStatusTypeID" physicalName="militaryservicestatustypeid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC293" populated="true" UUID="4d4e5676-3639-41d1-8c3e-ff031eab0bd5" ascendingOrDescending="UNSPECIFIED" column-ref="COL290" name="MilitaryServiceStatusTypeID" physicalName="MilitaryServiceStatusTypeID" />
     </index>
    </folder>
@@ -1175,7 +1175,7 @@
    <relationship id="REL368" populated="true" UUID="b5c76746-0b24-4e8d-80a9-fe9cd7382b3d" deferrability="7" deleteRule="3" fk-table-ref="TAB240" fkCardinality="7" identifying="false" name="Location_CustodyStatusChangeArrest_fk" physicalName="location_custodystatuschangearrest_fk" pk-table-ref="TAB277" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP369" populated="true" UUID="a98ca62a-b693-4096-acac-2985a1f37bbb" fk-column-ref="COL243" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL278" />
    </relationship>
-   <relationship id="REL370" populated="true" UUID="03262133-16ca-46d7-8572-d27e38250d00" deferrability="7" deleteRule="3" fk-table-ref="TAB183" fkCardinality="7" identifying="false" name="MilitaryServiceStatusType_BookingSubject_fk" physicalName="MilitaryServiceStatusType_BookingSubject_fk" pk-table-ref="TAB289" pkCardinality="2" updateRule="3" >
+   <relationship id="REL370" populated="true" UUID="03262133-16ca-46d7-8572-d27e38250d00" deferrability="7" deleteRule="3" fk-table-ref="TAB183" fkCardinality="7" identifying="false" name="MilitaryServiceStatusType_BookingSubject_fk" physicalName="militaryservicestatustype_bookingsubject_fk" pk-table-ref="TAB289" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP371" populated="true" UUID="a6815882-275a-4840-95b5-8504fb8326dc" fk-column-ref="COL196" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL290" />
    </relationship>
   </relationships>
