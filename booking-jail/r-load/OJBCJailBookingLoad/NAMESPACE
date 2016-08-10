@@ -2,6 +2,7 @@
 
 export(generateCodeTableSpreadsheetTemplate)
 export(loadDemoDimensional)
+export(loadDemoStaging)
 import(RMySQL)
 import(openxlsx)
 import(readr)
