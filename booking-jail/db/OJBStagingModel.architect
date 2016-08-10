@@ -312,7 +312,7 @@
     <folder id="FOLTAB822" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB824" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX86" populated="true" UUID="51d9fcdf-0fd6-4d88-83c9-cf16ab1ceb8b" clustered="false" name="PersonSexTypeID" physicalName="personsexid" primaryKeyIndex="true" unique="false" >
+    <index id="IDX86" populated="true" UUID="51d9fcdf-0fd6-4d88-83c9-cf16ab1ceb8b" clustered="false" name="PersonSexTypeID" physicalName="personsextypeid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC87" populated="true" UUID="6540dcd9-eebd-4b83-8bae-0ab687793aca" ascendingOrDescending="UNSPECIFIED" column-ref="COL83" name="PersonSexTypeID" physicalName="PersonSexTypeID" />
     </index>
    </folder>
@@ -335,7 +335,7 @@
     <folder id="FOLTAB882" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB884" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX92" populated="true" UUID="608042c3-ed9f-44cb-85a5-485a791b98ee" clustered="false" name="PersonRaceTypeID" physicalName="personraceid" primaryKeyIndex="true" unique="false" >
+    <index id="IDX92" populated="true" UUID="608042c3-ed9f-44cb-85a5-485a791b98ee" clustered="false" name="PersonRaceTypeID" physicalName="personracetypeid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC93" populated="true" UUID="9e3acac9-236e-4770-a803-217b4c95153b" ascendingOrDescending="UNSPECIFIED" column-ref="COL89" name="PersonRaceTypeID" physicalName="PersonRaceTypeID" />
     </index>
    </folder>
@@ -346,7 +346,7 @@
     <column id="COL95" populated="true" UUID="c47caec4-6489-44f3-9dfa-74d4c46ebfb2" autoIncrement="true" autoIncrementSequenceName="BehavioralHealthType_BehavioralHealthTypeID_seq" defaultValue="" name="BehavioralHealthTypeID" nullable="0" physicalName="BehavioralHealthTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL96" populated="true" UUID="0460ceec-6db0-4425-902e-bdad4cdbf9e8" autoIncrement="false" autoIncrementSequenceName="BehavioralHealthType_BehavioralHealthDescription_seq" defaultValue="" name="BehavioralHealthDescription" nullable="0" physicalName="BehavioralHealthDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL96" populated="true" UUID="0460ceec-6db0-4425-902e-bdad4cdbf9e8" autoIncrement="false" autoIncrementSequenceName="BehavioralHealthType_BehavioralHealthTypeDescription_seq" defaultValue="" name="BehavioralHealthTypeDescription" nullable="0" physicalName="BehavioralHealthTypeDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -965,7 +965,7 @@
     <folder id="FOLTAB2632" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB2634" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX267" populated="true" UUID="c4b8bfde-2122-4091-9247-32148458bc1d" clustered="false" name="MedicationTypeID" physicalName="medicationid" primaryKeyIndex="true" unique="false" >
+    <index id="IDX267" populated="true" UUID="c4b8bfde-2122-4091-9247-32148458bc1d" clustered="false" name="MedicationTypeID" physicalName="medicationtypeid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC268" populated="true" UUID="1f1a982e-c7ec-4fbf-8a80-6d43df995c8b" ascendingOrDescending="UNSPECIFIED" column-ref="COL264" name="MedicationTypeID" physicalName="MedicationTypeID" />
     </index>
    </folder>
@@ -1180,7 +1180,7 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.LiquibaseDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="506" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
