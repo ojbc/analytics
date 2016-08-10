@@ -170,34 +170,34 @@
     <column id="COL48" populated="true" UUID="b6519e0b-5bd4-4d68-b2f0-2ba90693933b" autoIncrement="true" autoIncrementSequenceName="Booking_BookingID_seq" defaultValue="" name="BookingID" nullable="0" physicalName="BookingID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL49" populated="true" UUID="20643d4a-060d-4cca-bccd-f05dc8e8efd9" autoIncrement="false" autoIncrementSequenceName="Booking_JurisdictionID_seq" defaultValue="" name="JurisdictionTypeID" nullable="0" physicalName="JurisdictionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL49" populated="true" UUID="20643d4a-060d-4cca-bccd-f05dc8e8efd9" autoIncrement="false" autoIncrementSequenceName="Booking_JurisdictionID_seq" defaultValue="" name="JurisdictionTypeID" nullable="1" physicalName="JurisdictionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL50" populated="true" UUID="e757a0ac-c8b5-4815-92c3-8d8875c71bb2" autoIncrement="false" autoIncrementSequenceName="Booking_CaseStatusID_seq" defaultValue="" name="CaseStatusTypeID" nullable="0" physicalName="CaseStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL50" populated="true" UUID="e757a0ac-c8b5-4815-92c3-8d8875c71bb2" autoIncrement="false" autoIncrementSequenceName="Booking_CaseStatusID_seq" defaultValue="" name="CaseStatusTypeID" nullable="1" physicalName="CaseStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL51" populated="true" UUID="65b7a246-40ab-4daa-be89-f86b8f76e221" autoIncrement="false" autoIncrementSequenceName="Person_PersonID_seq_1" defaultValue="" name="PersonID" nullable="0" physicalName="PersonID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL52" populated="true" UUID="c65601bf-339f-405b-9bad-f4bb117a6833" autoIncrement="false" autoIncrementSequenceName="Booking_BookingReportDate_seq" defaultValue="" name="BookingReportDate" nullable="0" physicalName="BookingReportDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL52" populated="true" UUID="c65601bf-339f-405b-9bad-f4bb117a6833" autoIncrement="false" autoIncrementSequenceName="Booking_BookingReportDate_seq" defaultValue="" name="BookingReportDate" nullable="1" physicalName="BookingReportDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
-    <column id="COL53" populated="true" UUID="6e83a8b7-87da-4fdd-8610-4ffd31fc989b" autoIncrement="false" autoIncrementSequenceName="Booking_BookingReportID_seq" defaultValue="" name="BookingReportID" nullable="0" physicalName="BookingReportID" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL53" populated="true" UUID="6e83a8b7-87da-4fdd-8610-4ffd31fc989b" autoIncrement="false" autoIncrementSequenceName="Booking_BookingReportID_seq" defaultValue="" name="BookingReportID" nullable="1" physicalName="BookingReportID" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL54" populated="true" UUID="72349472-0820-42ea-a060-b81bc2cf1255" autoIncrement="false" autoIncrementSequenceName="Booking_BookingDate_seq" defaultValue="" name="BookingDate" nullable="0" physicalName="BookingDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL54" populated="true" UUID="72349472-0820-42ea-a060-b81bc2cf1255" autoIncrement="false" autoIncrementSequenceName="Booking_BookingDate_seq" defaultValue="" name="BookingDate" nullable="1" physicalName="BookingDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
-    <column id="COL55" populated="true" UUID="981054a9-a542-4467-bc48-29ca75426233" autoIncrement="false" autoIncrementSequenceName="Booking_CommitDate_seq" defaultValue="" name="CommitDate" nullable="0" physicalName="CommitDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+    <column id="COL55" populated="true" UUID="981054a9-a542-4467-bc48-29ca75426233" autoIncrement="false" autoIncrementSequenceName="Booking_CommitDate_seq" defaultValue="" name="CommitDate" nullable="1" physicalName="CommitDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
      <remarks></remarks>
     </column>
     <column id="COL56" populated="true" UUID="46e50cbb-604c-41b8-a9dc-6da33e70c2fb" autoIncrement="false" autoIncrementSequenceName="CustodyRelease_ScheduledReleaseDate_seq" defaultValue="" name="ScheduledReleaseDate" nullable="1" physicalName="ScheduledReleaseDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
      <remarks></remarks>
     </column>
-    <column id="COL57" populated="true" UUID="5a0a32ab-ffe0-4083-a97e-df18bbc4aa04" autoIncrement="false" autoIncrementSequenceName="Booking_FacilityID_seq" defaultValue="" name="FacilityID" nullable="0" physicalName="FacilityID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL57" populated="true" UUID="5a0a32ab-ffe0-4083-a97e-df18bbc4aa04" autoIncrement="false" autoIncrementSequenceName="Booking_FacilityID_seq" defaultValue="" name="FacilityID" nullable="1" physicalName="FacilityID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL58" populated="true" UUID="cbc93867-110d-4f16-b6e5-db797de1617e" autoIncrement="false" autoIncrementSequenceName="Booking_BedTypeID_seq" defaultValue="" name="BedTypeID" nullable="0" physicalName="BedTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL58" populated="true" UUID="cbc93867-110d-4f16-b6e5-db797de1617e" autoIncrement="false" autoIncrementSequenceName="Booking_BedTypeID_seq" defaultValue="" name="BedTypeID" nullable="1" physicalName="BedTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL59" populated="true" UUID="60e8e865-8554-4928-bf0a-2f409f1de2a0" autoIncrement="false" autoIncrementSequenceName="BookingSubject_BookingNumber_seq" defaultValue="" name="BookingNumber" nullable="0" physicalName="BookingNumber" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -433,7 +433,7 @@
     <column id="COL119" populated="true" UUID="81c78c73-ea7d-4899-8ecb-76458012f7a9" autoIncrement="false" autoIncrementSequenceName="BookingArrest_BookingArrestID_seq" defaultValue="" name="BookingArrestID" nullable="0" physicalName="BookingArrestID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL120" populated="true" UUID="feb0abbe-91ae-44b1-8705-0ce5a2a63d82" autoIncrement="false" autoIncrementSequenceName="BookingCharge_ChargeTypeID_seq" defaultValue="" name="ChargeTypeID" nullable="0" physicalName="ChargeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL120" populated="true" UUID="feb0abbe-91ae-44b1-8705-0ce5a2a63d82" autoIncrement="false" autoIncrementSequenceName="BookingCharge_ChargeTypeID_seq" defaultValue="" name="ChargeTypeID" nullable="1" physicalName="ChargeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL121" populated="true" UUID="61358f68-a80e-4122-8a01-b16ecbd509d6" autoIncrement="false" autoIncrementSequenceName="charge_NextCourtName_seq" defaultValue="" name="NextCourtName" nullable="1" physicalName="NextCourtName" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -442,7 +442,7 @@
     <column id="COL122" populated="true" UUID="1a342970-c8c9-4a7f-b4b6-fdf5838f427b" autoIncrement="false" autoIncrementSequenceName="booking_NextCourtDate_seq" defaultValue="" name="NextCourtDate" nullable="1" physicalName="NextCourtDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
      <remarks></remarks>
     </column>
-    <column id="COL123" populated="true" UUID="6229eadf-153c-41f8-80ef-2ac498ec8d61" autoIncrement="false" autoIncrementSequenceName="Agency_AgencyID_seq_1_1" defaultValue="" name="AgencyTypeID" nullable="0" physicalName="AgencyTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL123" populated="true" UUID="6229eadf-153c-41f8-80ef-2ac498ec8d61" autoIncrement="false" autoIncrementSequenceName="Agency_AgencyID_seq_1_1" defaultValue="" name="AgencyTypeID" nullable="1" physicalName="AgencyTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL124" populated="true" UUID="e4383444-7488-400c-a9ca-3e4e8555ca9a" autoIncrement="false" autoIncrementSequenceName="Booking_BondAmount_seq" defaultValue="" name="BondAmount" nullable="1" physicalName="BondAmount" precision="10" referenceCount="1" scale="2" sourceDataTypeName="UserDefinedSQLType" type="2" userDefinedTypeUUID="115245ce-612c-4d6a-b559-6dd903dd959a" >
@@ -451,7 +451,7 @@
     <column id="COL125" populated="true" UUID="bfd4e0aa-3140-4562-8c50-44a0973d9dc1" autoIncrement="false" autoIncrementSequenceName="BookingCharge_BondRemainingAmount_seq" defaultValue="" name="BondRemainingAmount" nullable="1" physicalName="BondRemainingAmount" precision="10" referenceCount="1" scale="2" sourceDataTypeName="UserDefinedSQLType" type="2" userDefinedTypeUUID="115245ce-612c-4d6a-b559-6dd903dd959a" >
      <remarks></remarks>
     </column>
-    <column id="COL126" populated="true" UUID="47fba437-4f85-49b1-972e-635d81b6e8f9" autoIncrement="false" autoIncrementSequenceName="BondType_BondTypeID_seq_1_1_1" defaultValue="" name="BondTypeID" nullable="0" physicalName="BondTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL126" populated="true" UUID="47fba437-4f85-49b1-972e-635d81b6e8f9" autoIncrement="false" autoIncrementSequenceName="BondType_BondTypeID_seq_1_1_1" defaultValue="" name="BondTypeID" nullable="1" physicalName="BondTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -530,19 +530,19 @@
     <column id="COL148" populated="true" UUID="967a88fd-ff84-4aba-9d5b-10a596fca9fa" autoIncrement="false" autoIncrementSequenceName="PersonRace_PersonRaceID_seq_1" defaultValue="" name="PersonRaceTypeID" nullable="1" physicalName="PersonRaceTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL149" populated="true" UUID="6f379638-b7a5-4db9-9c27-572ff58cace0" autoIncrement="false" autoIncrementSequenceName="MilitaryServiceStatusType_MilitaryServiceStatusTypeID_seq_1" defaultValue="" name="MilitaryServiceStatusTypeID" nullable="0" physicalName="MilitaryServiceStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL149" populated="true" UUID="6f379638-b7a5-4db9-9c27-572ff58cace0" autoIncrement="false" autoIncrementSequenceName="MilitaryServiceStatusType_MilitaryServiceStatusTypeID_seq_1" defaultValue="" name="MilitaryServiceStatusTypeID" nullable="1" physicalName="MilitaryServiceStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL150" populated="true" UUID="290c7a92-36f6-40ba-88fa-bd1600a43568" autoIncrement="false" autoIncrementSequenceName="IncomeLevelType_IncomeLevelTypeID_seq" defaultValue="" name="IncomeLevelTypeID" nullable="0" physicalName="IncomeLevelTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL150" populated="true" UUID="290c7a92-36f6-40ba-88fa-bd1600a43568" autoIncrement="false" autoIncrementSequenceName="IncomeLevelType_IncomeLevelTypeID_seq" defaultValue="" name="IncomeLevelTypeID" nullable="1" physicalName="IncomeLevelTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL151" populated="true" UUID="fad61bd5-f466-4941-8c18-c4244831ba03" autoIncrement="false" autoIncrementSequenceName="OccupationType_OccupationTypeID_seq" defaultValue="" name="OccupationTypeID" nullable="0" physicalName="OccupationTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL151" populated="true" UUID="fad61bd5-f466-4941-8c18-c4244831ba03" autoIncrement="false" autoIncrementSequenceName="OccupationType_OccupationTypeID_seq" defaultValue="" name="OccupationTypeID" nullable="1" physicalName="OccupationTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL152" populated="true" UUID="ab504915-5935-4d18-92b1-c7d86ffb5935" autoIncrement="false" autoIncrementSequenceName="EducationLevelType_EducationLevelTypeID_seq" defaultValue="" name="EducationLevelTypeID" nullable="0" physicalName="EducationLevelTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL152" populated="true" UUID="ab504915-5935-4d18-92b1-c7d86ffb5935" autoIncrement="false" autoIncrementSequenceName="EducationLevelType_EducationLevelTypeID_seq" defaultValue="" name="EducationLevelTypeID" nullable="1" physicalName="EducationLevelTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL153" populated="true" UUID="00f0a3b0-9eaf-4f63-a5aa-7184f23251d6" autoIncrement="false" autoIncrementSequenceName="HousingStatusType_HousingStatusTypeID_seq" defaultValue="" name="HousingStatusTypeID" nullable="0" physicalName="HousingStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL153" populated="true" UUID="00f0a3b0-9eaf-4f63-a5aa-7184f23251d6" autoIncrement="false" autoIncrementSequenceName="HousingStatusType_HousingStatusTypeID_seq" defaultValue="" name="HousingStatusTypeID" nullable="1" physicalName="HousingStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -688,13 +688,13 @@
     <column id="COL189" populated="true" UUID="faa8ad5b-d75e-4105-8906-9e02e89550cd" autoIncrement="false" autoIncrementSequenceName="Booking_BookingID_seq_1" defaultValue="" name="BookingID" nullable="0" physicalName="BookingID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL190" populated="true" UUID="febe4ade-46d3-420e-b3e6-1c9909d2f2c8" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_ReportID_seq" defaultValue="" name="ReportID" nullable="0" physicalName="ReportID" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL190" populated="true" UUID="febe4ade-46d3-420e-b3e6-1c9909d2f2c8" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_ReportID_seq" defaultValue="" name="ReportID" nullable="1" physicalName="ReportID" precision="30" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL191" populated="true" UUID="9e0bd43e-89b9-46e4-9590-b57119db53e5" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_BookingDate_seq" defaultValue="" name="BookingDate" nullable="0" physicalName="BookingDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL191" populated="true" UUID="9e0bd43e-89b9-46e4-9590-b57119db53e5" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_BookingDate_seq" defaultValue="" name="BookingDate" nullable="1" physicalName="BookingDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
-    <column id="COL192" populated="true" UUID="55defa5d-4eec-4899-9177-ab9f09a4a962" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_CommitDate_seq" defaultValue="" name="CommitDate" nullable="0" physicalName="CommitDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+    <column id="COL192" populated="true" UUID="55defa5d-4eec-4899-9177-ab9f09a4a962" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_CommitDate_seq" defaultValue="" name="CommitDate" nullable="1" physicalName="CommitDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
      <remarks></remarks>
     </column>
     <column id="COL193" populated="true" UUID="88545ec4-dd1c-43a7-87ab-ffe90d8b729a" autoIncrement="false" autoIncrementSequenceName="CustodyRelease_ScheduledReleaseDate_seq_1" defaultValue="" name="ScheduledReleaseDate" nullable="1" physicalName="ScheduledReleaseDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
@@ -703,16 +703,16 @@
     <column id="COL194" populated="true" UUID="8238753e-087a-4a4e-871a-e126e007dd95" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_BedTypeID_seq" defaultValue="" name="BedTypeID" nullable="1" physicalName="BedTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL195" populated="true" UUID="a5d0a209-fb65-4c44-8579-f4c986358ccb" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_CaseStatusID_seq" defaultValue="" name="CaseStatusTypeID" nullable="0" physicalName="CaseStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL195" populated="true" UUID="a5d0a209-fb65-4c44-8579-f4c986358ccb" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_CaseStatusID_seq" defaultValue="" name="CaseStatusTypeID" nullable="1" physicalName="CaseStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL196" populated="true" UUID="9c19309c-fc1e-4529-ae32-2a4414653fa9" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_JurisdictionID_seq" defaultValue="" name="JurisdictionTypeID" nullable="0" physicalName="JurisdictionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL196" populated="true" UUID="9c19309c-fc1e-4529-ae32-2a4414653fa9" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_JurisdictionID_seq" defaultValue="" name="JurisdictionTypeID" nullable="1" physicalName="JurisdictionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL197" populated="true" UUID="3e409fc8-4c2d-4666-a9cd-3c55fa5cef3d" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_FacilityID_seq" defaultValue="" name="FacilityID" nullable="0" physicalName="FacilityID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL197" populated="true" UUID="3e409fc8-4c2d-4666-a9cd-3c55fa5cef3d" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_FacilityID_seq" defaultValue="" name="FacilityID" nullable="1" physicalName="FacilityID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL198" populated="true" UUID="1d170a8d-b36b-4c9b-b0fb-0fe34188a068" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_ReportDate_seq" defaultValue="" name="ReportDate" nullable="0" physicalName="ReportDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL198" populated="true" UUID="1d170a8d-b36b-4c9b-b0fb-0fe34188a068" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_ReportDate_seq" defaultValue="" name="ReportDate" nullable="1" physicalName="ReportDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     <column id="COL199" populated="true" UUID="b047cbf7-0eb9-417c-ab3e-e7413af0da96" autoIncrement="false" autoIncrementSequenceName="Person_PersonID_seq_1" defaultValue="" name="PersonID" nullable="0" physicalName="PersonID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -738,7 +738,7 @@
     <column id="COL204" populated="true" UUID="1bd1246e-97d0-4847-bbff-ae8045f6fb34" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChangeArrest_CustodyStatusChangeArrestID_seq" defaultValue="" name="CustodyStatusChangeArrestID" nullable="0" physicalName="CustodyStatusChangeArrestID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL205" populated="true" UUID="a00ea8b5-d911-4a68-a26e-528e337d0ff1" autoIncrement="false" autoIncrementSequenceName="ChargeType_ChargeTypeID_seq_1" defaultValue="" name="ChargeTypeID" nullable="0" physicalName="ChargeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL205" populated="true" UUID="a00ea8b5-d911-4a68-a26e-528e337d0ff1" autoIncrement="false" autoIncrementSequenceName="ChargeType_ChargeTypeID_seq_1" defaultValue="" name="ChargeTypeID" nullable="1" physicalName="ChargeTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL206" populated="true" UUID="12a9f606-ea5f-452f-83cb-1dcdec2af4b5" autoIncrement="false" autoIncrementSequenceName="booking_NextCourtDate_seq_1" defaultValue="" name="NextCourtDate" nullable="1" physicalName="NextCourtDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
@@ -747,10 +747,10 @@
     <column id="COL207" populated="true" UUID="b25db2a1-28b8-4e04-bdc7-9f011202863d" autoIncrement="false" autoIncrementSequenceName="charge_NextCourtName_seq_1" defaultValue="" name="NextCourtName" nullable="1" physicalName="NextCourtName" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL208" populated="true" UUID="a9e52a44-bf91-40c0-955c-967f8e4ad344" autoIncrement="false" autoIncrementSequenceName="BondType_BondTypeID_seq_1_1_1_2" defaultValue="" name="BondTypeID" nullable="0" physicalName="BondTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL208" populated="true" UUID="a9e52a44-bf91-40c0-955c-967f8e4ad344" autoIncrement="false" autoIncrementSequenceName="BondType_BondTypeID_seq_1_1_1_2" defaultValue="" name="BondTypeID" nullable="1" physicalName="BondTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL209" populated="true" UUID="7baf7521-a23d-48bf-bb5c-cd13da49d9ca" autoIncrement="false" autoIncrementSequenceName="Agency_AgencyID_seq_1_2" defaultValue="" name="AgencyTypeID" nullable="0" physicalName="AgencyTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL209" populated="true" UUID="7baf7521-a23d-48bf-bb5c-cd13da49d9ca" autoIncrement="false" autoIncrementSequenceName="Agency_AgencyID_seq_1_2" defaultValue="" name="AgencyTypeID" nullable="1" physicalName="AgencyTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL210" populated="true" UUID="cedac7f1-52e4-4950-8e43-ca828c2f8e7b" autoIncrement="false" autoIncrementSequenceName="Booking_BondAmount_seq_1" defaultValue="" name="BondAmount" nullable="1" physicalName="BondAmount" precision="10" referenceCount="1" scale="2" sourceDataTypeName="UserDefinedSQLType" type="2" userDefinedTypeUUID="115245ce-612c-4d6a-b559-6dd903dd959a" >
@@ -831,7 +831,7 @@
     <column id="COL230" populated="true" UUID="518f7d41-c59f-439a-ad0a-9040f0633d1c" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChange_CustodyStatusChangeID_seq_1" defaultValue="" name="CustodyStatusChangeID" nullable="0" physicalName="CustodyStatusChangeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL231" populated="true" UUID="b69d499f-f1fb-4677-9c68-f74641ac5900" autoIncrement="false" autoIncrementSequenceName="Location_LocationID_seq_1" defaultValue="" name="LocationID" nullable="0" physicalName="LocationID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL231" populated="true" UUID="b69d499f-f1fb-4677-9c68-f74641ac5900" autoIncrement="false" autoIncrementSequenceName="Location_LocationID_seq_1" defaultValue="" name="LocationID" nullable="1" physicalName="LocationID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1139,7 +1139,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="398" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="15" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="711" y="359" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB62" x="278" y="51" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB67" x="22" y="135" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
