@@ -44,6 +44,7 @@ loadCodeTables <- function(conn, codeTableFileName) {
 #' @import RMySQL
 #' @import openxlsx
 #' @export
+#' @title Generate a code table spreadsheet template with random number of rows and sequential content
 generateCodeTableSpreadsheetTemplate <- function(conn, spreadsheetFile="CodeTables.xlsx", additionalTables=character()) {
 
   codeTableNames <- dbListTables(conn)
