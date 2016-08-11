@@ -518,7 +518,7 @@
     <column id="COL144" populated="true" UUID="9d922bb4-6a89-437f-8d0f-bb483d52c48b" autoIncrement="false" autoIncrementSequenceName="Person_RegisteredSexOffenderIndicator_seq" defaultValue="" name="RegisteredSexOffenderIndicator" nullable="1" physicalName="RegisteredSexOffenderIndicator" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="16" userDefinedTypeUUID="a26374aa-3026-4bb8-b564-eb2e186dfa5d" >
      <remarks></remarks>
     </column>
-    <column id="COL145" populated="true" UUID="72a27194-86ce-40fd-ab43-e037e99abde8" autoIncrement="false" autoIncrementSequenceName="BookingSubject_PersonAge_seq" defaultValue="" name="PersonAge" nullable="1" physicalName="PersonAge" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL145" populated="true" UUID="72a27194-86ce-40fd-ab43-e037e99abde8" autoIncrement="false" autoIncrementSequenceName="BookingSubject_PersonAgeAtBooking_seq" defaultValue="" name="PersonAgeAtBooking" nullable="1" physicalName="PersonAgeAtBooking" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL146" populated="true" UUID="f487cac2-668d-4aeb-8a4e-91a73edf1437" autoIncrement="false" autoIncrementSequenceName="Person_PersonBirthDate_seq" defaultValue="" name="PersonBirthDate" nullable="1" physicalName="PersonBirthDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
@@ -1169,7 +1169,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="416" viewportY="316" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="711" y="359" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB62" x="278" y="51" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB67" x="22" y="135" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
