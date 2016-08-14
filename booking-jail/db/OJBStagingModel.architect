@@ -707,10 +707,10 @@
     <column id="COL197" populated="true" UUID="e63b718d-ab83-4c3e-a552-f408d721f00b" autoIncrement="false" autoIncrementSequenceName="JurisdictionType_ChargeJurisdictionTypeID_seq_1" defaultValue="" name="ChargeJurisdictionTypeID" nullable="1" physicalName="ChargeJurisdictionTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL198" populated="true" UUID="ce3739f9-6030-4412-83d5-ca8b64ddfd4d" autoIncrement="false" autoIncrementSequenceName="ChargeClassType_ChargeClassTypeID_seq" defaultValue="" name="ChargeClassTypeID" nullable="1" physicalName="ChargeClassTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL198" populated="true" UUID="ce3739f9-6030-4412-83d5-ca8b64ddfd4d" autoIncrement="false" autoIncrementSequenceName="ChargeClassType_ChargeClassTypeID_seq_1" defaultValue="" name="ChargeClassTypeID" nullable="1" physicalName="ChargeClassTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL199" populated="true" UUID="63956d2f-f38c-4972-b104-5678f129f0ab" autoIncrement="false" autoIncrementSequenceName="BondStatusType_BondStatusTypeID_seq" defaultValue="" name="BondStatusTypeID" nullable="1" physicalName="BondStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL199" populated="true" UUID="63956d2f-f38c-4972-b104-5678f129f0ab" autoIncrement="false" autoIncrementSequenceName="BondStatusType_BondStatusTypeID_seq_1" defaultValue="" name="BondStatusTypeID" nullable="1" physicalName="BondStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL200" populated="true" UUID="e5db91d8-201d-4b61-ab68-bb13b2793b19" autoIncrement="false" autoIncrementSequenceName="CustodyStatusChangeCharge_CustodyStatusChangeChargeTimestamp_seq" defaultValue="now()" name="CustodyStatusChangeChargeTimestamp" nullable="0" physicalName="CustodyStatusChangeChargeTimestamp" precision="0" referenceCount="1" scale="0" source-column-ref="COL58" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
@@ -1163,7 +1163,7 @@
   <table id="TAB319" populated="true" UUID="829eb91d-f855-44fb-af45-063843e2fdf3" name="ChargeClassType" objectType="TABLE" physicalName="ChargeClassType" >
    <remarks></remarks>
    <folder id="FOLTAB3191" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL320" populated="true" UUID="a94dae2e-a9c7-4586-9e3a-2e91c4074013" autoIncrement="true" autoIncrementSequenceName="ChargeClassType_ChargeClassTypeID_seq" defaultValue="" name="ChargeClassTypeID" nullable="0" physicalName="ChargeClassTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL320" populated="true" UUID="a94dae2e-a9c7-4586-9e3a-2e91c4074013" autoIncrement="true" autoIncrementSequenceName="ChargeClassType_ChargeClassTypeID_seq_2" defaultValue="" name="ChargeClassTypeID" nullable="0" physicalName="ChargeClassTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL321" populated="true" UUID="4150eede-2010-4f1b-b3a5-3b4d12e95d8f" autoIncrement="false" autoIncrementSequenceName="ChargeClassType_ChargeClassTypeDescription_seq" defaultValue="" name="ChargeClassTypeDescription" nullable="0" physicalName="ChargeClassTypeDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -1175,7 +1175,7 @@
     <folder id="FOLTAB3192" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB3194" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX322" populated="true" UUID="94b22256-6646-430a-8cad-9f4ac6c061d4" clustered="false" name="ChargeClassTypeID" physicalName="ChargeClassTypeID" primaryKeyIndex="true" unique="false" >
+    <index id="IDX322" populated="true" UUID="94b22256-6646-430a-8cad-9f4ac6c061d4" clustered="false" name="ChargeClassTypeID" physicalName="chargeclasstypeid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC323" populated="true" UUID="324ca053-c8d6-4513-bb37-be300bac5ceb" ascendingOrDescending="UNSPECIFIED" column-ref="COL320" name="ChargeClassTypeID" physicalName="ChargeClassTypeID" />
     </index>
    </folder>
@@ -1183,7 +1183,7 @@
   <table id="TAB324" populated="true" UUID="a20359db-ec51-4586-a510-2c6ac001fd4e" name="BondStatusType" objectType="TABLE" physicalName="BondStatusType" >
    <remarks></remarks>
    <folder id="FOLTAB3241" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL325" populated="true" UUID="d3881f8f-0fb9-4dd7-ad07-6ef3efbcfac5" autoIncrement="false" autoIncrementSequenceName="BondStatusType_BondStatusTypeID_seq" defaultValue="" name="BondStatusTypeID" nullable="0" physicalName="BondStatusTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL325" populated="true" UUID="d3881f8f-0fb9-4dd7-ad07-6ef3efbcfac5" autoIncrement="false" autoIncrementSequenceName="BondStatusType_BondStatusTypeID_seq_2" defaultValue="" name="BondStatusTypeID" nullable="0" physicalName="BondStatusTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL326" populated="true" UUID="338b335b-f831-42aa-9982-0fa8265d0d3f" autoIncrement="false" autoIncrementSequenceName="BondStatusType_BondStatusTypeDescription_seq" defaultValue="" name="BondStatusTypeDescription" nullable="0" physicalName="BondStatusTypeDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -1195,7 +1195,7 @@
     <folder id="FOLTAB3242" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB3244" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX327" populated="true" UUID="2938eca4-c9bf-48cd-9790-f8b9d3ae6522" clustered="false" name="BondStatusTypeID" physicalName="BondStatusTypeID" primaryKeyIndex="true" unique="false" >
+    <index id="IDX327" populated="true" UUID="2938eca4-c9bf-48cd-9790-f8b9d3ae6522" clustered="false" name="BondStatusTypeID" physicalName="bondstatustypeid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC328" populated="true" UUID="abf69b83-28b1-4c1b-8d1e-66be93c69070" ascendingOrDescending="UNSPECIFIED" column-ref="COL325" name="BondStatusTypeID" physicalName="BondStatusTypeID" />
     </index>
    </folder>
@@ -1215,7 +1215,7 @@
     <folder id="FOLTAB3292" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB3294" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX332" populated="true" UUID="11c7254b-ce1b-4c01-9b9a-17ae0aaff48b" clustered="false" name="EnrolledHealthcareProviderID" physicalName="EnrolledHealthcareProviderID" primaryKeyIndex="true" unique="false" >
+    <index id="IDX332" populated="true" UUID="11c7254b-ce1b-4c01-9b9a-17ae0aaff48b" clustered="false" name="EnrolledHealthcareProviderID" physicalName="enrolledhealthcareproviderid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC333" populated="true" UUID="2cde5a72-b527-471c-8f70-5a2d8d02a1cb" ascendingOrDescending="UNSPECIFIED" column-ref="COL330" name="EnrolledHealthcareProviderID" physicalName="EnrolledHealthcareProviderID" />
     </index>
    </folder>
@@ -1296,7 +1296,7 @@
    <relationship id="REL382" populated="true" UUID="3281d065-dce2-4b44-9697-ba3c5669ab5b" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="3" identifying="false" name="Person_Booking_fk" physicalName="person_booking_fk" pk-table-ref="TAB134" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP383" populated="true" UUID="26e5be9e-0ce5-45ba-bdaf-4ec7bc83602e" fk-column-ref="COL50" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL135" />
    </relationship>
-   <relationship id="REL384" populated="true" UUID="1a85e842-06c7-494a-99de-2be770945503" deferrability="7" deleteRule="3" fk-table-ref="TAB175" fkCardinality="3" identifying="false" name="Person_CustodyStatusChange_fk" physicalName="Person_CustodyStatusChange_fk" pk-table-ref="TAB134" pkCardinality="2" updateRule="3" >
+   <relationship id="REL384" populated="true" UUID="1a85e842-06c7-494a-99de-2be770945503" deferrability="7" deleteRule="3" fk-table-ref="TAB175" fkCardinality="3" identifying="false" name="Person_CustodyStatusChange_fk" physicalName="person_custodystatuschange_fk" pk-table-ref="TAB134" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP385" populated="true" UUID="d0ee22d8-5b4f-461c-bcba-6f275874986d" fk-column-ref="COL185" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL135" />
    </relationship>
    <relationship id="REL386" populated="true" UUID="862397a5-47bb-4ce0-bc13-330761739c56" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="7" identifying="false" name="Facility_Booking_fk" physicalName="facility_booking_fk" pk-table-ref="TAB154" pkCardinality="2" updateRule="3" >
@@ -1359,19 +1359,19 @@
    <relationship id="REL424" populated="true" UUID="8bc51cbd-d160-4648-9d1a-a0421c62d229" deferrability="7" deleteRule="3" fk-table-ref="TAB235" fkCardinality="7" identifying="false" name="TreatmentProvider_Treatment_fk" physicalName="treatmentprovider_treatment_fk" pk-table-ref="TAB314" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP425" populated="true" UUID="62ced6c7-d12b-424c-b4d6-f64d647f93ce" fk-column-ref="COL242" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL315" />
    </relationship>
-   <relationship id="REL426" populated="true" UUID="a617074d-6c48-485e-97df-f4faa506c472" deferrability="7" deleteRule="3" fk-table-ref="TAB116" fkCardinality="7" identifying="false" name="ChargeClassType_BookingCharge_fk" physicalName="ChargeClassType_BookingCharge_fk" pk-table-ref="TAB319" pkCardinality="2" updateRule="3" >
+   <relationship id="REL426" populated="true" UUID="a617074d-6c48-485e-97df-f4faa506c472" deferrability="7" deleteRule="3" fk-table-ref="TAB116" fkCardinality="7" identifying="false" name="ChargeClassType_BookingCharge_fk" physicalName="chargeclasstype_bookingcharge_fk" pk-table-ref="TAB319" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP427" populated="true" UUID="afbcd379-f9e0-4c03-98df-bc16c4e71586" fk-column-ref="COL124" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL320" />
    </relationship>
-   <relationship id="REL428" populated="true" UUID="84a80734-9841-444b-9492-62c0f55b9588" deferrability="7" deleteRule="3" fk-table-ref="TAB189" fkCardinality="7" identifying="false" name="ChargeClassType_CustodyStatusChangeCharge_fk" physicalName="ChargeClassType_CustodyStatusChangeCharge_fk" pk-table-ref="TAB319" pkCardinality="2" updateRule="3" >
+   <relationship id="REL428" populated="true" UUID="84a80734-9841-444b-9492-62c0f55b9588" deferrability="7" deleteRule="3" fk-table-ref="TAB189" fkCardinality="7" identifying="false" name="ChargeClassType_CustodyStatusChangeCharge_fk" physicalName="chargeclasstype_custodystatuschangecharge_fk" pk-table-ref="TAB319" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP429" populated="true" UUID="62646e84-584f-4106-9144-8b4feebcddda" fk-column-ref="COL198" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL320" />
    </relationship>
-   <relationship id="REL430" populated="true" UUID="c0174116-7471-4476-868d-1087072142e5" deferrability="7" deleteRule="3" fk-table-ref="TAB189" fkCardinality="7" identifying="false" name="BondStatusType_CustodyStatusChangeCharge_fk" physicalName="BondStatusType_CustodyStatusChangeCharge_fk" pk-table-ref="TAB324" pkCardinality="2" updateRule="3" >
+   <relationship id="REL430" populated="true" UUID="c0174116-7471-4476-868d-1087072142e5" deferrability="7" deleteRule="3" fk-table-ref="TAB189" fkCardinality="7" identifying="false" name="BondStatusType_CustodyStatusChangeCharge_fk" physicalName="bondstatustype_custodystatuschangecharge_fk" pk-table-ref="TAB324" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP431" populated="true" UUID="879e9261-ef99-461c-a87e-e3873e98a83f" fk-column-ref="COL199" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL325" />
    </relationship>
-   <relationship id="REL432" populated="true" UUID="38b5ec94-6bab-4fa0-a4a3-ec559c510248" deferrability="7" deleteRule="3" fk-table-ref="TAB116" fkCardinality="7" identifying="false" name="BondStatusType_BookingCharge_fk" physicalName="BondStatusType_BookingCharge_fk" pk-table-ref="TAB324" pkCardinality="2" updateRule="3" >
+   <relationship id="REL432" populated="true" UUID="38b5ec94-6bab-4fa0-a4a3-ec559c510248" deferrability="7" deleteRule="3" fk-table-ref="TAB116" fkCardinality="7" identifying="false" name="BondStatusType_BookingCharge_fk" physicalName="bondstatustype_bookingcharge_fk" pk-table-ref="TAB324" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP433" populated="true" UUID="1e7db31a-541d-40da-ab34-e1e615dea81d" fk-column-ref="COL125" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL325" />
    </relationship>
-   <relationship id="REL434" populated="true" UUID="9fcce2cf-9048-46da-bf71-a97f1d2ac131" deferrability="7" deleteRule="3" fk-table-ref="TAB98" fkCardinality="7" identifying="false" name="EnrolledHealtchareProvider_BehavioralHealthAssessment_fk" physicalName="EnrolledHealtchareProvider_BehavioralHealthAssessment_fk" pk-table-ref="TAB329" pkCardinality="2" updateRule="3" >
+   <relationship id="REL434" populated="true" UUID="9fcce2cf-9048-46da-bf71-a97f1d2ac131" deferrability="7" deleteRule="3" fk-table-ref="TAB98" fkCardinality="7" identifying="false" name="EnrolledHealtchareProvider_BehavioralHealthAssessment_fk" physicalName="enrolledhealtchareprovider_behavioralhealthassessment_fk" pk-table-ref="TAB329" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP435" populated="true" UUID="f5c939a8-4d77-4c69-a121-c99c9a27ff2c" fk-column-ref="COL107" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL330" />
    </relationship>
   </relationships>
@@ -1379,7 +1379,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="529" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="57" viewportY="529" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="756" y="359" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB61" x="323" y="51" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB66" x="67" y="135" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
