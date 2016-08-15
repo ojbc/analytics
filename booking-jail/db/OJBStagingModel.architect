@@ -509,7 +509,7 @@
     <column id="COL141" populated="true" UUID="967a88fd-ff84-4aba-9d5b-10a596fca9fa" autoIncrement="false" autoIncrementSequenceName="PersonRace_PersonRaceID_seq_1" defaultValue="" name="PersonRaceTypeID" nullable="1" physicalName="PersonRaceTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL142" populated="true" UUID="0c3701d2-d6d1-42d3-8d31-46225cb061fa" autoIncrement="false" autoIncrementSequenceName="PersonEthnicityType_PersonEthnicityTypeID_seq" defaultValue="" name="PersonEthnicityTypeID" nullable="0" physicalName="PersonEthnicityTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL142" populated="true" UUID="0c3701d2-d6d1-42d3-8d31-46225cb061fa" autoIncrement="false" autoIncrementSequenceName="PersonEthnicityType_PersonEthnicityTypeID_seq" defaultValue="" name="PersonEthnicityTypeID" nullable="1" physicalName="PersonEthnicityTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL143" populated="true" UUID="6f379638-b7a5-4db9-9c27-572ff58cace0" autoIncrement="false" autoIncrementSequenceName="MilitaryServiceStatusType_MilitaryServiceStatusTypeID_seq_1" defaultValue="" name="MilitaryServiceStatusTypeID" nullable="1" physicalName="MilitaryServiceStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -1370,10 +1370,10 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.LiquibaseDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="55" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="213" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="756" y="359" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB60" x="323" y="51" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB65" x="67" y="135" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
