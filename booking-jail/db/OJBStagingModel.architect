@@ -1103,7 +1103,7 @@
   <table id="TAB304" populated="true" UUID="7e872952-e598-46e6-b17c-77d3edd82614" name="TreatmentInitiationType" objectType="TABLE" physicalName="TreatmentInitiationType" >
    <remarks></remarks>
    <folder id="FOLTAB3041" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL305" populated="true" UUID="afd8a286-e94c-4285-8bb1-edfb21e6719e" autoIncrement="true" autoIncrementSequenceName="TreatmentInitiationType_TreatmentInitiationType_seq_1" defaultValue="" name="TreatmentInitiationTypeID" nullable="0" physicalName="TreatmentInitiationType" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL305" populated="true" UUID="afd8a286-e94c-4285-8bb1-edfb21e6719e" autoIncrement="true" autoIncrementSequenceName="TreatmentInitiationType_TreatmentInitiationType_seq_1" defaultValue="" name="TreatmentInitiationTypeID" nullable="0" physicalName="TreatmentInitiationTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL306" populated="true" UUID="8656713f-cc1e-4d56-bd9f-53cbcd703775" autoIncrement="false" autoIncrementSequenceName="TreatmentInitiationType_TreatmentInitiationTypeDescription_seq" defaultValue="" name="TreatmentInitiationTypeDescription" nullable="0" physicalName="TreatmentInitiationTypeDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -1116,7 +1116,7 @@
     </folder>
     <folder id="FOLTAB3044" populated="true" name="Indices" physicalName="Indices" type="4">
     <index id="IDX307" populated="true" UUID="c2871539-45b4-4a30-b7a6-1a3db980212c" clustered="false" name="TreatmentInitiationTypeID" physicalName="treatmentinitiationtypeid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC308" populated="true" UUID="dc3a876e-b8ff-45b6-be14-c95e1e06f25b" ascendingOrDescending="UNSPECIFIED" column-ref="COL305" name="TreatmentInitiationTypeID" physicalName="TreatmentInitiationType" />
+     <index-column id="IDC308" populated="true" UUID="dc3a876e-b8ff-45b6-be14-c95e1e06f25b" ascendingOrDescending="UNSPECIFIED" column-ref="COL305" name="TreatmentInitiationTypeID" physicalName="TreatmentInitiationTypeID" />
     </index>
    </folder>
   </table>
@@ -1379,7 +1379,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="57" viewportY="529" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="529" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="756" y="359" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB61" x="323" y="51" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB66" x="67" y="135" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
