@@ -1068,7 +1068,7 @@
     <folder id="FOLTAB2902" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB2904" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX293" populated="true" UUID="01a092cd-449b-4d5d-9058-31d625a058ec" clustered="false" name="SexOffenderStatusTypeID" physicalName="sexoffenderregistrationstatustypeid" primaryKeyIndex="true" unique="false" >
+    <index id="IDX293" populated="true" UUID="01a092cd-449b-4d5d-9058-31d625a058ec" clustered="false" name="SexOffenderStatusTypeID" physicalName="sexoffenderstatustypeid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC294" populated="true" UUID="1894b68c-2bd6-4e2b-be2b-b6d1c5dab491" ascendingOrDescending="UNSPECIFIED" column-ref="COL291" name="SexOffenderStatusTypeID" physicalName="SexOffenderStatusTypeID" />
     </index>
    </folder>
@@ -1208,7 +1208,7 @@
     <folder id="FOLTAB3252" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB3254" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX328" populated="true" UUID="aecc4d40-fb3d-4efb-b14d-3c89d02e966f" clustered="false" name="AssessmentCategoryType_pk" physicalName="AssessmentCategoryType_pk" primaryKeyIndex="true" unique="false" >
+    <index id="IDX328" populated="true" UUID="aecc4d40-fb3d-4efb-b14d-3c89d02e966f" clustered="false" name="AssessmentCategoryType_pk" physicalName="assessmentcategorytype_pk" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC329" populated="true" UUID="7665d150-dea5-4915-bb6f-82ab630e04fa" ascendingOrDescending="UNSPECIFIED" column-ref="COL326" name="AssessmentCategoryTypeID" physicalName="AssessmentCategoryTypeID" />
     </index>
    </folder>
@@ -1219,10 +1219,10 @@
     <column id="COL331" populated="true" UUID="a1e3faeb-8f77-419b-840d-6c9cd2028326" autoIncrement="false" autoIncrementSequenceName="BehavioralHealthAssessmentCategory_BehavioralHealthAssessmentCategoryID_seq" defaultValue="" name="BehavioralHealthAssessmentCategoryID" nullable="0" physicalName="BehavioralHealthAssessmentCategoryID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL332" populated="true" UUID="18868b50-cbd9-4f15-b0be-6b3ac40dcd6f" autoIncrement="false" autoIncrementSequenceName="BehavioralHealthAssessment_BehavioralHealthAssessmentID_seq" defaultValue="" name="BehavioralHealthAssessmentID" nullable="0" physicalName="BehavioralHealthAssessmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL332" populated="true" UUID="18868b50-cbd9-4f15-b0be-6b3ac40dcd6f" autoIncrement="false" autoIncrementSequenceName="BehavioralHealthAssessment_BehavioralHealthAssessmentID_seq_1_1" defaultValue="" name="BehavioralHealthAssessmentID" nullable="0" physicalName="BehavioralHealthAssessmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL333" populated="true" UUID="682cdc9c-2d8c-4a0e-b005-058a69f6882f" autoIncrement="false" autoIncrementSequenceName="AssessmentCategoryType_AssessmentCategoryTypeID_seq" defaultValue="" name="AssessmentCategoryTypeID" nullable="0" physicalName="AssessmentCategoryTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL333" populated="true" UUID="682cdc9c-2d8c-4a0e-b005-058a69f6882f" autoIncrement="false" autoIncrementSequenceName="AssessmentCategoryType_AssessmentCategoryTypeID_seq_1" defaultValue="" name="AssessmentCategoryTypeID" nullable="0" physicalName="AssessmentCategoryTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1231,7 +1231,7 @@
     <folder id="FOLTAB3302" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB3304" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX334" populated="true" UUID="3cf79b02-a034-4949-9528-5909a3eaa76a" clustered="false" name="BehavioralHealthAssessmentCategory_pk" physicalName="BehavioralHealthAssessmentCategory_pk" primaryKeyIndex="true" unique="false" >
+    <index id="IDX334" populated="true" UUID="3cf79b02-a034-4949-9528-5909a3eaa76a" clustered="false" name="BehavioralHealthAssessmentCategory_pk" physicalName="behavioralhealthassessmentcategory_pk" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC335" populated="true" UUID="0fcd5544-b198-46f7-b1d7-3881a5993fdb" ascendingOrDescending="UNSPECIFIED" column-ref="COL331" name="BehavioralHealthAssessmentCategoryID" physicalName="BehavioralHealthAssessmentCategoryID" />
     </index>
    </folder>
@@ -1239,7 +1239,7 @@
   <table id="TAB336" populated="true" UUID="6f8a4be3-a4f3-4b63-877c-8d7a959b0758" name="MedicaidStatusType" objectType="TABLE" physicalName="MedicaidStatusType" >
    <remarks></remarks>
    <folder id="FOLTAB3361" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL337" populated="true" UUID="9e411237-bd75-4240-980a-5afca36919d9" autoIncrement="false" autoIncrementSequenceName="MedicaidStatusType_MedicaidStatusTypeID_seq" defaultValue="" name="MedicaidStatusTypeID" nullable="0" physicalName="MedicaidStatusTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL337" populated="true" UUID="9e411237-bd75-4240-980a-5afca36919d9" autoIncrement="false" autoIncrementSequenceName="MedicaidStatusType_MedicaidStatusTypeID_seq_1" defaultValue="" name="MedicaidStatusTypeID" nullable="0" physicalName="MedicaidStatusTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL338" populated="true" UUID="9194413c-8623-40d3-a2aa-aa2502f52fcf" autoIncrement="false" autoIncrementSequenceName="MedicaidStatusType_MedicaidStatusTypeDescription_seq" defaultValue="" name="MedicaidStatusTypeDescription" nullable="0" physicalName="MedicaidStatusTypeDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -1251,7 +1251,7 @@
     <folder id="FOLTAB3362" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB3364" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX339" populated="true" UUID="4ec7dae8-4236-41cc-b1ed-50db807b4fec" clustered="false" name="MedicaidStatusType_pk" physicalName="MedicaidStatusType_pk" primaryKeyIndex="true" unique="false" >
+    <index id="IDX339" populated="true" UUID="4ec7dae8-4236-41cc-b1ed-50db807b4fec" clustered="false" name="MedicaidStatusType_pk" physicalName="medicaidstatustype_pk" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC340" populated="true" UUID="4f485073-007d-4343-866a-7fdb991d582f" ascendingOrDescending="UNSPECIFIED" column-ref="COL337" name="MedicaidStatusTypeID" physicalName="MedicaidStatusTypeID" />
     </index>
    </folder>
@@ -1314,7 +1314,7 @@
    <relationship id="REL377" populated="true" UUID="dcdb12a0-64f3-42e1-84fb-bd1cf3bd744c" deferrability="7" deleteRule="3" fk-table-ref="TAB243" fkCardinality="7" identifying="false" name="BehavioralHealthAssessment_PrescribedMedication_fk" physicalName="behavioralhealthassessment_prescribedmedication_fk" pk-table-ref="TAB94" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP378" populated="true" UUID="4bff0050-f225-43bf-b3a4-1373d580da6d" fk-column-ref="COL245" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL95" />
    </relationship>
-   <relationship id="REL379" populated="true" UUID="275d0d72-5c7f-47b3-b1be-d484445520bc" deferrability="7" deleteRule="3" fk-table-ref="TAB330" fkCardinality="7" identifying="false" name="BehavioralHealthAssessment_BehavioralHealthAssessmentCategory_fk" physicalName="BehavioralHealthAssessment_BehavioralHealthAssessmentCategory_fk" pk-table-ref="TAB94" pkCardinality="2" updateRule="3" >
+   <relationship id="REL379" populated="true" UUID="275d0d72-5c7f-47b3-b1be-d484445520bc" deferrability="7" deleteRule="3" fk-table-ref="TAB330" fkCardinality="7" identifying="false" name="BehavioralHealthAssessment_BehavioralHealthAssessmentCategory_fk" physicalName="behavioralhealthassessment_behavioralhealthassessmentcategory_fk" pk-table-ref="TAB94" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP380" populated="true" UUID="2e55ba37-486e-4bdc-b579-1053add6b488" fk-column-ref="COL332" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL95" />
    </relationship>
    <relationship id="REL381" populated="true" UUID="4f74c397-b789-4dc1-bcd0-ccf54d3df56e" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="7" identifying="false" name="BedType_Booking_fk" physicalName="bedtype_booking_fk" pk-table-ref="TAB105" pkCardinality="2" updateRule="3" >
@@ -1413,10 +1413,10 @@
    <relationship id="REL443" populated="true" UUID="9fcce2cf-9048-46da-bf71-a97f1d2ac131" deferrability="7" deleteRule="3" fk-table-ref="TAB94" fkCardinality="7" identifying="false" name="EnrolledHealtchareProvider_BehavioralHealthAssessment_fk" physicalName="enrolledhealtchareprovider_behavioralhealthassessment_fk" pk-table-ref="TAB320" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP444" populated="true" UUID="f5c939a8-4d77-4c69-a121-c99c9a27ff2c" fk-column-ref="COL101" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL321" />
    </relationship>
-   <relationship id="REL445" populated="true" UUID="6469e395-78ff-41c8-943a-9cd790144992" deferrability="7" deleteRule="3" fk-table-ref="TAB330" fkCardinality="7" identifying="false" name="AssessmentCategoryType_BehavioralHealthAssessmentCategory_fk" physicalName="AssessmentCategoryType_BehavioralHealthAssessmentCategory_fk" pk-table-ref="TAB325" pkCardinality="2" updateRule="3" >
+   <relationship id="REL445" populated="true" UUID="6469e395-78ff-41c8-943a-9cd790144992" deferrability="7" deleteRule="3" fk-table-ref="TAB330" fkCardinality="7" identifying="false" name="AssessmentCategoryType_BehavioralHealthAssessmentCategory_fk" physicalName="assessmentcategorytype_behavioralhealthassessmentcategory_fk" pk-table-ref="TAB325" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP446" populated="true" UUID="bd26b6b2-c577-40a1-89a5-2705fdd022e3" fk-column-ref="COL333" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL326" />
    </relationship>
-   <relationship id="REL447" populated="true" UUID="219546ed-b313-46e7-aa12-a267bbb6b876" deferrability="7" deleteRule="3" fk-table-ref="TAB94" fkCardinality="7" identifying="false" name="MedicaidStatusType_BehavioralHealthAssessment_fk" physicalName="MedicaidStatusType_BehavioralHealthAssessment_fk" pk-table-ref="TAB336" pkCardinality="3" updateRule="3" >
+   <relationship id="REL447" populated="true" UUID="219546ed-b313-46e7-aa12-a267bbb6b876" deferrability="7" deleteRule="3" fk-table-ref="TAB94" fkCardinality="7" identifying="false" name="MedicaidStatusType_BehavioralHealthAssessment_fk" physicalName="medicaidstatustype_behavioralhealthassessment_fk" pk-table-ref="TAB336" pkCardinality="3" updateRule="3" >
     <column-mapping id="CMP448" populated="true" UUID="af9f2dc5-3095-4db6-b69a-db91d0b73cb1" fk-column-ref="COL100" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL337" />
    </relationship>
   </relationships>
@@ -1424,7 +1424,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="506" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="978" y="359" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB59" x="545" y="51" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB64" x="289" y="135" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
