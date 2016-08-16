@@ -17,7 +17,10 @@
 
 #' @import RMySQL
 #' @import openxlsx
+#' @export
 loadCodeTables <- function(conn, codeTableFileName) {
+
+  ret = list()
 
   spreadsheetFile <- system.file("raw", codeTableFileName, package=getPackageName())
   sheetNames <- getSheetNames(spreadsheetFile)
@@ -29,8 +32,14 @@ loadCodeTables <- function(conn, codeTableFileName) {
     }
     ct <- data.table::data.table(ct)
     writeDataFrameToDatabase(conn=conn, x=ct, tableName=codeTableName, append=FALSE)
-    assign(codeTableName, ct, envir=.GlobalEnv)
+    #assign(codeTableName, ct, envir=.GlobalEnv)
+    l <- list(ct)
+    names(l) <- c(codeTableName)
+    ret <- c(ret, l)
   }
+
+  ret
+
 }
 
 #' Generate a code table spreadsheet template with random number of rows and sequential content, reading the
