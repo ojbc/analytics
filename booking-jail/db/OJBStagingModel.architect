@@ -831,7 +831,7 @@
     <column id="COL230" populated="true" UUID="5d9d3129-d44c-4a75-b6c5-a5af138c7d82" autoIncrement="false" autoIncrementSequenceName="Treatment_EndDate_seq" defaultValue="" name="EndDate" nullable="1" physicalName="EndDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
      <remarks></remarks>
     </column>
-    <column id="COL231" populated="true" UUID="1f1d7951-7021-439c-86b7-5335d3eee257" autoIncrement="false" autoIncrementSequenceName="TreatmentInitiationType_TreatmentInitiationType_seq" defaultValue="" name="TreatmentInitiationTypeID" nullable="1" physicalName="TreatmentInitiationType" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL231" populated="true" UUID="1f1d7951-7021-439c-86b7-5335d3eee257" autoIncrement="false" autoIncrementSequenceName="TreatmentInitiationType_TreatmentInitiationType_seq" defaultValue="" name="TreatmentAdmissionReasonTypeID" nullable="1" physicalName="TreatmentInitiationType" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL232" populated="true" UUID="9947dcd4-794d-404b-b2b2-c6d227bf9a4b" autoIncrement="false" autoIncrementSequenceName="TreatmentStatusType_TreatmentStatusTypeID_seq" defaultValue="" name="TreatmentStatusTypeID" nullable="1" physicalName="TreatmentStatusTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -1073,13 +1073,13 @@
     </index>
    </folder>
   </table>
-  <table id="TAB295" populated="true" UUID="7e872952-e598-46e6-b17c-77d3edd82614" name="TreatmentInitiationType" objectType="TABLE" physicalName="TreatmentInitiationType" >
+  <table id="TAB295" populated="true" UUID="7e872952-e598-46e6-b17c-77d3edd82614" name="TreatmentAdmissionReasonType" objectType="TABLE" physicalName="TreatmentAdmissionReasonType" >
    <remarks></remarks>
    <folder id="FOLTAB2951" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL296" populated="true" UUID="afd8a286-e94c-4285-8bb1-edfb21e6719e" autoIncrement="true" autoIncrementSequenceName="TreatmentInitiationType_TreatmentInitiationType_seq_1" defaultValue="" name="TreatmentInitiationTypeID" nullable="0" physicalName="TreatmentInitiationTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL296" populated="true" UUID="afd8a286-e94c-4285-8bb1-edfb21e6719e" autoIncrement="true" autoIncrementSequenceName="TreatmentInitiationType_TreatmentInitiationType_seq_1" defaultValue="" name="TreatmentAdmissionReasonTypeID" nullable="0" physicalName="TreatmentAdmissionReasonTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL297" populated="true" UUID="8656713f-cc1e-4d56-bd9f-53cbcd703775" autoIncrement="false" autoIncrementSequenceName="TreatmentInitiationType_TreatmentInitiationTypeDescription_seq" defaultValue="" name="TreatmentInitiationTypeDescription" nullable="0" physicalName="TreatmentInitiationTypeDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL297" populated="true" UUID="8656713f-cc1e-4d56-bd9f-53cbcd703775" autoIncrement="false" autoIncrementSequenceName="TreatmentAdmissionReasonType_TreatmentAdmissionReasonTypeDescription_seq" defaultValue="" name="TreatmentAdmissionReasonTypeDescription" nullable="0" physicalName="TreatmentAdmissionReasonTypeDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1088,8 +1088,8 @@
     <folder id="FOLTAB2952" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB2954" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX298" populated="true" UUID="c2871539-45b4-4a30-b7a6-1a3db980212c" clustered="false" name="TreatmentInitiationTypeID" physicalName="treatmentinitiationtypeid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC299" populated="true" UUID="dc3a876e-b8ff-45b6-be14-c95e1e06f25b" ascendingOrDescending="UNSPECIFIED" column-ref="COL296" name="TreatmentInitiationTypeID" physicalName="TreatmentInitiationTypeID" />
+    <index id="IDX298" populated="true" UUID="c2871539-45b4-4a30-b7a6-1a3db980212c" clustered="false" name="TreatmentAdmissionReasonTypeID" physicalName="treatmentinitiationtypeid" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC299" populated="true" UUID="dc3a876e-b8ff-45b6-be14-c95e1e06f25b" ascendingOrDescending="UNSPECIFIED" column-ref="COL296" name="TreatmentAdmissionReasonTypeID" physicalName="TreatmentAdmissionReasonTypeID" />
     </index>
    </folder>
   </table>
@@ -1421,10 +1421,10 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.LiquibaseDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="710" viewportY="525" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="978" y="359" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB59" x="545" y="51" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB64" x="289" y="135" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
