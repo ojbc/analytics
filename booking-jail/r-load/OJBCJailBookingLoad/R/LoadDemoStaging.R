@@ -21,6 +21,16 @@
 #' Census website, by visiting factfinder.census.gov, select Advanced Search, then Geographies.  Chose "Census Tract - 140" as
 #' Geography Type, then the state and county of interest, and "Add to Selection".  Search for table name P1 (total population)
 #' and download.
+#' @param lookbackDayCount Number of days into the past to generate bookings
+#' @param averageDailyBookingVolume average number of bookings to generate per day
+#' @param percentPretrial Percentage of bookings into jail for pretrial detainees
+#' @param percentSentenced Percentage of bookings into jail for sentenced people
+#' @param averagePretrialStay Average number of days in jail for pretrial detainees
+#' @param averageSentenceStay Average number of days in jail for sentenced people
+#' @param recidivismRate Percentage of people who recidivate in each recidivism episode
+#' @param recidivistEpisodes Number of times to cycle through the booked population generating recidivism
+#' @param percentAssessments Percentage of booked individuals that have Behavioral Health Assessments
+#' @param baseDate the "current date" for the database...the date from which the lookback period begins
 #' @import RMySQL
 #' @import rgdal
 #' @import sp
@@ -32,7 +42,10 @@
 #' @export
 loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo",
                                 censusTractShapefileDSN, censusTractShapefileLayer, countyFIPSCode,
-                            censusTractPopulationFile) {
+                            censusTractPopulationFile, lookbackDayCount=365, averageDailyBookingVolume=2000,
+                            percentPretrial=.39, percentSentenced=.01, averagePretrialStay=1.5,
+                            averageSentenceStay=60, recidivismRate=.5, recidivistEpisodes=5, percentAssessments=.5,
+                            baseDate=Sys.Date()) {
 
   loadStartTime <- Sys.time()
 
@@ -81,7 +94,10 @@ loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo",
 
   codeTableList <- loadCodeTables(stagingConnection, "StagingCodeTables.xlsx")
 
-  txTableList <- createTransactionTables(codeTableList, 365, 2000, .25, .01, 1.4, 65)
+  txTableList <- createTransactionTables(codeTableList, lookbackDayCount, averageDailyBookingVolume,
+                                         percentPretrial, percentSentenced, averagePretrialStay,
+                                         averageSentenceStay, recidivismRate, recidivistEpisodes, percentAssessments,
+                                         baseDate)
   writeTablesToDatabase(stagingConnection, txTableList)
 
   c(codeTableList, txTableList)
@@ -89,7 +105,6 @@ loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo",
 }
 
 #' @import RMySQL
-#' @export
 writeTablesToDatabase <- function(conn, txTables) {
 
   dbWriteTable(conn, "Person", txTables$Person, append=TRUE, row.names=FALSE)
@@ -109,11 +124,10 @@ writeTablesToDatabase <- function(conn, txTables) {
 
 #' @importFrom lubridate hour<- minute<- second<- ddays
 #' @import dplyr
-#' @export
-createTransactionTables <- function(codeTableList, lookbackDayCount=365, averageDailyBookingVolume=2000,
-                                    percentPretrial=.39, percentSentenced=.01, averagePretrialStay=1.5,
-                                    averageSentenceStay=60, recidivismRate=.5, recidivistEpisodes=5,
-                                    baseDate=Sys.Date()) {
+createTransactionTables <- function(codeTableList, lookbackDayCount, averageDailyBookingVolume,
+                                    percentPretrial, percentSentenced, averagePretrialStay,
+                                    averageSentenceStay, recidivismRate, recidivistEpisodes, percentAssessments,
+                                    baseDate) {
 
   writeLines("Creating Booking Table...")
 
@@ -182,7 +196,7 @@ createTransactionTables <- function(codeTableList, lookbackDayCount=365, average
 
   writeLines("Created Person table")
 
-  bhTableList <- buildBehavioralHealthTables(Person$PersonID, df$BookingDateTime, codeTableList)
+  bhTableList <- buildBehavioralHealthTables(Person$PersonID, df$BookingDateTime, percentAssessments, codeTableList)
   ret <- c(ret, bhTableList)
 
   bookingChildTableList <- buildBookingChildTables(bookingID, ReleaseDateTime, codeTableList)
@@ -277,8 +291,7 @@ buildBookingChildTables <- function(bookingID, releaseDateTime, codeTableList) {
 
 #' @importFrom dplyr sample_frac mutate select left_join
 #' @importFrom lubridate ddays %--% days
-#' @export
-buildBehavioralHealthTables <- function(PersonID, BookingDateTime, codeTableList) {
+buildBehavioralHealthTables <- function(PersonID, BookingDateTime, percentAssessments, codeTableList) {
 
   tenProbs <- sample(10)
 
@@ -286,7 +299,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDateTime, codeTableList
 
   # 50% of inmates have BH issues
   bha <- data.frame(PersonID, BookingDateTime) %>%
-    sample_frac(.5)
+    sample_frac(percentAssessments)
 
   recs <- nrow(bha)
 
@@ -406,7 +419,6 @@ buildBehavioralHealthTables <- function(PersonID, BookingDateTime, codeTableList
 }
 
 #' @importFrom lubridate dyears %--% years
-#' @export
 buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDate) {
 
   ret <- data.frame(PersonUniqueIdentifier)
