@@ -58,7 +58,6 @@ loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo",
   dbSendQuery(stagingConnection, "truncate Agency")
   dbSendQuery(stagingConnection, "truncate AssessmentCategoryType")
   dbSendQuery(stagingConnection, "truncate SupervisionUnitType")
-  dbSendQuery(stagingConnection, "truncate BehavioralHealthDiagnosisType")
   dbSendQuery(stagingConnection, "truncate BondStatusType")
   dbSendQuery(stagingConnection, "truncate BondType")
   dbSendQuery(stagingConnection, "truncate CaseStatusType")
@@ -69,7 +68,6 @@ loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo",
   dbSendQuery(stagingConnection, "truncate JurisdictionType")
   dbSendQuery(stagingConnection, "truncate LanguageType")
   dbSendQuery(stagingConnection, "truncate MedicaidStatusType")
-  dbSendQuery(stagingConnection, "truncate MedicationType")
   dbSendQuery(stagingConnection, "truncate MilitaryServiceStatusType")
   dbSendQuery(stagingConnection, "truncate OccupationType")
   dbSendQuery(stagingConnection, "truncate PersonEthnicityType")
@@ -84,13 +82,13 @@ loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo",
   codeTableList <- loadCodeTables(stagingConnection, "StagingCodeTables.xlsx")
 
   txTableList <- createTransactionTables(codeTableList, 365, 2000, .25, .01, 1.4, 65)
+  writeTablesToDatabase(stagingConnection, txTableList)
 
   c(codeTableList, txTableList)
 
 }
 
 #' @import RMySQL
-#' @import DBI
 #' @export
 writeTablesToDatabase <- function(conn, txTables) {
 
@@ -98,8 +96,7 @@ writeTablesToDatabase <- function(conn, txTables) {
   dbWriteTable(conn, "BehavioralHealthAssessment", txTables$BehavioralHealthAssessment, append=TRUE, row.names=FALSE)
   dbWriteTable(conn, "BehavioralHealthEvaluation", txTables$BehavioralHealthEvaluation, append=TRUE, row.names=FALSE)
   dbWriteTable(conn, "BehavioralHealthAssessmentCategory", txTables$BehavioralHealthAssessmentCategory, append=TRUE, row.names=FALSE)
-  # todo: Waiting on Cenpatico input so we can finalize the model
-  #dbWriteTable(conn, "PrescribedMedication", txTables$PrescribedMedication, append=TRUE, row.names=FALSE)
+  dbWriteTable(conn, "PrescribedMedication", txTables$PrescribedMedication, append=TRUE, row.names=FALSE)
   dbWriteTable(conn, "Booking", txTables$Booking, append=TRUE, row.names=FALSE)
   dbWriteTable(conn, "BookingArrest", txTables$BookingArrest, append=TRUE, row.names=FALSE)
   dbWriteTable(conn, "BookingCharge", txTables$BookingCharge, append=TRUE, row.names=FALSE)
@@ -110,7 +107,7 @@ writeTablesToDatabase <- function(conn, txTables) {
 
 }
 
-#' @importFrom lubridate hour minute second ddays
+#' @importFrom lubridate hour<- minute<- second<- ddays
 #' @import dplyr
 #' @export
 createTransactionTables <- function(codeTableList, lookbackDayCount=365, averageDailyBookingVolume=2000,
@@ -359,6 +356,27 @@ buildBehavioralHealthTables <- function(PersonID, BookingDateTime, codeTableList
 
   writeLines(paste0("Created BH Evaluation table with ", recs, " rows."))
 
+  # 60% of assessments have medication
+
+  recs <- nrow(bha)
+  bha$n_Medication <- sample(1:3, size=recs, replace=TRUE, prob=c(4, 4, 2))
+  med <- bha %>% sample_frac(.6) %>%
+    select(BehavioralHealthAssessmentID, n_Medication)
+
+  recs <- nrow(med)
+  bhaIDs <- rep(med$BehavioralHealthAssessmentID, times=med$n_Medication)
+
+  med <- data.frame(BehavioralHealthAssessmentID=bhaIDs)
+  recs <- nrow(med)
+
+  # leaving dispensing date null for now...don't think we will use it
+  med$MedicationDescription <- paste0("Medication ", sample(1:100, recs, prob=sample(100), replace=TRUE))
+  med$MedicationDoseMeasure <- paste0(sample(c("5", "10", "50", "500", "1000"), size=recs, replace=TRUE),
+                                      sample(c(" mg", " oz", " Units", " ml"), size=recs, replace=TRUE))
+  med$PrescribedMedicationID <- seq(recs)
+
+  writeLines(paste0("Created PrescribedMedication table with ", recs, " rows."))
+
   # 30% of assessments have assigned categories
   recs <- nrow(bha)
   bha$n_Category <- sample(1:2, size=recs, prob=c(.6, .4), replace=TRUE)
@@ -381,12 +399,13 @@ buildBehavioralHealthTables <- function(PersonID, BookingDateTime, codeTableList
   ret$Treatment <- tmt
   ret$BehavioralHealthEvaluation <- ev
   ret$BehavioralHealthAssessmentCategory <- bhc
+  ret$PrescribedMedication <- med
 
   ret
 
 }
 
-#' @importFrom lubridate dyears %--%
+#' @importFrom lubridate dyears %--% years
 #' @export
 buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDate) {
 
@@ -420,8 +439,6 @@ buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDa
 #' @importFrom truncdist rtrunc
 #' @importFrom pscl rigamma pigamma
 generateRandomArresteeAges <- function(approximateMeanAge, size, minimumAge=12, maximumAge=85) {
-
-  require(pscl) # have to do this, because the library is dynamically referenced by rtrunc
 
   # we use a shape (alpha) parameter of 12, which seems to produce about the right height
   alphaParameter <- 12

@@ -18,4 +18,7 @@ Imports: RMySQL,
     dplyr,
     data.table,
     stats,
-    openxlsx
+    openxlsx,
+    lubridate,
+    pscl,
+    truncdist
