@@ -18,7 +18,7 @@
 #' @import RMySQL
 #' @import openxlsx
 #' @export
-loadCodeTables <- function(conn, codeTableFileName) {
+loadCodeTables <- function(conn, codeTableFileName, writeToDatabase=TRUE) {
 
   ret = list()
 
@@ -31,7 +31,9 @@ loadCodeTables <- function(conn, codeTableFileName) {
       ct <- dplyr::select(ct, -starts_with("X_"))
     }
     ct <- data.table::data.table(ct)
-    writeDataFrameToDatabase(conn=conn, x=ct, tableName=codeTableName, append=FALSE)
+    if (writeToDatabase) {
+      writeDataFrameToDatabase(conn=conn, x=ct, tableName=codeTableName, append=FALSE)
+    }
     #assign(codeTableName, ct, envir=.GlobalEnv)
     l <- list(ct)
     names(l) <- c(codeTableName)

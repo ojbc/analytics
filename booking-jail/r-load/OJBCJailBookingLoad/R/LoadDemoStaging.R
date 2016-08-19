@@ -14,6 +14,7 @@
 
 #' Loads the booking/jail staging database with demo data.
 #' @param databaseName the MySQL database in which to save the data (assumes write access to user=root and blank password)
+#' @param databaseHost the hostname of the machine on which MySQL is running, with a database named "databaseName" created and populated via DDL
 #' @param countyFIPSCode the FIPS code for the county of interest
 #' @param censusTractShapefileDSN Path to folder containing tract shapefiles.  Download shapefiles from https://www.census.gov/geo/maps-data/data/cbf/cbf_tracts.html
 #' @param censusTractShapefileLayer Layer within the shapefile (should be same name as last part of DSN path)
@@ -31,6 +32,7 @@
 #' @param recidivistEpisodes Number of times to cycle through the booked population generating recidivism
 #' @param percentAssessments Percentage of booked individuals that have Behavioral Health Assessments
 #' @param baseDate the "current date" for the database...the date from which the lookback period begins
+#' @param writeToDatabase whether to write to the database, or just create the data frames in the local environment (the return value)
 #' @import RMySQL
 #' @import rgdal
 #' @import sp
@@ -40,16 +42,41 @@
 #' @examples
 #' loadDemoStaging(censusTractShapefileDSN="/opt/data/Shapefiles/gz_2010_08_150_00_500k", censusTractShapefileLayer="gz_2010_08_150_00_500k", countyFIPSCode="001", censusTractPopulationFile="/opt/data/Census/DEC_10_SF1_P1_with_ann.csv")
 #' @export
-loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo",
+loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo", databaseHost="localhost",
                                 censusTractShapefileDSN, censusTractShapefileLayer, countyFIPSCode,
                             censusTractPopulationFile, lookbackDayCount=365, averageDailyBookingVolume=2000,
                             percentPretrial=.39, percentSentenced=.01, averagePretrialStay=1.5,
                             averageSentenceStay=60, recidivismRate=.5, recidivistEpisodes=5, percentAssessments=.5,
-                            baseDate=Sys.Date()) {
+                            baseDate=Sys.Date(), writeToDatabase=TRUE) {
 
   loadStartTime <- Sys.time()
 
-  stagingConnection <- dbConnect(MySQL(), host="localhost", dbname=databaseName, username="root")
+  stagingConnection <- dbConnect(MySQL(), host=databaseHost, dbname=databaseName, username="root")
+
+  if (writeToDatabase) {
+    wipeCurrentDatabase(stagingConnection)
+  } else {
+    writeLines("writeToDatabase set to FALSE, therefore current db was not wiped")
+  }
+
+  codeTableList <- loadCodeTables(stagingConnection, "StagingCodeTables.xlsx", writeToDatabase)
+
+  txTableList <- createTransactionTables(codeTableList, lookbackDayCount, averageDailyBookingVolume,
+                                         percentPretrial, percentSentenced, averagePretrialStay,
+                                         averageSentenceStay, recidivismRate, recidivistEpisodes, percentAssessments,
+                                         baseDate)
+
+  if (writeToDatabase) {
+    writeTablesToDatabase(stagingConnection, txTableList)
+  } else {
+    writeLines("writeToDatabase set to FALSE, therefore new tables not written to database")
+  }
+
+  c(codeTableList, txTableList)
+
+}
+
+wipeCurrentDatabase <- function(stagingConnection) {
 
   dbSendQuery(stagingConnection, "set foreign_key_checks=0")
 
@@ -91,16 +118,6 @@ loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo",
   dbSendQuery(stagingConnection, "truncate TreatmentStatusType")
   dbSendQuery(stagingConnection, "truncate WorkReleaseStatusType")
   dbSendQuery(stagingConnection, "truncate TreatmentAdmissionReasonType")
-
-  codeTableList <- loadCodeTables(stagingConnection, "StagingCodeTables.xlsx")
-
-  txTableList <- createTransactionTables(codeTableList, lookbackDayCount, averageDailyBookingVolume,
-                                         percentPretrial, percentSentenced, averagePretrialStay,
-                                         averageSentenceStay, recidivismRate, recidivistEpisodes, percentAssessments,
-                                         baseDate)
-  writeTablesToDatabase(stagingConnection, txTableList)
-
-  c(codeTableList, txTableList)
 
 }
 
