@@ -467,8 +467,19 @@ buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDa
 }
 
 #' @importFrom truncdist rtrunc
-#' @importFrom pscl rigamma pigamma
 generateRandomArresteeAges <- function(approximateMeanAge, size, minimumAge=12, maximumAge=85) {
+
+  # need this hack so that rtrunc can find these functions
+  # very tiny risk, in that this will overwrite variables with these names in the current environment, thus
+  # we err if that occurs
+  if (exists("pigamma")) {
+    stop("Variable pigamma exists in current global environment, thus cannot dynamically invoke pscl::pigamma via truncdist::rtrunc")
+  }
+  assign("pigamma", pscl::pigamma, envir=.GlobalEnv)
+  if (exists("qigamma")) {
+    stop("Variable qigamma exists in current global environment, thus cannot dynamically invoke pscl::qigamma via truncdist::rtrunc")
+  }
+  assign("qigamma", pscl::qigamma, envir=.GlobalEnv)
 
   # we use a shape (alpha) parameter of 12, which seems to produce about the right height
   alphaParameter <- 12
@@ -485,6 +496,10 @@ generateRandomArresteeAges <- function(approximateMeanAge, size, minimumAge=12, 
                 b=maximumAge/(approximateMeanAge*(alphaParameter-1)),
                 alpha=alphaParameter, beta=1)*(approximateMeanAge*(alphaParameter-1))
   options(warn=warnVal)
+
+  # clean up from hack
+  rm(pigamma)
+  rm(qigamma)
 
   ret
 
