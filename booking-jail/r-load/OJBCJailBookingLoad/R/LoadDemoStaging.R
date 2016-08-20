@@ -51,9 +51,10 @@ loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo", databaseHo
 
   loadStartTime <- Sys.time()
 
-  stagingConnection <- dbConnect(MySQL(), host=databaseHost, dbname=databaseName, username="root")
+  stagingConnection <- NULL
 
   if (writeToDatabase) {
+    stagingConnection <- dbConnect(MySQL(), host=databaseHost, dbname=databaseName, username="root")
     wipeCurrentDatabase(stagingConnection)
   } else {
     writeLines("writeToDatabase set to FALSE, therefore current db was not wiped")
