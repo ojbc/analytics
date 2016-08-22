@@ -501,7 +501,7 @@
     <column id="COL140" populated="true" UUID="a267cb7b-c641-4e44-9971-6e0d500ca897" autoIncrement="false" autoIncrementSequenceName="Incident_IncidentID_seq_1_1" defaultValue="" name="FacilityDescription" nullable="0" physicalName="FacilityDescription" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL141" populated="true" UUID="a37e5866-c703-4791-89f5-eda1c1aac293" autoIncrement="false" autoIncrementSequenceName="Facility_Capacity_seq" defaultValue="" name="Capacity" nullable="0" physicalName="Capacity" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL141" populated="true" UUID="a37e5866-c703-4791-89f5-eda1c1aac293" autoIncrement="false" autoIncrementSequenceName="Facility_Capacity_seq" defaultValue="0" name="Capacity" nullable="0" physicalName="Capacity" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -896,7 +896,7 @@
     <column id="COL250" populated="true" UUID="4d742d1a-91dc-409f-9611-dfc967f14f1c" autoIncrement="true" autoIncrementSequenceName="MilitaryServiceStatusType_MilitaryServiceStatusTypeID_seq_1_1" defaultValue="" name="MilitaryServiceStatusTypeID" nullable="0" physicalName="MilitaryServiceStatusTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL251" populated="true" UUID="98d96f79-3be7-424b-81cb-b144b06c4646" autoIncrement="false" autoIncrementSequenceName="Jail_Custody_MilitaryServiceStatusTypeDescription_seq" defaultValue="" name="MilitaryServiceStatusTypeDescription" nullable="0" physicalName="MilitaryServiceStatusTypeDescription" precision="20" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL251" populated="true" UUID="98d96f79-3be7-424b-81cb-b144b06c4646" autoIncrement="false" autoIncrementSequenceName="Jail_Custody_MilitaryServiceStatusTypeDescription_seq" defaultValue="" name="MilitaryServiceStatusTypeDescription" nullable="0" physicalName="MilitaryServiceStatusTypeDescription" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1303,10 +1303,10 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.LiquibaseDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="360" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="514" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="978" y="359" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB60" x="545" y="51" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB65" x="289" y="135" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
