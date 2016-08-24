@@ -101,7 +101,6 @@ wipeCurrentDatabase <- function(stagingConnection) {
   dbSendQuery(stagingConnection, "truncate SupervisionUnitType")
   dbSendQuery(stagingConnection, "truncate BondStatusType")
   dbSendQuery(stagingConnection, "truncate BondType")
-  dbSendQuery(stagingConnection, "truncate CaseStatusType")
   dbSendQuery(stagingConnection, "truncate ChargeClassType")
   dbSendQuery(stagingConnection, "truncate DomicileStatusType")
   dbSendQuery(stagingConnection, "truncate Facility")
@@ -168,7 +167,6 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
 
   df$FacilityID <- generateRandomIDsFromCodeTable(codeTableList, "Facility", nrow(df))
   df$SupervisionUnitTypeID <- generateRandomIDsFromCodeTable(codeTableList, "SupervisionUnitType", nrow(df))
-  df$CaseStatusTypeID <- generateRandomIDsFromCodeTable(codeTableList, "CaseStatusType", nrow(df))
   df$InmateJailResidentIndicator <- as.logical(rbinom(n=nrow(df), size=1, prob=.8))
 
   BookingDateTime <- baseDate - ddays(df$DaysAgo)
@@ -290,6 +288,7 @@ buildBookingChildTables <- function(bookingID, releaseDateTime, codeTableList) {
     mutate(BookingChargeID=seq(n()))
   recs <- nrow(BookingCharge)
   BookingCharge$ChargeCode <- paste0("Charge Code ", sample(1:200, size=recs, replace=TRUE))
+  BookingCharge$ChargeDisposition <- paste0("Charge Disposition ", sample(1:10, size=recs, replace=TRUE))
   BookingCharge$BondAmount <- sample(c(10000, 5000, 2500, 1000, 500, 50), size=recs, replace=TRUE, prob=c(10,40,30,10,5,5))
   BookingCharge$AgencyID <- generateRandomIDsFromCodeTable(codeTableList, "Agency", recs)
   BookingCharge$BondTypeID <- generateRandomIDsFromCodeTable(codeTableList, "BondType", recs)
