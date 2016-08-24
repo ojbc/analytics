@@ -18,7 +18,7 @@
 		<!-- Analytics Loading flow -->
 		<camel:route id="analyticsDataLoadingTimerRoute">
 		
-			<camel:from	uri="quartz2://analytics/analyticsLoadingProcess?cron=0+0+4+?+*+*" />
+			<camel:from	uri="quartz2://analytics/analyticsLoadingProcess?cron={{analytics.loadingProscessCronExpression}}" />
 				
 			<camel:to uri="direct:processAnalyticsLoading"/>
 					
