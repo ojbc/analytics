@@ -568,7 +568,7 @@
     <column id="COL159" populated="true" UUID="3363b1a9-10d7-4b26-ab34-14b3c0f8618d" autoIncrement="false" autoIncrementSequenceName="BookingCharge_ChargeCode_seq_1" defaultValue="" name="ChargeCode" nullable="1" physicalName="ChargeCode" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL160" populated="true" UUID="9bacfab8-24ff-4cf3-8b14-c0aa894d5861" autoIncrement="false" autoIncrementSequenceName="BookingCharge_ChargeeDisposition_seq_1" defaultValue="" name="ChargeDisposition" nullable="1" physicalName="ChargeeDisposition" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL160" populated="true" UUID="9bacfab8-24ff-4cf3-8b14-c0aa894d5861" autoIncrement="false" autoIncrementSequenceName="BookingCharge_ChargeDisposition_seq_1" defaultValue="" name="ChargeDisposition" nullable="1" physicalName="ChargeDisposition" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL161" populated="true" UUID="7baf7521-a23d-48bf-bb5c-cd13da49d9ca" autoIncrement="false" autoIncrementSequenceName="Agency_AgencyID_seq_1_2" defaultValue="" name="AgencyID" nullable="1" physicalName="AgencyID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -1234,7 +1234,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="213" viewportY="113" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="437" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="978" y="359" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB59" x="545" y="51" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB64" x="289" y="135" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
