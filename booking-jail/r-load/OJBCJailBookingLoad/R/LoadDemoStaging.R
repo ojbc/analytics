@@ -120,21 +120,25 @@ wipeCurrentDatabase <- function(stagingConnection) {
 }
 
 #' @import RMySQL
+writeTableToDatabase <- function(conn, tableName, df) {
+  writeLines(paste0("Writing table ", tableName, " to database..."))
+  dbWriteTable(conn, tableName, df, append=TRUE, row.names=FALSE)
+  writeLines("...done")
+}
+
 writeTablesToDatabase <- function(conn, txTables) {
-
-  dbWriteTable(conn, "Person", txTables$Person, append=TRUE, row.names=FALSE)
-  dbWriteTable(conn, "BehavioralHealthAssessment", txTables$BehavioralHealthAssessment, append=TRUE, row.names=FALSE)
-  dbWriteTable(conn, "BehavioralHealthEvaluation", txTables$BehavioralHealthEvaluation, append=TRUE, row.names=FALSE)
-  dbWriteTable(conn, "BehavioralHealthAssessmentCategory", txTables$BehavioralHealthAssessmentCategory, append=TRUE, row.names=FALSE)
-  dbWriteTable(conn, "PrescribedMedication", txTables$PrescribedMedication, append=TRUE, row.names=FALSE)
-  dbWriteTable(conn, "Booking", txTables$Booking, append=TRUE, row.names=FALSE)
-  dbWriteTable(conn, "BookingArrest", txTables$BookingArrest, append=TRUE, row.names=FALSE)
-  dbWriteTable(conn, "BookingCharge", txTables$BookingCharge, append=TRUE, row.names=FALSE)
-  dbWriteTable(conn, "CustodyRelease", txTables$CustodyRelease, append=TRUE, row.names=FALSE)
-  dbWriteTable(conn, "CustodyStatusChange", txTables$CustodyStatusChange, append=TRUE, row.names=FALSE)
-  dbWriteTable(conn, "CustodyStatusChangeArrest", txTables$CustodyStatusChangeArrest, append=TRUE, row.names=FALSE)
-  dbWriteTable(conn, "CustodyStatusChangeCharge", txTables$CustodyStatusChangeCharge, append=TRUE, row.names=FALSE)
-
+  writeTableToDatabase(conn, "Person", txTables$Person)
+  writeTableToDatabase(conn, "BehavioralHealthAssessment", txTables$BehavioralHealthAssessment)
+  writeTableToDatabase(conn, "BehavioralHealthEvaluation", txTables$BehavioralHealthEvaluation)
+  writeTableToDatabase(conn, "BehavioralHealthAssessmentCategory", txTables$BehavioralHealthAssessmentCategory)
+  writeTableToDatabase(conn, "PrescribedMedication", txTables$PrescribedMedication)
+  writeTableToDatabase(conn, "Booking", txTables$Booking)
+  writeTableToDatabase(conn, "BookingArrest", txTables$BookingArrest)
+  writeTableToDatabase(conn, "BookingCharge", txTables$BookingCharge)
+  writeTableToDatabase(conn, "CustodyRelease", txTables$CustodyRelease)
+  writeTableToDatabase(conn, "CustodyStatusChange", txTables$CustodyStatusChange)
+  writeTableToDatabase(conn, "CustodyStatusChangeArrest", txTables$CustodyStatusChangeArrest)
+  writeTableToDatabase(conn, "CustodyStatusChangeCharge", txTables$CustodyStatusChangeCharge)
 }
 
 #' @importFrom lubridate hour<- minute<- second<- ddays
@@ -447,6 +451,8 @@ buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDa
   # recode 1 in 50 birthdates as NA, to simulate missing birthdates
   ret[sample(nPeople, as.integer(nPeople/50)), 'PersonBirthDate'] <- NA
 
+  tenProbs <- sample(10)
+
   ret$LanguageTypeID <- generateRandomIDsFromCodeTable(codeTableList, "LanguageType", nPeople)
   ret$PersonSexTypeID <- generateRandomIDsFromCodeTable(codeTableList, "PersonSexType", nPeople)
   ret$PersonRaceTypeID <- generateRandomIDsFromCodeTable(codeTableList, "PersonRaceType", nPeople)
@@ -495,8 +501,8 @@ generateRandomArresteeAges <- function(approximateMeanAge, size, minimumAge=12, 
   options(warn=warnVal)
 
   # clean up from hack
-  rm(pigamma)
-  rm(qigamma)
+  rm(pigamma, envir=.GlobalEnv)
+  rm(qigamma, envir=.GlobalEnv)
 
   ret
 
