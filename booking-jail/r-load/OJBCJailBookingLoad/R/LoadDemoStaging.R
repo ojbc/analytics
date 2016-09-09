@@ -43,8 +43,8 @@
 #' loadDemoStaging(censusTractShapefileDSN="/opt/data/Shapefiles/gz_2010_08_150_00_500k", censusTractShapefileLayer="gz_2010_08_150_00_500k", countyFIPSCode="001", censusTractPopulationFile="/opt/data/Census/DEC_10_SF1_P1_with_ann.csv")
 #' @export
 loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo", databaseHost="localhost",
-                                censusTractShapefileDSN, censusTractShapefileLayer, countyFIPSCode,
-                            censusTractPopulationFile, lookbackDayCount=365, averageDailyBookingVolume=2000,
+                                censusTractShapefileDSN=NA, censusTractShapefileLayer=NA, countyFIPSCode=NA,
+                            censusTractPopulationFile=NA, lookbackDayCount=365, averageDailyBookingVolume=2000,
                             percentPretrial=.39, percentSentenced=.01, averagePretrialStay=1.5,
                             averageSentenceStay=60, recidivismRate=.5, recidivistEpisodes=5, percentAssessments=.5,
                             baseDate=Sys.Date(), writeToDatabase=TRUE) {
