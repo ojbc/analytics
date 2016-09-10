@@ -132,6 +132,7 @@ writeTablesToDatabase <- function(conn, txTables) {
   writeTableToDatabase(conn, "BehavioralHealthEvaluation", txTables$BehavioralHealthEvaluation)
   writeTableToDatabase(conn, "BehavioralHealthAssessmentCategory", txTables$BehavioralHealthAssessmentCategory)
   writeTableToDatabase(conn, "PrescribedMedication", txTables$PrescribedMedication)
+  writeTableToDatabase(conn, "Treatment", txTables$Treatment)
   writeTableToDatabase(conn, "Booking", txTables$Booking)
   writeTableToDatabase(conn, "BookingArrest", txTables$BookingArrest)
   writeTableToDatabase(conn, "BookingCharge", txTables$BookingCharge)
