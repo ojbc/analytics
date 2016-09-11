@@ -174,12 +174,14 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   df$SupervisionUnitTypeID <- generateRandomIDsFromCodeTable(codeTableList, "SupervisionUnitType", nrow(df))
   df$InmateJailResidentIndicator <- as.logical(rbinom(n=nrow(df), size=1, prob=.8))
 
-  BookingDateTime <- baseDate - ddays(df$DaysAgo)
-  hour(BookingDateTime) <- sample(0:23, size=length(BookingDateTime), replace = TRUE)
-  minute(BookingDateTime) <- sample(0:59, size=length(BookingDateTime), replace = TRUE)
-  second(BookingDateTime) <- sample(0:59, size=length(BookingDateTime), replace = TRUE)
+  df$BookingDate <- baseDate - ddays(df$DaysAgo)
 
-  df$BookingDateTime <- as.POSIXct(BookingDateTime)
+  nn <- nrow(df)
+
+  df$BookingTime <- paste0(
+    sample(0:23, size=nn, replace = TRUE), ':',
+    sample(0:59, size=nn, replace = TRUE), ':',
+    sample(0:59, size=nn, replace = TRUE))
 
   # can't use mutate and lubridate together on this because the lubridate overloaded minus ("-") doesn't handle NAs well...
   df[!is.na(df$ReleaseDay), 'ScheduledReleaseDate'] <- as.Date(baseDate - ddays(df[!is.na(df$ReleaseDay), 'ReleaseDay']), origin="1970-01-01")
@@ -189,12 +191,11 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
     mutate(BookingNumber=paste0("B", formatC(BookingNumber, width=12, flag="0")))
 
   ReleaseDateTime <- df$ScheduledReleaseDate
-  hour(ReleaseDateTime) <- sample(0:23, size=length(BookingDateTime), replace = TRUE)
-  minute(ReleaseDateTime) <- sample(0:59, size=length(BookingDateTime), replace = TRUE)
-  second(ReleaseDateTime) <- sample(0:59, size=length(BookingDateTime), replace = TRUE)
-  df$ReleaseDateTime <- ReleaseDateTime
+  hour(ReleaseDateTime) <- sample(0:23, size=nn, replace = TRUE)
+  minute(ReleaseDateTime) <- sample(0:59, size=nn, replace = TRUE)
+  second(ReleaseDateTime) <- sample(0:59, size=nn, replace = TRUE)
 
-  ret$Booking <- df %>% select(-DaysAgo, -LengthOfStay, -ReleaseDay, -ReleaseDateTime, -Disposition)
+  ret$Booking <- df %>% select(-DaysAgo, -LengthOfStay, -ReleaseDay, -Disposition)
 
   writeLines(paste0("...Booking table created with ", nrow(df), " rows."))
 
@@ -215,7 +216,7 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
 
   writeLines("Created Person table")
 
-  bhTableList <- buildBehavioralHealthTables(Person$PersonID, df$BookingDateTime, percentAssessments, codeTableList)
+  bhTableList <- buildBehavioralHealthTables(Person$PersonID, df$BookingDate, percentAssessments, codeTableList)
   ret <- c(ret, bhTableList)
 
   bookingChildTableList <- buildBookingChildTables(bookingID, ReleaseDateTime, codeTableList)
@@ -264,12 +265,16 @@ buildChangeTables <- function(txTableList, codeTableList) {
 }
 
 #' @import dplyr
+#' @importFrom lubridate as_date hour minute second
 buildBookingChildTables <- function(bookingID, releaseDateTime, codeTableList) {
 
   ret <- list()
 
-  CustodyRelease <- data.frame(BookingID=bookingID, ReleaseDateTime=releaseDateTime) %>%
-    filter(!is.na(ReleaseDateTime)) %>%
+  ReleaseTime <- paste0(hour(releaseDateTime), ':', minute(releaseDateTime), ':', as.integer(second(releaseDateTime)))
+  ReleaseDate <- as_date(releaseDateTime)
+
+  CustodyRelease <- data.frame(BookingID=bookingID, ReleaseDate=ReleaseDate, ReleaseTime=ReleaseTime) %>%
+    filter(!is.na(ReleaseDate)) %>%
     mutate(CustodyReleaseID=seq(n()))
 
   writeLines(paste0("Created CustodyRelease table with ", nrow(CustodyRelease), " rows"))
@@ -311,24 +316,24 @@ buildBookingChildTables <- function(bookingID, releaseDateTime, codeTableList) {
 
 #' @importFrom dplyr sample_frac mutate select left_join
 #' @importFrom lubridate ddays %--% days
-buildBehavioralHealthTables <- function(PersonID, BookingDateTime, percentAssessments, codeTableList) {
+buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessments, codeTableList) {
 
   tenProbs <- sample(10)
 
   ret <- list()
 
   # 50% of inmates have BH issues
-  bha <- data.frame(PersonID, BookingDateTime) %>%
+  bha <- data.frame(PersonID, BookingDate) %>%
     sample_frac(percentAssessments)
 
   recs <- nrow(bha)
 
-  bha$CareEpisodeStartDate <- as.Date(bha$BookingDateTime - ddays(rchisq(n=recs, df=90)))
+  bha$CareEpisodeStartDate <- as.Date(bha$BookingDate - ddays(rchisq(n=recs, df=90)))
   bha$CareEpisodeEndDate <- as.Date(bha$CareEpisodeStartDate + ddays(rchisq(n=recs, df=45)))
 
   bha <- bha %>%
-    mutate(CareEpisodeEndDate=replace(CareEpisodeEndDate, CareEpisodeEndDate > as.Date(BookingDateTime), NA)) %>%
-    select(-BookingDateTime)
+    mutate(CareEpisodeEndDate=replace(CareEpisodeEndDate, CareEpisodeEndDate > BookingDate, NA)) %>%
+    select(-BookingDate)
 
   bha[sample(recs, recs*.1), 'CareEpisodeEndDate'] <- NA
 
