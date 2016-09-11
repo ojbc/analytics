@@ -37,6 +37,14 @@ defaultMedicationTextValueConverter <- function(textValues) {
   as.integer(gsub(x=textValues, pattern="Medication ([0-9]+)", replacement="\\1"))
 }
 
+defaultDispositionTextConverter <- function(textValues) {
+  as.integer(gsub(x=textValues, pattern="Charge Disposition ([0-9]+)", replacement="\\1"))
+}
+
+defaultChargeCodeTextConverter <- function(textValues) {
+  as.integer(gsub(x=textValues, pattern="Charge Code ([0-9]+)", replacement="\\1"))
+}
+
 #' @importFrom DBI dbGetQuery
 #' @importFrom lubridate ymd_hms
 getLastLoadingTime <- function(adsConnection) {
@@ -76,8 +84,6 @@ updateLoadHistory <- function(adsConnection, currentLoadTime) {
 
 buildJailEpisodeTables <- function(stagingConnection, lastLoadTime, currentLoadTime, loadHistoryID, unknownCodeTableValue) {
 
-  ret <- list()
-
   buildTable <- function(stagingTableName, extraFields="") {
 
     Booking <- getQuery(stagingConnection, paste0("select ", extraFields, " BookingID, PersonID, BookingDate, ",
@@ -103,10 +109,10 @@ buildJailEpisodeTables <- function(stagingConnection, lastLoadTime, currentLoadT
 
   }
 
+  ret <- list()
   ret$JailEpisode <- buildTable('Booking', "BookingNumber,")
-  # todo: determine if this works on SQL Server
+  # todo: determine if "null as BookingNumber" works on SQL Server
   ret$JailEpisodeEdits <- buildTable('CustodyStatusChange', "null as BookingNumber,")
-
   ret
 
 }
@@ -173,31 +179,52 @@ buildArrestTables <- function(stagingConnection, lastLoadTime, unknownCodeTableV
   ret <- list()
   ret$Arrest <- buildTable('Booking', 'BookingArrest')
   ret$ArrestEdits <- buildTable('CustodyStatusChange', 'CustodyStatusChangeArrest')
-
   ret
 
 }
 
-buildChargeTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue) {
+buildChargeTables <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, chargeCodeTextConverter, dispositionTextConverter) {
 
-  Charge <- getQuery(stagingConnection, paste0("select BookingCharge.* from BookingCharge, BookingArrest, Booking where ",
-                                               "BookingCharge.BookingArrestID=BookingArrest.BookingArrestID and ",
-                                               "BookingArrest.BookingID=Booking.BookingID and ",
-                                               "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+  buildTable <- function(grandparentBookingTable, parentArrestTable, chargeTable) {
 
-  Charge <- Charge %>%
-    transmute(JailEpisodeCharge=BookingChargeID,
-              JailEpisodeArrestID=BookingArrestID,
-              ChargeTypeID=unknownCodeTableValue,
-              ChargeClassTypeID=unknownCodeTableValue,
-              ChargeDispositionTypeID=unknownCodeTableValue,
-              AgencyTypeID=unknownCodeTableValue,
-              JurisdictionTypeID=unknownCodeTableValue,
-              BondStatusTypeID=unknownCodeTableValue,
-              BondTypeID=unknownCodeTableValue,
-              BondAmount=BondAmount)
+    Charge <- getQuery(stagingConnection, paste0("select ",
+                                                 chargeTable, "ID as pk, ", chargeTable, ".", parentArrestTable, "ID as ParentArrestID, ",
+                                                 parentArrestTable, ".", grandparentBookingTable, "ID as GrandparentBookingRecordPK, ",
+                                                 grandparentBookingTable, ".BookingID as GrandparentBookingID, ",
+                                                 "ChargeCode, ChargeDisposition, AgencyID, BondTypeID, BondAmount, ChargeJurisdictionTypeID, ",
+                                                 "BondStatusTypeID from ",
+                                                 grandparentBookingTable, ", ", parentArrestTable, ", ", chargeTable, " where ",
+                                                 chargeTable, ".", parentArrestTable, "ID=", parentArrestTable, ".", parentArrestTable, "ID and ",
+                                                 parentArrestTable, ".", grandparentBookingTable, "ID=", grandparentBookingTable, ".", grandparentBookingTable, "ID and ",
+                                                 grandparentBookingTable, "Timestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
-  Charge
+    Charge <- Charge %>%
+      transmute(ChargeTablePK=pk,
+                ParentArrestID=ParentArrestID,
+                GrandparentBookingRecordPK=GrandparentBookingRecordPK,
+                GrandparentBookingID=GrandparentBookingID,
+                ChargeCode=ChargeCode,
+                ChargeDisposition=ChargeDisposition,
+                ChargeClassTypeID=unknownCodeTableValue,
+                AgencyTypeID=unknownCodeTableValue,
+                JurisdictionTypeID=unknownCodeTableValue,
+                BondStatusTypeID=unknownCodeTableValue,
+                BondTypeID=unknownCodeTableValue,
+                BondAmount=BondAmount)
+
+    args <- list()
+    args$textValues <- Charge$ChargeCode
+    Charge$ChargeTypeID <- do.call(chargeCodeTextConverter, args)
+    args$textValues <- Charge$ChargeDisposition
+    Charge$ChargeDispositionTypeID <- do.call(dispositionTextConverter, args)
+
+    Charge %>% select(-ChargeCode, -ChargeDisposition)
+
+  }
+
+  ret <- list()
+  ret$Charge <- buildTable('Booking', 'BookingArrest', 'BookingCharge')
+  ret
 
 }
 
@@ -310,6 +337,8 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
                                     educationTextValueConverter=defaultEducationTextValueConverter,
                                     diagnosisTextValueConverter=defaultDiagnosisTextValueConverter,
                                     medicationTextValueConverter=defaultMedicationTextValueConverter,
+                                    chargeCodeTextConverter=defaultChargeCodeTextConverter,
+                                    dispositionTextConverter=defaultDispositionTextConverter,
                                     unknownCodeTableValue=99999,
                                     noneCodeTableValue=99998) {
 
@@ -330,7 +359,9 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   arrestTables <- buildArrestTables(stagingConnection, lastLoadTime, unknownCodeTableValue)
   ret <- c(ret, arrestTables)
 
-  ret$JailEpisodeCharge <- buildChargeTable(stagingConnection, lastLoadTime, unknownCodeTableValue)
+  chargeTables <- buildChargeTables(stagingConnection, lastLoadTime, unknownCodeTableValue, chargeCodeTextConverter, dispositionTextConverter)
+  ret <- c(ret, chargeTables)
+
   ret$BehavioralHealthAssessment <- buildBHAssessmentTable(stagingConnection, lastLoadTime, unknownCodeTableValue)
   ret$BehavioralHealthAssessmentCategory <- buildBHAssessmentCategoryTable(stagingConnection, lastLoadTime, unknownCodeTableValue)
   ret$BehavioralHealthTreatment <- buildBHTreatmentTable(stagingConnection, lastLoadTime, unknownCodeTableValue)
