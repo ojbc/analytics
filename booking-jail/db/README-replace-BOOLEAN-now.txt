@@ -6,3 +6,5 @@ The following sed commands does it:
 
 sed -i -e 's/BOOLEAN/BIT/g' analyticsDB-sqlserver.sql
 sed -i -e 's/now()/getdate()/g' analyticsDB-sqlserver.sql 
+sed -i -e 's/Date DATETIME/Date DATE/g' analyticsDB-sqlserver.sql 
+sed -i -e 's/Time DATETIME/Time TIME/g' analyticsDB-sqlserver.sql 
