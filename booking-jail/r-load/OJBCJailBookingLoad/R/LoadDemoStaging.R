@@ -157,10 +157,12 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   day <- integer()
   bookingNumber <- integer()
 
+  lastBookingNumber <- 0
   for (i in seq(lookbackDayCount)) {
     dbi <- dailyBookings[i]
     day <- c(day, rep(i, dbi))
-    bookingNumber <- c(bookingNumber, 1:dbi)
+    bookingNumber <- c(bookingNumber, lastBookingNumber + 1:dbi)
+    lastBookingNumber <- lastBookingNumber + dbi
   }
 
   df <- day %>%
@@ -187,7 +189,7 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   class(df$ScheduledReleaseDate) <- "Date"
 
   df <- df %>%
-    mutate(BookingNumber=paste0("B", formatC(BookingNumber, width=12, flag="0")))
+    mutate(BookingNumber=paste0("B", formatC(BookingNumber, width=12, flag="0", format="d")))
 
   ReleaseDateTime <- df$ScheduledReleaseDate
   hour(ReleaseDateTime) <- sample(0:23, size=nn, replace = TRUE)
