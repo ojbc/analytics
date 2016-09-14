@@ -37,6 +37,14 @@ defaultMedicationTextValueConverter <- function(textValues) {
   as.integer(gsub(x=textValues, pattern="Medication ([0-9]+)", replacement="\\1"))
 }
 
+defaultDispositionTextConverter <- function(textValues) {
+  as.integer(gsub(x=textValues, pattern="Charge Disposition ([0-9]+)", replacement="\\1"))
+}
+
+defaultChargeCodeTextConverter <- function(textValues) {
+  as.integer(gsub(x=textValues, pattern="Charge Code ([0-9]+)", replacement="\\1"))
+}
+
 #' @importFrom DBI dbGetQuery
 #' @importFrom lubridate ymd_hms
 getLastLoadingTime <- function(adsConnection) {
@@ -74,40 +82,55 @@ updateLoadHistory <- function(adsConnection, currentLoadTime) {
   loadHistoryID
 }
 
-buildInitialJailEpisodeTable <- function(stagingConnection, lastLoadTime, currentLoadTime, loadHistoryID, unknownCodeTableValue) {
+buildJailEpisodeTables <- function(stagingConnection, lastLoadTime, currentLoadTime, loadHistoryID, unknownCodeTableValue) {
 
-  Booking <- getQuery(stagingConnection, paste0("select BookingID, BookingNumber, PersonID, BookingDate, ",
-                                                "FacilityID, SupervisionUnitTypeID, InmateJailResidentIndicator from Booking ",
-                                                "where BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+  buildTable <- function(stagingTableName, extraFields="") {
 
-  JailEpisode <- Booking %>%
-    transmute(
-      JailEpisodeID=BookingID,
-      PersonID=PersonID,
-      BookingNumber=BookingNumber,
-      IsActive='Y',
-      EpisodeStartDate=BookingDate,
-      PretrialStatusTypeID=unknownCodeTableValue,
-      FacilityID=unknownCodeTableValue,
-      BedTypeID=unknownCodeTableValue,
-      CaseStatusTypeID=unknownCodeTableValue,
-      DaysAgo=(EpisodeStartDate %--% currentLoadTime) %/% days(1),
-      LengthOfStay=DaysAgo,
-      LoadHistoryID=loadHistoryID)
+    Booking <- getQuery(stagingConnection, paste0("select ", extraFields, " BookingID, PersonID, BookingDate, ",
+                                                  "FacilityID, SupervisionUnitTypeID, InmateJailResidentIndicator from ", stagingTableName,
+                                                  " where ", stagingTableName, "Timestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
-  JailEpisode
+    JailEpisode <- Booking %>%
+      transmute(
+        JailEpisodeID=BookingID,
+        PersonID=PersonID,
+        BookingNumber=BookingNumber,
+        IsActive='Y',
+        EpisodeStartDate=BookingDate,
+        PretrialStatusTypeID=unknownCodeTableValue,
+        FacilityID=unknownCodeTableValue,
+        BedTypeID=unknownCodeTableValue,
+        CaseStatusTypeID=unknownCodeTableValue,
+        DaysAgo=(EpisodeStartDate %--% currentLoadTime) %/% days(1),
+        LengthOfStay=DaysAgo,
+        LoadHistoryID=loadHistoryID)
+
+    JailEpisode
+
+  }
+
+  ret <- list()
+  ret$JailEpisode <- buildTable('Booking', "BookingNumber,")
+  # todo: determine if "null as BookingNumber" works on SQL Server
+  ret$JailEpisodeEdits <- buildTable('CustodyStatusChange', "null as BookingNumber,")
+  ret
 
 }
 
 buildPersonTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, educationTextValueConverter) {
 
-  Person <- getQuery(stagingConnection, paste0("select Person.PersonID as PersonID, PersonUniqueIdentifier, PersonAgeAtBooking, PersonBirthDate, ",
-                                               "EducationLevel, Occupation, LanguageTypeID, PersonSexTypeID, PersonRaceTypeID, ",
-                                               "PersonEthnicityTypeID, MilitaryServiceStatusTypeID, DomicileStatusTypeID, ",
-                                               "ProgramEligibilityTypeID, WorkReleaseStatusTypeID, SexOffenderStatusTypeID, BookingDate from Person, Booking ",
+  selectStatement <- paste0("select Person.PersonID as PersonID, PersonUniqueIdentifier, PersonAgeAtBooking, PersonBirthDate, ",
+                            "EducationLevel, Occupation, LanguageTypeID, PersonSexTypeID, PersonRaceTypeID, ",
+                            "PersonEthnicityTypeID, MilitaryServiceStatusTypeID, DomicileStatusTypeID, ",
+                            "ProgramEligibilityTypeID, WorkReleaseStatusTypeID, SexOffenderStatusTypeID, BookingDate")
+
+  Person <- getQuery(stagingConnection, paste0(selectStatement, " from Person, Booking ",
                                                "where BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and Person.PersonID=Booking.PersonID"))
 
-  Person <- Person %>%
+  PersonE <- getQuery(stagingConnection, paste0(selectStatement, " from Person, CustodyStatusChange ",
+                                                "where CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and Person.PersonID=CustodyStatusChange.PersonID"))
+
+  Person <- Person %>% bind_rows(PersonE) %>%
     transmute(PersonID=PersonID,
               StagingPersonUniqueIdentifier=PersonUniqueIdentifier,
               LanguageTypeID=unknownCodeTableValue,
@@ -132,44 +155,76 @@ buildPersonTable <- function(stagingConnection, lastLoadTime, unknownCodeTableVa
 
 }
 
-buildArrestTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue) {
+buildArrestTables <- function(stagingConnection, lastLoadTime, unknownCodeTableValue) {
 
-  Arrest <- getQuery(stagingConnection, paste0("select BookingArrest.BookingID, BookingArrestID, LocationLatitude, LocationLongitude, ArrestAgencyID ",
-                                               "from (BookingArrest inner join Booking on BookingArrest.BookingID=Booking.BookingID) ",
-                                               "left join Location on BookingArrest.LocationID=Location.LocationID where ",
-                                               "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+  buildTable <- function(parentBookingTable, arrestTable) {
 
-  Arrest <- Arrest %>%
-    transmute(JailEpisodeArrestID=BookingArrestID,
-              JailEpisodeID=BookingID,
-              ArrestLocationLatitude=LocationLatitude,
-              ArrestLocationLongitude=LocationLongitude,
-              AgencyTypeID=unknownCodeTableValue)
+    Arrest <- getQuery(stagingConnection, paste0("select ", parentBookingTable, ".BookingID, ", arrestTable, "ID as pk, LocationLatitude, LocationLongitude, ArrestAgencyID ",
+                                                 "from (", arrestTable, " inner join ", parentBookingTable,
+                                                 " on ", arrestTable, ".", parentBookingTable, "ID=", parentBookingTable, ".", parentBookingTable, "ID) ",
+                                                 "left join Location on ", arrestTable, ".LocationID=Location.LocationID where ",
+                                                 parentBookingTable, "Timestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
-  Arrest
+    Arrest <- Arrest %>%
+      transmute(ArrestTablePK=pk,
+                ParentBookingID=BookingID,
+                ArrestLocationLatitude=LocationLatitude,
+                ArrestLocationLongitude=LocationLongitude,
+                AgencyTypeID=unknownCodeTableValue)
+
+    Arrest
+
+  }
+
+  ret <- list()
+  ret$Arrest <- buildTable('Booking', 'BookingArrest')
+  ret$ArrestEdits <- buildTable('CustodyStatusChange', 'CustodyStatusChangeArrest')
+  ret
 
 }
 
-buildChargeTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue) {
+buildChargeTables <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, chargeCodeTextConverter, dispositionTextConverter) {
 
-  Charge <- getQuery(stagingConnection, paste0("select BookingCharge.* from BookingCharge, BookingArrest, Booking where ",
-                                               "BookingCharge.BookingArrestID=BookingArrest.BookingArrestID and ",
-                                               "BookingArrest.BookingID=Booking.BookingID and ",
-                                               "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+  buildTable <- function(grandparentBookingTable, parentArrestTable, chargeTable) {
 
-  Charge <- Charge %>%
-    transmute(JailEpisodeCharge=BookingChargeID,
-              JailEpisodeArrestID=BookingArrestID,
-              ChargeTypeID=unknownCodeTableValue,
-              ChargeClassTypeID=unknownCodeTableValue,
-              ChargeDispositionTypeID=unknownCodeTableValue,
-              AgencyTypeID=unknownCodeTableValue,
-              JurisdictionTypeID=unknownCodeTableValue,
-              BondStatusTypeID=unknownCodeTableValue,
-              BondTypeID=unknownCodeTableValue,
-              BondAmount=BondAmount)
+    Charge <- getQuery(stagingConnection, paste0("select ",
+                                                 chargeTable, "ID as pk, ", chargeTable, ".", parentArrestTable, "ID as ParentArrestID, ",
+                                                 parentArrestTable, ".", grandparentBookingTable, "ID as GrandparentBookingRecordPK, ",
+                                                 grandparentBookingTable, ".BookingID as GrandparentBookingID, ",
+                                                 "ChargeCode, ChargeDisposition, AgencyID, BondTypeID, BondAmount, ChargeJurisdictionTypeID, ",
+                                                 "BondStatusTypeID from ",
+                                                 grandparentBookingTable, ", ", parentArrestTable, ", ", chargeTable, " where ",
+                                                 chargeTable, ".", parentArrestTable, "ID=", parentArrestTable, ".", parentArrestTable, "ID and ",
+                                                 parentArrestTable, ".", grandparentBookingTable, "ID=", grandparentBookingTable, ".", grandparentBookingTable, "ID and ",
+                                                 grandparentBookingTable, "Timestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
-  Charge
+    Charge <- Charge %>%
+      transmute(ChargeTablePK=pk,
+                ParentArrestID=ParentArrestID,
+                GrandparentBookingRecordPK=GrandparentBookingRecordPK,
+                GrandparentBookingID=GrandparentBookingID,
+                ChargeCode=ChargeCode,
+                ChargeDisposition=ChargeDisposition,
+                ChargeClassTypeID=unknownCodeTableValue,
+                AgencyTypeID=unknownCodeTableValue,
+                JurisdictionTypeID=unknownCodeTableValue,
+                BondStatusTypeID=unknownCodeTableValue,
+                BondTypeID=unknownCodeTableValue,
+                BondAmount=BondAmount)
+
+    args <- list()
+    args$textValues <- Charge$ChargeCode
+    Charge$ChargeTypeID <- do.call(chargeCodeTextConverter, args)
+    args$textValues <- Charge$ChargeDisposition
+    Charge$ChargeDispositionTypeID <- do.call(dispositionTextConverter, args)
+
+    Charge %>% select(-ChargeCode, -ChargeDisposition)
+
+  }
+
+  ret <- list()
+  ret$Charge <- buildTable('Booking', 'BookingArrest', 'BookingCharge')
+  ret
 
 }
 
@@ -282,6 +337,8 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
                                     educationTextValueConverter=defaultEducationTextValueConverter,
                                     diagnosisTextValueConverter=defaultDiagnosisTextValueConverter,
                                     medicationTextValueConverter=defaultMedicationTextValueConverter,
+                                    chargeCodeTextConverter=defaultChargeCodeTextConverter,
+                                    dispositionTextConverter=defaultDispositionTextConverter,
                                     unknownCodeTableValue=99999,
                                     noneCodeTableValue=99998) {
 
@@ -294,10 +351,17 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   currentLoadTime <- now()
   loadHistoryID <- updateLoadHistory(adsConnection, currentLoadTime)
 
-  ret$JailEpisode <- buildInitialJailEpisodeTable(stagingConnection, lastLoadTime, currentLoadTime, loadHistoryID, unknownCodeTableValue)
+  jailEpisodeTables <- buildJailEpisodeTables(stagingConnection, lastLoadTime, currentLoadTime, loadHistoryID, unknownCodeTableValue)
+  ret <- c(ret, jailEpisodeTables)
+
   ret$Person <- buildPersonTable(stagingConnection, lastLoadTime, unknownCodeTableValue, educationTextValueConverter)
-  ret$JailEpisodeArrest <- buildArrestTable(stagingConnection, lastLoadTime, unknownCodeTableValue)
-  ret$JailEpisodeCharge <- buildChargeTable(stagingConnection, lastLoadTime, unknownCodeTableValue)
+
+  arrestTables <- buildArrestTables(stagingConnection, lastLoadTime, unknownCodeTableValue)
+  ret <- c(ret, arrestTables)
+
+  chargeTables <- buildChargeTables(stagingConnection, lastLoadTime, unknownCodeTableValue, chargeCodeTextConverter, dispositionTextConverter)
+  ret <- c(ret, chargeTables)
+
   ret$BehavioralHealthAssessment <- buildBHAssessmentTable(stagingConnection, lastLoadTime, unknownCodeTableValue)
   ret$BehavioralHealthAssessmentCategory <- buildBHAssessmentCategoryTable(stagingConnection, lastLoadTime, unknownCodeTableValue)
   ret$BehavioralHealthTreatment <- buildBHTreatmentTable(stagingConnection, lastLoadTime, unknownCodeTableValue)
@@ -306,6 +370,11 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   ret$Release <- buildReleaseTable(stagingConnection, lastLoadTime)
   # todo: now that you have episodes and people, you can do recidivism.  but note that you need to read the whole booking/person wad to do that right,
   #  so you have to wait until you write the final booking/person wad to the db
+
+  # When inserting arrest and charge records, just let autoincrement determine the PK value.  we don't rely on any implicit link for these
+  # fields between staging and dimensional
+
+  # When writing release records, be sure to set JailEpisode:IsActive to 'N'
 
   dbDisconnect(stagingConnection)
   dbDisconnect(adsConnection)

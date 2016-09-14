@@ -33,17 +33,17 @@
 #' @param percentAssessments Percentage of booked individuals that have Behavioral Health Assessments
 #' @param baseDate the "current date" for the database...the date from which the lookback period begins
 #' @param writeToDatabase whether to write to the database, or just create the data frames in the local environment (the return value)
-#' @import RMySQL
+#' @import DBI
 #' @import rgdal
 #' @import sp
 #' @import readr
 #' @import tidyr
 #' @import stringr
 #' @examples
-#' loadDemoStaging(censusTractShapefileDSN="/opt/data/Shapefiles/gz_2010_08_150_00_500k", censusTractShapefileLayer="gz_2010_08_150_00_500k", countyFIPSCode="001", censusTractPopulationFile="/opt/data/Census/DEC_10_SF1_P1_with_ann.csv")
+#' loadDemoStaging(connection=dbConnect(MySQL(), host="localhost", dbname="ojbc_booking_staging_demo", username="root"))
 #' @export
-loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo", databaseHost="localhost",
-                                censusTractShapefileDSN=NA, censusTractShapefileLayer=NA, countyFIPSCode=NA,
+loadDemoStaging <- function(connection=NULL,
+                            censusTractShapefileDSN=NA, censusTractShapefileLayer=NA, countyFIPSCode=NA,
                             censusTractPopulationFile=NA, lookbackDayCount=365, averageDailyBookingVolume=2000,
                             percentPretrial=.39, percentSentenced=.01, averagePretrialStay=1.5,
                             averageSentenceStay=60, recidivismRate=.5, recidivistEpisodes=5, percentAssessments=.5,
@@ -51,10 +51,9 @@ loadDemoStaging <- function(databaseName="ojbc_booking_staging_demo", databaseHo
 
   loadStartTime <- Sys.time()
 
-  stagingConnection <- NULL
+  stagingConnection <- connection
 
   if (writeToDatabase) {
-    stagingConnection <- dbConnect(MySQL(), host=databaseHost, dbname=databaseName, username="root")
     wipeCurrentDatabase(stagingConnection)
   } else {
     writeLines("writeToDatabase set to FALSE, therefore current db was not wiped")
