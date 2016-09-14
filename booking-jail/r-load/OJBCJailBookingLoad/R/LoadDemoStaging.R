@@ -252,6 +252,16 @@ buildChangeTables <- function(txTableList, codeTableList) {
   changedArrests$ArrestAgencyID <- generateRandomIDsFromCodeTable(codeTableList, "Agency", nrow(changedArrests))
   changedCharges$ChargeClassTypeID <- generateRandomIDsFromCodeTable(codeTableList, "ChargeClassType", nrow(changedCharges))
 
+  nextPersonID <- max(txTableList$Person$PersonID) + 1
+
+  ChangedPerson <- txTableList$Person %>%
+    filter(PersonID %in% changedBookings$PersonID) %>%
+    mutate(PersonID=nextPersonID + row_number())
+
+  writeLines(paste0("Adding ", nrow(ChangedPerson), " rows to Person table for CustodyStatusChange records."))
+  txTableList$Person <- bind_rows(txTableList$Person, ChangedPerson)
+  changedBookings$PersonID <- ChangedPerson$PersonID
+
   ret$CustodyStatusChange <- changedBookings
   writeLines(paste0("Created CustodyStatusChange table with ", nrow(changedBookings), " rows."))
   ret$CustodyStatusChangeArrest <- changedArrests
