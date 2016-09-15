@@ -380,7 +380,7 @@
   <table id="TAB103" populated="true" UUID="567ef488-a9b8-477d-a8ed-4a32249ebca6" name="BehavioralHealthEvaluationType" objectType="TABLE" physicalName="BehavioralHealthEvaluationType" >
    <remarks></remarks>
    <folder id="FOLTAB1031" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL104" populated="true" UUID="c47caec4-6489-44f3-9dfa-74d4c46ebfb2" autoIncrement="true" autoIncrementSequenceName="BehavioralHealthEvaluationType_BehavioralHealBehavioralHealthEvaluationTypeIDthTypeID_seq" defaultValue="" name="BehavioralHealthEvaluationTypeID" nullable="0" physicalName="BehavioralHealBehavioralHealthEvaluationTypeIDthTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL104" populated="true" UUID="c47caec4-6489-44f3-9dfa-74d4c46ebfb2" autoIncrement="true" autoIncrementSequenceName="BehavioralHealthEvaluationType_BehavioralHealthEvaluationTypeID_seq" defaultValue="" name="BehavioralHealthEvaluationTypeID" nullable="0" physicalName="BehavioralHealthEvaluationTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL105" populated="true" UUID="0460ceec-6db0-4425-902e-bdad4cdbf9e8" autoIncrement="false" autoIncrementSequenceName="BehavioralHealthEvaluationType_BehavioralHealthEvaluationTypeDescription_seq" defaultValue="" name="BehavioralHealthEvaluationTypeDescription" nullable="0" physicalName="BehavioralHealthEvaluationTypeDescription" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -393,7 +393,7 @@
     </folder>
     <folder id="FOLTAB1034" populated="true" name="Indices" physicalName="Indices" type="4">
     <index id="IDX106" populated="true" UUID="db412faa-0e34-4d04-a6e5-c5ca3be4ec44" clustered="false" name="BehavioralHealthEvaluationType_pk" physicalName="behavioralhealthevaluationtype_pk" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC107" populated="true" UUID="589b8837-968e-47e5-aa64-965bf8b7df66" ascendingOrDescending="UNSPECIFIED" column-ref="COL104" name="BehavioralHealthEvaluationTypeID" physicalName="BehavioralHealBehavioralHealthEvaluationTypeIDthTypeID" />
+     <index-column id="IDC107" populated="true" UUID="589b8837-968e-47e5-aa64-965bf8b7df66" ascendingOrDescending="UNSPECIFIED" column-ref="COL104" name="BehavioralHealthEvaluationTypeID" physicalName="BehavioralHealthEvaluationTypeID" />
     </index>
    </folder>
   </table>
@@ -1260,7 +1260,7 @@
   <table id="TAB338" populated="true" UUID="a3fea55b-3907-4629-8e00-32a01329c8cf" name="HistoricalPeriodType" objectType="TABLE" physicalName="HistoricalPeriodType" >
    <remarks></remarks>
    <folder id="FOLTAB3381" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL339" populated="true" UUID="4798be34-dfcc-4f17-a4b0-e412bf121b40" autoIncrement="true" autoIncrementSequenceName="HistoricalPeriodType_HistoricalPeriodTypeID_seq" defaultValue="" name="HistoricalPeriodTypeID" nullable="0" physicalName="HistoricalPeriodTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL339" populated="true" UUID="4798be34-dfcc-4f17-a4b0-e412bf121b40" autoIncrement="false" autoIncrementSequenceName="HistoricalPeriodType_HistoricalPeriodTypeID_seq" defaultValue="" name="HistoricalPeriodTypeID" nullable="0" physicalName="HistoricalPeriodTypeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL340" populated="true" UUID="a61d81a0-3aa9-4a3a-b652-75d0849dda31" autoIncrement="false" autoIncrementSequenceName="HistoricalPeriodType_DaysAgo_seq" defaultValue="" name="DaysAgo" nullable="0" physicalName="DaysAgo" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
