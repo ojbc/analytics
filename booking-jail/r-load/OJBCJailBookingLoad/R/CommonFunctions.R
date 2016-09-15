@@ -16,9 +16,12 @@
 
 #' @import stringr
 #' @import RMySQL
-writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE) {
+#' @importFrom readr write_delim
+writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk = FALSE) {
+
   # replacing dbWriteTable with our own, because found it to be buggy and inconsistent across platforms...
   #dbWriteTable(conn, tableName, x, row.names=FALSE, append=append)
+
   executeSQL <- function(sql) {
     #writeLines(sql)
     tryCatch(
@@ -28,6 +31,7 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE) {
         stop(e)
       })
   }
+
   formatValue <- function(value) {
     ret <- "NULL"
     if (!is.na(value)) {
@@ -41,19 +45,50 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE) {
     }
     ret
   }
-  x <- as.data.frame(x)
-  if (nrow(x) > 0) {
-    if (!append) {
-      executeSQL(paste0("delete from ", tableName))
-    }
-    colNames <- colnames(x)
-    colCount <- length(colNames)
-    for (r in 1:nrow(x)) {
-      sql <- paste0("insert into ", tableName, " (", paste0(colNames, collapse=","), ") values (")
-      for (c in 1:colCount) {
-        sql <- paste0(sql, formatValue(x[r,c]), ifelse(c == colCount, ")", ","))
+
+  if (viaBulk) {
+    cc <- class(conn)
+    if ('MySQLConnection'==cc) {
+      if (nrow(x) > 0) {
+        if (!append) {
+          executeSQL(paste0("delete from ", tableName))
+        }
+        f <- tempfile(tmpdir = "/tmp", pattern = tableName)
+        write_delim(x=x, path=f, na="\\N", delim="|", col_names=FALSE)
+        cn <- colnames(x)
+        dateCols <- as.vector(sapply(x, function(col) {inherits(col, "Date")}))
+        cne <- cn
+        cne[dateCols] <- paste0('@', cne[dateCols])
+        setString <- ""
+        fieldList <-  paste0("(", paste0(cne, collapse=','), ")")
+        if (any(dateCols)) {
+          setString <- paste0("set ", paste0(cn[dateCols], "=str_to_date(", cne[dateCols], ", '%Y-%m-%d')", collapse=","))
+          fieldList <-  paste0("(", paste0(cne, collapse=','), ")")
+        }
+        sql <- paste0("load data infile '", f, "' into table ", tableName, " fields terminated by \"|\" ", fieldList, " ", setString)
+        executeSQL(sql)
+        file.remove(f)
       }
-      executeSQL(sql)
+    } else {
+      stop(paste0("Bulk loading on unsupported database: ", cc))
+    }
+  }
+  else {
+
+    x <- as.data.frame(x)
+    if (nrow(x) > 0) {
+      if (!append) {
+        executeSQL(paste0("delete from ", tableName))
+      }
+      colNames <- colnames(x)
+      colCount <- length(colNames)
+      for (r in 1:nrow(x)) {
+        sql <- paste0("insert into ", tableName, " (", paste0(colNames, collapse=","), ") values (")
+        for (c in 1:colCount) {
+          sql <- paste0(sql, formatValue(x[r,c]), ifelse(c == colCount, ")", ","))
+        }
+        executeSQL(sql)
+      }
     }
   }
   invisible()

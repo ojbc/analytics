@@ -1042,7 +1042,7 @@
     <column id="COL282" populated="true" UUID="57150a6c-9781-4c57-b8be-90bf203ba87c" autoIncrement="false" autoIncrementSequenceName="BehavioralHealthAssessment_BehavioralHealthAssessmentID_seq_1" defaultValue="" name="BehavioralHealthAssessmentID" nullable="0" physicalName="BehavioralHealthAssessmentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL283" populated="true" UUID="75e81aec-2245-4ebf-bb87-d69dbea3018e" autoIncrement="false" autoIncrementSequenceName="BehavioralHealthEvaluationType_BehavioralHealBehavioralHealthEvaluationTypeIDthTypeID_seq_1" defaultValue="" name="BehavioralHealthEvaluationTypeID" nullable="0" physicalName="BehavioralHealBehavioralHealthEvaluationTypeIDthTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL283" populated="true" UUID="75e81aec-2245-4ebf-bb87-d69dbea3018e" autoIncrement="false" autoIncrementSequenceName="BehavioralHealthEvaluationType_BehavioralHealthEvaluationTypeID_seq_1" defaultValue="" name="BehavioralHealthEvaluationTypeID" nullable="0" physicalName="BehavioralHealthEvaluationTypeID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1278,7 +1278,7 @@
     <folder id="FOLTAB3382" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB3384" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX343" populated="true" UUID="f7a6f8e8-51d6-4774-aa0b-a1e6a7493035" clustered="false" name="HistoricalPeriodType_pk" physicalName="HistoricalPeriodType_pk" primaryKeyIndex="true" unique="false" >
+    <index id="IDX343" populated="true" UUID="f7a6f8e8-51d6-4774-aa0b-a1e6a7493035" clustered="false" name="HistoricalPeriodType_pk" physicalName="historicalperiodtype_pk" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC344" populated="true" UUID="ada47486-8a38-4adc-8414-1c485d5c40b3" ascendingOrDescending="UNSPECIFIED" column-ref="COL339" name="HistoricalPeriodTypeID" physicalName="HistoricalPeriodTypeID" />
     </index>
    </folder>
@@ -1467,10 +1467,10 @@
    <relationship id="REL465" populated="true" UUID="97639ec8-7743-419b-870e-ee9402f4e863" deferrability="7" deleteRule="3" fk-table-ref="TAB296" fkCardinality="7" identifying="false" name="TreatmentProviderType_BehavioralHealthTreatment_fk" physicalName="treatmentprovidertype_behavioralhealthtreatment_fk" pk-table-ref="TAB333" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP466" populated="true" UUID="49bbbb09-e8f8-42e5-ba9f-31b793af7205" fk-column-ref="COL301" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL334" />
    </relationship>
-   <relationship id="REL467" populated="true" UUID="c386901e-a5b3-4914-8c45-0adc4d7a92fd" deferrability="7" deleteRule="3" fk-table-ref="TAB108" fkCardinality="7" identifying="false" name="HistoricalPeriodType_BehavioralHealthAssessment_fk" physicalName="HistoricalPeriodType_BehavioralHealthAssessment_fk" pk-table-ref="TAB338" pkCardinality="2" updateRule="3" >
+   <relationship id="REL467" populated="true" UUID="c386901e-a5b3-4914-8c45-0adc4d7a92fd" deferrability="7" deleteRule="3" fk-table-ref="TAB108" fkCardinality="7" identifying="false" name="HistoricalPeriodType_BehavioralHealthAssessment_fk" physicalName="historicalperiodtype_behavioralhealthassessment_fk" pk-table-ref="TAB338" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP468" populated="true" UUID="b9e72308-b137-45fb-a26d-a640dcc2b7e7" fk-column-ref="COL114" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL339" />
    </relationship>
-   <relationship id="REL469" populated="true" UUID="253dc1ad-b2da-4b45-8edf-fc9c542712ec" deferrability="7" deleteRule="3" fk-table-ref="TAB296" fkCardinality="7" identifying="false" name="HistoricalPeriodType_BehavioralHealthTreatment_fk" physicalName="HistoricalPeriodType_BehavioralHealthTreatment_fk" pk-table-ref="TAB338" pkCardinality="2" updateRule="3" >
+   <relationship id="REL469" populated="true" UUID="253dc1ad-b2da-4b45-8edf-fc9c542712ec" deferrability="7" deleteRule="3" fk-table-ref="TAB296" fkCardinality="7" identifying="false" name="HistoricalPeriodType_BehavioralHealthTreatment_fk" physicalName="historicalperiodtype_behavioralhealthtreatment_fk" pk-table-ref="TAB338" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP470" populated="true" UUID="1a450548-924b-4bbc-a19e-365550566d3a" fk-column-ref="COL302" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL339" />
    </relationship>
   </relationships>
