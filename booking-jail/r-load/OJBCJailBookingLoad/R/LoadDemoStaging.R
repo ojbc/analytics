@@ -224,6 +224,7 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   ret <- c(ret, bookingChildTableList)
 
   changeTableList <- buildChangeTables(ret, codeTableList)
+  ret$Person <- NULL
   ret <- c(ret, changeTableList)
 
   ret
@@ -261,7 +262,8 @@ buildChangeTables <- function(txTableList, codeTableList) {
     mutate(PersonID=nextPersonID + row_number())
 
   writeLines(paste0("Adding ", nrow(ChangedPerson), " rows to Person table for CustodyStatusChange records."))
-  txTableList$Person <- bind_rows(txTableList$Person, ChangedPerson)
+  ret$Person <- bind_rows(txTableList$Person, ChangedPerson)
+
   changedBookings$PersonID <- ChangedPerson$PersonID
 
   ret$CustodyStatusChange <- changedBookings
