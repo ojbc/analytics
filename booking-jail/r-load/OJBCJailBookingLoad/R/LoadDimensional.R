@@ -35,24 +35,29 @@ defaultOccupationTextValueConverter <- function(textValues) {
   as.integer(gsub(x=textValues, pattern="Occupation ([0-9]+)", replacement="\\1"))
 }
 
-defaultDiagnosisTextValueConverter <- function(textValues) {
-  as.integer(gsub(x=textValues, pattern="Diagnosis ([0-9]+)", replacement="\\1"))
+defaultDiagnosisTextValueConverter <- function(textValues, unknownCodeTableValue) {
+  units <- as.integer(gsub(x=textValues, pattern="Diagnosis ([0-9]+)", replacement="\\1"))
+  units <- (units %/% 10) + 1
+  units <- ifelse(units > 10, unknownCodeTableValue, units)
+  units
 }
 
-defaultMedicationTextValueConverter <- function(textValues) {
-  as.integer(gsub(x=textValues, pattern="Medication ([0-9]+)", replacement="\\1"))
+defaultMedicationTextValueConverter <- function(textValues, unknownCodeTableValue) {
+  units <- as.integer(gsub(x=textValues, pattern="Medication ([0-9]+)", replacement="\\1"))
+  units <- (units %/% 10) + 1
+  units <- ifelse(units > 10, unknownCodeTableValue, units)
+  units
 }
 
 defaultDispositionTextConverter <- function(textValues) {
   as.integer(gsub(x=textValues, pattern="Charge Disposition ([0-9]+)", replacement="\\1"))
 }
 
-defaultChargeCodeTypeTextConverter <- function(textValues) {
-  as.integer(gsub(x=textValues, pattern="Charge Code ([0-9]+)", replacement="\\1"))
-}
-
-defaultChargeCodeClassTextConverter <- function(textValues) {
-  as.integer(gsub(x=textValues, pattern="Charge Code ([0-9]+)", replacement="\\1"))
+defaultChargeCodeTextConverter <- function(textValues, unknownCodeTableValue) {
+  units <- as.integer(gsub(x=textValues, pattern="Charge Code ([0-9]+)", replacement="\\1"))
+  units <- (units %% 10) + 1
+  units <- ifelse(units > 7, unknownCodeTableValue, units)
+  units
 }
 
 defaultProviderTextValueConverter <- function(textValues) {
@@ -106,7 +111,11 @@ updateLoadHistory <- function(adsConnection, currentLoadTime) {
 
 translateCodeTableValue <- function(stagingValue, codeTableName, unknownCodeTableValue, translationVectorList=list()) {
   # obviously a very simplistic translation that just replaces NA with the unknown value, and otherwise just returns the staging value as the ads value
-  ifelse(is.na(stagingValue), unknownCodeTableValue, stagingValue)
+  ret <- ifelse(is.na(stagingValue), unknownCodeTableValue, stagingValue)
+  if ('PersonRaceType' == codeTableName) {
+    ret <- ifelse(stagingValue == 7, unknownCodeTableValue, stagingValue)
+  }
+  ret
 }
 
 buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTime, currentLoadTime, loadHistoryID, unknownCodeTableValue, chargeDispositionAggregator) {
@@ -192,6 +201,7 @@ buildPersonTable <- function(stagingConnection, lastLoadTime, unknownCodeTableVa
               SexOffenderStatusTypeID=translateCodeTableValue(SexOffenderStatusTypeID, "SexOffenderStatusType", unknownCodeTableValue),
               Occupation=Occupation,
               EducationLevel=EducationLevel,
+              PopulationTypeID=unknownCodeTableValue,
               PersonAgeTypeID=ifelse(is.na(PersonBirthDate), PersonAgeAtBooking, (PersonBirthDate %--% BookingDate) %/% years(1))
               )
 
@@ -277,8 +287,11 @@ buildChargeTables <- function(stagingConnection, adsConnection, lastLoadTime, un
 
     args <- list()
     args$textValues <- Charge$ChargeCode
+    args$unknownCodeTableValue <- unknownCodeTableValue
     Charge$ChargeTypeID <- do.call(chargeCodeTypeTextConverter, args)
     Charge$ChargeClassTypeID <- do.call(chargeCodeClassTextConverter, args)
+
+    args <- list()
     args$textValues <- Charge$ChargeDisposition
     Charge$ChargeDispositionTypeID <- do.call(dispositionTextConverter, args)
 
@@ -384,6 +397,7 @@ buildBHEvaluationTable <- function(stagingConnection, lastLoadTime, unknownCodeT
 
   args <- list()
   args$textValues <- BHEvaluation$BehavioralHealthDiagnosisDescription
+  args$unknownCodeTableValue <- unknownCodeTableValue
   BHEvaluation$BehavioralHealthEvaluationTypeID <- do.call(diagnosisTextValueConverter, args)
 
   BHEvaluation %>% select(-BehavioralHealthDiagnosisDescription)
@@ -402,6 +416,7 @@ buildMedicationTable <- function(stagingConnection, lastLoadTime, unknownCodeTab
 
   args <- list()
   args$textValues <- PrescribedMedication$MedicationDescription
+  args$unknownCodeTableValue <- unknownCodeTableValue
   PrescribedMedication$MedicationTypeID <- do.call(medicationTextValueConverter, args)
 
   PrescribedMedication %>% select(-MedicationDescription)
@@ -421,8 +436,8 @@ buildAndLoadHistoricalPeriodTable <- function(adsConnection, unknownCodeTableVal
 
   lookbackPeriod <- 365*10 # ten years
 
-  df <- data.frame(HistoricalPeriodTypeID=1:lookbackPeriod,
-                   DaysAgo=1:lookbackPeriod) %>%
+  df <- data.frame(HistoricalPeriodTypeID=0:lookbackPeriod,
+                   DaysAgo=0:lookbackPeriod) %>%
     mutate(HistoricalPeriodTypeDescription1=paste0(90*(1 + DaysAgo %/% 90), " days"),
            HistoricalPeriodTypeDescription1=ifelse(DaysAgo >= 360, "360+ days", HistoricalPeriodTypeDescription1),
            HistoricalPeriodTypeDescription2=ifelse(DaysAgo >= 360, "36 months", HistoricalPeriodTypeDescription1),
@@ -452,8 +467,8 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
                                     occupationTextValueConverter=defaultOccupationTextValueConverter,
                                     diagnosisTextValueConverter=defaultDiagnosisTextValueConverter,
                                     medicationTextValueConverter=defaultMedicationTextValueConverter,
-                                    chargeCodeTypeTextConverter=defaultChargeCodeTypeTextConverter,
-                                    chargeCodeClassTextConverter=defaultChargeCodeClassTextConverter,
+                                    chargeCodeTypeTextConverter=defaultChargeCodeTextConverter,
+                                    chargeCodeClassTextConverter=defaultChargeCodeTextConverter,
                                     dispositionTextConverter=defaultDispositionTextConverter,
                                     providerTextValueConverter=defaultProviderTextValueConverter,
                                     unknownCodeTableValue=99999,
@@ -473,8 +488,6 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
 
   currentLoadTime <- now()
   loadHistoryID <- updateLoadHistory(adsConnection, currentLoadTime)
-
-  executeQuery(adsConnection, "set foreign_key_checks=0")
 
   if (writeToDatabase & completeLoad) {
     writeLines("Truncating all current tables")
@@ -616,42 +629,43 @@ persistReleases <- function(adsConnection, dfs) {
 }
 
 truncateTables <- function(adsConnection) {
-  executeQuery(adsConnection, "truncate PersonSexType")
-  executeQuery(adsConnection, "truncate PersonEthnicityType")
-  executeQuery(adsConnection, "truncate PersonRaceType")
-  executeQuery(adsConnection, "truncate PersonAgeType")
-  executeQuery(adsConnection, "truncate PersonAgeRangeType")
-  executeQuery(adsConnection, "truncate Facility")
-  executeQuery(adsConnection, "truncate Agency")
-  executeQuery(adsConnection, "truncate AssessmentCategoryType")
-  executeQuery(adsConnection, "truncate BondStatusType")
-  executeQuery(adsConnection, "truncate BondType")
-  executeQuery(adsConnection, "truncate ChargeClassType")
-  executeQuery(adsConnection, "truncate DomicileStatusType")
-  executeQuery(adsConnection, "truncate JurisdictionType")
-  executeQuery(adsConnection, "truncate LanguageType")
-  executeQuery(adsConnection, "truncate MedicaidStatusType")
-  executeQuery(adsConnection, "truncate MilitaryServiceStatusType")
-  executeQuery(adsConnection, "truncate ProgramEligibilityType")
-  executeQuery(adsConnection, "truncate SexOffenderStatusType")
-  executeQuery(adsConnection, "truncate SupervisionUnitType")
-  executeQuery(adsConnection, "truncate TreatmentAdmissionReasonType")
-  executeQuery(adsConnection, "truncate TreatmentStatusType")
-  executeQuery(adsConnection, "truncate WorkReleaseStatusType")
-  executeQuery(adsConnection, "truncate CaseStatusType")
-  executeQuery(adsConnection, "truncate ChargeDispositionType")
-  executeQuery(adsConnection, "truncate EducationLevelType")
-  executeQuery(adsConnection, "truncate OccupationType")
-  executeQuery(adsConnection, "truncate PopulationType")
 
-  executeQuery(adsConnection, "truncate JailEpisode")
-  executeQuery(adsConnection, "truncate Person")
-  executeQuery(adsConnection, "truncate JailEpisodeArrest")
-  executeQuery(adsConnection, "truncate JailEpisodeCharge")
-  executeQuery(adsConnection, "truncate BehavioralHealthAssessment")
-  executeQuery(adsConnection, "truncate BehavioralHealthAssessmentCategory")
-  executeQuery(adsConnection, "truncate BehavioralHealthTreatment")
-  executeQuery(adsConnection, "truncate BehavioralHealthEvaluation")
-  executeQuery(adsConnection, "truncate PrescribedMedication")
+  executeQuery(adsConnection, "delete from JailEpisodeCharge")
+  executeQuery(adsConnection, "delete from JailEpisodeArrest")
+  executeQuery(adsConnection, "delete from JailEpisode")
+  executeQuery(adsConnection, "delete from BehavioralHealthAssessmentCategory")
+  executeQuery(adsConnection, "delete from BehavioralHealthTreatment")
+  executeQuery(adsConnection, "delete from BehavioralHealthEvaluation")
+  executeQuery(adsConnection, "delete from PrescribedMedication")
+  executeQuery(adsConnection, "delete from BehavioralHealthAssessment")
+  executeQuery(adsConnection, "delete from Person")
+
+  executeQuery(adsConnection, "delete from PersonSexType")
+  executeQuery(adsConnection, "delete from PersonEthnicityType")
+  executeQuery(adsConnection, "delete from PersonRaceType")
+  executeQuery(adsConnection, "delete from PersonAgeType")
+  executeQuery(adsConnection, "delete from PersonAgeRangeType")
+  executeQuery(adsConnection, "delete from Facility")
+  executeQuery(adsConnection, "delete from Agency")
+  executeQuery(adsConnection, "delete from AssessmentCategoryType")
+  executeQuery(adsConnection, "delete from BondStatusType")
+  executeQuery(adsConnection, "delete from BondType")
+  executeQuery(adsConnection, "delete from ChargeClassType")
+  executeQuery(adsConnection, "delete from DomicileStatusType")
+  executeQuery(adsConnection, "delete from JurisdictionType")
+  executeQuery(adsConnection, "delete from LanguageType")
+  executeQuery(adsConnection, "delete from MedicaidStatusType")
+  executeQuery(adsConnection, "delete from MilitaryServiceStatusType")
+  executeQuery(adsConnection, "delete from ProgramEligibilityType")
+  executeQuery(adsConnection, "delete from SexOffenderStatusType")
+  executeQuery(adsConnection, "delete from SupervisionUnitType")
+  executeQuery(adsConnection, "delete from TreatmentAdmissionReasonType")
+  executeQuery(adsConnection, "delete from TreatmentStatusType")
+  executeQuery(adsConnection, "delete from WorkReleaseStatusType")
+  executeQuery(adsConnection, "delete from CaseStatusType")
+  executeQuery(adsConnection, "delete from ChargeDispositionType")
+  executeQuery(adsConnection, "delete from EducationLevelType")
+  executeQuery(adsConnection, "delete from OccupationType")
+  executeQuery(adsConnection, "delete from PopulationType")
 
 }
