@@ -587,8 +587,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
 
   persistTables(adsConnection, ret)
 
-  # todo: now that you have episodes and people, you can do recidivism.  but note that you need to read the whole booking/person wad to do that right,
-  #  so you have to wait until you write the final booking/person wad to the db
+  determineRecidivism(adsConnection)
 
   dbDisconnect(stagingConnection)
   dbDisconnect(adsConnection)
@@ -596,6 +595,66 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   writeLines("ADS load complete")
 
   ret
+
+}
+
+determineRecidivism <- function(adsConnection) {
+
+  writeLines("Determining recidivism")
+
+  df <- getQuery(adsConnection, paste0("select JailEpisodeID, StagingPersonUniqueIdentifier, EpisodeStartDate from JailEpisode, Person ",
+                                       "where JailEpisode.PersonID=Person.PersonID order by StagingPersonUniqueIdentifier, EpisodeStartDate"))
+
+  df <- df %>%
+    mutate(EpisodeStartDate=as.Date(EpisodeStartDate)) %>%
+    group_by(StagingPersonUniqueIdentifier) %>%
+    mutate(first=row_number()==1, last=row_number()==n(), recidivist=!(first & last), DaysToNextEpisode=NA, DaysSinceLastEpisode=NA)
+
+  recidivistIndices <- which(df$recidivist)
+
+  writeLines(paste0("Found ", length(recidivistIndices), " recidivist booking records out of ", nrow(df), " total booking records"))
+
+  executeQuery(adsConnection, "update JailEpisode set DaysSinceLastEpisode=NULL, DaysUntilNextEpisode=NULL, SixMonthRebooking='N', OneYearRebooking='N', TwoYearRebooking='N'")
+
+  for (i in recidivistIndices) {
+
+    bookingDate <- df[[i, 'EpisodeStartDate']]
+    first <- df[[i, 'first']]
+    last <- df[[i, 'last']]
+    priorBookingDate <- as.Date(NA)
+    nextBookingDate <- as.Date(NA)
+
+    if (!first) {
+      priorBookingDate <- df[[i-1, "EpisodeStartDate"]]
+    }
+
+    if (!last) {
+      nextBookingDate <- df[[i+1, "EpisodeStartDate"]]
+    }
+
+    # lubridate took considerably longer
+    DaysUntilNextEpisode <- as.numeric(nextBookingDate - bookingDate) # (bookingDate %--% nextBookingDate) %/% days(1)
+    DaysSinceLastEpisode <- as.numeric(bookingDate - priorBookingDate) # (priorBookingDate %--% bookingDate) %/% days(1)
+    SixMonthRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 180, 'Y', 'N')
+    OneYearRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 365, 'Y', 'N')
+    TwoYearRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 730, 'Y', 'N')
+
+    JailEpisodeID <- df[[i, 'JailEpisodeID']]
+
+    sql <- paste0("update JailEpisode set ",
+                  "DaysSinceLastEpisode=", ifelse(is.na(DaysSinceLastEpisode), 'NULL', as.character(DaysSinceLastEpisode)), ",",
+                  "DaysUntilNextEpisode=", ifelse(is.na(DaysUntilNextEpisode), 'NULL', as.character(DaysUntilNextEpisode)), ",",
+                  "SixMonthRebooking='", SixMonthRebooking, "', ",
+                  "OneYearRebooking='", OneYearRebooking, "', ",
+                  "TwoYearRebooking='", TwoYearRebooking, "' where JailEpisodeID=", JailEpisodeID)
+
+    executeQuery(adsConnection, sql)
+
+  }
+
+  writeLines("Recidivism determination complete")
+
+  invisible()
 
 }
 
