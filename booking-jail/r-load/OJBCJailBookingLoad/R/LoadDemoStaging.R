@@ -78,8 +78,6 @@ loadDemoStaging <- function(connection=NULL,
 
 wipeCurrentDatabase <- function(stagingConnection) {
 
-  #dbSendQuery(stagingConnection, "set foreign_key_checks=0")
-
   dbSendQuery(stagingConnection, "delete from Treatment")
   dbSendQuery(stagingConnection, "delete from PrescribedMedication")
   dbSendQuery(stagingConnection, "delete from BehavioralHealthAssessmentCategory")
@@ -208,7 +206,8 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   actualPersonDf <- buildActualPersonTable(codeTableList, unique(Person$PersonUniqueIdentifier), baseDate)
 
   Person <- Person %>% inner_join(actualPersonDf, by=c("PersonUniqueIdentifier"="PersonUniqueIdentifier")) %>%
-    mutate(PersonUniqueIdentifier=paste0("P", formatC(PersonUniqueIdentifier, width=16, flag="0")))
+    mutate(PersonUniqueIdentifier=paste0("P", formatC(PersonUniqueIdentifier, width=16, flag="0"))) %>%
+    mutate(PersonUniqueIdentifier2=PersonUniqueIdentifier)
 
   ret$Person <- Person
   ret$Booking$PersonID <- Person$PersonID
