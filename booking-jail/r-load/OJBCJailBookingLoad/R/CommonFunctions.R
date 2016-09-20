@@ -25,7 +25,7 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
   executeSQL <- function(sql) {
     #writeLines(sql)
     tryCatch(
-      dbClearResult(dbSendQuery(conn, sql)),
+      dbClearResult(dbSendStatement(conn, sql)),
       error = function(e) {
         writeLines(paste0("Attempted SQL: ", sql))
         stop(e)
