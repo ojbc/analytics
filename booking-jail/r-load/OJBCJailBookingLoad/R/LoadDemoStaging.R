@@ -119,7 +119,7 @@ wipeCurrentDatabase <- function(stagingConnection) {
 #' @import RMySQL
 writeTableToDatabase <- function(conn, tableName, df) {
   writeLines(paste0("Writing table ", tableName, " to database..."))
-  dbWriteTable(conn, tableName, df, append=TRUE, row.names=FALSE)
+  writeDataFrameToDatabase(conn, df, tableName, viaBulk=TRUE)
   writeLines("...done")
 }
 

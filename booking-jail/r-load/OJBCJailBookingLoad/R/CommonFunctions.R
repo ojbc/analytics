@@ -36,9 +36,9 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
     ret <- "NULL"
     if (!is.na(value)) {
       if (is.character(value) | is.factor(value)) {
-        ret <- paste0("\"", value, "\"")
+        ret <- paste0("'", value, "'")
       } else if (class(value) == "Date") {
-        ret <- paste0("\"", format(value, "%Y-%m-%d"), "\"")
+        ret <- paste0("'", format(value, "%Y-%m-%d"), "'")
       } else {
         ret <- as.character(value)
       }
