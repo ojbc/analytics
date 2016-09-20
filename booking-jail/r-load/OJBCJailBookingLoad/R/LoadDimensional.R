@@ -196,7 +196,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
 
 buildPersonTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, educationTextValueConverter, occupationTextValueConverter, codeTableList) {
 
-  selectStatement <- paste0("select Person.PersonID as PersonID, PersonUniqueIdentifier, PersonAgeAtBooking, PersonBirthDate, ",
+  selectStatement <- paste0("select Person.PersonID as PersonID, PersonUniqueIdentifier, PersonUniqueIdentifier2, PersonAgeAtBooking, PersonBirthDate, ",
                             "EducationLevel, Occupation, LanguageTypeID, PersonSexTypeID, PersonRaceTypeID, ",
                             "PersonEthnicityTypeID, MilitaryServiceStatusTypeID, DomicileStatusTypeID, ",
                             "ProgramEligibilityTypeID, WorkReleaseStatusTypeID, SexOffenderStatusTypeID, BookingDate")
@@ -210,6 +210,7 @@ buildPersonTable <- function(stagingConnection, lastLoadTime, unknownCodeTableVa
   Person <- Person %>% bind_rows(PersonE) %>%
     transmute(PersonID=PersonID,
               StagingPersonUniqueIdentifier=PersonUniqueIdentifier,
+              StagingPersonUniqueIdentifier2=PersonUniqueIdentifier2,
               LanguageTypeID=translateCodeTableValue(LanguageTypeID, "LanguageType", unknownCodeTableValue, codeTableList),
               PersonSexTypeID=translateCodeTableValue(PersonSexTypeID, "PersonSexType", unknownCodeTableValue, codeTableList),
               PersonRaceTypeID=translateCodeTableValue(PersonRaceTypeID, "PersonRaceType", unknownCodeTableValue, codeTableList),
@@ -602,6 +603,8 @@ determineRecidivism <- function(adsConnection) {
 
   writeLines("Determining recidivism")
 
+  # note: change StagingPersonUniqueIdentifier to "StagingPersonUniqueIdentifier2 as StagingPersonUniqueIdentifier" to use that as the basis for recidivism
+  # todo: make this a method parameter
   df <- getQuery(adsConnection, paste0("select JailEpisodeID, StagingPersonUniqueIdentifier, EpisodeStartDate from JailEpisode, Person ",
                                        "where JailEpisode.PersonID=Person.PersonID order by StagingPersonUniqueIdentifier, EpisodeStartDate"))
 
