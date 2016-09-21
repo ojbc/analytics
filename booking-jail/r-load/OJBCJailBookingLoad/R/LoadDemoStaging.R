@@ -124,24 +124,18 @@ writeTableToDatabase <- function(conn, tableName, df) {
 }
 
 writeTablesToDatabase <- function(conn, txTables) {
-  storage.mode(txTables$Person$PersonAgeAtBooking) <- 'integer'
   writeTableToDatabase(conn, "Person", txTables$Person)
   writeTableToDatabase(conn, "BehavioralHealthAssessment", txTables$BehavioralHealthAssessment)
   writeTableToDatabase(conn, "BehavioralHealthEvaluation", txTables$BehavioralHealthEvaluation)
   writeTableToDatabase(conn, "BehavioralHealthAssessmentCategory", txTables$BehavioralHealthAssessmentCategory)
-  txTables$PrescribedMedication[, "MedicationDispensingDate"] <- NA
   writeTableToDatabase(conn, "PrescribedMedication", txTables$PrescribedMedication)
   writeTableToDatabase(conn, "Treatment", txTables$Treatment)
   writeTableToDatabase(conn, "Booking", txTables$Booking)
-  txTables$BookingArrest[, "LocationID"] <- NA
   writeTableToDatabase(conn, "BookingArrest", txTables$BookingArrest)
   writeTableToDatabase(conn, "BookingCharge", txTables$BookingCharge)
-  txTables$CustodyRelease[, "ReleaseCondition"] <- NA
   writeTableToDatabase(conn, "CustodyRelease", txTables$CustodyRelease)
   writeTableToDatabase(conn, "CustodyStatusChange", txTables$CustodyStatusChange)
-  txTables$CustodyStatusChangeArrest[, "LocationID"] <- NA
   writeTableToDatabase(conn, "CustodyStatusChangeArrest", txTables$CustodyStatusChangeArrest)
-  txTables$CustodyStatusChangeCharge[, "BondRemainingAmount"] <-NA
   writeTableToDatabase(conn, "CustodyStatusChangeCharge", txTables$CustodyStatusChangeCharge)
 }
 
@@ -207,7 +201,7 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   Person <- data.frame(PersonID=df$PersonID) %>%
     mutate(PersonUniqueIdentifier=PersonID)
 
-  Person$PersonID <- 1:nrow(Person)
+  Person$PersonID <-as.integer(1:nrow(Person))
 
   actualPersonDf <- buildActualPersonTable(codeTableList, unique(Person$PersonUniqueIdentifier), baseDate)
 
@@ -229,6 +223,7 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   ret <- c(ret, bookingChildTableList)
 
   changeTableList <- buildChangeTables(ret, codeTableList)
+
   ret$Person <- NULL
   ret <- c(ret, changeTableList)
 
@@ -253,18 +248,20 @@ buildChangeTables <- function(txTableList, codeTableList) {
     mutate(CustodyStatusChangeChargeID=seq(n()))
 
   changedArrests <- changedArrests %>% select(-BookingArrestID)
+  changedArrests[, "LocationID"] <- NA
   changedCharges <- changedCharges %>% select(-BookingChargeID)
+  changedCharges[, "BondRemainingAmount"] <-NA
 
   # note:  we can change more attributes as we learn what is important to test in the ADS loading process
   changedBookings$SupervisionUnitTypeID <- generateRandomIDsFromCodeTable(codeTableList, "SupervisionUnitType", nrow(changedBookings))
   changedArrests$ArrestAgencyID <- generateRandomIDsFromCodeTable(codeTableList, "Agency", nrow(changedArrests))
   changedCharges$ChargeClassTypeID <- generateRandomIDsFromCodeTable(codeTableList, "ChargeClassType", nrow(changedCharges))
 
-  nextPersonID <- max(txTableList$Person$PersonID) + 1
+  nextPersonID <- as.integer(max(txTableList$Person$PersonID) + 1)
 
   ChangedPerson <- txTableList$Person %>%
     filter(PersonID %in% changedBookings$PersonID) %>%
-    mutate(PersonID=nextPersonID + row_number())
+    mutate(PersonID=as.integer(nextPersonID + row_number()))
 
   writeLines(paste0("Adding ", nrow(ChangedPerson), " rows to Person table for CustodyStatusChange records."))
   ret$Person <- bind_rows(txTableList$Person, ChangedPerson)
@@ -294,6 +291,7 @@ buildBookingChildTables <- function(bookingID, releaseDateTime, codeTableList) {
   CustodyRelease <- data.frame(BookingID=bookingID, ReleaseDate=ReleaseDate, ReleaseTime=ReleaseTime) %>%
     filter(!is.na(ReleaseDate)) %>%
     mutate(CustodyReleaseID=seq(n()))
+  CustodyRelease[, "ReleaseCondition"] <- NA
 
   writeLines(paste0("Created CustodyRelease table with ", nrow(CustodyRelease), " rows"))
 
@@ -304,6 +302,7 @@ buildBookingChildTables <- function(bookingID, releaseDateTime, codeTableList) {
     mutate(BookingArrestID=seq(n()))
   recs <- nrow(BookingArrest)
   BookingArrest$ArrestAgencyID <- generateRandomIDsFromCodeTable(codeTableList, "Agency", recs)
+  BookingArrest[,"LocationID"] <- NA
 
   ret$BookingArrest <- BookingArrest
 
@@ -430,6 +429,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   med$MedicationDoseMeasure <- paste0(sample(c("5", "10", "50", "500", "1000"), size=recs, replace=TRUE),
                                       sample(c(" mg", " oz", " Units", " ml"), size=recs, replace=TRUE))
   med$PrescribedMedicationID <- seq(recs)
+  med[, "MedicationDispensingDate"] <- NA
 
   writeLines(paste0("Created PrescribedMedication table with ", recs, " rows."))
 
@@ -471,7 +471,7 @@ buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDa
   birthdates <- baseDate - dyears(generateRandomArresteeAges(23, nPeople))
 
   ret$PersonBirthDate <- as.Date(birthdates)
-  ret$PersonAgeAtBooking <- as.integer((birthdates %--% baseDate) %/% years(1)) - 1
+  ret$PersonAgeAtBooking <- as.integer((birthdates %--% baseDate) %/% years(1) - 1)
   # recode 1 in 50 birthdates as NA, to simulate missing birthdates
   ret[sample(nPeople, as.integer(nPeople/50)), 'PersonBirthDate'] <- NA
 
@@ -536,7 +536,7 @@ generateRandomIDsFromCodeTable <- function(codeTableList, codeTableName, size) {
   codeTableDf <- codeTableList[[codeTableName]]
   idVector <- codeTableDf[[paste0(codeTableName, "ID")]]
   probs <- sample(nrow(codeTableDf))
-  sample(idVector, replace=TRUE, size=size, prob=probs)
+  as.integer(sample(idVector, replace=TRUE, size=size, prob=probs))
 }
 
 projectJailStay <- function(day, personID, bookingNumber, percentPretrial, percentSentenced, averagePretrialStay, averageSentenceStay) {

@@ -79,13 +79,20 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
         columnNames <-columnNames[-length(columnNames)]
 
         x <- x[c(columnNames)]
-        idColumns <- columnNames[endsWith(columnNames, "ID")]
-        for (idColumnName in idColumns){
-          x[,idColumnName] <-as.integer(x[,idColumnName])
-        }
 
-        for (booleanColumnName in columnNames[endsWith(columnNames, "Indicator")]){
-          x[,booleanColumnName] <-as.integer(x[,booleanColumnName])
+        #writeLines(paste0(sapply(x, typeof), ","))
+
+        nums = sapply(x, is.logical)
+
+        if ( sum(nums) == 1){
+          x[, nums] = as.integer(x[,nums])
+        }
+        else if(sum(nums) >1 ){
+          colNames <- names( x[, nums])
+
+          for (colName in colNames){
+            x[,colName] <-as.integer(x[,colName])
+          }
         }
 
         # To avoid the scientific notation. Ideally, we should use the options(scipen=999)
@@ -95,9 +102,7 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
         }
 
         x[, paste0(tableName, "Timestamp")] <-NA
-
         f <- tempfile(tmpdir = "C:/dev", pattern = tableName)
-
         write_delim(x=x, path=f, na="", delim="|", col_names=FALSE)
 
         sql <- paste0("BULK INSERT ", tableName, " FROM '" , f, "' WITH ( KEEPIDENTITY, FIELDTERMINATOR ='|', ROWTERMINATOR ='\n' ) ")
