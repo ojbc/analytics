@@ -69,7 +69,40 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
         executeSQL(sql)
         file.remove(f)
       }
-    } else {
+    } else if ('SQLServerConnection'==cc) {
+      if (nrow(x) > 0) {
+        if (!append) {
+          executeSQL(paste0("delete from ", tableName))
+        }
+
+        columnNames <- dbListFields(conn, tableName)
+        columnNames <-columnNames[-length(columnNames)]
+
+        x <- x[c(columnNames)]
+        idColumns <- columnNames[endsWith(columnNames, "ID")]
+        for (idColumnName in idColumns){
+          x[,idColumnName] <-as.integer(x[,idColumnName])
+        }
+
+        for (booleanColumnName in columnNames[endsWith(columnNames, "Indicator")]){
+          x[,booleanColumnName] <-as.integer(x[,booleanColumnName])
+        }
+
+        for (amountColumnName in columnNames[endsWith(columnNames, "Amount")]){
+          x[,amountColumnName] <-format(x[,amountColumnName], scientific = FALSE)
+        }
+
+        x[, paste0(tableName, "Timestamp")] <-NA
+
+        f <- tempfile(tmpdir = "C:/dev", pattern = tableName)
+
+        write_delim(x=x, path=f, na="", delim="|", col_names=FALSE)
+
+        sql <- paste0("BULK INSERT ", tableName, " FROM '" , f, "' WITH ( KEEPIDENTITY, FIELDTERMINATOR ='|', ROWTERMINATOR ='\n' ) ")
+        executeSQL(sql)
+        file.remove(f)
+      }
+    }else {
       stop(paste0("Bulk loading on unsupported database: ", cc))
     }
   }

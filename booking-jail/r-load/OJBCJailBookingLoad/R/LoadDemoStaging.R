@@ -119,11 +119,12 @@ wipeCurrentDatabase <- function(stagingConnection) {
 #' @import RMySQL
 writeTableToDatabase <- function(conn, tableName, df) {
   writeLines(paste0("Writing table ", tableName, " to database..."))
-  writeDataFrameToDatabase(conn, df, tableName, viaBulk=TRUE)
+  writeDataFrameToDatabase(conn, df, tableName, viaBulk=TRUE, append=FALSE)
   writeLines("...done")
 }
 
 writeTablesToDatabase <- function(conn, txTables) {
+  storage.mode(txTables$Person$PersonAgeAtBooking) <- 'integer'
   writeTableToDatabase(conn, "Person", txTables$Person)
   writeTableToDatabase(conn, "BehavioralHealthAssessment", txTables$BehavioralHealthAssessment)
   writeTableToDatabase(conn, "BehavioralHealthEvaluation", txTables$BehavioralHealthEvaluation)
@@ -465,7 +466,7 @@ buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDa
   birthdates <- baseDate - dyears(generateRandomArresteeAges(23, nPeople))
 
   ret$PersonBirthDate <- as.Date(birthdates)
-  ret$PersonAgeAtBooking <- ((birthdates %--% baseDate) %/% years(1)) - 1
+  ret$PersonAgeAtBooking <- as.integer((birthdates %--% baseDate) %/% years(1)) - 1
   # recode 1 in 50 birthdates as NA, to simulate missing birthdates
   ret[sample(nPeople, as.integer(nPeople/50)), 'PersonBirthDate'] <- NA
 
