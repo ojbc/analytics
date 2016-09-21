@@ -141,7 +141,7 @@ writeTablesToDatabase <- function(conn, txTables) {
   writeTableToDatabase(conn, "CustodyStatusChange", txTables$CustodyStatusChange)
   txTables$CustodyStatusChangeArrest[, "LocationID"] <- NA
   writeTableToDatabase(conn, "CustodyStatusChangeArrest", txTables$CustodyStatusChangeArrest)
-  txTables$CustodyStatusChangeCharge[, "BondRemainingAmount"] <-0
+  txTables$CustodyStatusChangeCharge[, "BondRemainingAmount"] <-NA
   writeTableToDatabase(conn, "CustodyStatusChangeCharge", txTables$CustodyStatusChangeCharge)
 }
 

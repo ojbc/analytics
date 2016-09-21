@@ -88,8 +88,10 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
           x[,booleanColumnName] <-as.integer(x[,booleanColumnName])
         }
 
+        # To avoid the scientific notation. Ideally, we should use the options(scipen=999)
+        # but for some reason, it is not working for write_delim for me. Need to figure out why -HW.
         for (amountColumnName in columnNames[endsWith(columnNames, "Amount")]){
-          x[,amountColumnName] <-format(x[,amountColumnName], scientific = FALSE)
+          x[is.na(x[,amountColumnName])== 0,amountColumnName] <-format(x[is.na(x[,amountColumnName])== 0,amountColumnName], scientific = FALSE)
         }
 
         x[, paste0(tableName, "Timestamp")] <-NA
