@@ -129,14 +129,19 @@ writeTablesToDatabase <- function(conn, txTables) {
   writeTableToDatabase(conn, "BehavioralHealthAssessment", txTables$BehavioralHealthAssessment)
   writeTableToDatabase(conn, "BehavioralHealthEvaluation", txTables$BehavioralHealthEvaluation)
   writeTableToDatabase(conn, "BehavioralHealthAssessmentCategory", txTables$BehavioralHealthAssessmentCategory)
+  txTables$PrescribedMedication[, "MedicationDispensingDate"] <- NA
   writeTableToDatabase(conn, "PrescribedMedication", txTables$PrescribedMedication)
   writeTableToDatabase(conn, "Treatment", txTables$Treatment)
   writeTableToDatabase(conn, "Booking", txTables$Booking)
+  txTables$BookingArrest[, "LocationID"] <- NA
   writeTableToDatabase(conn, "BookingArrest", txTables$BookingArrest)
   writeTableToDatabase(conn, "BookingCharge", txTables$BookingCharge)
+  txTables$CustodyRelease[, "ReleaseCondition"] <- NA
   writeTableToDatabase(conn, "CustodyRelease", txTables$CustodyRelease)
   writeTableToDatabase(conn, "CustodyStatusChange", txTables$CustodyStatusChange)
+  txTables$CustodyStatusChangeArrest[, "LocationID"] <- NA
   writeTableToDatabase(conn, "CustodyStatusChangeArrest", txTables$CustodyStatusChangeArrest)
+  txTables$CustodyStatusChangeCharge[, "BondRemainingAmount"] <-0
   writeTableToDatabase(conn, "CustodyStatusChangeCharge", txTables$CustodyStatusChangeCharge)
 }
 
