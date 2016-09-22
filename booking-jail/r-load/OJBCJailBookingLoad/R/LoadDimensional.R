@@ -132,7 +132,7 @@ translateCodeTableValue <- function(stagingValue, codeTableName, unknownCodeTabl
   as.integer(ret)
 }
 
-buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTime, currentLoadTime, loadHistoryID, unknownCodeTableValue, chargeDispositionAggregator, codeTableList) {
+buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTime, currentLoadTime, loadHistoryID, unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator, codeTableList) {
 
   buildTable <- function(StagingBookingDf, StagingBookingChargeDispositionDf, chargeDispositionAggregator) {
 
@@ -144,6 +144,9 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
         IsActive='Y',
         CaseStatusTypeID=unknownCodeTableValue,
         EpisodeStartDate=as.Date(BookingDate),
+        EpisodeStartDateID=format(EpisodeStartDate, "%Y%m%d"),
+        EpisodeEndDate=NA,
+        EpisodeEndDateID=noneCodeTableValue,
         FacilityID=translateCodeTableValue(FacilityID, "Facility", unknownCodeTableValue, codeTableList),
         SupervisionUnitTypeID=translateCodeTableValue(SupervisionUnitTypeID, "SupervisionUnitType", unknownCodeTableValue, codeTableList),
         DaysAgo=(EpisodeStartDate %--% currentLoadTime) %/% days(1),
@@ -481,6 +484,8 @@ buildReleaseTable <- function(stagingConnection, lastLoadTime, codeTableList) {
   Release <- getQuery(stagingConnection, paste0("select ReleaseDate, BookingID from CustodyRelease ",
                                                 "where CustodyReleaseTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
+  Release <- Release %>% mutate(ReleaseDate=as_date(ReleaseDate))
+
   Release
 
 }
@@ -555,7 +560,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
 
   writeLines("Loading JailEpisode tables")
   jailEpisodeTables <- buildJailEpisodeTables(stagingConnection, adsConnection, lastLoadTime, currentLoadTime, loadHistoryID,
-                                              unknownCodeTableValue, chargeDispositionAggregator, codeTableList)
+                                              unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator, codeTableList)
   ret <- c(ret, jailEpisodeTables)
   writeLines(paste0("Loaded JailEpisode with ", nrow(ret$JailEpisode), " rows and JailEpisodeEdits with ", nrow(ret$JailEpisodeEdits), " rows"))
 
@@ -594,7 +599,9 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   ret$Release <- buildReleaseTable(stagingConnection, lastLoadTime, codeTableList)
   writeLines(paste0("Loaded Release with ", nrow(ret$Release), " rows"))
 
-  persistTables(adsConnection, ret)
+  ret$Date <- loadDateDimension(adsConnection, ret, unknownCodeTableValue, noneCodeTableValue)
+
+  persistTables(adsConnection, ret, unknownCodeTableValue)
 
   determineRecidivism(adsConnection)
 
@@ -604,6 +611,24 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   writeLines("ADS load complete")
 
   ret
+
+}
+
+loadDateDimension <- function(adsConnection, dfs, unknownCodeTableValue, noneCodeTableValue) {
+
+  startDates <- getQuery(adsConnection, paste0("select max(EpisodeStartDate) as max1, min(EpisodeStartDate) as min1 from JailEpisode ",
+                                               "where EpisodeStartDate is not null"))
+  endDates <- getQuery(adsConnection, paste0("select max(EpisodeEndDate) as max2, min(EpisodeEndDate) as min2 from JailEpisode ",
+                                             "where EpisodeEndDate is not null"))
+
+  d <- cbind(startDates, endDates)
+  minDate <- min(as.integer(c(d$min1, d$min2, min(dfs$JailEpisode$EpisodeStartDate, na.rm=TRUE), min(dfs$Release$ReleaseDate, na.rm=TRUE))), na.rm=TRUE) %>% as_date()
+  maxDate <- max(as.integer(c(d$max1, d$max2, max(dfs$JailEpisode$EpisodeStartDate, na.rm=TRUE), max(dfs$Release$ReleaseDate, na.rm=TRUE))), na.rm=TRUE) %>% as_date()
+
+  DateDf <- buildDateDimensionTable(minDate, maxDate, unknownCodeTableValue, noneCodeTableValue)
+  writeDataFrameToDatabase(adsConnection, DateDf, "Date", viaBulk = TRUE)
+
+  DateDf
 
 }
 
@@ -669,7 +694,7 @@ determineRecidivism <- function(adsConnection) {
 
 }
 
-persistTables <- function(adsConnection, dfs) {
+persistTables <- function(adsConnection, dfs, unknownCodeTableValue) {
 
   checkForAndRemoveDuplicateBookings(adsConnection, dfs)
 
@@ -691,7 +716,7 @@ persistTables <- function(adsConnection, dfs) {
   applyEdits(adsConnection, dfs)
 
   writeLines("Processing releases")
-  persistReleases(adsConnection, dfs)
+  persistReleases(adsConnection, dfs, unknownCodeTableValue)
 
 }
 
@@ -807,7 +832,7 @@ removeBookingsAndChildren <- function(adsConnection, BookingIDs, groupSize=50) {
 }
 
 #' @importFrom lubridate %--%
-persistReleases <- function(adsConnection, dfs) {
+persistReleases <- function(adsConnection, dfs, unknownCodeTableValue) {
 
   bookingDf <- getQuery(adsConnection, "select JailEpisodeID, EpisodeStartDate from JailEpisode")
 
@@ -815,14 +840,19 @@ persistReleases <- function(adsConnection, dfs) {
 
     bookingDf <- bookingDf %>%
       inner_join(dfs$Release, by=c("JailEpisodeID"="BookingID")) %>%
-      mutate(LengthOfStay=(EpisodeStartDate %--% ReleaseDate) %/% days(1))
+      mutate(LengthOfStay=(EpisodeStartDate %--% ReleaseDate) %/% days(1), EpisodeEndDate=ReleaseDate) %>% select(-ReleaseDate)
 
     if (nrow(bookingDf)) {
 
       for (r in seq(nrow(bookingDf))) {
         bookingID <- bookingDf[r, 'JailEpisodeID']
         lengthOfStay <- bookingDf[r, 'LengthOfStay']
-        sql <- paste0("update JailEpisode set IsActive='N', LengthOfStay=", lengthOfStay, " where JailEpisodeID=", bookingID)
+        episodeEndDate <- bookingDf[r, 'EpisodeEndDate']
+        episodeEndDateS <- ifelse(is.na(episodeEndDate), 'NULL', format(episodeEndDate, "%Y-%m-%d"))
+        episodeEndDateID <- ifelse(is.na(episodeEndDate), unknownCodeTableValue, format(episodeEndDate, "%Y%m%d"))
+        sql <- paste0("update JailEpisode set IsActive='N', LengthOfStay=", lengthOfStay, ", EpisodeEndDate='", episodeEndDateS, "'",
+                      ", EpisodeEndDateID=", episodeEndDateID,
+                      " where JailEpisodeID=", bookingID)
         executeQuery(adsConnection, sql)
       }
 
@@ -836,6 +866,50 @@ persistReleases <- function(adsConnection, dfs) {
 
   invisible()
 
+}
+
+#' @importFrom lubridate year month day wday
+buildDateDimensionTable <- function(minDate, maxDate, unknownCodeTableValue, noneCodeTableValue) {
+  DateDf <- data.frame(CalendarDate=seq(minDate, maxDate, by="days")) %>%
+    mutate(DateID=as.integer(format(CalendarDate, "%Y%m%d")),
+           Year=year(CalendarDate),
+           YearLabel=as.character(Year),
+           CalendarQuarter=quarter(CalendarDate),
+           Month=month(CalendarDate),
+           MonthName=as.character(month(CalendarDate, label=TRUE, abbr=FALSE)),
+           FullMonth=format(CalendarDate, paste0(Year, "-", Month)),
+           Day=day(CalendarDate),
+           DayOfWeek=as.character(wday(CalendarDate, label=TRUE, abbr=FALSE)),
+           DayOfWeekSort=wday(CalendarDate),
+           DateMMDDYYYY=format(CalendarDate, "%m%d%Y")
+    ) %>%
+    bind_rows(data.frame(CalendarDate=as.Date("1899-01-01"),
+                         DateID=unknownCodeTableValue,
+                         Year=0,
+                         YearLabel='Unknown',
+                         CalendarQuarter=0,
+                         Month=0,
+                         MonthName='Unknown',
+                         FullMonth='Unknown',
+                         Day=0,
+                         DayOfWeek='Unknown',
+                         DayOfWeekSort=0,
+                         DateMMDDYYYY='Unknown',
+                         stringsAsFactors=FALSE)) %>%
+    bind_rows(data.frame(CalendarDate=as.Date("1899-01-02"),
+                         DateID=noneCodeTableValue,
+                         Year=0,
+                         YearLabel='None',
+                         CalendarQuarter=0,
+                         Month=0,
+                         MonthName='None',
+                         FullMonth='None',
+                         Day=0,
+                         DayOfWeek='None',
+                         DayOfWeekSort=0,
+                         DateMMDDYYYY='None',
+                         stringsAsFactors=FALSE))
+  DateDf
 }
 
 truncateTables <- function(adsConnection) {
@@ -878,5 +952,6 @@ truncateTables <- function(adsConnection) {
   executeQuery(adsConnection, "delete from EducationLevelType")
   executeQuery(adsConnection, "delete from OccupationType")
   executeQuery(adsConnection, "delete from PopulationType")
+  executeQuery(adsConnection, "delete from Date")
 
 }
