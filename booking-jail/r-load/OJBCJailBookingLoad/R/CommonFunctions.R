@@ -76,45 +76,19 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
         }
 
         columnNames <- dbListFields(conn, tableName)
-        writeLines(paste0(colnames(x), ","))
+        #writeLines(paste0(colnames(x), ","))
+        #writeLines(paste0(tableName, ","))
 
-        writeLines(paste0(tableName, ","))
-        x <- x[c(dbListFields(conn, tableName))] # you don't need the c() here.  dbListFields already returns a character vector
+        x <- select_(x, .dots=dbListFields(conn, tableName))
 
-        # also, the more R way to do the above is this:
-
-        #x <- select_(x, .dots=dbListFields(conn, tableName))
-
-        nums = sapply(x, is.logical)
-
-        if ( sum(nums) == 1){
-          x[, nums] = as.integer(x[,nums])
+        if (any(sapply(x, is.logical))) {
+          x <- mutate_if(x, is.logical, "as.integer")
         }
-        else if(sum(nums) >1 ){
-          colNames <- names( x[, nums])
-
-          for (colName in colNames){
-            x[,colName] <-as.integer(x[,colName])
-          }
-        }
-
-        # I think you should consider replacing the above with something more like this:
-
-        #if (any(sapply(x, is.logical))) {
-        #  x <- mutate_if(x, is.logical, "as.integer")
-        #}
-
-        # it is more the R way, and reduces 10 lines to 3
 
         # To avoid the scientific notation. Ideally, we should use the options(scipen=999)
-        # but for some reason, it is not working for write_delim for me. Need to figure out why -HW.
-        for (amountColumnName in columnNames[endsWith(columnNames, "Amount")]){
-          x[is.na(x[,amountColumnName])== 0,amountColumnName] <-format(x[is.na(x[,amountColumnName])== 0,amountColumnName], scientific = FALSE)
-        }
+        # but in readr version 1.0.0, it does not for write_delim -HW.
 
-        # also, we can redo the above to remove the fragile dependency on fields ending in "Amount", and in general make it simpler
-
-        #x <- mutate_if(x, is.numeric, function(x) trimws(format(x, scientific=FALSE)))
+        x <- mutate_if(x, function(col) !is.na(col) && is.numeric(col), function(x) trimws(format(x, scientific=FALSE)))
 
         f <- tempfile(tmpdir = "C:/dev", pattern = tableName)
         write_delim(x=x, path=f, na="", delim="|", col_names=FALSE)
