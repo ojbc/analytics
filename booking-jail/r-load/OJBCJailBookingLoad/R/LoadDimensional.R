@@ -96,7 +96,7 @@ formatDateTimeForSQL <- function(dateTime) {
 
 #' @importFrom DBI dbClearResult dbSendQuery
 executeQuery <- function(conn, query) {
-  dbClearResult(dbSendQuery(conn, query))
+  dbClearResult(dbSendStatement(conn, query))
 }
 
 #' @importFrom DBI dbGetQuery
@@ -129,7 +129,7 @@ translateCodeTableValue <- function(stagingValue, codeTableName, unknownCodeTabl
     writeLines(paste0("Values were: ", paste0(sort(unique(ret[mismatches]), collapse=","))))
     ret[mismatches] <- unknownCodeTableValue
   }
-  ret
+  as.integer(ret)
 }
 
 buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTime, currentLoadTime, loadHistoryID, unknownCodeTableValue, chargeDispositionAggregator, codeTableList) {
@@ -154,9 +154,16 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
       args <- list()
       args$BookingChargeDispositionDataFrame <- StagingBookingChargeDispositionDf
       args$unknownCodeTableValue <- unknownCodeTableValue
-      JailEpisode$CaseStatusTypeID <- do.call(chargeDispositionAggregator, args)
+      JailEpisode$CaseStatusTypeID <- as.integer(do.call(chargeDispositionAggregator, args))
     }
 
+    JailEpisode$DaysAgo <- as.integer(JailEpisode$DaysAgo)
+    JailEpisode$LengthOfStay <- as.integer(JailEpisode$LengthOfStay)
+    JailEpisode[, "DaysSinceLastEpisode"] <- NA
+    JailEpisode[, "DaysUntilNextEpisode"] <- NA
+    JailEpisode[, "SixMonthRebooking"] <- 'N'
+    JailEpisode[, "OneYearRebooking"] <- 'N'
+    JailEpisode[, "TwoYearRebooking"] <- 'N'
     JailEpisode
 
   }
@@ -226,8 +233,8 @@ buildPersonTable <- function(stagingConnection, lastLoadTime, unknownCodeTableVa
               EducationLevelTypeID=unknownCodeTableValue,
               OccupationTypeID=unknownCodeTableValue,
               PersonAgeTypeID=ifelse(is.na(PersonBirthDate), PersonAgeAtBooking, (PersonBirthDate %--% BookingDate) %/% years(1))
-              ) %>%
-    mutate(PersonAgeTypeID=ifelse(is.na(PersonAgeTypeID), unknownCodeTableValue, PersonAgeTypeID))
+    ) %>%
+    mutate(PersonAgeTypeID=ifelse(is.na(PersonAgeTypeID), unknownCodeTableValue, as.integer(PersonAgeTypeID)))
 
   dups <- unique(Person$PersonID[duplicated(Person$PersonID)])
   dups <- length(dups)
@@ -239,10 +246,10 @@ buildPersonTable <- function(stagingConnection, lastLoadTime, unknownCodeTableVa
     args <- list()
     args$textValues <- Person$EducationLevel
     args$unknownCodeTableValue <- unknownCodeTableValue
-    Person$EducationLevelTypeID <- do.call(educationTextValueConverter, args)
+    Person$EducationLevelTypeID <- as.integer(do.call(educationTextValueConverter, args))
     args$textValues <- Person$Occupation
     args$unknownCodeTableValue <- unknownCodeTableValue
-    Person$OccupationTypeID <- do.call(occupationTextValueConverter, args)
+    Person$OccupationTypeID <- as.integer(do.call(occupationTextValueConverter, args))
   }
 
   Person %>% select(-EducationLevel, -Occupation)
@@ -260,7 +267,7 @@ buildArrestTables <- function(stagingConnection, adsConnection, lastLoadTime, un
                                                  parentBookingTable, "Timestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
     Arrest <- Arrest %>%
-      transmute(JailEpisodeArrestID=row_number() + baseArrestID,
+      transmute(JailEpisodeArrestID=as.integer(row_number() + baseArrestID),
                 JailEpisodeID=BookingID,
                 ArrestLocationLatitude=LocationLatitude,
                 ArrestLocationLongitude=LocationLongitude,
@@ -303,12 +310,12 @@ buildChargeTables <- function(stagingConnection, adsConnection, lastLoadTime, un
                                                  grandparentBookingTable, "Timestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
     Charge <- Charge %>%
-      transmute(JailEpisodeChargeID=row_number() + baseChargeID,
+      transmute(JailEpisodeChargeID=as.integer(row_number() + baseChargeID),
                 ParentArrestID=ParentArrestID,
                 ChargeCode=ChargeCode,
                 ChargeDisposition=ChargeDisposition,
-                ChargeTypeID=unknownCodeTableValue,
-                ChargeClassTypeID=unknownCodeTableValue,
+                ChargeTypeID=as.integer(unknownCodeTableValue),
+                ChargeClassTypeID=as.integer(unknownCodeTableValue),
                 ChargeDispositionTypeID=unknownCodeTableValue,
                 AgencyID=translateCodeTableValue(AgencyID, "Agency", unknownCodeTableValue, codeTableList),
                 JurisdictionTypeID=translateCodeTableValue(ChargeJurisdictionTypeID, "JurisdictionType", unknownCodeTableValue, codeTableList),
@@ -321,13 +328,13 @@ buildChargeTables <- function(stagingConnection, adsConnection, lastLoadTime, un
       args <- list()
       args$textValues <- Charge$ChargeCode
       args$unknownCodeTableValue <- unknownCodeTableValue
-      Charge$ChargeTypeID <- do.call(chargeCodeTypeTextConverter, args)
-      Charge$ChargeClassTypeID <- do.call(chargeCodeClassTextConverter, args)
+      Charge$ChargeTypeID <- as.integer(do.call(chargeCodeTypeTextConverter, args))
+      Charge$ChargeClassTypeID <- as.integer(do.call(chargeCodeClassTextConverter, args))
 
       args <- list()
       args$textValues <- Charge$ChargeDisposition
       args$unknownCodeTableValue <- unknownCodeTableValue
-      Charge$ChargeDispositionTypeID <- do.call(dispositionTextConverter, args)
+      Charge$ChargeDispositionTypeID <- as.integer(do.call(dispositionTextConverter, args))
 
     }
 
@@ -371,8 +378,8 @@ buildBHAssessmentTable <- function(stagingConnection, lastLoadTime, unknownCodeT
               MedicaidStatusTypeID=translateCodeTableValue(MedicaidStatusTypeID, "MedicaidStatusType", unknownCodeTableValue, codeTableList),
               InTreatmentAtBooking=is.na(CareEpisodeEndDate),
               EndedDaysBeforeBooking=(CareEpisodeEndDate %--% BookingDate) %/% days(1)
-              ) %>%
-    mutate(EndedDaysBeforeBooking=ifelse(is.na(EndedDaysBeforeBooking), unknownCodeTableValue, EndedDaysBeforeBooking))
+    ) %>%
+    mutate(EndedDaysBeforeBooking=as.integer(ifelse(is.na(EndedDaysBeforeBooking), unknownCodeTableValue, EndedDaysBeforeBooking)))
 
   BHAssessment
 
@@ -412,13 +419,13 @@ buildBHTreatmentTable <- function(stagingConnection, lastLoadTime, unknownCodeTa
               TreatmentProviderTypeID=unknownCodeTableValue,
               DaysBeforeBooking=(TreatmentStartDate %--% BookingDate) %/% days(1)
     ) %>%
-    mutate(DaysBeforeBooking=ifelse(is.na(DaysBeforeBooking), unknownCodeTableValue, DaysBeforeBooking))
+    mutate(DaysBeforeBooking=as.integer(ifelse(is.na(DaysBeforeBooking), unknownCodeTableValue, DaysBeforeBooking)))
 
   if (nrow(BHTreatment)) {
     args <- list()
     args$textValues <- BHTreatment$TreatmentProviderName
     args$unknownCodeTableValue <- unknownCodeTableValue
-    BHTreatment$TreatmentProviderTypeID <- do.call(providerTextValueConverter, args)
+    BHTreatment$TreatmentProviderTypeID <- as.integer(do.call(providerTextValueConverter, args))
   }
 
   BHTreatment %>% select(-TreatmentProviderName)
@@ -440,7 +447,7 @@ buildBHEvaluationTable <- function(stagingConnection, lastLoadTime, unknownCodeT
     args <- list()
     args$textValues <- BHEvaluation$BehavioralHealthDiagnosisDescription
     args$unknownCodeTableValue <- unknownCodeTableValue
-    BHEvaluation$BehavioralHealthEvaluationTypeID <- do.call(diagnosisTextValueConverter, args)
+    BHEvaluation$BehavioralHealthEvaluationTypeID <- as.integer(do.call(diagnosisTextValueConverter, args))
   }
 
   BHEvaluation %>% select(-BehavioralHealthDiagnosisDescription)
@@ -462,7 +469,7 @@ buildMedicationTable <- function(stagingConnection, lastLoadTime, unknownCodeTab
     args <- list()
     args$textValues <- PrescribedMedication$MedicationDescription
     args$unknownCodeTableValue <- unknownCodeTableValue
-    PrescribedMedication$MedicationTypeID <- do.call(medicationTextValueConverter, args)
+    PrescribedMedication$MedicationTypeID <- as.integer(do.call(medicationTextValueConverter, args))
   }
 
   PrescribedMedication %>% select(-MedicationDescription)
@@ -482,7 +489,7 @@ buildAndLoadHistoricalPeriodTable <- function(adsConnection, unknownCodeTableVal
 
   lookbackPeriod <- 365*10 # ten years
 
-  df <- data.frame(HistoricalPeriodTypeID=0:lookbackPeriod,
+  df <- data.frame(HistoricalPeriodTypeID=as.integer(0:lookbackPeriod),
                    DaysAgo=0:lookbackPeriod) %>%
     mutate(HistoricalPeriodTypeDescription1=paste0(90*(1 + DaysAgo %/% 90), " days"),
            HistoricalPeriodTypeDescription1=ifelse(DaysAgo >= 360, "360+ days", HistoricalPeriodTypeDescription1),
@@ -490,6 +497,7 @@ buildAndLoadHistoricalPeriodTable <- function(adsConnection, unknownCodeTableVal
            HistoricalPeriodTypeDescription2=ifelse(DaysAgo >= 360*3, "36 months+", HistoricalPeriodTypeDescription2))
 
   df <- df %>% bind_rows(data.frame(HistoricalPeriodTypeID=c(unknownCodeTableValue, noneCodeTableValue),
+                                    DaysAgo=as.integer(c(0,0)),
                                     HistoricalPeriodTypeDescription1=c("Unknown", "None"),
                                     HistoricalPeriodTypeDescription2=c("Unknown", "None")))
 
@@ -515,8 +523,8 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
                                     chargeCodeClassTextConverter=defaultChargeCodeTextConverter,
                                     dispositionTextConverter=defaultDispositionTextConverter,
                                     providerTextValueConverter=defaultProviderTextValueConverter,
-                                    unknownCodeTableValue=99999,
-                                    noneCodeTableValue=99998,
+                                    unknownCodeTableValue=as.integer(99999),
+                                    noneCodeTableValue=as.integer(99998),
                                     completeLoad=TRUE,
                                     writeToDatabase=FALSE) {
 
