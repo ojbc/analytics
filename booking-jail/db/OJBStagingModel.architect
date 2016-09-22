@@ -760,7 +760,7 @@
     <column id="COL212" populated="true" UUID="39393680-e183-4f17-88c5-bb21183013fe" autoIncrement="false" autoIncrementSequenceName="Treatment_TreatmentProviderName_seq" defaultValue="" name="TreatmentProviderName" nullable="1" physicalName="TreatmentProviderName" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL213" populated="true" UUID="00ae5632-dfc9-46d6-8ac9-144ac1248cad" autoIncrement="false" autoIncrementSequenceName="Treatment_BehavioralHealthAssessmentTimestamp_seq" defaultValue="now()" name="BehavioralHealthAssessmentTimestamp" nullable="0" physicalName="BehavioralHealthAssessmentTimestamp" precision="0" referenceCount="1" scale="0" source-column-ref="COL88" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL213" populated="true" UUID="00ae5632-dfc9-46d6-8ac9-144ac1248cad" autoIncrement="false" autoIncrementSequenceName="Treatment_TreatmentTimestamp_seq" defaultValue="now()" name="TreatmentTimestamp" nullable="0" physicalName="TreatmentTimestamp" precision="0" referenceCount="1" scale="0" source-column-ref="COL88" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     </folder>
@@ -1254,7 +1254,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.LiquibaseDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.8408964152537146" viewportX="408" viewportY="324" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB47" x="978" y="359" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB60" x="545" y="51" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB65" x="289" y="135" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
