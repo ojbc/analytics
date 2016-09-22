@@ -418,7 +418,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   recs <- nrow(ev)
   ev$BehavioralHealthDiagnosisDescription <- paste0("Diagnosis ", sample(1:100, recs, prob=sample(100), replace=TRUE))
   ev$BehavioralHealthEvaluationID <- seq(recs)
-  ev$BehavioralHealthEvaluationTimestamp < -NA
+  ev$BehavioralHealthEvaluationTimestamp <- NA
 
   writeLines(paste0("Created BH Evaluation table with ", recs, " rows."))
 
