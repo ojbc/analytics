@@ -194,7 +194,7 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   minute(ReleaseDateTime) <- sample(0:59, size=nn, replace = TRUE)
   second(ReleaseDateTime) <- sample(0:59, size=nn, replace = TRUE)
 
-  df[,"BookingTimestamp"] <- NA
+  df$BookingTimestamp <- NA
 
   ret$Booking <- df %>% select(-DaysAgo, -LengthOfStay, -ReleaseDay, -Disposition)
 
@@ -210,7 +210,7 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   Person <- Person %>% inner_join(actualPersonDf, by=c("PersonUniqueIdentifier"="PersonUniqueIdentifier")) %>%
     mutate(PersonUniqueIdentifier=paste0("P", formatC(PersonUniqueIdentifier, width=16, flag="0"))) %>%
     mutate(PersonUniqueIdentifier2=PersonUniqueIdentifier)
-  Person[,"PersonTimestamp"] <- NA
+  Person$PersonTimestamp <- NA
 
   ret$Person <- Person
   ret$Booking$PersonID <- Person$PersonID
@@ -240,22 +240,23 @@ buildChangeTables <- function(txTableList, codeTableList) {
   ret <- list()
 
   # 20% of bookings have edits
-  changedBookings <- txTableList$Booking %>% sample_frac(.2) %>% select(-BookingNumber) %>%
+  changedBookings <- txTableList$Booking %>% sample_frac(.2) %>% select(-BookingNumber, -BookingTimestamp) %>%
     mutate(CustodyStatusChangeID=seq(n()))
   changedArrests <- txTableList$BookingArrest %>% filter(BookingID %in% changedBookings$BookingID) %>%
-    inner_join(changedBookings %>% select(BookingID, CustodyStatusChangeID), by=c("BookingID"="BookingID")) %>% select(-BookingID) %>%
+    inner_join(changedBookings %>% select(BookingID, CustodyStatusChangeID), by=c("BookingID"="BookingID")) %>% select(-BookingID, -BookingArrestTimestamp) %>%
     mutate(CustodyStatusChangeArrestID=seq(n()))
   changedCharges <- txTableList$BookingCharge %>% filter(BookingArrestID %in% changedArrests$BookingArrestID) %>%
     inner_join(changedArrests %>% select(BookingArrestID, CustodyStatusChangeArrestID), by=c("BookingArrestID"="BookingArrestID")) %>%
-    select(-BookingArrestID) %>%
+    select(-BookingArrestID, -BookingChargeTimestamp) %>%
     mutate(CustodyStatusChangeChargeID=seq(n()))
 
-  changedArrests <- changedArrests %>% select(-BookingArrestID)
-  changedArrests[, "LocationID"] <- NA
-  changedArrests[, "CustodyStatusChangeArrestTimestamp"] <- NA
-  changedCharges <- changedCharges %>% select(-BookingChargeID)
-  changedCharges[, "BondRemainingAmount"] <-NA
-  changedCharges[, "CustodyStatusChangeChargeTimestamp"] <-NA
+  changedArrests <- changedArrests %>%
+    select(-BookingArrestID) %>%
+    mutate(LocationID=NA, CustodyStatusChangeArrestTimestamp=NA)
+
+  changedCharges <- changedCharges %>%
+    select(-BookingChargeID) %>%
+    mutate(BondRemainingAmount=NA, CustodyStatusChangeChargeTimestamp=NA)
 
   # note:  we can change more attributes as we learn what is important to test in the ADS loading process
   changedBookings$SupervisionUnitTypeID <- generateRandomIDsFromCodeTable(codeTableList, "SupervisionUnitType", nrow(changedBookings))
@@ -272,7 +273,7 @@ buildChangeTables <- function(txTableList, codeTableList) {
   ret$Person <- bind_rows(txTableList$Person, ChangedPerson)
 
   changedBookings$PersonID <- ChangedPerson$PersonID
-  changedBookings[,"CustodyStatusChangeTimestamp"] <- NA
+  changedBookings$CustodyStatusChangeTimestamp <- NA
 
   ret$CustodyStatusChange <- changedBookings
   writeLines(paste0("Created CustodyStatusChange table with ", nrow(changedBookings), " rows."))
@@ -296,9 +297,7 @@ buildBookingChildTables <- function(bookingID, releaseDateTime, codeTableList) {
 
   CustodyRelease <- data.frame(BookingID=bookingID, ReleaseDate=ReleaseDate, ReleaseTime=ReleaseTime) %>%
     filter(!is.na(ReleaseDate)) %>%
-    mutate(CustodyReleaseID=seq(n()))
-  CustodyRelease[, "ReleaseCondition"] <- NA
-  CustodyRelease[, "CustodyReleaseTimestamp"] <- NA
+    mutate(CustodyReleaseID=seq(n()), ReleaseCondition=NA, CustodyReleaseTimestamp=NA)
 
   writeLines(paste0("Created CustodyRelease table with ", nrow(CustodyRelease), " rows"))
 
@@ -309,8 +308,8 @@ buildBookingChildTables <- function(bookingID, releaseDateTime, codeTableList) {
     mutate(BookingArrestID=seq(n()))
   recs <- nrow(BookingArrest)
   BookingArrest$ArrestAgencyID <- generateRandomIDsFromCodeTable(codeTableList, "Agency", recs)
-  BookingArrest[,"LocationID"] <- NA
-  BookingArrest[,"BookingArrestTimestamp"] <- NA
+  BookingArrest$LocationID <- NA
+  BookingArrest$BookingArrestTimestamp <- NA
 
   ret$BookingArrest <- BookingArrest
 
@@ -330,7 +329,7 @@ buildBookingChildTables <- function(bookingID, releaseDateTime, codeTableList) {
   BookingCharge$ChargeJurisdictionTypeID <- generateRandomIDsFromCodeTable(codeTableList, "JurisdictionType", recs)
   BookingCharge$ChargeClassTypeID <- generateRandomIDsFromCodeTable(codeTableList, "ChargeClassType", recs)
   BookingCharge$BondStatusTypeID <- generateRandomIDsFromCodeTable(codeTableList, "BondStatusType", recs)
-  BookingCharge[,"BookingChargeTimestamp"] <-NA
+  BookingCharge$BookingChargeTimestamp <-NA
 
   ret$BookingCharge <- BookingCharge
 
@@ -367,6 +366,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   bha$SeriousMentalIllnessIndicator <- as.logical(rbinom(n=recs, size=2, prob=.3))
   bha$EnrolledProviderName <- paste0("Enrolled Provider ", sample(1:10, recs, prob=tenProbs, replace=TRUE))
   bha$BehavioralHealthAssessmentID <- seq(recs)
+  bha$BehavioralHealthAssessmentTimestamp <- NA
 
   bha$n_Treatment <- sample(1:4, size=recs, replace=TRUE)
 
@@ -399,6 +399,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   tmt$TreatmentAdmissionReasonTypeID <- generateRandomIDsFromCodeTable(codeTableList, "TreatmentAdmissionReasonType", recs)
   tmt$TreatmentStatusTypeID <- generateRandomIDsFromCodeTable(codeTableList, "TreatmentStatusType", recs)
   tmt$TreatmentProviderName <- paste0("Treatment Provider ", sample(1:10, recs, prob=tenProbs, replace=TRUE))
+  tmt$TreatmentTimestamp <- NA
 
   tmt$TreatmentID <- seq(nrow(tmt))
 
@@ -417,6 +418,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   recs <- nrow(ev)
   ev$BehavioralHealthDiagnosisDescription <- paste0("Diagnosis ", sample(1:100, recs, prob=sample(100), replace=TRUE))
   ev$BehavioralHealthEvaluationID <- seq(recs)
+  ev$BehavioralHealthEvaluationTimestamp < -NA
 
   writeLines(paste0("Created BH Evaluation table with ", recs, " rows."))
 
@@ -438,7 +440,8 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   med$MedicationDoseMeasure <- paste0(sample(c("5", "10", "50", "500", "1000"), size=recs, replace=TRUE),
                                       sample(c(" mg", " oz", " Units", " ml"), size=recs, replace=TRUE))
   med$PrescribedMedicationID <- seq(recs)
-  med[, "MedicationDispensingDate"] <- NA
+  med$MedicationDispensingDate <- NA
+  med$PrescribedMedicationTimestamp <- NA
 
   writeLines(paste0("Created PrescribedMedication table with ", recs, " rows."))
 
@@ -455,17 +458,12 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   recs <- nrow(bhc)
   bhc$AssessmentCategoryTypeID <- generateRandomIDsFromCodeTable(codeTableList, "AssessmentCategoryType", recs)
   bhc <- bhc %>% distinct() # avoid duplicate categories per assessment
-  bhc[, "BehavioralHealthAssessmentCategory"] <- NA
+  bhc$BehavioralHealthAssessmentCategoryTimestamp <- NA
   recs <- nrow(bhc)
   bhc$BehavioralHealthAssessmentCategoryID <- seq(recs)
 
   writeLines(paste0("Created BH Assessment Category table with ", recs, " rows."))
 
-  bhc[, "BehavioralHealthAssessmentCategoryTimestamp"] <- NA
-  bha[, "BehavioralHealthAssessmentTimestamp"] <- NA
-  tmt[, "TreatmentTimestamp"] <- NA
-  ev[, "BehavioralHealthEvaluationTimestamp"]<-NA
-  med[, "PrescribedMedicationTimestamp"] <- NA
   ret$BehavioralHealthAssessment <- bha %>% select(-starts_with("n_"))
   ret$Treatment <- tmt
   ret$BehavioralHealthEvaluation <- ev

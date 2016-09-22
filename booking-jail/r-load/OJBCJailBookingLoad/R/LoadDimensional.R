@@ -234,7 +234,7 @@ buildPersonTable <- function(stagingConnection, lastLoadTime, unknownCodeTableVa
               OccupationTypeID=unknownCodeTableValue,
               PersonAgeTypeID=ifelse(is.na(PersonBirthDate), PersonAgeAtBooking, (PersonBirthDate %--% BookingDate) %/% years(1))
     ) %>%
-    mutate(PersonAgeTypeID=ifelse(is.na(PersonAgeTypeID), unknownCodeTableValue, as.integer(PersonAgeTypeID)))
+    mutate(PersonAgeTypeID=as.integer(ifelse(is.na(PersonAgeTypeID), unknownCodeTableValue, PersonAgeTypeID)))
 
   dups <- unique(Person$PersonID[duplicated(Person$PersonID)])
   dups <- length(dups)
@@ -314,8 +314,8 @@ buildChargeTables <- function(stagingConnection, adsConnection, lastLoadTime, un
                 ParentArrestID=ParentArrestID,
                 ChargeCode=ChargeCode,
                 ChargeDisposition=ChargeDisposition,
-                ChargeTypeID=as.integer(unknownCodeTableValue),
-                ChargeClassTypeID=as.integer(unknownCodeTableValue),
+                ChargeTypeID=unknownCodeTableValue,
+                ChargeClassTypeID=unknownCodeTableValue,
                 ChargeDispositionTypeID=unknownCodeTableValue,
                 AgencyID=translateCodeTableValue(AgencyID, "Agency", unknownCodeTableValue, codeTableList),
                 JurisdictionTypeID=translateCodeTableValue(ChargeJurisdictionTypeID, "JurisdictionType", unknownCodeTableValue, codeTableList),
@@ -487,9 +487,9 @@ buildReleaseTable <- function(stagingConnection, lastLoadTime, codeTableList) {
 
 buildAndLoadHistoricalPeriodTable <- function(adsConnection, unknownCodeTableValue, noneCodeTableValue) {
 
-  lookbackPeriod <- 365*10 # ten years
+  lookbackPeriod <- as.integer(365*10) # ten years
 
-  df <- data.frame(HistoricalPeriodTypeID=as.integer(0:lookbackPeriod),
+  df <- data.frame(HistoricalPeriodTypeID=0:lookbackPeriod,
                    DaysAgo=0:lookbackPeriod) %>%
     mutate(HistoricalPeriodTypeDescription1=paste0(90*(1 + DaysAgo %/% 90), " days"),
            HistoricalPeriodTypeDescription1=ifelse(DaysAgo >= 360, "360+ days", HistoricalPeriodTypeDescription1),
