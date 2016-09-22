@@ -76,11 +76,10 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
         }
 
         columnNames <- dbListFields(conn, tableName)
-        columnNames <-columnNames[-length(columnNames)]
+        writeLines(paste0(colnames(x), ","))
 
-        x <- x[c(columnNames)]
-
-        #writeLines(paste0(sapply(x, typeof), ","))
+        writeLines(paste0(tableName, ","))
+        x <- x[c(dbListFields(conn, tableName))]
 
         nums = sapply(x, is.logical)
 
@@ -101,7 +100,6 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
           x[is.na(x[,amountColumnName])== 0,amountColumnName] <-format(x[is.na(x[,amountColumnName])== 0,amountColumnName], scientific = FALSE)
         }
 
-        x[, paste0(tableName, "Timestamp")] <-NA
         f <- tempfile(tmpdir = "C:/dev", pattern = tableName)
         write_delim(x=x, path=f, na="", delim="|", col_names=FALSE)
 
