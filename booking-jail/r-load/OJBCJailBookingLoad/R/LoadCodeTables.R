@@ -30,11 +30,10 @@ loadCodeTables <- function(conn, codeTableFileName, writeToDatabase=TRUE) {
     if (any(grepl("X_", colnames(ct)))) {
       ct <- dplyr::select(ct, -starts_with("X_"))
     }
-    ct <- data.table::data.table(ct)
+    ct <- dplyr::mutate_if(ct, is.numeric, "as.integer")
     if (writeToDatabase) {
       writeDataFrameToDatabase(conn=conn, x=ct, tableName=codeTableName, append=FALSE)
     }
-    #assign(codeTableName, ct, envir=.GlobalEnv)
     l <- list(ct)
     names(l) <- c(codeTableName)
     ret <- c(ret, l)
