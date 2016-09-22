@@ -868,7 +868,7 @@ persistReleases <- function(adsConnection, dfs, unknownCodeTableValue) {
 
 }
 
-#' @importFrom lubridate year month day wday
+#' @importFrom lubridate year month day wday quarter
 buildDateDimensionTable <- function(minDate, maxDate, unknownCodeTableValue, noneCodeTableValue) {
   DateDf <- data.frame(CalendarDate=seq(minDate, maxDate, by="days")) %>%
     mutate(DateID=as.integer(format(CalendarDate, "%Y%m%d")),
@@ -886,7 +886,7 @@ buildDateDimensionTable <- function(minDate, maxDate, unknownCodeTableValue, non
     bind_rows(data.frame(CalendarDate=as.Date("1899-01-01"),
                          DateID=unknownCodeTableValue,
                          Year=0,
-                         YearLabel='Unknown',
+                         YearLabel='Unk',
                          CalendarQuarter=0,
                          Month=0,
                          MonthName='Unknown',
