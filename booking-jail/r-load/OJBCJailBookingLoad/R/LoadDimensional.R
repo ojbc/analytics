@@ -379,7 +379,7 @@ buildBHAssessmentTable <- function(stagingConnection, lastLoadTime, unknownCodeT
               PersonID=PersonID,
               SevereMentalIllnessIndicator=SeriousMentalIllnessIndicator,
               MedicaidStatusTypeID=translateCodeTableValue(MedicaidStatusTypeID, "MedicaidStatusType", unknownCodeTableValue, codeTableList),
-              InTreatmentAtBooking=is.na(CareEpisodeEndDate),
+              InTreatmentAtBooking=recode(CareEpisodeEndDate, .default='Y', .missing='N'),
               EndedDaysBeforeBooking=(CareEpisodeEndDate %--% BookingDate) %/% days(1)
     ) %>%
     mutate(EndedDaysBeforeBooking=as.integer(ifelse(is.na(EndedDaysBeforeBooking), unknownCodeTableValue, EndedDaysBeforeBooking)))
