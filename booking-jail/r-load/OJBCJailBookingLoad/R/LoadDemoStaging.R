@@ -34,8 +34,6 @@
 #' @param baseDate the "current date" for the database...the date from which the lookback period begins
 #' @param writeToDatabase whether to write to the database, or just create the data frames in the local environment (the return value)
 #' @import DBI
-#' @import rgdal
-#' @import sp
 #' @import readr
 #' @import tidyr
 #' @import stringr

@@ -10,8 +10,6 @@ License: Reciprocal Public License, Version 1.5
 LazyData: TRUE
 RoxygenNote: 5.0.1
 Imports: RMySQL,
-    rgdal,
-    sp,
     readr,
     tidyr,
     stringr,
