@@ -220,7 +220,7 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   bhTableList <- buildBehavioralHealthTables(Person$PersonID, df$BookingDate, percentAssessments, codeTableList)
   ret <- c(ret, bhTableList)
 
-  bookingChildTableList <- buildBookingChildTables(bookingID, ReleaseDateTime, codeTableList)
+  bookingChildTableList <- buildBookingChildTables(bookingID, ret$Booking$BookingNumber, ReleaseDateTime, codeTableList)
   ret <- c(ret, bookingChildTableList)
 
   changeTableList <- buildChangeTables(ret, codeTableList)
@@ -238,7 +238,7 @@ buildChangeTables <- function(txTableList, codeTableList) {
   ret <- list()
 
   # 20% of bookings have edits
-  changedBookings <- txTableList$Booking %>% sample_frac(.2) %>% select(-BookingNumber, -BookingTimestamp) %>%
+  changedBookings <- txTableList$Booking %>% sample_frac(.2) %>% select(-BookingTimestamp) %>%
     mutate(CustodyStatusChangeID=seq(n()))
   changedArrests <- txTableList$BookingArrest %>% filter(BookingID %in% changedBookings$BookingID) %>%
     inner_join(changedBookings %>% select(BookingID, CustodyStatusChangeID), by=c("BookingID"="BookingID")) %>% select(-BookingID, -BookingArrestTimestamp) %>%
@@ -286,14 +286,14 @@ buildChangeTables <- function(txTableList, codeTableList) {
 
 #' @import dplyr
 #' @importFrom lubridate as_date hour minute second
-buildBookingChildTables <- function(bookingID, releaseDateTime, codeTableList) {
+buildBookingChildTables <- function(bookingID, bookingNumber, releaseDateTime, codeTableList) {
 
   ret <- list()
 
   ReleaseTime <- paste0(hour(releaseDateTime), ':', minute(releaseDateTime), ':', as.integer(second(releaseDateTime)))
   ReleaseDate <- as_date(releaseDateTime)
 
-  CustodyRelease <- data.frame(BookingID=bookingID, ReleaseDate=ReleaseDate, ReleaseTime=ReleaseTime) %>%
+  CustodyRelease <- data.frame(BookingID=bookingID, BookingNumber=bookingNumber, ReleaseDate=ReleaseDate, ReleaseTime=ReleaseTime) %>%
     filter(!is.na(ReleaseDate)) %>%
     mutate(CustodyReleaseID=seq(n()), ReleaseCondition=NA, CustodyReleaseTimestamp=NA)
 

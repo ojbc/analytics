@@ -185,7 +185,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
 
   ret$JailEpisode <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator)
 
-  Booking <- getQuery(stagingConnection, paste0("select BookingNumber, CustodyStatusChange.BookingID, CustodyStatusChange.PersonID, CustodyStatusChange.BookingDate, ",
+  Booking <- getQuery(stagingConnection, paste0("select Booking.BookingNumber, CustodyStatusChange.BookingID, CustodyStatusChange.PersonID, CustodyStatusChange.BookingDate, ",
                                                 "CustodyStatusChange.FacilityID, CustodyStatusChange.SupervisionUnitTypeID, ",
                                                 "CustodyStatusChange.InmateJailResidentIndicator from Booking, CustodyStatusChange ",
                                                 "where Booking.BookingID=CustodyStatusChange.BookingID and ",
@@ -482,7 +482,7 @@ buildMedicationTable <- function(stagingConnection, lastLoadTime, unknownCodeTab
 buildReleaseTable <- function(stagingConnection, lastLoadTime, codeTableList) {
 
   Release <- getQuery(stagingConnection, paste0("select ReleaseDate, BookingID from CustodyRelease ",
-                                                "where CustodyReleaseTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+                                                "where BookingID is not null and CustodyReleaseTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
   Release <- Release %>% mutate(ReleaseDate=as_date(ReleaseDate))
 
