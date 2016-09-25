@@ -1,0 +1,17 @@
+# SQL statements to put additional test data in staging
+
+## The following test the scenario where we get a CustodyRelease before we get its booking
+
+# Run these two statements first...
+insert into CustodyRelease (BookingNumber, ReleaseDate, ReleaseTime) values ('B9999999', '2016-10-23', '05:55:55');
+select last_insert_id() into @PendingCustodyReleaseID;
+
+# Now run a dimensional load.  You should not see the above CustodyRelease record added to the dimensional db.
+
+# Then run the next three statements, followed by another dimensional load.  The Person, Booking and CustodyRelease records should get added
+
+insert into Person (PersonUniqueIdentifier) values ('P9999999');
+insert into Booking (BookingNumber, PersonID, BookingDate) values ('B9999999', last_insert_id(), '2016-10-10');
+update CustodyRelease set BookingID=last_insert_id(), CustodyReleaseTimestamp=current_timestamp() where CustodyReleaseID=@PendingCustodyReleaseID;
+
+## END Scenario
