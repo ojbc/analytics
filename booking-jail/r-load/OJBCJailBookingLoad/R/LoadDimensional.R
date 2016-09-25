@@ -149,8 +149,13 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
         EpisodeEndDateID=noneCodeTableValue,
         FacilityID=translateCodeTableValue(FacilityID, "Facility", unknownCodeTableValue, codeTableList),
         SupervisionUnitTypeID=translateCodeTableValue(SupervisionUnitTypeID, "SupervisionUnitType", unknownCodeTableValue, codeTableList),
-        DaysAgo=(EpisodeStartDate %--% currentLoadTime) %/% days(1),
+        DaysAgo=as.integer((EpisodeStartDate %--% currentLoadTime) %/% days(1)),
         LengthOfStay=DaysAgo,
+        SixMonthRebooking='N',
+        OneYearRebooking='N',
+        TwoYearRebooking='N',
+        DaysSinceLastEpisode=NA,
+        DaysUntilNextEpisode=NA,
         LoadHistoryID=loadHistoryID)
 
     if (nrow(StagingBookingChargeDispositionDf)) {
@@ -160,13 +165,6 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
       JailEpisode$CaseStatusTypeID <- as.integer(do.call(chargeDispositionAggregator, args))
     }
 
-    JailEpisode$DaysAgo <- as.integer(JailEpisode$DaysAgo)
-    JailEpisode$LengthOfStay <- as.integer(JailEpisode$LengthOfStay)
-    JailEpisode[, "DaysSinceLastEpisode"] <- NA
-    JailEpisode[, "DaysUntilNextEpisode"] <- NA
-    JailEpisode[, "SixMonthRebooking"] <- 'N'
-    JailEpisode[, "OneYearRebooking"] <- 'N'
-    JailEpisode[, "TwoYearRebooking"] <- 'N'
     JailEpisode
 
   }
@@ -490,7 +488,7 @@ buildReleaseTable <- function(stagingConnection, lastLoadTime, codeTableList) {
 
 }
 
-buildAndLoadHistoricalPeriodTable <- function(adsConnection, unknownCodeTableValue, noneCodeTableValue) {
+buildAndLoadHistoricalPeriodTable <- function(adsConnection, unknownCodeTableValue, noneCodeTableValue, completeLoad, writeToDatabase) {
 
   lookbackPeriod <- as.integer(365*10) # ten years
 
@@ -506,7 +504,9 @@ buildAndLoadHistoricalPeriodTable <- function(adsConnection, unknownCodeTableVal
                                     HistoricalPeriodTypeDescription1=c("Unknown", "None"),
                                     HistoricalPeriodTypeDescription2=c("Unknown", "None")))
 
-  writeTableToDatabase(adsConnection, "HistoricalPeriodType", df)
+  if (completeLoad & writeToDatabase) {
+    writeTableToDatabase(adsConnection, "HistoricalPeriodType", df)
+  }
 
   ret <- list()
   ret$HistoricalPeriodType <- df
@@ -555,7 +555,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   codeTableList <- loadCodeTables(adsConnection, "DimensionalCodeTables.xlsx", writeToDatabase & completeLoad)
   ret <- c(ret, codeTableList)
 
-  historicalPeriodType <- buildAndLoadHistoricalPeriodTable(adsConnection, unknownCodeTableValue, noneCodeTableValue)
+  historicalPeriodType <- buildAndLoadHistoricalPeriodTable(adsConnection, unknownCodeTableValue, noneCodeTableValue, completeLoad, writeToDatabase)
   ret <- c(ret, historicalPeriodType)
 
   writeLines("Loading JailEpisode tables")
@@ -599,7 +599,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   ret$Release <- buildReleaseTable(stagingConnection, lastLoadTime, codeTableList)
   writeLines(paste0("Loaded Release with ", nrow(ret$Release), " rows"))
 
-  ret$Date <- loadDateDimension(adsConnection, ret, unknownCodeTableValue, noneCodeTableValue)
+  ret$Date <- loadDateDimension(adsConnection, ret, unknownCodeTableValue, noneCodeTableValue, writeToDatabase)
 
   persistTables(adsConnection, ret, unknownCodeTableValue)
 
@@ -614,19 +614,39 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
 
 }
 
-loadDateDimension <- function(adsConnection, dfs, unknownCodeTableValue, noneCodeTableValue) {
+loadDateDimension <- function(adsConnection, dfs, unknownCodeTableValue, noneCodeTableValue, writeToDatabase) {
 
   startDates <- getQuery(adsConnection, paste0("select max(EpisodeStartDate) as max1, min(EpisodeStartDate) as min1 from JailEpisode ",
                                                "where EpisodeStartDate is not null"))
   endDates <- getQuery(adsConnection, paste0("select max(EpisodeEndDate) as max2, min(EpisodeEndDate) as min2 from JailEpisode ",
                                              "where EpisodeEndDate is not null"))
+  currentDates <- getQuery(adsConnection, "select CalendarDate from Date")
 
   d <- cbind(startDates, endDates)
-  minDate <- min(as.integer(c(d$min1, d$min2, min(dfs$JailEpisode$EpisodeStartDate, na.rm=TRUE), min(dfs$Release$ReleaseDate, na.rm=TRUE))), na.rm=TRUE) %>% as_date()
-  maxDate <- max(as.integer(c(d$max1, d$max2, max(dfs$JailEpisode$EpisodeStartDate, na.rm=TRUE), max(dfs$Release$ReleaseDate, na.rm=TRUE))), na.rm=TRUE) %>% as_date()
 
-  DateDf <- buildDateDimensionTable(minDate, maxDate, unknownCodeTableValue, noneCodeTableValue)
-  writeDataFrameToDatabase(adsConnection, DateDf, "Date", viaBulk = TRUE)
+  dvmin <- as.integer(as.Date(c(startDates[1, 'min1'], endDates[1, 'min2'])))
+  dvmax <- as.integer(as.Date(c(startDates[1, 'max1'], endDates[1, 'max2'])))
+
+  if (nrow(dfs$JailEpisode)) {
+    dvmin <- as.integer(c(dvmin, dfs$JailEpisode$EpisodeStartDate))
+    dvmax <- as.integer(c(dvmax, dfs$JailEpisode$EpisodeStartDate))
+  }
+
+  if (nrow(dfs$Release)) {
+    dvmin <- as.integer(c(dvmin, dfs$Release$ReleaseDate))
+    dvmax <- as.integer(c(dvmax, dfs$Release$ReleaseDate))
+  }
+
+  dvmin <- unique(dvmin[!is.na(dvmin)])
+  minDate <- min(dvmin) %>% as_date
+  dvmax <- unique(dvmax[!is.na(dvmax)])
+  maxDate <- max(dvmax) %>% as_date()
+
+  DateDf <- buildDateDimensionTable(minDate, maxDate, as.Date(currentDates$CalendarDate), unknownCodeTableValue, noneCodeTableValue)
+
+  if (writeToDatabase) {
+    writeDataFrameToDatabase(adsConnection, DateDf, "Date", viaBulk = TRUE)
+  }
 
   DateDf
 
@@ -869,7 +889,8 @@ persistReleases <- function(adsConnection, dfs, unknownCodeTableValue) {
 }
 
 #' @importFrom lubridate year month day wday quarter
-buildDateDimensionTable <- function(minDate, maxDate, unknownCodeTableValue, noneCodeTableValue) {
+buildDateDimensionTable <- function(minDate, maxDate, datesToExclude, unknownCodeTableValue, noneCodeTableValue) {
+  writeLines(paste0("Building date dimension, earliest date=", minDate, ", latestDate=", maxDate))
   DateDf <- data.frame(CalendarDate=seq(minDate, maxDate, by="days")) %>%
     mutate(DateID=as.integer(format(CalendarDate, "%Y%m%d")),
            Year=year(CalendarDate),
@@ -909,6 +930,8 @@ buildDateDimensionTable <- function(minDate, maxDate, unknownCodeTableValue, non
                          DayOfWeekSort=0,
                          DateMMDDYYYY='None',
                          stringsAsFactors=FALSE))
+  DateDf <- DateDf %>% filter(!(CalendarDate %in% datesToExclude))
+  writeLines(paste0("Adding ", nrow(DateDf), " new dates to the Date dimension"))
   DateDf
 }
 
