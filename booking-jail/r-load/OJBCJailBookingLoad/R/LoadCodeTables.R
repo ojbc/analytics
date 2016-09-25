@@ -15,14 +15,13 @@
 # Script to load code tables into the analytical data store
 # Typically, only need to do this if building a database from scratch
 
-#' @import RMySQL
+#' @import DBI
 #' @import openxlsx
 #' @export
-loadCodeTables <- function(conn, codeTableFileName, writeToDatabase=TRUE) {
+loadCodeTables <- function(conn, spreadsheetFile, writeToDatabase=TRUE) {
 
   ret = list()
 
-  spreadsheetFile <- system.file("raw", codeTableFileName, package=getPackageName())
   sheetNames <- getSheetNames(spreadsheetFile)
 
   for (codeTableName in sheetNames) {
@@ -51,7 +50,7 @@ loadCodeTables <- function(conn, codeTableFileName, writeToDatabase=TRUE) {
 #' @param conn the database containing the tables
 #' @param spreadsheetFile the spreadsheet into which the code table content is written
 #' @param additionalTables names of additional tables in the database (other than those ending in Type) to create
-#' @import RMySQL
+#' @import DBI
 #' @import openxlsx
 #' @export
 #' @title Generate a code table spreadsheet template with random number of rows and sequential content

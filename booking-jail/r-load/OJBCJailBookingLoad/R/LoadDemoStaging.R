@@ -57,7 +57,8 @@ loadDemoStaging <- function(connection=NULL,
     writeLines("writeToDatabase set to FALSE, therefore current db was not wiped")
   }
 
-  codeTableList <- loadCodeTables(stagingConnection, "StagingCodeTables.xlsx", writeToDatabase)
+  spreadsheetFile <- system.file("raw", "StagingCodeTables.xlsx", package=getPackageName())
+  codeTableList <- loadCodeTables(stagingConnection, spreadsheetFile, writeToDatabase)
 
   txTableList <- createTransactionTables(codeTableList, lookbackDayCount, averageDailyBookingVolume,
                                          percentPretrial, percentSentenced, averagePretrialStay,
