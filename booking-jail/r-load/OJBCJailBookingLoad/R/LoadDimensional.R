@@ -202,13 +202,13 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
                                                 "CustodyStatusChange.FacilityID, CustodyStatusChange.SupervisionUnitTypeID, ",
                                                 "CustodyStatusChange.InmateJailResidentIndicator from Booking, CustodyStatusChange ",
                                                 "where Booking.BookingID=CustodyStatusChange.BookingID and ",
-                                                "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+                                                "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' order by CustodyStatusChangeTimestamp"))
 
   BookingChargeDisposition <- getQuery(stagingConnection, paste0("select CustodyStatusChange.BookingID, ChargeDisposition from ",
                                                                  "Booking inner join CustodyStatusChange on Booking.BookingID=CustodyStatusChange.BookingID ",
                                                                  "left join CustodyStatusChangeArrest on CustodyStatusChange.CustodyStatusChangeID=CustodyStatusChangeArrest.CustodyStatusChangeID ",
                                                                  "left join CustodyStatusChangeCharge on CustodyStatusChangeArrest.CustodyStatusChangeArrestID=CustodyStatusChangeCharge.CustodyStatusChangeArrestID ",
-                                                                 "where CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+                                                                 "where CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' order by CustodyStatusChangeTimestamp"))
 
   ret$JailEpisodeEdits <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator)
 
