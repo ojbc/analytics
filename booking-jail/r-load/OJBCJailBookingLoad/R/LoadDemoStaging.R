@@ -38,11 +38,11 @@
 #' @import tidyr
 #' @import stringr
 #' @examples
-#' loadDemoStaging(connection=dbConnect(MySQL(), host="localhost", dbname="ojbc_booking_staging_demo", username="root"))
+#' loadDemoStaging(connection=DBI::dbConnect(RMySQL::MySQL(), host="localhost", dbname="ojbc_booking_staging_demo", username="root"))
 #' @export
 loadDemoStaging <- function(connection=NULL,
                             censusTractShapefileDSN=NA, censusTractShapefileLayer=NA, countyFIPSCode=NA,
-                            censusTractPopulationFile=NA, lookbackDayCount=365, averageDailyBookingVolume=2000,
+                            censusTractPopulationFile=NA, lookbackDayCount=365, averageDailyBookingVolume=100,
                             percentPretrial=.39, percentSentenced=.01, averagePretrialStay=1.5,
                             averageSentenceStay=60, recidivismRate=.5, recidivistEpisodes=5, percentAssessments=.5,
                             baseDate=Sys.Date(), writeToDatabase=TRUE) {
@@ -302,7 +302,10 @@ buildBookingChildTables <- function(bookingID, bookingNumber, releaseDateTime, c
 
   ret$CustodyRelease <- CustodyRelease
 
-  n_Arrest <- sample(1:6, size=length(bookingID), replace=TRUE, prob=c(.7, .2, .05, .01, .01, .01))
+  n_Arrest <- sample(0:6, size=length(bookingID), replace=TRUE, prob=c(.05, .65, .2, .05, .01, .01, .01))
+  nonZeros <- n_Arrest > 0
+  n_Arrest <- n_Arrest[nonZeros]
+  bookingID <- bookingID[nonZeros]
   BookingArrest <- data.frame(BookingID=rep(bookingID, times=n_Arrest)) %>%
     mutate(BookingArrestID=seq(n()))
   recs <- nrow(BookingArrest)
@@ -316,7 +319,10 @@ buildBookingChildTables <- function(bookingID, bookingNumber, releaseDateTime, c
 
   bookingArrestID <- BookingArrest$BookingArrestID
 
-  n_Charge <- sample(1:5, size=length(bookingArrestID), replace=TRUE, prob=c(.5, .2, .15, .1, .05))
+  n_Charge <- sample(0:5, size=length(bookingArrestID), replace=TRUE, prob=c(.05, .45, .2, .15, .1, .05))
+  nonZeros <- n_Charge > 0
+  n_Charge <- n_Charge[nonZeros]
+  bookingArrestID <- bookingArrestID[nonZeros]
   BookingCharge <- data.frame(BookingArrestID=rep(bookingArrestID, times=n_Charge)) %>%
     mutate(BookingChargeID=seq(n()))
   recs <- nrow(BookingCharge)
