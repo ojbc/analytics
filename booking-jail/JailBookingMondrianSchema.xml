@@ -1,4 +1,7 @@
 <Schema name="ojbc_booking_analytics_demo">	
+<!-- TODO: like Age, add multi-level heirarchies for Agency, Jurisdiction, Bond Type, Bond Status
+
+				Add mssql dialects -->
 
 	<Dimension type="TimeDimension" visible="true" highCardinality="false" name="Date">
 		<Hierarchy name="DateYMD" visible="true" hasAll="true" primaryKey="DateID" caption="Year/Month/Day" allMemberName="All Years" allMemberCaption="All Years" >
@@ -242,30 +245,19 @@
 	</Dimension>
 
 	
-	
 	<Cube name="Booking" visible="false">
 		<View alias="Booking">
 			<SQL dialect="mysql">
         <![CDATA[select JailEpisodeID, LengthOfStay, SupervisionUnitTypeID, CaseStatusTypeID, FacilityID,  PersonRaceTypeID, PersonSexTypeID, Person.PersonAgeTypeID, PersonEthnicityTypeID, 
-	         LanguageTypeID, EducationLevelTypeID, OccupationTypeID, MilitaryServiceStatusTypeID,  DomicileStatusTypeID, ProgramEligibilityTypeID, SexOffenderStatusTypeID,  
-	         WorkReleaseStatusTypeID, PopulationTypeID, EpisodeStartDateID,
-	         if(SixMonthRebooking='Y', 1, 0) as SixMonthRecidivism,
-	         if(OneYearRebooking='Y', 1, 0) as OneYearRecidivism,
-	         if(TwoYearRebooking='Y', 1, 0) as TwoYearRecidivism,
-	         if(IsActive='Y', 1, 0) as IsActiveBooking
-         	from JailEpisode, Person
-         	where JailEpisode.PersonID=Person.PersonID]]>
-			</SQL>
-			<SQL dialect="mssql">
-        <![CDATA[select JailEpisodeID, LengthOfStay, SupervisionUnitTypeID, CaseStatusTypeID, FacilityID,  PersonRaceTypeID, PersonSexTypeID, Person.PersonAgeTypeID, PersonEthnicityTypeID, 
-	         LanguageTypeID, EducationLevelTypeID, OccupationTypeID, MilitaryServiceStatusTypeID,  DomicileStatusTypeID, ProgramEligibilityTypeID, SexOffenderStatusTypeID,  
-	         WorkReleaseStatusTypeID, PopulationTypeID, EpisodeStartDateID,
-	         iif(SixMonthRebooking='Y', 1, 0) as SixMonthRecidivism,
-	         iif(OneYearRebooking='Y', 1, 0) as OneYearRecidivism,
-	         iif(TwoYearRebooking='Y', 1, 0) as TwoYearRecidivism,
-	         iif(IsActive='Y', 1, 0) as IsActiveBooking
-         	from JailEpisode, Person
-         	where JailEpisode.PersonID=Person.PersonID]]>
+	         LanguageTypeID, EducationLevelTypeID, OccupationTypeID, MilitaryServiceStatusTypeID,  DomicileStatusTypeID, ProgramEligibilityTypeID, SexOffenderStatusTypeID,   
+ 	         WorkReleaseStatusTypeID, PopulationTypeID, EpisodeStartDateID, 
+ 	         (if(SixMonthRebooking='Y', 1, 0) *JailEpisodeID) as SixMonthRebookNumerator, 
+ 	         (if(OneYearRebooking='Y', 1, 0) *JailEpisodeID) as OneYearRebookNumerator, 
+ 	         (if(TwoYearRebooking='Y', 1, 0) *JailEpisodeID) as TwoYearRebookNumerator, 
+ 	         if(IsActive='Y', 1, 0) as IsActiveBooking 
+          	 From JailEpisode 
+          	 Inner Join Person on JailEpisode.PersonID=Person.PersonID 
+          	 ]]> 
 			</SQL>
 		</View>
 		<DimensionUsage source="Age" name="Age" visible="true" foreignKey="PersonAgeTypeID" highCardinality="false"/>
@@ -285,12 +277,27 @@
 		<DimensionUsage source="SupervisionUnit" name="Supervision Unit" visible="true" foreignKey="SupervisionUnitTypeID" highCardinality="false"/>
 		<DimensionUsage source="CaseStatus" name="Case Status" visible="true" foreignKey="CaseStatusTypeID" highCardinality="false"/>
  		<DimensionUsage source="Date" name="Booking Date" visible="true" foreignKey="EpisodeStartDateID" highCardinality="false"/>
-		<Measure name="Booking Count" column="JailEpisodeID" aggregator="count"/>
+		<Measure name="Booking Count" column="JailEpisodeID" aggregator="distinct-count"/>
 		<Measure name="Active Booking Count" column="IsActiveBooking" aggregator="sum"/>
 		<Measure name="Average Length Of Stay" column="LengthOfStay" aggregator="avg" visible="true"/>
-		<Measure name="Six Month Rebooking Rate" column="SixMonthRecidivism"  aggregator="avg" formatString="#0.0%" caption="Six Month Rebooking Rate" visible="true"/>
-		<Measure name="One Year Rebooking Rate" column="OneYearRecidivism"  aggregator="avg" formatString="#0.0%" caption="One Year Rebooking Rate" visible="true"/>
-		<Measure name="Two Year Rebooking Rate" column="TwoYearRecidivism"  aggregator="avg" formatString="#0.0%" caption="Two Year Rebooking Rate" visible="true"/>	
+		<Measure name="SixMonthRebookNumerator" column="SixMonthRebookNumerator" aggregator="distinct-count"  visible="false"/>
+		<Measure name="OneYearRebookNumerator" column="OneYearRebookNumerator" aggregator="distinct-count"  visible="false"/>
+		<Measure name="TwoYearRebookNumerator" column="TwoYearRebookNumerator" aggregator="distinct-count"  visible="false"/>
+		
+		<!--  We have to substract 1 in the numerator because all of the zeros (from multiplying the JailEpisodeID * not-a-recidivist) will count as 1-->
+		<CalculatedMember name="SixMonthRebookRate" caption="Six Month Rebooking Rate" dimension="Measures">
+			<Formula>IIf([Measures].[Booking Count] > 0, ([Measures].[SixMonthRebookNumerator]-1)  / [Measures].[Booking Count], 0)</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+		</CalculatedMember>
+		<CalculatedMember name="OneYearRebookRate" caption="One Year Rebooking Rate" dimension="Measures">
+			<Formula>IIf([Measures].[Booking Count] > 0, ([Measures].[OneYearRebookNumerator] -1)/ [Measures].[Booking Count], 0)</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+		</CalculatedMember>
+		<CalculatedMember name="TwoYearRebookRate" caption="Two Year Rebooking Rate" dimension="Measures">
+			<Formula>IIf([Measures].[Booking Count] > 0,  ([Measures].[TwoYearRebookNumerator] -1)/ [Measures].[Booking Count], 0)</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+		</CalculatedMember>
+		
 	</Cube>
 			
 	<Cube name="Booking-Charge" visible="false">
@@ -501,9 +508,15 @@
 		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[Booking Count]"/>
 		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[Active Booking Count]"/>
 		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[Average Length Of Stay]"/>
-		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[Six Month Rebooking Rate]"/>
-		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[One Year Rebooking Rate]"/>
-		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[Two Year Rebooking Rate]"/>
+		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[SixMonthRebookNumerator]" visible="false"/>
+		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[OneYearRebookNumerator]" visible="false"/>
+		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[TwoYearRebookNumerator]" visible="false"/>
+		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[SixMonthRebookRate]"/>
+		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[OneYearRebookRate]"/>
+		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[TwoYearRebookRate]"/>
+		
+<!-- 		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[One Year Rebooking Rate]"/> -->
+<!-- 		<VirtualCubeMeasure cubeName="Booking" name="[Measures].[Two Year Rebooking Rate]"/> -->
 		<VirtualCubeMeasure cubeName="Booking-Charge" name="[Measures].[Charge Count]"/>
 		<VirtualCubeMeasure cubeName="Booking-Charge" name="[Measures].[Average Bond Amount]"/>
 	</VirtualCube>
