@@ -271,7 +271,7 @@
 		 	         ifnull( JurisdictionTypeID, 99998), JurisdictionTypeID, 
 		 	         ifnull(BondTypeID, 99998), BondTypeID, 
 		 	         ifnull(BondStatusTypeID, 99998), BondStatusTypeID, 
-		 	         BondAmount
+		 	         BondAmount, JailEpisodeArrest.JailEpisodeArrestID
 		          	 From JailEpisode
 		          	 Inner Join Person on JailEpisode.PersonID=Person.PersonID 
 		          	 Left Join JailEpisodeArrest on JailEpisode.JailEpisodeID=JailEpisodeArrest.JailEpisodeID
@@ -294,7 +294,7 @@
 		 	         isnull( JurisdictionTypeID, 99998), JurisdictionTypeID, 
 		 	         isnull(BondTypeID, 99998), BondTypeID, 
 		 	         isnull(BondStatusTypeID, 99998), BondStatusTypeID, 
-		 	         BondAmount
+		 	         BondAmount, JailEpisodeArrest.JailEpisodeArrestID
 		          	 From JailEpisode
 		          	 Inner Join Person on JailEpisode.PersonID=Person.PersonID 
 		          	 Left Join JailEpisodeArrest on JailEpisode.JailEpisodeID=JailEpisodeArrest.JailEpisodeID
@@ -326,12 +326,14 @@
 		<DimensionUsage source="ChargeClass" name="Charge Class" visible="true" foreignKey="ChargeClassTypeID" highCardinality="false"/>
 		<DimensionUsage source="ChargeDisposition" name="Charge Disposition" visible="true" foreignKey="ChargeDispositionTypeID" highCardinality="false"/>
 		<DimensionUsage source="Arrest Agency" name="Arrest Agency" visible="true" foreignKey="ArrestAgencyID" highCardinality="false"/>
-		<DimensionUsage source="Hold for Agency" name="Hold for Agency" visible="true" foreignKey="HoldForAgencyID" highCardinality="false"/>
+		<!-- Removing hold for agency for now -->
+<!-- 		<DimensionUsage source="Hold for Agency" name="Hold for Agency" visible="true" foreignKey="HoldForAgencyID" highCardinality="false"/> -->
 		<DimensionUsage source="Jurisdiction" name="Charge Jurisdiction" visible="true" foreignKey="JurisdictionTypeID" highCardinality="false"/>
 		<DimensionUsage source="BondStatus" name="Bond Status" visible="true" foreignKey="BondStatusTypeID" highCardinality="false"/>
 		<DimensionUsage source="Bond" name="Bond Type" visible="true" foreignKey="BondTypeID" highCardinality="false"/>
 		
 		<Measure name="Booking Count" column="JailEpisodeID" aggregator="distinct-count"/>
+		<Measure name="Arrest Count" column="JailEpisodeArrestID" aggregator="distinct-count"/>
 		<Measure name="Active Booking Count" column="IsActiveBooking" aggregator="sum"/>
 		<Measure name="Average Length Of Stay" column="LengthOfStay" aggregator="avg" visible="true"/>
 		<Measure name="SixMonthRebookNumerator" column="SixMonthRebookNumerator" aggregator="distinct-count"  visible="false"/>
