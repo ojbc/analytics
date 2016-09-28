@@ -1,4 +1,4 @@
-<Schema name="ojbc_booking_analytics_demo">	
+<Schema name="ojbc_booking_analytics">	
 <!-- TODO: like Age, add multi-level heirarchies for Agency, Jurisdiction, Bond Type, Bond Status
 
 				Add mssql dialects -->
@@ -109,10 +109,17 @@
 		</Hierarchy>
 	</Dimension>
 	
-	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Agency">
-		<Hierarchy name="Agency" visible="true" hasAll="true" primaryKey="AgencyID" caption="Agency">
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Arrest Agency">
+		<Hierarchy name="Agency" visible="true" hasAll="true" primaryKey="AgencyID" caption="Arrest Agency">
 			<Table name="Agency"/>
-			<Level name="Agency" visible="true" table="Agency" column="AgencyDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Arrest Agency" visible="true" table="Agency" column="AgencyDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Hold for Agency">
+		<Hierarchy name="Agency" visible="true" hasAll="true" primaryKey="AgencyID" caption="Hold for Agency">
+			<Table name="Agency"/>
+			<Level name="Hold for Agency" visible="true" table="Agency" column="AgencyDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
@@ -245,25 +252,56 @@
 	</Dimension>
 
 	
-	<Cube name="JailBooking" visible="false">
-		<View alias="JailBooking">
+	<Cube name="JailBookingCharge" visible="true">
+		<View alias="JailBookingCharge">
 			<SQL dialect="mysql">
-        <![CDATA[select JailEpisode.JailEpisodeID, LengthOfStay, SupervisionUnitTypeID, CaseStatusTypeID, FacilityID,  PersonRaceTypeID, PersonSexTypeID, Person.PersonAgeTypeID, PersonEthnicityTypeID, 
-	         LanguageTypeID, EducationLevelTypeID, OccupationTypeID, MilitaryServiceStatusTypeID,  DomicileStatusTypeID, ProgramEligibilityTypeID, SexOffenderStatusTypeID,   
- 	         WorkReleaseStatusTypeID, PopulationTypeID, EpisodeStartDateID, 
- 	         (if(SixMonthRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID) as SixMonthRebookNumerator, 
- 	         (if(OneYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID) as OneYearRebookNumerator, 
- 	         (if(TwoYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID) as TwoYearRebookNumerator, 
- 	         if(IsActive='Y', 1, 0) as IsActiveBooking, 
- 	         ifnull(JailEpisodeArrest.AgencyID, 99998),
- 	         ChargeClassTypeID, ChargeTypeID, ChargeDispositionTypeID, JurisdictionTypeID, BondTypeID, BondStatusTypeID, BondAmount
-          	 From JailEpisode
-          	 Inner Join Person on JailEpisode.PersonID=Person.PersonID 
-          	 Left Join JailEpisodeArrest on JailEpisode.JailEpisodeID=JailEpisodeArrest.JailEpisodeID
-             Left Join JailEpisodeCharge on JailEpisodeArrest.JailEpisodeArrestID=JailEpisodeCharge.JailEpisodeArrestID
-          	 ]]> 
+		        <![CDATA[select JailEpisode.JailEpisodeID, LengthOfStay, SupervisionUnitTypeID, CaseStatusTypeID, FacilityID,  PersonRaceTypeID, PersonSexTypeID, Person.PersonAgeTypeID, PersonEthnicityTypeID, 
+			         LanguageTypeID, EducationLevelTypeID, OccupationTypeID, MilitaryServiceStatusTypeID,  DomicileStatusTypeID, ProgramEligibilityTypeID, SexOffenderStatusTypeID,   
+		 	         WorkReleaseStatusTypeID, PopulationTypeID, EpisodeStartDateID, 
+		 	         (if(SixMonthRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID) as SixMonthRebookNumerator, 
+		 	         (if(OneYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID) as OneYearRebookNumerator, 
+		 	         (if(TwoYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID) as TwoYearRebookNumerator, 
+		 	         if(IsActive='Y', 1, 0) as IsActiveBooking, 
+		 	         ifnull(JailEpisodeArrest.AgencyID, 99998), JailEpisodeArrest.AgencyID as ArrestAgencyID,
+		 	         ifnull(JailEpisodeCharge.AgencyID, 99998), JailEpisodeCharge.AgencyID as HoldForAgencyID,
+		 	         ifnull(ChargeClassTypeID, 99998), ChargeClassTypeID, 
+		 	         ifnull(ChargeTypeID, 99998),  ChargeTypeID, 
+		 	         ifnull(ChargeDispositionTypeID, 99998), ChargeDispositionTypeID, 
+		 	         ifnull( JurisdictionTypeID, 99998), JurisdictionTypeID, 
+		 	         ifnull(BondTypeID, 99998), BondTypeID, 
+		 	         ifnull(BondStatusTypeID, 99998), BondStatusTypeID, 
+		 	         BondAmount
+		          	 From JailEpisode
+		          	 Inner Join Person on JailEpisode.PersonID=Person.PersonID 
+		          	 Left Join JailEpisodeArrest on JailEpisode.JailEpisodeID=JailEpisodeArrest.JailEpisodeID
+		             Left Join JailEpisodeCharge on JailEpisodeArrest.JailEpisodeArrestID=JailEpisodeCharge.JailEpisodeArrestID
+		          	 ]]> 
 			</SQL>
+			<SQL dialect="mssql">
+		        <![CDATA[select JailEpisode.JailEpisodeID, LengthOfStay, SupervisionUnitTypeID, CaseStatusTypeID, FacilityID,  PersonRaceTypeID, PersonSexTypeID, Person.PersonAgeTypeID, PersonEthnicityTypeID, 
+			         LanguageTypeID, EducationLevelTypeID, OccupationTypeID, MilitaryServiceStatusTypeID,  DomicileStatusTypeID, ProgramEligibilityTypeID, SexOffenderStatusTypeID,   
+		 	         WorkReleaseStatusTypeID, PopulationTypeID, EpisodeStartDateID, 
+		 	         (iif(SixMonthRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID) as SixMonthRebookNumerator, 
+		 	         (iif(OneYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID) as OneYearRebookNumerator, 
+		 	         (iif(TwoYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID) as TwoYearRebookNumerator, 
+		 	         iif(IsActive='Y', 1, 0) as IsActiveBooking, 
+		 	         JailEpisodeArrest.AgencyID,
+		 	         isnull( JailEpisodeArrest.AgencyID, 99998),
+		 	         ChargeClassTypeID, isnull(ChargeClassTypeID, 99998),
+		 	         ChargeTypeID, isnull(ChargeTypeID, 99998), 
+		 	         ChargeDispositionTypeID, isnull(ChargeDispositionTypeID, 99998),
+		 	         JurisdictionTypeID, isnull( JurisdictionTypeID, 99998),
+		 	         BondTypeID, isnull(BondTypeID, 99998),
+		 	         BondStatusTypeID, isnull(BondStatusTypeID, 99998), BondAmount
+		          	 From JailEpisode
+		          	 Inner Join Person on JailEpisode.PersonID=Person.PersonID 
+		          	 Left Join JailEpisodeArrest on JailEpisode.JailEpisodeID=JailEpisodeArrest.JailEpisodeID
+		             Left Join JailEpisodeCharge on JailEpisodeArrest.JailEpisodeArrestID=JailEpisodeCharge.JailEpisodeArrestID
+		          	 ]]> 
+			</SQL>
+			<!-- Add mssql dialect and hold for agency-->
 		</View>
+		<!-- Person Dimensions -->
 		<DimensionUsage source="Age" name="Age" visible="true" foreignKey="PersonAgeTypeID" highCardinality="false"/>
 		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="PersonRaceTypeID" highCardinality="false"/>
 		<DimensionUsage source="Sex" name="Sex" visible="true" foreignKey="PersonSexTypeID" highCardinality="false"/>
@@ -276,11 +314,22 @@
 		<DimensionUsage source="ProgramEligibility" name="Program Eligibility" visible="true" foreignKey="ProgramEligibilityTypeID" highCardinality="false"/>
 		<DimensionUsage source="SexOffenderStatus" name="Sex Offender Status" visible="true" foreignKey="SexOffenderStatusTypeID" highCardinality="false"/>
 		<DimensionUsage source="WorkReleaseStatus" name="Work Release Status" visible="true" foreignKey="WorkReleaseStatusTypeID" highCardinality="false"/>
+		<!-- Booking Dimensions -->
 		<DimensionUsage source="Population" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/>
 		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/>
 		<DimensionUsage source="SupervisionUnit" name="Supervision Unit" visible="true" foreignKey="SupervisionUnitTypeID" highCardinality="false"/>
 		<DimensionUsage source="CaseStatus" name="Case Status" visible="true" foreignKey="CaseStatusTypeID" highCardinality="false"/>
  		<DimensionUsage source="Date" name="Booking Date" visible="true" foreignKey="EpisodeStartDateID" highCardinality="false"/>
+ 		<!--  Charge Dimensions-->
+		<DimensionUsage source="Charge" name="Charge Type" visible="true" foreignKey="ChargeTypeID" highCardinality="false"/>
+		<DimensionUsage source="ChargeClass" name="Charge Class" visible="true" foreignKey="ChargeClassTypeID" highCardinality="false"/>
+		<DimensionUsage source="ChargeDisposition" name="Charge Disposition" visible="true" foreignKey="ChargeDispositionTypeID" highCardinality="false"/>
+		<DimensionUsage source="Arrest Agency" name="Arrest Agency" visible="true" foreignKey="ArrestAgencyID" highCardinality="false"/>
+		<DimensionUsage source="Hold for Agency" name="Hold for Agency" visible="true" foreignKey="HoldForAgencyID" highCardinality="false"/>
+		<DimensionUsage source="Jurisdiction" name="Charge Jurisdiction" visible="true" foreignKey="JurisdictionTypeID" highCardinality="false"/>
+		<DimensionUsage source="BondStatus" name="Bond Status" visible="true" foreignKey="BondStatusTypeID" highCardinality="false"/>
+		<DimensionUsage source="Bond" name="Bond Type" visible="true" foreignKey="BondTypeID" highCardinality="false"/>
+		
 		<Measure name="Booking Count" column="JailEpisodeID" aggregator="distinct-count"/>
 		<Measure name="Active Booking Count" column="IsActiveBooking" aggregator="sum"/>
 		<Measure name="Average Length Of Stay" column="LengthOfStay" aggregator="avg" visible="true"/>
