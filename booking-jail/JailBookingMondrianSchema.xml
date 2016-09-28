@@ -1,8 +1,4 @@
 <Schema name="ojbc_booking_analytics">	
-<!-- TODO: like Age, add multi-level heirarchies for Agency, Jurisdiction, Bond Type, Bond Status
-
-				Add mssql dialects -->
-
 	<Dimension type="TimeDimension" visible="true" highCardinality="false" name="Date">
 		<Hierarchy name="DateYMD" visible="true" hasAll="true" primaryKey="DateID" caption="Year/Month/Day" allMemberName="All Years" allMemberCaption="All Years" >
 			<Table name="Date"/>
@@ -85,6 +81,7 @@
 		<Hierarchy name="Bond Status" visible="true" hasAll="true" primaryKey="BondStatusTypeID" caption="Bond Status">
 			<Table name="BondStatusType"/>
 			<Level name="Bond Status" visible="true" table="BondStatusType" column="BondStatusTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Bond Status Category" visible="true" table="BondStatusType" column="BondStatusTypeCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
@@ -92,6 +89,7 @@
 		<Hierarchy name="Bond Type" visible="true" hasAll="true" primaryKey="BondTypeID" caption="Bond Type">
 			<Table name="BondType"/>
 			<Level name="Bond Type" visible="true" table="BondType" column="BondTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Bond Category" visible="true" table="BondType" column="BondTypeCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
@@ -99,6 +97,7 @@
 		<Hierarchy name="Jurisdiction" visible="true" hasAll="true" primaryKey="JurisdictionTypeID" caption="Jurisdiction">
 			<Table name="JurisdictionType"/>
 			<Level name="Jurisdiction" visible="true" table="JurisdictionType" column="JurisdictionTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Jurisdiction Category" visible="true" table="JurisdictionType" column="JurisdictionCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
@@ -113,6 +112,7 @@
 		<Hierarchy name="Agency" visible="true" hasAll="true" primaryKey="AgencyID" caption="Arrest Agency">
 			<Table name="Agency"/>
 			<Level name="Arrest Agency" visible="true" table="Agency" column="AgencyDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Arrest Agency Category" visible="true" table="Agency" column="AgencyCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
@@ -120,6 +120,7 @@
 		<Hierarchy name="Agency" visible="true" hasAll="true" primaryKey="AgencyID" caption="Hold for Agency">
 			<Table name="Agency"/>
 			<Level name="Hold for Agency" visible="true" table="Agency" column="AgencyDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Hold for Agency Category" visible="true" table="Agency" column="AgencyCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
@@ -278,28 +279,28 @@
 		          	 ]]> 
 			</SQL>
 			<SQL dialect="mssql">
-		        <![CDATA[select JailEpisode.JailEpisodeID, LengthOfStay, SupervisionUnitTypeID, CaseStatusTypeID, FacilityID,  PersonRaceTypeID, PersonSexTypeID, Person.PersonAgeTypeID, PersonEthnicityTypeID, 
+		         <![CDATA[select JailEpisode.JailEpisodeID, LengthOfStay, SupervisionUnitTypeID, CaseStatusTypeID, FacilityID,  PersonRaceTypeID, PersonSexTypeID, Person.PersonAgeTypeID, PersonEthnicityTypeID, 
 			         LanguageTypeID, EducationLevelTypeID, OccupationTypeID, MilitaryServiceStatusTypeID,  DomicileStatusTypeID, ProgramEligibilityTypeID, SexOffenderStatusTypeID,   
 		 	         WorkReleaseStatusTypeID, PopulationTypeID, EpisodeStartDateID, 
 		 	         (iif(SixMonthRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID) as SixMonthRebookNumerator, 
 		 	         (iif(OneYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID) as OneYearRebookNumerator, 
 		 	         (iif(TwoYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID) as TwoYearRebookNumerator, 
 		 	         iif(IsActive='Y', 1, 0) as IsActiveBooking, 
-		 	         JailEpisodeArrest.AgencyID,
-		 	         isnull( JailEpisodeArrest.AgencyID, 99998),
-		 	         ChargeClassTypeID, isnull(ChargeClassTypeID, 99998),
-		 	         ChargeTypeID, isnull(ChargeTypeID, 99998), 
-		 	         ChargeDispositionTypeID, isnull(ChargeDispositionTypeID, 99998),
-		 	         JurisdictionTypeID, isnull( JurisdictionTypeID, 99998),
-		 	         BondTypeID, isnull(BondTypeID, 99998),
-		 	         BondStatusTypeID, isnull(BondStatusTypeID, 99998), BondAmount
+		 	         isnull(JailEpisodeArrest.AgencyID, 99998), JailEpisodeArrest.AgencyID as ArrestAgencyID,
+		 	         isnull(JailEpisodeCharge.AgencyID, 99998), JailEpisodeCharge.AgencyID as HoldForAgencyID,
+		 	         isnull(ChargeClassTypeID, 99998), ChargeClassTypeID, 
+		 	         isnull(ChargeTypeID, 99998),  ChargeTypeID, 
+		 	         isnull(ChargeDispositionTypeID, 99998), ChargeDispositionTypeID, 
+		 	         isnull( JurisdictionTypeID, 99998), JurisdictionTypeID, 
+		 	         isnull(BondTypeID, 99998), BondTypeID, 
+		 	         isnull(BondStatusTypeID, 99998), BondStatusTypeID, 
+		 	         BondAmount
 		          	 From JailEpisode
 		          	 Inner Join Person on JailEpisode.PersonID=Person.PersonID 
 		          	 Left Join JailEpisodeArrest on JailEpisode.JailEpisodeID=JailEpisodeArrest.JailEpisodeID
 		             Left Join JailEpisodeCharge on JailEpisodeArrest.JailEpisodeArrestID=JailEpisodeCharge.JailEpisodeArrestID
 		          	 ]]> 
 			</SQL>
-			<!-- Add mssql dialect and hold for agency-->
 		</View>
 		<!-- Person Dimensions -->
 		<DimensionUsage source="Age" name="Age" visible="true" foreignKey="PersonAgeTypeID" highCardinality="false"/>
@@ -354,22 +355,13 @@
 		
 	</Cube>
 			
-<Cube name="Behavioral-Health-Evaluation" visible="false">
-	<View alias="Behavioral-Health-Evaluation">
+<Cube name="Behavioral-Health" visible="true">
+	<View alias="Behavioral-Health">
 		<SQL dialect="mysql">
         <![CDATA[select BehavioralHealthAssessment.BehavioralHealthAssessmentID, MedicaidStatusTypeID, BehavioralHealthEvaluationTypeID, 
         PersonRaceTypeID, PersonSexTypeID, Person.PersonAgeTypeID, PersonEthnicityTypeID,  LanguageTypeID, EducationLevelTypeID, 
         OccupationTypeID, MilitaryServiceStatusTypeID,  DomicileStatusTypeID, ProgramEligibilityTypeID, SexOffenderStatusTypeID,  WorkReleaseStatusTypeID, PopulationTypeID, SevereMentalIllnessIndicator,
          if(InTreatmentAtBooking='Y', 1, 0) as BeingTreatedAtBooking
-         	from BehavioralHealthAssessment, BehavioralHealthEvaluation, Person
-         	where BehavioralHealthEvaluation.BehavioralHealthAssessmentID=BehavioralHealthAssessment.BehavioralHealthAssessmentID and 
-	         	BehavioralHealthAssessment.PersonID=Person.PersonID]]>
-			</SQL>
-			<SQL dialect="mssql">
-        <![CDATA[select BehavioralHealthAssessment.BehavioralHealthAssessmentID, MedicaidStatusTypeID, BehavioralHealthEvaluationTypeID, 
-        PersonRaceTypeID, PersonSexTypeID, Person.PersonAgeTypeID, PersonEthnicityTypeID,  LanguageTypeID, EducationLevelTypeID, 
-        OccupationTypeID, MilitaryServiceStatusTypeID,  DomicileStatusTypeID, ProgramEligibilityTypeID, SexOffenderStatusTypeID,  WorkReleaseStatusTypeID, PopulationTypeID, SevereMentalIllnessIndicator,
-         iif(InTreatmentAtBooking='Y', 1, 0) as BeingTreatedAtBooking
          	from BehavioralHealthAssessment, BehavioralHealthEvaluation, Person
          	where BehavioralHealthEvaluation.BehavioralHealthAssessmentID=BehavioralHealthAssessment.BehavioralHealthAssessmentID and 
 	         	BehavioralHealthAssessment.PersonID=Person.PersonID]]>
