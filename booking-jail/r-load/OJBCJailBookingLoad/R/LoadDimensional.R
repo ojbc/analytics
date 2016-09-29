@@ -546,6 +546,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
                                     codeTableValueTranslator=defaultCodeTableValueTranslator,
                                     unknownCodeTableValue=as.integer(99999),
                                     noneCodeTableValue=as.integer(99998),
+                                    materializedViewsSqlFile=system.file("raw", "MaterializedViews.sql", package=getPackageName()),
                                     completeLoad=TRUE,
                                     writeToDatabase=FALSE) {
 
@@ -627,6 +628,8 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   args$unknownCodeTableValue <- unknownCodeTableValue
   args$writeToDatabase <- writeToDatabase
   do.call(populationTypeConverter, args)
+
+  createMaterializedViews(adsConnection, materializedViewsSqlFile)
 
   dbDisconnect(stagingConnection)
   dbDisconnect(adsConnection)
@@ -760,6 +763,20 @@ persistTables <- function(adsConnection, dfs, unknownCodeTableValue) {
 
   writeLines("Processing releases")
   persistReleases(adsConnection, dfs, unknownCodeTableValue)
+
+}
+
+#' @importFrom readr read_file
+#' @importFrom stringr str_split str_length
+createMaterializedViews <- function(adsConnection, sqlFile) {
+
+  sql <- readr::read_file(sqlFile)
+  sql <- stringr::str_split(sql, ";")[[1]]
+  for (s in sql) {
+    if (str_length(trimws(s))) {
+      executeQuery(adsConnection, s)
+    }
+  }
 
 }
 
