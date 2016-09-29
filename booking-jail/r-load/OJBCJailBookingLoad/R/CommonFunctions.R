@@ -53,7 +53,14 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
         if (!append) {
           executeSQL(paste0("delete from ", tableName))
         }
-        f <- tempfile(tmpdir = "D:/temp", pattern = tableName)
+        
+        f <- NULL
+        if (Sys.info()['sysname'] == 'Windows') {
+            f <- gsub(x=tempfile(tmpdir='c:\\tmp', pattern=tableName), pattern='\\', replacement='/')
+        } else {
+            f <- tempfile(tmpdir = "/tmp", pattern = tableName)
+        }
+        
         write_delim(x=x, path=f, na="\\N", delim="|", col_names=FALSE)
         cn <- colnames(x)
         dateCols <- as.vector(sapply(x, function(col) {inherits(col, "Date")}))
@@ -65,6 +72,7 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
           setString <- paste0("set ", paste0(cn[dateCols], "=str_to_date(", cne[dateCols], ", '%Y-%m-%d')", collapse=","))
           fieldList <-  paste0("(", paste0(cne, collapse=','), ")")
         }
+        
         sql <- paste0("load data infile '", f, "' into table ", tableName, " fields terminated by \"|\" ", fieldList, " ", setString)
         executeSQL(sql)
         file.remove(f)
