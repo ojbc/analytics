@@ -56,7 +56,7 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
         
         f <- NULL
         if (Sys.info()['sysname'] == 'Windows') {
-            f <- gsub(x=tempfile(tmpdir='c:\\tmp', pattern=tableName), pattern='\\', replacement='/')
+            f <- gsub(x=tempfile(tmpdir='c:\\tmp', pattern=tableName), pattern='\\\\', replacement='/')
         } else {
             f <- tempfile(tmpdir = "/tmp", pattern = tableName)
         }
