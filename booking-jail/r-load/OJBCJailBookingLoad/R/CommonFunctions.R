@@ -53,7 +53,7 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
         if (!append) {
           executeSQL(paste0("delete from ", tableName))
         }
-        f <- tempfile(tmpdir = "C:/tmp", pattern = tableName)
+        f <- tempfile(tmpdir = "D:/temp", pattern = tableName)
         write_delim(x=x, path=f, na="\\N", delim="|", col_names=FALSE)
         cn <- colnames(x)
         dateCols <- as.vector(sapply(x, function(col) {inherits(col, "Date")}))
