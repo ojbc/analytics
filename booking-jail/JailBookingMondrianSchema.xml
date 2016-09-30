@@ -290,31 +290,31 @@
 		<DimensionUsage source="TreatmentStatus" name="Treatment Status" visible="true" foreignKey="TreatmentStatusTypeID" highCardinality="false"/>
 		<DimensionUsage source="TreatmentAdmissionReason" name="Treatment Admission Reason" visible="true" foreignKey="TreatmentAdmissionReasonTypeID" highCardinality="false"/>
 		<DimensionUsage source="TreatmentProvider"  name="Treatment Provider" visible="true" foreignKey="TreatmentProviderTypeID" highCardinality="false"/>	
-		<Measure name="Booking Count" column="JailEpisodeID" aggregator="distinct-count"/>
-		<Measure name="Arrest Count" column="JailEpisodeArrestID" aggregator="distinct-count"/>
-		<Measure name="Active Booking Count" column="IsActiveBookingCount" aggregator="sum"/>
+		<Measure name="Booking Count" column="JailEpisodeID" aggregator="distinct-count" visible="true"/>
+		<Measure name="Arrest Count" column="JailEpisodeArrestID" aggregator="distinct-count" visible="true"/>
+		<Measure name="Active Booking Count" column="IsActiveBookingCount" aggregator="sum" visible="true"/>
 		<Measure name="Average Length Of Stay" column="LengthOfStay" aggregator="avg" visible="true"/>
 		<Measure name="SixMonthRebookingCount" column="SixMonthRebookingCount" aggregator="distinct-count"  visible="false"/>
 		<Measure name="OneYearRebookingCount" column="OneYearRebookingCount" aggregator="distinct-count"  visible="false"/>
 		<Measure name="TwoYearRebookingCount" column="TwoYearRebookingCount" aggregator="distinct-count"  visible="false"/>
-		<Measure name="Charge Count" column="JailEpisodeChargeID" aggregator="count"/>
- 		<Measure name="Average Bond Amount" column="BondAmount" aggregator="avg" formatString="$0.00"/>
- 		<Measure name="Evaluation Count" column="BehavioralHealthEvaluationID" aggregator="distinct-count"/>
- 		<Measure name="Treatment Count" column="BehavioralHealthTreatmentID" aggregator="distinct-count"/>
- 		 <Measure name="Prescription Count" column="PrescribedMedicationID" aggregator="distinct-count"/>
-		<Measure name="SMI Rate" column="SevereMentalIllnessIndicator" aggregator="avg" formatString="#0.0%" caption="SMI Rate"/>
-		<Measure name="Treatment At Booking Rate" column="InTreatmentAtBookingCount" aggregator="avg" formatString="#0.0%" caption="In Treatment at Booking Rate"/>
+		<Measure name="Charge Count" column="JailEpisodeChargeID" aggregator="count" visible="true"/>
+ 		<Measure name="Average Bond Amount" column="BondAmount" aggregator="avg" formatString="$0.00" visible="true"/>
+ 		<Measure name="Evaluation Count" column="BehavioralHealthEvaluationID" aggregator="distinct-count" visible="true"/>
+ 		<Measure name="Treatment Count" column="BehavioralHealthTreatmentID" aggregator="distinct-count" visible="true"/>
+ 		 <Measure name="Prescription Count" column="PrescribedMedicationID" aggregator="distinct-count" visible="true"/>
+		<Measure name="SMI Rate" column="SevereMentalIllnessIndicator" aggregator="avg" formatString="#0.0%" caption="SMI Rate" visible="true"/>
+		<Measure name="Treatment At Booking Rate" column="InTreatmentAtBookingCount" aggregator="avg" formatString="#0.0%" caption="In Treatment at Booking Rate" visible="true"/>
 		<!--  We have to subtract 1 in the numerator because all of the zeros (from multiplying the JailEpisodeID * not-a-recidivist) will count as 1-->
 		<CalculatedMember name="SixMonthRebookRate" caption="Six Month Rebooking Rate" dimension="Measures">
-			<Formula>IIf([Measures].[Booking Count] > 0, ([Measures].[SixMonthRebookingCount]-1)  / [Measures].[Booking Count], 0)</Formula>
+			<Formula><![CDATA[IIf([Measures].[Booking Count] > 0, ([Measures].[SixMonthRebookingCount]-1)  / [Measures].[Booking Count], 0)]]></Formula>
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
 		</CalculatedMember>
 		<CalculatedMember name="OneYearRebookRate" caption="One Year Rebooking Rate" dimension="Measures">
-			<Formula>IIf([Measures].[Booking Count] > 0, ([Measures].[OneYearRebookingCount] -1)/ [Measures].[Booking Count], 0)</Formula>
+			<Formula><![CDATA[IIf([Measures].[Booking Count] > 0, ([Measures].[OneYearRebookingCount] -1)/ [Measures].[Booking Count], 0)]]></Formula>
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
 		</CalculatedMember>
 		<CalculatedMember name="TwoYearRebookRate" caption="Two Year Rebooking Rate" dimension="Measures">
-			<Formula>IIf([Measures].[Booking Count] > 0,  ([Measures].[TwoYearRebookingCount] -1)/ [Measures].[Booking Count], 0)</Formula>
+			<Formula><![CDATA[IIf([Measures].[Booking Count] > 0,  ([Measures].[TwoYearRebookingCount] -1)/ [Measures].[Booking Count], 0)]]></Formula>
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
 		</CalculatedMember>
 		
