@@ -368,7 +368,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   bha[sample(recs, recs*.1), 'CareEpisodeEndDate'] <- NA
 
   bha$MedicaidStatusTypeID <- generateRandomIDsFromCodeTable(codeTableList, "MedicaidStatusType", recs)
-  bha$SeriousMentalIllnessIndicator <- as.logical(rbinom(n=recs, size=2, prob=.3))
+  bha$SeriousMentalIllnessIndicator <- as.integer(rbinom(n=recs, size=1, prob=.3))
   bha$EnrolledProviderName <- paste0("Enrolled Provider ", sample(1:10, recs, prob=tenProbs, replace=TRUE))
   bha$BehavioralHealthAssessmentID <- seq(recs)
   bha$BehavioralHealthAssessmentTimestamp <- NA
