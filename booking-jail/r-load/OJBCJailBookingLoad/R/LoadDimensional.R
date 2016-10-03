@@ -117,8 +117,18 @@ getQuery <- function(conn, query, printSQL=FALSE) {
   suppressWarnings(dbGetQuery(conn, query))
 }
 
-updateLoadHistory <- function(adsConnection, currentLoadTime) {
-  executeQuery(adsConnection, paste0("insert into LoadHistory (LoadHistoryTimestamp) values ('", formatDateTimeForSQL(currentLoadTime), "')"))
+#' @import dplyr
+updateLoadHistory <- function(adsConnection, stagingConnection, currentLoadTime) {
+
+  df <- bind_rows(getQuery(stagingConnection, "select max(BookingTimestamp) as ttt from Booking"),
+                  getQuery(stagingConnection, "select max(PersonTimestamp) as ttt from Person"),
+                  getQuery(stagingConnection, "select max(CustodyReleaseTimestamp) as ttt from CustodyRelease"),
+                  getQuery(stagingConnection, "select max(CustodyStatusChangeTimestamp) as ttt from CustodyStatusChange"))
+
+  maxStagingTimestamp <- as.POSIXlt(max(df$ttt))
+
+  executeQuery(adsConnection, paste0("insert into LoadHistory (LoadHistoryTimestamp, MostRecentStagingTimestamp) ",
+                                     "values ('", formatDateTimeForSQL(currentLoadTime), "', '", formatDateTimeForSQL(maxStagingTimestamp), "')"))
   loadHistory <- getQuery(adsConnection, paste0("select LoadHistoryID from LoadHistory where LoadHistoryTimestamp='", formatDateTimeForSQL(currentLoadTime), "'"))
   loadHistoryID <- loadHistory$LoadHistoryID
   loadHistoryID
@@ -566,7 +576,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   writeLines(paste0("lastLoadTime=", lastLoadTime))
 
   currentLoadTime <- now()
-  loadHistoryID <- updateLoadHistory(adsConnection, currentLoadTime)
+  loadHistoryID <- updateLoadHistory(adsConnection, stagingConnection, currentLoadTime)
 
   writeLines("Loading code tables")
   codeTableList <- loadCodeTables(adsConnection, codeTableSpreadsheetFile, writeToDatabase & completeLoad)
