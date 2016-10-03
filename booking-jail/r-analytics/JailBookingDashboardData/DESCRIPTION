@@ -1,0 +1,11 @@
+Package: JailBookingDashboardData
+Type: Package
+Title: Summarized data to support Jail Booking Dashboards
+Version: 0.1
+Date: 2016-10-01
+Author: Who wrote it
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one line)
+License: What license is it under?
+LazyData: true
+RoxygenNote: 5.0.1
