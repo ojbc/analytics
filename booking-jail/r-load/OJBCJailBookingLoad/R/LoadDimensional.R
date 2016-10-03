@@ -160,6 +160,11 @@ translateCodeTableValue <- function(codeTableValueTranslator, stagingValue, code
 buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTime, currentLoadTime, loadHistoryID,
                                    unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator, codeTableList, codeTableValueTranslator) {
 
+  currentStagingDate <- getQuery(adsConnection, paste0("select MostRecentStagingTimestamp from LoadHistory where LoadHistoryID=", loadHistoryID))
+  currentStagingDate <- as_date(currentStagingDate[1,1])
+
+  writeLines(paste0("Most recent staging timestamp for this load is ", currentStagingDate))
+
   buildTable <- function(StagingBookingDf, StagingBookingChargeDispositionDf, chargeDispositionAggregator) {
 
     JailEpisode <- StagingBookingDf %>%
@@ -175,7 +180,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
         EpisodeEndDateID=noneCodeTableValue,
         FacilityID=translateCodeTableValue(codeTableValueTranslator, FacilityID, "Facility", unknownCodeTableValue, codeTableList),
         SupervisionUnitTypeID=translateCodeTableValue(codeTableValueTranslator, SupervisionUnitTypeID, "SupervisionUnitType", unknownCodeTableValue, codeTableList),
-        DaysAgo=as.integer((EpisodeStartDate %--% currentLoadTime) %/% days(1)),
+        DaysAgo=as.integer((EpisodeStartDate %--% currentStagingDate) %/% days(1)),
         LengthOfStay=DaysAgo,
         SixMonthRebooking='N',
         OneYearRebooking='N',
