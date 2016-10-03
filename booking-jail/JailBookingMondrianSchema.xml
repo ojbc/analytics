@@ -252,6 +252,27 @@
 		</Hierarchy>
 	</Dimension>
 
+	<Dimension name="SevereMentalIllness">
+		<Hierarchy hasAll="true" primaryKey="SevereMentalIllnessID">
+			<InlineTable alias="SevereMentalIllness">
+				<ColumnDefs>
+					<ColumnDef name="SevereMentalIllnessID" type="Integer"/>
+					<ColumnDef name="SevereMentalIllnessDescription" type="String"/>
+				</ColumnDefs>
+				<Rows>
+					<Row>
+						<Value column="SevereMentalIllnessID">0</Value>
+						<Value column="SevereMentalIllnessDescription">No</Value>
+					</Row>
+					<Row>
+						<Value column="SevereMentalIllnessID">1</Value>
+						<Value column="SevereMentalIllnessDescription">Yes</Value>
+					</Row>
+				</Rows>
+			</InlineTable>
+			<Level name="SevereMentalIllness" column="SevereMentalIllnessID" nameColumn="SevereMentalIllnessDescription" uniqueMembers="true"/>
+		</Hierarchy>
+	</Dimension>
 	
 	<Cube name="Jail-Booking-Analytics" visible="true">
 			<Table name="FullBookingView"/>
@@ -289,7 +310,9 @@
 		<DimensionUsage source="Medication" name="Prescribed Medication" visible="true" foreignKey="PrescribedMedicationID" highCardinality="false"/>
 		<DimensionUsage source="TreatmentStatus" name="Treatment Status" visible="true" foreignKey="TreatmentStatusTypeID" highCardinality="false"/>
 		<DimensionUsage source="TreatmentAdmissionReason" name="Treatment Admission Reason" visible="true" foreignKey="TreatmentAdmissionReasonTypeID" highCardinality="false"/>
-		<DimensionUsage source="TreatmentProvider"  name="Treatment Provider" visible="true" foreignKey="TreatmentProviderTypeID" highCardinality="false"/>	
+		<DimensionUsage source="TreatmentProvider" name="Treatment Provider" visible="true" foreignKey="TreatmentProviderTypeID" highCardinality="false"/>
+		<DimensionUsage source="SevereMentalIllness" name="Severe Mental Illness" visible="true" foreignKey="SevereMentalIllnessIndicator" highCardinality="false"/>
+
 		<Measure name="Booking Count" column="JailEpisodeID" aggregator="distinct-count" visible="true"/>
 		<Measure name="Arrest Count" column="JailEpisodeArrestID" aggregator="distinct-count" visible="true"/>
 		<Measure name="Active Booking Count" column="IsActiveBookingCount" aggregator="sum" visible="true"/>
@@ -301,9 +324,10 @@
  		<Measure name="Average Bond Amount" column="BondAmount" aggregator="avg" formatString="$0.00" visible="true"/>
  		<Measure name="Evaluation Count" column="BehavioralHealthEvaluationID" aggregator="distinct-count" visible="true"/>
  		<Measure name="Treatment Count" column="BehavioralHealthTreatmentID" aggregator="distinct-count" visible="true"/>
- 		 <Measure name="Prescription Count" column="PrescribedMedicationID" aggregator="distinct-count" visible="true"/>
+ 		<Measure name="Prescription Count" column="PrescribedMedicationID" aggregator="distinct-count" visible="true"/>
 		<Measure name="SMI Rate" column="SevereMentalIllnessIndicator" aggregator="avg" formatString="#0.0%" caption="SMI Rate" visible="true"/>
 		<Measure name="Treatment At Booking Rate" column="InTreatmentAtBookingCount" aggregator="avg" formatString="#0.0%" caption="In Treatment at Booking Rate" visible="true"/>
+
 		<!--  We have to subtract 1 in the numerator because all of the zeros (from multiplying the JailEpisodeID * not-a-recidivist) will count as 1-->
 		<CalculatedMember name="SixMonthRebookRate" caption="Six Month Rebooking Rate" dimension="Measures">
 			<Formula><![CDATA[IIf([Measures].[Booking Count] > 0, ([Measures].[SixMonthRebookingCount]-1)  / [Measures].[Booking Count], 0)]]></Formula>
