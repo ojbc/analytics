@@ -61,7 +61,7 @@
 
 		<div class="row toprow">
 			<div class="col-sm-6">
-				<h3>Adams County, Colorado - Jail Dashboard</h3>
+				<h3>OJBC Demo Jurisdiction - Jail Dashboard</h3>
 			</div>
 			<div class="col-sm-6 dashboard">
 				<button type="button" class="btn btn-primary export">Export Raw Data</button>	
@@ -84,7 +84,6 @@
 						<select id="metric-select" class="selectpicker show-tick query-control" data-width="195px">
 							<option>Population Count</option>
 							<option>Length of Stay</option>
-							<option>Average Daily Population</option>
 							<option>Rebooking Rate</option>
 						</select>
 					</li>
@@ -92,24 +91,19 @@
 						<label class="control-label" for="jurisdiction-select">Jurisdiction:</label>
 						<select id="jurisdiction-select" class="selectpicker show-tick query-control" data-width="150px">
 							<option>All Jurisdictions</option>
-							<option>State Court</option>
-							<option>County Court</option>
-							<option>Municipal Court</option>
+							<option>JurisdictionType Category 1</option>
+							<option>JurisdictionType Category 2</option>
 						</select>
 					</li>
 					<li class="navli">
 						<label class="control-label" for="agency-select">Agency:</label>
 						<select id="agency-select" class="selectpicker show-tick query-control" data-width="160px">
 							<option>All Agencies</option>
-							<option>Adams County SO</option>
-							<option>Arvada PD</option>
-							<option>Aurora PD</option>
-							<option>Brighton PD</option>
-							<option>Commerce City PD</option>
-							<option>Federal Heights PD</option>
-							<option>Northglenn PD</option>
-							<option>Thornton PD</option>
-							<option>Westminster PD</option>
+							<option>Agency Category 1</option>
+							<option>Agency Category 2</option>
+							<option>Agency Category 3</option>
+							<option>Agency Category 4</option>
+							<option>Agency Category 5</option>
 						</select>
 					</li>
 					<li class="navli">
@@ -176,7 +170,7 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-static-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Charge Types</h3>
+								<h3 class="panel-title">Charge Type</h3>
 							</div>
 							<div class="panel-body">
       							<div class="row1-panel-control-spacer"></div>
@@ -186,7 +180,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-sm-7">
+					<div class="col-sm-4">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-static-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
@@ -196,24 +190,34 @@
 								<div id="jail-util-widget-div">
 									<img id="img_operations_static_r2c1_util" width="100%"/>
 								</div>
-								<table width="100%">
-								<tr>
-								<th>Originating Agency</th><th>Bed Type</th></tr><tr>
-								<td class="multi-widget-td"><img id="img_operations_static_r2c1_left" width="100%"/></td>
-								<td class="multi-widget-td"><img id="img_operations_static_r2c1_right" width="100%"/></td>
-								</tr></table>
+								<h5>Originating Agency</h5>
+								<div id="jail-util-widget-div">
+									<img id="img_operations_static_r2c1_main" width="100%"/>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-5">
+					<div class="col-sm-4">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-static-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Pretrial Status</h3>
+								<h3 class="panel-title">Work Release Status</h3>
 							</div>
 							<div class="panel-body">
       							<div class="row2-panel-control-spacer"></div>
 								<img id="img_operations_static_r2c2" width="100%"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-operations-static-r2c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Charge Disposition</h3>
+							</div>
+							<div class="panel-body">
+      							<div class="row2-panel-control-spacer"></div>
+								<img id="img_operations_static_r2c3" width="100%"/>
 							</div>
 						</div>
 					</div>
@@ -224,7 +228,7 @@
 
 			<div id="demographics-static" class="tab-pane">
 				<div class="row">					
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-demographics-static-r1c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
@@ -235,7 +239,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-demographics-static-r1c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
@@ -246,7 +250,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-demographics-static-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
@@ -257,24 +261,13 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-3">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<span id="info-icon-demographics-static-r1c4" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Language</h3>
-							</div>
-							<div class="panel-body">
-								<img id="img_demographics_static_r1c4" width="100%"/>
-							</div>
-						</div>
-					</div>
 				</div>
 				<div class="row">					
 					<div class="col-sm-4">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-demographics-static-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Income Level</h3>
+								<h3 class="panel-title">Language</h3>
 							</div>
 							<div class="panel-body">
 								<img id="img_demographics_static_r2c1" width="100%"/>
@@ -296,7 +289,7 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-demographics-static-r2c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Housing Status</h3>
+								<h3 class="panel-title">Military Service Status</h3>
 							</div>
 							<div class="panel-body">
 								<img id="img_demographics_static_r2c3" width="100%"/>
@@ -337,7 +330,7 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-timeline-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Charge Types</h3>
+								<h3 class="panel-title">Charge Type</h3>
 							</div>
 							<div class="panel-body">
 								<div><img id="img_operations_timeline_r1c3" width="100%"/></div>
@@ -350,7 +343,7 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-timeline-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Jail Utilization - Originating Agency</h3>
+								<h3 class="panel-title">Originating Agency</h3>
 							</div>
 							<div class="panel-body">
 								<img id="img_operations_timeline_r2c1" width="100%"/>
@@ -361,7 +354,7 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-timeline-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Jail Utilization - Bed Type</h3>
+								<h3 class="panel-title">Work Release Status</h3>
 							</div>
 							<div class="panel-body">
 								<img id="img_operations_timeline_r2c2" width="100%"/>
@@ -372,7 +365,7 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-timeline-r2c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Pretrial Status</h3>
+								<h3 class="panel-title">Charge Disposition</h3>
 							</div>
 							<div class="panel-body">
 								<img id="img_operations_timeline_r2c3" width="100%"/>
@@ -417,24 +410,13 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-3">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<span id="info-icon-demographics-timeline-r1c4" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Language</h3>
-							</div>
-							<div class="panel-body">
-								<img id="img_demographics_timeline_r1c4" width="100%"/>
-							</div>
-						</div>
-					</div>
 				</div>
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-demographics-timeline-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Income Level</h3>
+								<h3 class="panel-title">Language</h3>
 							</div>
 							<div class="panel-body">
 								<img id="img_demographics_timeline_r2c1" width="100%"/>
@@ -456,7 +438,7 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-demographics-timeline-r2c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Housing Status</h3>
+								<h3 class="panel-title">Military Service Status</h3>
 							</div>
 							<div class="panel-body">
 								<img id="img_demographics_timeline_r2c3" width="100%"/>

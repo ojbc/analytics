@@ -22,33 +22,31 @@ chartNameRFunctionLookup["operations_static_r1c1"] = "plotStaticCaseStatus";
 chartNameRFunctionLookup["operations_static_r1c2"] = "plotStaticIllnessDisorder";
 chartNameRFunctionLookup["operations_static_r1c2_SMI"] = "plotStaticSMI";
 chartNameRFunctionLookup["operations_static_r1c3"] = "plotStaticChargeType";
-chartNameRFunctionLookup["operations_static_r2c1_left"] = "plotStaticOriginatingAgency";
-chartNameRFunctionLookup["operations_static_r2c1_right"] = "plotStaticBedType";
+chartNameRFunctionLookup["operations_static_r2c1_main"] = "plotStaticOriginatingAgency";
 chartNameRFunctionLookup["operations_static_r2c1_util"] = "plotStaticJailUtilization";
-chartNameRFunctionLookup["operations_static_r2c2"] = "plotStaticPretrialStatus";
+chartNameRFunctionLookup["operations_static_r2c2"] = "plotStaticWorkReleaseStatus";
+chartNameRFunctionLookup["operations_static_r2c3"] = "plotStaticChargeDisposition";
 
 chartNameRFunctionLookup["demographics_static_r1c1"] = "plotStaticGender";
 chartNameRFunctionLookup["demographics_static_r1c2"] = "plotStaticRace";
 chartNameRFunctionLookup["demographics_static_r1c3"] = "plotStaticAge";
-chartNameRFunctionLookup["demographics_static_r1c4"] = "plotStaticLanguage";
-chartNameRFunctionLookup["demographics_static_r2c1"] = "plotStaticIncome";
+chartNameRFunctionLookup["demographics_static_r2c1"] = "plotStaticLanguage";
 chartNameRFunctionLookup["demographics_static_r2c2"] = "plotStaticEducation";
-chartNameRFunctionLookup["demographics_static_r2c3"] = "plotStaticHousingStatus";
+chartNameRFunctionLookup["demographics_static_r2c3"] = "plotStaticMilitaryServiceStatus";
 
 chartNameRFunctionLookup["operations_timeline_r1c1"] = "plotTimelineCaseStatus";
 chartNameRFunctionLookup["operations_timeline_r1c2"] = "plotTimelineIllnessDisorder";
 chartNameRFunctionLookup["operations_timeline_r1c3"] = "plotTimelineChargeType";
 chartNameRFunctionLookup["operations_timeline_r2c1"] = "plotTimelineOriginatingAgency";
-chartNameRFunctionLookup["operations_timeline_r2c2"] = "plotTimelineBedType";
-chartNameRFunctionLookup["operations_timeline_r2c3"] = "plotTimelinePretrialStatus";
+chartNameRFunctionLookup["operations_timeline_r2c2"] = "plotTimelineWorkReleaseStatus";
+chartNameRFunctionLookup["operations_timeline_r2c3"] = "plotTimelineChargeDisposition";
 
 chartNameRFunctionLookup["demographics_timeline_r1c1"] = "plotTimelineGender";
 chartNameRFunctionLookup["demographics_timeline_r1c2"] = "plotTimelineRace";
 chartNameRFunctionLookup["demographics_timeline_r1c3"] = "plotTimelineAge";
-chartNameRFunctionLookup["demographics_timeline_r1c4"] = "plotTimelineLanguage";
-chartNameRFunctionLookup["demographics_timeline_r2c1"] = "plotTimelineIncome";
+chartNameRFunctionLookup["demographics_timeline_r2c1"] = "plotTimelineLanguage";
 chartNameRFunctionLookup["demographics_timeline_r2c2"] = "plotTimelineEducation";
-chartNameRFunctionLookup["demographics_timeline_r2c3"] = "plotTimelineHousingStatus";
+chartNameRFunctionLookup["demographics_timeline_r2c3"] = "plotTimelineMilitaryServiceStatus";
 
 var RFunctionChartNameLookup = new Array();
 for (var chartName in chartNameRFunctionLookup) {
@@ -153,6 +151,7 @@ collectQueryArgs = function() {
 	ret.jurisdiction = $("#jurisdiction-select").val();
 	ret.originatingAgency = $("#agency-select").val();
 	ret.targetPopulationOnly = ($('#pop-button-group button.btn.active').attr('id') == "target-pop-button");
+	ret.measure = $("#metric-select").val();
 	var selectedDashboardLabel = $("#dashboard-select").val();
 	if (selectedDashboardLabel.includes("timeline")) {
 		stop = $("#slider").val();

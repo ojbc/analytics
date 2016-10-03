@@ -1,40 +1,20 @@
 # R script of functions shared across the package
 
-#' Filter a data frame for the common filtering dimensions
-#'
-#' @import dplyr
-filterDataFrame <- function(dataFrame, jurisdiction, originatingAgency, targetPopulationOnly) {
-
-  df <- dataFrame
-
-  if (targetPopulationOnly) {
-    df <- filter(df, PopulationTypeDescription == TargetPopulationLabel)
-  }
-
-  if (jurisdiction != AllCourtsLabel) {
-    df <- filter(df, JurisdictionTypeDescription == jurisdiction)
-  }
-
-  if (originatingAgency != AllOriginatingAgenciesLabel) {
-    df <- filter(df, AgencyTypeDescription == originatingAgency)
-  }
-
-  df
-
-}
+allRollupID <- -1
+JailCapacity <- 150
 
 #' Get the theme for graphics on the dashboard
 #'
 #' @import ggthemes
 getTheme <- function() {
-  ggthemes::theme_hc()
+  ggthemes::theme_gdocs()
 }
 
 #' Get the color scheme for graphics on the dashboard
 #'
 #' @import ggthemes
 getColorScheme <- function() {
-  ggthemes::scale_colour_hc()
+  ggthemes::scale_colour_gdocs()
 }
 
 #' Get the fill scheme for graphics on the dashboard
@@ -55,12 +35,3 @@ svgPrint <- function(plot, filename, width, height) {
   dev.off()
   invisible()
 }
-
-AllOriginatingAgenciesLabel <- "All Agencies"
-AllCourtsLabel <- "All Jurisdictions"
-TargetPopulationLabel <- "Target Population"
-
-DefaultOriginatingAgenciesLabel <- AllOriginatingAgenciesLabel
-DefaultJurisdictionLabel <- AllCourtsLabel
-
-JailCapacity <- 2005
