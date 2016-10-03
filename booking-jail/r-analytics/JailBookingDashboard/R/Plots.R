@@ -1,3 +1,17 @@
+# Unless explicitly acquired and licensed from Licensor under another license, the contents of
+# this file are subject to the Reciprocal Public License ("RPL") Version 1.5, or subsequent
+# versions as allowed by the RPL, and You may not copy or use this file in either source code
+# or executable form, except in compliance with the terms and conditions of the RPL
+# All software distributed under the RPL is provided strictly on an "AS IS" basis, WITHOUT
+# WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, AND LICENSOR HEREBY DISCLAIMS ALL SUCH
+# WARRANTIES, INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE, QUIET ENJOYMENT, OR NON-INFRINGEMENT. See the RPL for specific language
+# governing rights and limitations under the RPL.
+#
+# http://opensource.org/licenses/RPL-1.5
+#
+# Copyright 2012-2016 Open Justice Broker Consortium
+
 allJurisdictionsLabel <- 'All Jurisdictions'
 allAgenciesLabel <- 'All Agencies'
 targetPopulationLabel <- 'Target Population'
@@ -16,7 +30,7 @@ timelineMeasureList <- list("Population Count"=c('Population', FALSE),
 #' @import dplyr
 #' @export
 plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly,
-                    horizontal=TRUE, width=5, height=2, svgMode=TRUE) {
+                    horizontal=TRUE, width=5, height=3, svgMode=TRUE) {
 
   df <- JailBookingDashboardData::SummaryDataFrameList[[dimensionTableName]]
   ct <- JailBookingDashboardData::CodeTableDataFrameList[[dimensionTableName]]
@@ -69,7 +83,7 @@ plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, juris
 #' @importFrom lubridate days
 #' @export
 plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, periodFilterDays,
-                         horizontal=TRUE, width=5, height=2, svgMode=TRUE) {
+                         horizontal=TRUE, width=10.5, height=4.5, svgMode=TRUE) {
 
   df <- JailBookingDashboardData::SummaryDataFrameList[[dimensionTableName]]
   ct <- JailBookingDashboardData::CodeTableDataFrameList[[dimensionTableName]]
@@ -91,7 +105,7 @@ plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, 
   plot <- ggplot(data=filteredDf, mapping=aes_string(x='Date', y=measure, color=label))  + geom_line(size=1.2) +
     scale_x_date() +
     getTheme() +
-    theme(axis.title.y = element_blank(), axis.title.x = element_blank(), legend.title = element_blank())
+    theme(axis.title.y = element_blank(), axis.title.x = element_blank(), legend.title = element_blank(), legend.position = "bottom")
 
   if (percentage) {
     plot <- plot + scale_y_continuous(labels=percent)
@@ -143,10 +157,11 @@ filterDataFrameForRollups <- function(df, jurisdictionLabel, agencyLabel, target
     }
   }
 
-  populationTypeID <- allRollupID
   if (targetPopulationOnly) {
     populationTypeID <- (populationTypeCodeTable %>% filter(PopulationTypeLabel == targetPopulationLabel))[1, 1]
     filteredDf <- filter(filteredDf, PopulationTypeID==populationTypeID)
+  } else {
+    filteredDf <- filter(filteredDf, PopulationTypeID==allRollupID)
   }
 
   filteredDf

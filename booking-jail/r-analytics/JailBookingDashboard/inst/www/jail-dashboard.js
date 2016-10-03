@@ -22,9 +22,11 @@ chartNameRFunctionLookup["operations_static_r1c1"] = "plotStaticCaseStatus";
 chartNameRFunctionLookup["operations_static_r1c2"] = "plotStaticIllnessDisorder";
 chartNameRFunctionLookup["operations_static_r1c2_SMI"] = "plotStaticSMI";
 chartNameRFunctionLookup["operations_static_r1c3"] = "plotStaticChargeType";
-chartNameRFunctionLookup["operations_static_r2c1_main"] = "plotStaticOriginatingAgency";
-chartNameRFunctionLookup["operations_static_r2c1_util"] = "plotStaticJailUtilization";
-chartNameRFunctionLookup["operations_static_r2c2"] = "plotStaticWorkReleaseStatus";
+chartNameRFunctionLookup["operations_static_r1c4"] = "plotStaticBondType";
+chartNameRFunctionLookup["operations_static_r2c1"] = "plotStaticWorkReleaseStatus";
+chartNameRFunctionLookup["operations_static_r2c2_left"] = "plotStaticOriginatingAgency";
+chartNameRFunctionLookup["operations_static_r2c2_right"] = "plotStaticJurisdiction";
+chartNameRFunctionLookup["operations_static_r2c2_util"] = "plotStaticJailUtilization";
 chartNameRFunctionLookup["operations_static_r2c3"] = "plotStaticChargeDisposition";
 
 chartNameRFunctionLookup["demographics_static_r1c1"] = "plotStaticGender";
@@ -36,10 +38,12 @@ chartNameRFunctionLookup["demographics_static_r2c3"] = "plotStaticMilitaryServic
 
 chartNameRFunctionLookup["operations_timeline_r1c1"] = "plotTimelineCaseStatus";
 chartNameRFunctionLookup["operations_timeline_r1c2"] = "plotTimelineIllnessDisorder";
-chartNameRFunctionLookup["operations_timeline_r1c3"] = "plotTimelineChargeType";
-chartNameRFunctionLookup["operations_timeline_r2c1"] = "plotTimelineOriginatingAgency";
-chartNameRFunctionLookup["operations_timeline_r2c2"] = "plotTimelineWorkReleaseStatus";
-chartNameRFunctionLookup["operations_timeline_r2c3"] = "plotTimelineChargeDisposition";
+chartNameRFunctionLookup["operations_timeline_r1c3"] = "plotTimelineBondType";
+chartNameRFunctionLookup["operations_timeline_r2c1"] = "plotTimelineWorkReleaseStatus";
+chartNameRFunctionLookup["operations_timeline_r2c2"] = "plotTimelineOriginatingAgency";
+chartNameRFunctionLookup["operations_timeline_r2c3"] = "plotTimelineJurisdiction";
+chartNameRFunctionLookup["operations_timeline_r3c1"] = "plotTimelineChargeType";
+chartNameRFunctionLookup["operations_timeline_r3c2"] = "plotTimelineChargeDisposition";
 
 chartNameRFunctionLookup["demographics_timeline_r1c1"] = "plotTimelineGender";
 chartNameRFunctionLookup["demographics_timeline_r1c2"] = "plotTimelineRace";

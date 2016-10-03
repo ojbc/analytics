@@ -44,6 +44,7 @@ dimensionTables <- list(
   BehavioralHealthEvaluationType=c('BehavioralHealthEvaluationTypeDescription', 'JailEpisodeID'),
   PersonAgeRangeType=c("AgeRange", "JailEpisodeID"),
   Agency=c('AgencyCategory', 'JailEpisodeChargeID', 'ChargeAgencyID'),
+  BondType=c('BondTypeCategory', 'JailEpisodeChargeID'),
   PersonRaceType=c("PersonRaceTypeDescription", "JailEpisodeID")
 )
 

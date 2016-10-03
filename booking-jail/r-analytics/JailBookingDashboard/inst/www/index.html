@@ -19,7 +19,7 @@
 
 <html>
 <head>
-	<title>Adams County Dashboard</title>
+	<title>OJBC Demo Jurisdiction - Jail Dashboard</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -135,7 +135,7 @@
 
 			<div id="jail-static" class="tab-pane active">
 				<div class="row">					
-					<div class="col-sm-4">
+					<div class="col-sm-3">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-static-r1c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"
@@ -148,7 +148,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-4">
+					<div class="col-sm-3">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-static-r1c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
@@ -157,7 +157,7 @@
 							<div class="panel-body">
 								<div id="smi-widget-div">
 									<table width="100%"><tr>
-										<td>%SMI: </td><td><img id="img_operations_static_r1c2_SMI" width="100%"/></td>
+										<td>SMI: </td><td><img id="img_operations_static_r1c2_SMI" width="100%"/></td>
 									</tr></table>
 								</div>
 								<div>
@@ -166,7 +166,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-4">
+					<div class="col-sm-3">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-static-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
@@ -178,38 +178,55 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4">
+					<div class="col-sm-3">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
-								<span id="info-icon-operations-static-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Jail Utilization</h3>
+								<span id="info-icon-operations-static-r1c4" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Bond Type</h3>
 							</div>
 							<div class="panel-body">
-								<div id="jail-util-widget-div">
-									<img id="img_operations_static_r2c1_util" width="100%"/>
-								</div>
-								<h5>Originating Agency</h5>
-								<div id="jail-util-widget-div">
-									<img id="img_operations_static_r2c1_main" width="100%"/>
-								</div>
+      							<div class="row1-panel-control-spacer"></div>
+								<div><img id="img_operations_static_r1c4" width="100%"/></div>
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-4">
+				</div>
+				<div class="row">
+					<div class="col-sm-3">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
-								<span id="info-icon-operations-static-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<span id="info-icon-operations-static-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
 								<h3 class="panel-title">Work Release Status</h3>
 							</div>
 							<div class="panel-body">
       							<div class="row2-panel-control-spacer"></div>
-								<img id="img_operations_static_r2c2" width="100%"/>
+								<img id="img_operations_static_r2c1" width="100%"/>
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-4">
+					<div class="col-sm-6">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-operations-static-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Jail Utilization</h3>
+							</div>
+							<div class="panel-body">
+								<div id="jail-util-widget-div">
+									<img id="img_operations_static_r2c2_util" width="100%"/>
+								</div>
+								<table width="100%">
+									<tr>
+										<th>Originating Agency</th><th>Jurisdiction</th>
+									</tr>
+									<tr>
+										<td class="multi-widget-td"><img id="img_operations_static_r2c2_left" width="100%"/></td>
+										<td class="multi-widget-td"><img id="img_operations_static_r2c2_right" width="100%"/></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-3">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-static-r2c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
@@ -330,7 +347,7 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-timeline-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Charge Type</h3>
+								<h3 class="panel-title">Bond Type</h3>
 							</div>
 							<div class="panel-body">
 								<div><img id="img_operations_timeline_r1c3" width="100%"/></div>
@@ -343,7 +360,7 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-timeline-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Originating Agency</h3>
+								<h3 class="panel-title">Work Release Status</h3>
 							</div>
 							<div class="panel-body">
 								<img id="img_operations_timeline_r2c1" width="100%"/>
@@ -354,7 +371,7 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-timeline-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Work Release Status</h3>
+								<h3 class="panel-title">Originating Agency</h3>
 							</div>
 							<div class="panel-body">
 								<img id="img_operations_timeline_r2c2" width="100%"/>
@@ -365,10 +382,34 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-operations-timeline-r2c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-								<h3 class="panel-title">Charge Disposition</h3>
+								<h3 class="panel-title">Jurisdiction</h3>
 							</div>
 							<div class="panel-body">
 								<img id="img_operations_timeline_r2c3" width="100%"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-operations-timeline-r3c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Charge Type</h3>
+							</div>
+							<div class="panel-body">
+								<img id="img_operations_timeline_r3c1" width="100%"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<span id="info-icon-operations-timeline-r3c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+								<h3 class="panel-title">Charge Disposition</h3>
+							</div>
+							<div class="panel-body">
+								<img id="img_operations_timeline_r3c2" width="100%"/>
 							</div>
 						</div>
 					</div>
@@ -377,7 +418,7 @@
 
 			<div id="demographics-timeline" class="tab-pane">
 				<div class="row">
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-demographics-timeline-r1c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
@@ -388,7 +429,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-demographics-timeline-r1c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
@@ -399,7 +440,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<span id="info-icon-demographics-timeline-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
