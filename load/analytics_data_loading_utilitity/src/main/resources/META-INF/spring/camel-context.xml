@@ -49,6 +49,18 @@
 				<camel:simple>CMD BATCH --no-save --no-restore ${properties:analytics.loadingScriptFullPath}</camel:simple>
 			</camel:setHeader>
 			
+			<removeHeaders pattern="CamelExecCommandExecutables"/>
+			
+			<camel:to uri="exec:R"/>	
+
+			<camel:setHeader headerName="CamelExecCommandWorkingDir">
+				<camel:simple>${properties:analytics.buildDashboardWorkingDirectory}</camel:simple>
+			</camel:setHeader>
+
+			<camel:setHeader headerName="CamelExecCommandArgs">
+				<camel:simple>CMD BATCH --no-save --no-restore ${properties:analytics.buildDashboardDataFullPath}</camel:simple>
+			</camel:setHeader>
+		
 			<camel:to uri="exec:R"/>	
 		
 			<camel:to uri="bean:rLoadingResultsFileProcessor?method=processResultsFileAndAddAttachment"/>
@@ -61,7 +73,8 @@
 	
 	<bean id="rLoadingResultsFileProcessor"  class="org.ojbc.bundles.utilities.analytics.dataloading.RLoadingResultsFileProcessor">
 		<property name="loadingOutputDirectory" value="${analytics.loadingOutputDirectory}"/>
-		<property name="workingDirectory" value="${analytics.loadingWorkingDirectory}"/>
+		<property name="loadingWorkingDirectory" value="${analytics.loadingWorkingDirectory}"/>
+		<property name="buildDashboardWorkingDirectory" value="${analytics.buildDashboardWorkingDirectory}"/>
 	</bean>
 
 </beans>
