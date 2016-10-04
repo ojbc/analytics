@@ -72,6 +72,9 @@
 					<option data-target="#demographics-timeline" value="demographics-timeline">Demographics Dashboard - Timeline</option>
 				</select>		
 			</div>
+			<div id="info-row" class="row">
+				<div class="col-sm-12 info-text" id="info-text"></div>
+			</div>
 		</div>
 
 		<!-- Dashboard nav bar (controls content of widgets) -->
@@ -212,12 +215,11 @@
 							</div>
 							<div class="panel-body">
 								<div id="jail-util-widget-div">
-									<img id="img_operations_static_r2c2_util" width="100%"/>
+									<table width="100%"><tr>
+										<td>Capacity: </td><td><img id="img_operations_static_r2c2_util" width="100%"/></td>
+									</tr></table>
 								</div>
 								<table width="100%">
-									<tr>
-										<th>Originating Agency</th><th>Jurisdiction</th>
-									</tr>
 									<tr>
 										<td class="multi-widget-td"><img id="img_operations_static_r2c2_left" width="100%"/></td>
 										<td class="multi-widget-td"><img id="img_operations_static_r2c2_right" width="100%"/></td>

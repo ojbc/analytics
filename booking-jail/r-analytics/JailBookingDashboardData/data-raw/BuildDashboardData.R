@@ -56,8 +56,9 @@ dbDisconnect(adsConnection)
 SummaryDataFrameList <- DashboardDataFrameLists$SummaryDataFrameList
 CodeTableDataFrameList <- DashboardDataFrameLists$CodeTableDataFrameList
 SMISummaryDataFrame <- DashboardDataFrameLists$SMISummaryDataFrame
+DimensionalMetadata <- DashboardDataFrameLists$DimensionalMetadata
 
-devtools::use_data(SummaryDataFrameList, CodeTableDataFrameList, SMISummaryDataFrame, overwrite = TRUE)
+devtools::use_data(SummaryDataFrameList, CodeTableDataFrameList, SMISummaryDataFrame, DimensionalMetadata, overwrite = TRUE)
 
 packageFile <- devtools::build()
 install.packages(packageFile, repos=NULL)

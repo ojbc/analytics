@@ -225,4 +225,13 @@ $(document).ready(function () {
 
 	drawAllPanels(collectQueryArgs());
 
+	if (!localTesting) {
+		ocpu.rpc('getLastLoadTime', new Object(), function(output) {
+			$("#info-text").html("Data current as of: " + output);
+		})
+		.fail(function(req) {
+			alert("Error: " + req.responseText);
+		});
+	}
+
 })	  	

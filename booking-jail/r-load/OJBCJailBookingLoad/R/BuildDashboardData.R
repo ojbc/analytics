@@ -30,6 +30,12 @@
 #' dimension table.
 buildDashboardData <- function(adsConnection, rollupTables, dimensionTables, recidivismIndicatorField, allRollupID=-1) {
 
+  lastLoadTime <- getQuery(adsConnection, "select max(LoadHistoryTimestamp) as ttt from LoadHistory")
+  lastLoadTime <- as.POSIXct(lastLoadTime[1,1])
+
+  DimensionalMetadata <- list()
+  DimensionalMetadata$LastLoadTime <- lastLoadTime
+
   df <- getFullBookingDataFrame(adsConnection)
 
   SummaryDataFrameList <- list()
@@ -74,6 +80,7 @@ buildDashboardData <- function(adsConnection, rollupTables, dimensionTables, rec
   ret$SummaryDataFrameList <- SummaryDataFrameList
   ret$CodeTableDataFrameList <- CodeTableDataFrameList
   ret$SMISummaryDataFrame <- smiSummaryDataFrame
+  ret$DimensionalMetadata <- DimensionalMetadata
 
   ret
 

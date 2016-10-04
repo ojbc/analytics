@@ -18,6 +18,8 @@
 .filterrow div select { float: left; }
 .filterrow .filters div { margin-right: 20px; }
 .radio { margin-top: 0; margin-bottom: 5px; }
+.info-text { font-size: x-small; font-style: italic; }
+#info-row { float: right; padding: 5px; padding-right: 15px}
 .export { float: right; }
 .glyphicon { float: right; }
 .toprow .dashboard { text-align: right; margin-top: 10px;}

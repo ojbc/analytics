@@ -25,7 +25,7 @@ plotStaticOriginatingAgency <- function(jurisdiction, originatingAgency, targetP
 
 #' @export
 plotStaticJurisdiction <- function(jurisdiction, originatingAgency, targetPopulationOnly, measure) {
-  plotBar(measure, "JurisdictionType", "JurisdictionTypeID", jurisdiction, originatingAgency, targetPopulationOnly)
+  plotBar(measure, "JurisdictionType", "JurisdictionTypeID", jurisdiction, originatingAgency, targetPopulationOnly, height=2.5)
 }
 
 #' @export
