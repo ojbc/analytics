@@ -224,10 +224,26 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   bookingChildTableList <- buildBookingChildTables(bookingID, ret$Booking$BookingNumber, ReleaseDateTime, codeTableList)
   ret <- c(ret, bookingChildTableList)
 
+  chargeDf <- bookingChildTableList$BookingCharge
+  maxArrestID <- max(chargeDf$BookingArrestID)
+  arrestDf <- bookingChildTableList$BookingArrest
+  arrestDf <- filter(arrestDf, BookingArrestID == maxArrestID)
+  bookingIDToAlter <- arrestDf[1, 'BookingID']
+
+  ret$Booking[ret$Booking$BookingID==bookingIDToAlter, 'BookingDate'] <- baseDate + 30
+
   changeTableList <- buildChangeTables(ret, codeTableList)
 
   ret$Person <- NULL
   ret <- c(ret, changeTableList)
+
+  chargeDf <- changeTableList$CustodyStatusChangeCharge
+  maxArrestID <- max(chargeDf$CustodyStatusChangeArrestID)
+  arrestDf <- changeTableList$CustodyStatusChangeArrest
+  arrestDf <- filter(arrestDf, CustodyStatusChangeArrestID == maxArrestID)
+  cscIDToAlter <- arrestDf[1, 'CustodyStatusChangeID']
+
+  ret$CustodyStatusChange[ret$CustodyStatusChange$CustodyStatusChangeID==cscIDToAlter, 'BookingDate'] <- baseDate + 30
 
   ret
 
