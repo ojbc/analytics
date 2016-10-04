@@ -15,20 +15,22 @@ import org.joda.time.DateTime;
 public class RLoadingResultsFileProcessor {
 
 	private String loadingOutputDirectory;
-	private String workingDirectory;
+	private String loadingWorkingDirectory;
+	private String buildDashboardWorkingDirectory;
 	
 	private static final Log log = LogFactory.getLog(RLoadingResultsFileProcessor.class);
 	
 	public void processResultsFileAndAddAttachment(Exchange ex) throws Exception
 	{
-		if (StringUtils.isBlank(loadingOutputDirectory) || StringUtils.isBlank(workingDirectory))
+		if (StringUtils.isBlank(loadingOutputDirectory) || StringUtils.isBlank(loadingWorkingDirectory))
 		{
 			throw new IllegalStateException("Working directory or loading output directory path not set.  Unable to process loading results file");		
 		}	
 		
-		File resultsFile = new File(workingDirectory + File.separator + "MainADSLoad.Rout");
+		File loadingScriptResultsFile = new File(loadingWorkingDirectory + File.separator + "MainADSLoad.Rout");
+		File buildDashboardResultsFile = new File(buildDashboardWorkingDirectory + File.separator + "BuildDashboardData.Rout");
 		
-		if (!resultsFile.exists())
+		if (!loadingScriptResultsFile.exists())
 		{
 			throw new Exception("Loading output file does not exist!");
 		}	
@@ -44,20 +46,35 @@ public class RLoadingResultsFileProcessor {
 		
 		String dateTimeStamp = today.toString("yyyyMMdd_HHmmss");
 		
-		String updatedFileName = dateTimeStamp + "MainADSLoadRout.txt";
-		String newFileNameWithPath = loadingOutputDirectory + File.separator + updatedFileName;
+		//Create the Main ADS load output attachment
+		String loadingScriptOuputFileName = dateTimeStamp + "MainADSLoadRout.txt";
+		String loadingScriptOutputFileWithPath = loadingOutputDirectory + File.separator + loadingScriptOuputFileName;
 		
-		File resultsFileRenamedWithDateStamp = new File(newFileNameWithPath);
+		File loadingScriptOutputFileRenamedWithDateStamp = new File(loadingScriptOutputFileWithPath);
 		
-		if(resultsFile.renameTo(resultsFileRenamedWithDateStamp)){
-			log.debug("Rename succesful to: " + newFileNameWithPath);
+		if(loadingScriptResultsFile.renameTo(loadingScriptOutputFileRenamedWithDateStamp)){
+			log.debug("Rename succesful to: " + loadingScriptOutputFileWithPath);
 		}else{
-			log.error("Rename failed using filename: " + newFileNameWithPath);
+			log.error("Rename failed using filename: " + loadingScriptOutputFileWithPath);
+			throw new Exception("Unable to rename file");
+		}
+		
+		//Create the Build Dashboard output attachment
+		String buildDashboardScriptOutputFileName = dateTimeStamp + "BuildDashboardDataRout.txt";
+		String buildDashboardScriptOutputFileNameWithPath = loadingOutputDirectory + File.separator + buildDashboardScriptOutputFileName;
+		
+		File buildDashboardScriptOutputRenamedWithDateStamp = new File(buildDashboardScriptOutputFileNameWithPath);
+		
+		if(buildDashboardResultsFile.renameTo(buildDashboardScriptOutputRenamedWithDateStamp)){
+			log.debug("Rename succesful to: " + buildDashboardScriptOutputFileNameWithPath);
+		}else{
+			log.error("Rename failed using filename: " + buildDashboardScriptOutputFileNameWithPath);
 			throw new Exception("Unable to rename file");
 		}
 		
 		Message in = ex.getIn();
-		in.addAttachment(updatedFileName, new DataHandler(new FileDataSource(resultsFileRenamedWithDateStamp)));
+		in.addAttachment(buildDashboardScriptOutputFileName, new DataHandler(new FileDataSource(buildDashboardScriptOutputRenamedWithDateStamp)));
+		in.addAttachment(loadingScriptOuputFileName, new DataHandler(new FileDataSource(loadingScriptOutputFileRenamedWithDateStamp)));
 	}
 
 	public String getLoadingOutputDirectory() {
@@ -68,12 +85,21 @@ public class RLoadingResultsFileProcessor {
 		this.loadingOutputDirectory = loadingOutputDirectory;
 	}
 
-	public String getWorkingDirectory() {
-		return workingDirectory;
+	public String getBuildDashboardWorkingDirectory() {
+		return buildDashboardWorkingDirectory;
 	}
 
-	public void setWorkingDirectory(String workingDirectory) {
-		this.workingDirectory = workingDirectory;
+	public void setBuildDashboardWorkingDirectory(
+			String buildDashboardWorkingDirectory) {
+		this.buildDashboardWorkingDirectory = buildDashboardWorkingDirectory;
+	}
+
+	public String getLoadingWorkingDirectory() {
+		return loadingWorkingDirectory;
+	}
+
+	public void setLoadingWorkingDirectory(String loadingWorkingDirectory) {
+		this.loadingWorkingDirectory = loadingWorkingDirectory;
 	}
 
 	

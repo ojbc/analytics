@@ -125,7 +125,7 @@ updateLoadHistory <- function(adsConnection, stagingConnection, currentLoadTime)
                   getQuery(stagingConnection, "select max(CustodyReleaseTimestamp) as ttt from CustodyRelease"),
                   getQuery(stagingConnection, "select max(CustodyStatusChangeTimestamp) as ttt from CustodyStatusChange"))
 
-  maxStagingTimestamp <- as.POSIXlt(max(df$ttt))
+  maxStagingTimestamp <- as.POSIXlt(max(na.omit(df$ttt)))
 
   executeQuery(adsConnection, paste0("insert into LoadHistory (LoadHistoryTimestamp, MostRecentStagingTimestamp) ",
                                      "values ('", formatDateTimeForSQL(currentLoadTime), "', '", formatDateTimeForSQL(maxStagingTimestamp), "')"))
