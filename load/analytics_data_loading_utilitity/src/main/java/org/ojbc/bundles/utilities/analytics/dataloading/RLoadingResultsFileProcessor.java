@@ -27,10 +27,15 @@ public class RLoadingResultsFileProcessor {
 			throw new IllegalStateException("Working directory or loading output directory path not set.  Unable to process loading results file");		
 		}	
 		
-		File loadingScriptResultsFile = new File(loadingWorkingDirectory + File.separator + "MainADSLoad.Rout");
+		File loadingScriptResultsFile = new File(loadingWorkingDirectory + File.separator + "LoadDimensional.Rout");
 		File buildDashboardResultsFile = new File(buildDashboardWorkingDirectory + File.separator + "BuildDashboardData.Rout");
 		
 		if (!loadingScriptResultsFile.exists())
+		{
+			throw new Exception("Loading output file does not exist!");
+		}	
+
+		if (!buildDashboardResultsFile.exists())
 		{
 			throw new Exception("Loading output file does not exist!");
 		}	
@@ -47,7 +52,7 @@ public class RLoadingResultsFileProcessor {
 		String dateTimeStamp = today.toString("yyyyMMdd_HHmmss");
 		
 		//Create the Main ADS load output attachment
-		String loadingScriptOuputFileName = dateTimeStamp + "MainADSLoadRout.txt";
+		String loadingScriptOuputFileName = dateTimeStamp + "LoadDimensional.txt";
 		String loadingScriptOutputFileWithPath = loadingOutputDirectory + File.separator + loadingScriptOuputFileName;
 		
 		File loadingScriptOutputFileRenamedWithDateStamp = new File(loadingScriptOutputFileWithPath);
