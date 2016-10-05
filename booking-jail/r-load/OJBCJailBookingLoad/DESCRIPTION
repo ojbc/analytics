@@ -9,12 +9,7 @@ Description: This package contains functions useful for loading the analytical d
 License: Reciprocal Public License, Version 1.5
 LazyData: TRUE
 RoxygenNote: 5.0.1
-Imports: lazyeval,
-	stringi, 
-	tibble,
-	magrittr,
-	assertthat,
-	DBI,
+Imports: RMySQL,
     readr,
     tidyr,
     stringr,
