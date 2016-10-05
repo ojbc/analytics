@@ -232,6 +232,12 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
 
   ret$Booking[ret$Booking$BookingID==bookingIDToAlter, 'BookingDate'] <- baseDate + 30
 
+  # create one weird release record where the release date is before the corresponding booking date
+
+  releaseRecordBookingID <- sample(ret$CustodyRelease$BookingID, 1)
+  bd <- ret$Booking[ret$Booking$BookingID==releaseRecordBookingID, 'BookingDate']
+  ret$CustodyRelease[ret$CustodyRelease$BookingID==releaseRecordBookingID, 'ReleaseDate'] <- bd - 10
+
   changeTableList <- buildChangeTables(ret, codeTableList)
 
   ret$Person <- NULL

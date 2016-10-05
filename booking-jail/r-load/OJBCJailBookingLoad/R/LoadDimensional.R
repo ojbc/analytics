@@ -515,16 +515,25 @@ buildMedicationTable <- function(stagingConnection, lastLoadTime, unknownCodeTab
 
 buildReleaseTable <- function(stagingConnection, lastLoadTime, currentStagingDate, codeTableList, codeTableValueTranslator) {
 
-  Release <- getQuery(stagingConnection, paste0("select ReleaseDate, BookingID from CustodyRelease ",
-                                                "where BookingID is not null and CustodyReleaseTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+  Release <- getQuery(stagingConnection, paste0("select CustodyRelease.BookingID, BookingDate, ReleaseDate, CustodyReleaseTimestamp ",
+                                                "from CustodyRelease inner join Booking on CustodyRelease.BookingID=Booking.BookingID ",
+                                                "where CustodyReleaseTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
-  Release <- Release %>% mutate(ReleaseDate=as_date(ReleaseDate))
+  Release <- Release %>% mutate(ReleaseDate=as_date(ReleaseDate), BookingDate=as_date(BookingDate))
 
   totalRows <- nrow(Release)
   Release <- filter(Release, ReleaseDate <= currentStagingDate)
   writeLines(paste0("Removing ", (totalRows - nrow(Release)), " Release rows due to future actual release dates"))
 
-  Release
+  weirdReleaseDateCount <- nrow(Release %>% filter(ReleaseDate < BookingDate))
+
+  if (weirdReleaseDateCount) {
+    writeLines(paste0(weirdReleaseDateCount, " release dates adjusted to staging record date, because release date was prior to booking date"))
+  }
+
+  Release <- mutate(Release, ReleaseDate=as_date(ifelse(ReleaseDate < BookingDate, as_date(CustodyReleaseTimestamp), ReleaseDate)))
+
+  Release %>% select(BookingID, ReleaseDate)
 
 }
 
