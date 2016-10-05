@@ -9,7 +9,8 @@ Description: This package contains functions useful for loading the analytical d
 License: Reciprocal Public License, Version 1.5
 LazyData: TRUE
 RoxygenNote: 5.0.1
-Imports: Rcpp, 
+Imports: magrittr, 
+	Rcpp, 
 	assertthat, 
 	DBI, 
 	RMySQL,
