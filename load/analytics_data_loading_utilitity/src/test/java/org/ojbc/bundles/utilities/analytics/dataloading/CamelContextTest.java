@@ -67,14 +67,16 @@ public class CamelContextTest {
                  continue; // dealing with attachments only
              } 
              
+             log.info(bodyPart.getFileName());
+             
              if (i==1)
-             {	
+             { 
             	 assertTrue(StringUtils.endsWith(bodyPart.getFileName(), "BuildDashboardDataRout.txt"));
              }
              
              if (i==2)
              {	
-            	 assertTrue(StringUtils.endsWith(bodyPart.getFileName(), "MainADSLoadRout.txt"));
+            	 assertTrue(StringUtils.endsWith(bodyPart.getFileName(), "LoadDimensionalRout.txt"));
              }	 
 
          }

@@ -52,7 +52,7 @@ public class RLoadingResultsFileProcessor {
 		String dateTimeStamp = today.toString("yyyyMMdd_HHmmss");
 		
 		//Create the Main ADS load output attachment
-		String loadingScriptOuputFileName = dateTimeStamp + "LoadDimensional.txt";
+		String loadingScriptOuputFileName = dateTimeStamp + "LoadDimensionalRout.txt";
 		String loadingScriptOutputFileWithPath = loadingOutputDirectory + File.separator + loadingScriptOuputFileName;
 		
 		File loadingScriptOutputFileRenamedWithDateStamp = new File(loadingScriptOutputFileWithPath);
