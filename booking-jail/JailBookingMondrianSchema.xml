@@ -225,9 +225,9 @@
 	</Dimension>
 	
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="BehavioralHealthEvaluationType">
-		<Hierarchy name="Behavioral Health Evaluation Type]"  visible="true" hasAll="true" primaryKey="BehavioralHealthEvaluationTypeID" caption="Behavioral Health Evaluation">
+		<Hierarchy name="Behavioral Health Evaluation Type]"  visible="true" hasAll="true" primaryKey="BehavioralHealthEvaluationTypeID" caption="Diagnosis">
 			<Table name="BehavioralHealthEvaluationType"/>
-			<Level name="Behavioral Health Evaluation Type" visible="true" table="BehavioralHealthEvaluationType" column="BehavioralHealthEvaluationTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Diagnosis" visible="true" table="BehavioralHealthEvaluationType" column="BehavioralHealthEvaluationTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
@@ -260,6 +260,10 @@
 					<ColumnDef name="SevereMentalIllnessDescription" type="String"/>
 				</ColumnDefs>
 				<Rows>
+					<Row>
+						<Value column="SevereMentalIllnessID">99998</Value>
+						<Value column="SevereMentalIllnessDescription">Not Assessed</Value>
+					</Row>
 					<Row>
 						<Value column="SevereMentalIllnessID">0</Value>
 						<Value column="SevereMentalIllnessDescription">No</Value>
@@ -311,7 +315,7 @@
 		<DimensionUsage source="TreatmentStatus" name="Treatment Status" visible="true" foreignKey="TreatmentStatusTypeID" highCardinality="false"/>
 		<DimensionUsage source="TreatmentAdmissionReason" name="Treatment Admission Reason" visible="true" foreignKey="TreatmentAdmissionReasonTypeID" highCardinality="false"/>
 		<DimensionUsage source="TreatmentProvider" name="Treatment Provider" visible="true" foreignKey="TreatmentProviderTypeID" highCardinality="false"/>
-		<DimensionUsage source="SevereMentalIllness" name="Severe Mental Illness" visible="true" foreignKey="SevereMentalIllnessIndicator" highCardinality="false"/>
+		<DimensionUsage source="SevereMentalIllness" name="Severe Mental Illness" visible="true" foreignKey="SevereMentalIllnessIndicatorDimension" highCardinality="false"/>
 
 		<Measure name="Booking Count" column="JailEpisodeID" aggregator="distinct-count" visible="true"/>
 		<Measure name="Arrest Count" column="JailEpisodeArrestID" aggregator="distinct-count" visible="true"/>

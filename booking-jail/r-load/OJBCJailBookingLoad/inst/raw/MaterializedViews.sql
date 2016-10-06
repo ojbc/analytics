@@ -48,6 +48,7 @@ select
     ifnull(TreatmentAdmissionReasonTypeID, 99998) as TreatmentAdmissionReasonTypeID,
     ifnull(TreatmentProviderTypeID, 99998) as TreatmentProviderTypeID,
     SevereMentalIllnessIndicator,
+    ifnull(SevereMentalIllnessIndicator, 99998) as SevereMentalIllnessIndicatorDimension,
     BehavioralHealthTreatment.DaysBeforeBooking,
     ifnull(PrescribedMedicationID,99998) as PrescribedMedicationID,
     if(SixMonthRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID as SixMonthRebookingCount, 
