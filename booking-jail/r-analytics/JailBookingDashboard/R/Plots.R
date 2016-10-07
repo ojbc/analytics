@@ -25,6 +25,9 @@ timelineMeasureList <- list("Population Count"=c('Population', FALSE),
                             "Length of Stay"=c('TotalLengthOfStay/Population', FALSE),
                             'Rebooking Rate'=c('RebookingCount/Population', TRUE))
 
+emptyGraphic <- ggplot2::ggplot(data=data.frame(x=1:3, y=1:3), mapping=ggplot2::aes(x=x, y=y)) +
+  ggplot2::theme_void() + ggplot2::annotate("text", x=3, y=3, label="No Data Available", size=8, fontface="italic")
+
 #' @import ggplot2
 #' @import scales
 #' @import dplyr
@@ -41,35 +44,41 @@ plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, juris
 
   filteredDf <- filterDataFrame(df, ct, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, dates)
 
-  measure <- barMeasureList[[measureLabel]][1]
-  stat <- barMeasureList[[measureLabel]][2]
-  percentage <- barMeasureList[[measureLabel]][3]
+  ret <- emptyGraphic
 
-  plot <- ggplot(data=filteredDf, mapping=aes_string(x=label)) + geom_bar(mapping=aes_string(y=measure), stat = stat, fill="#08305c")
+  if (nrow(filteredDf)) {
 
-  if (percentage) {
-    plot <- plot + scale_y_continuous(labels=percent)
+    measure <- barMeasureList[[measureLabel]][1]
+    stat <- barMeasureList[[measureLabel]][2]
+    percentage <- barMeasureList[[measureLabel]][3]
+
+    plot <- ggplot(data=filteredDf, mapping=aes_string(x=label)) + geom_bar(mapping=aes_string(y=measure), stat = stat, fill="#08305c")
+
+    if (percentage) {
+      plot <- plot + scale_y_continuous(labels=percent)
+    }
+
+    if (horizontal) {
+      plot <- plot + coord_flip()
+    }
+
+    plot <- plot +
+      getTheme() + theme(axis.title.y = element_blank(), axis.title.x = element_blank())
+
+    if (!horizontal) {
+      plot <- plot + theme(axis.text.x = element_text(angle = 60, hjust = 1))
+    }
+
+    ret <- plot
+
   }
-
-  if (horizontal) {
-    plot <- plot + coord_flip()
-  }
-
-  plot <- plot +
-    getTheme() + theme(axis.title.y = element_blank(), axis.title.x = element_blank())
-
-  if (!horizontal) {
-    plot <- plot + theme(axis.text.x = element_text(angle = 60, hjust = 1))
-  }
-
-  ret <- plot
 
   if (svgMode) {
     callingFunctionStack <- as.list(sys.call(-1))[[1]]
     callingFunctionName <- ifelse(class(callingFunctionStack) == "name", callingFunctionStack,
                                   callingFunctionStack[length(callingFunctionStack)])
     svgFileName <- paste0(callingFunctionName, ".svg")
-    svgPrint(plot, svgFileName, width, height)
+    svgPrint(ret, svgFileName, width, height)
     ret <- as.character(callingFunctionName)
   }
 
@@ -97,28 +106,34 @@ plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, 
 
   label <- paste0(dimensionTableName, 'Label')
 
+  ret <- emptyGraphic
+
   filteredDf <- filterDataFrame(df, ct, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, dates)
 
-  measure <- timelineMeasureList[[measureLabel]][1]
-  percentage <- timelineMeasureList[[measureLabel]][2]
+  if (nrow(filteredDf)) {
 
-  plot <- ggplot(data=filteredDf, mapping=aes_string(x='Date', y=measure, color=label))  + geom_line(size=1.2) +
-    scale_x_date() +
-    getTheme() +
-    theme(axis.title.y = element_blank(), axis.title.x = element_blank(), legend.title = element_blank(), legend.position = "bottom")
+    measure <- timelineMeasureList[[measureLabel]][1]
+    percentage <- timelineMeasureList[[measureLabel]][2]
 
-  if (percentage) {
-    plot <- plot + scale_y_continuous(labels=percent)
+    plot <- ggplot(data=filteredDf, mapping=aes_string(x='Date', y=measure, color=label))  + geom_line(size=1.2) +
+      scale_x_date() +
+      getTheme() +
+      theme(axis.title.y = element_blank(), axis.title.x = element_blank(), legend.title = element_blank(), legend.position = "bottom")
+
+    if (percentage) {
+      plot <- plot + scale_y_continuous(labels=percent)
+    }
+
+    ret <- plot
+
   }
-
-  ret <- plot
 
   if (svgMode) {
     callingFunctionStack <- as.list(sys.call(-1))[[1]]
     callingFunctionName <- ifelse(class(callingFunctionStack) == "name", callingFunctionStack,
                                   callingFunctionStack[length(callingFunctionStack)])
     svgFileName <- paste0(callingFunctionName, ".svg")
-    svgPrint(plot, svgFileName, width, height)
+    svgPrint(ret, svgFileName, width, height)
     ret <- as.character(callingFunctionName)
   }
 

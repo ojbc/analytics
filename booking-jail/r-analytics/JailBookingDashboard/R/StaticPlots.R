@@ -99,14 +99,20 @@ plotStaticJailUtilization <- function(jurisdiction, originatingAgency, targetPop
     select(Population) %>% mutate(Capacity=JailCapacity) %>%
     gather() %>% arrange(value)
 
-  plot <- ggplot(data=df, aes(x=1, y=value, fill=key)) +
-    geom_bar(stat="identity") + coord_flip() + theme_void() + theme(legend.position="none") +
-    scale_fill_manual(values=c('#9ecae1', '#deebf7')) + geom_text(aes(label=value, hjust=1.5), position="stack")
+  ret <- ggplot() + theme_void()
 
-  ret <- plot
+  if (nrow(df)) {
+
+    plot <- ggplot(data=df, aes(x=1, y=value, fill=key)) +
+      geom_bar(stat="identity") + coord_flip() + theme_void() + theme(legend.position="none") +
+      scale_fill_manual(values=c('#9ecae1', '#deebf7')) + geom_text(aes(label=value, hjust=1.5), position="stack")
+
+    ret <- plot
+
+  }
 
   if (svgMode) {
-    svgPrint(plot, "plotStaticJailUtilization.svg", width=10, height=.35)
+    svgPrint(ret, "plotStaticJailUtilization.svg", width=10, height=.35)
     ret <- "plotStaticJailUtilization"
   }
 
@@ -131,14 +137,20 @@ plotStaticSMI <- function(jurisdiction, originatingAgency, targetPopulationOnly,
     select(Population, SMIPopulation) %>%
     gather() %>% arrange(value)
 
-  plot <- ggplot(data=df, aes(x=1, y=value, fill=key)) +
-    geom_bar(stat="identity") + coord_flip() + theme_void() + theme(legend.position="none") +
-    scale_fill_manual(values=c('#9ecae1', '#deebf7')) + geom_text(aes(label=value, hjust=1.5), position="stack")
+  ret <- ggplot() + theme_void()
 
-  ret <- plot
+  if (nrow(df)) {
+
+    plot <- ggplot(data=df, aes(x=1, y=value, fill=key)) +
+      geom_bar(stat="identity") + coord_flip() + theme_void() + theme(legend.position="none") +
+      scale_fill_manual(values=c('#9ecae1', '#deebf7')) + geom_text(aes(label=value, hjust=1.5), position="stack")
+
+    ret <- plot
+
+  }
 
   if (svgMode) {
-    svgPrint(plot, "plotStaticSMI.svg", width=5, height=.35)
+    svgPrint(ret, "plotStaticSMI.svg", width=5, height=.35)
     ret <- "plotStaticSMI"
   }
 
