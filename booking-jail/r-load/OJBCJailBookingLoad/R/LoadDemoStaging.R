@@ -261,8 +261,12 @@ buildChangeTables <- function(txTableList, codeTableList) {
   ret <- list()
 
   # 20% of bookings have edits
-  changedBookings <- txTableList$Booking %>% sample_frac(.2) %>% select(-BookingTimestamp) %>%
+  changedBookings <- txTableList$Booking %>% sample_frac(.2) %>% select(-BookingTimestamp)
+
+  multipleCsc <- changedBookings %>% sample_n(size=100)
+  changedBookings <- bind_rows(changedBookings, multipleCsc) %>%
     mutate(CustodyStatusChangeID=seq(n()))
+
   changedArrests <- txTableList$BookingArrest %>% filter(BookingID %in% changedBookings$BookingID) %>%
     inner_join(changedBookings %>% select(BookingID, CustodyStatusChangeID), by=c("BookingID"="BookingID")) %>% select(-BookingID, -BookingArrestTimestamp) %>%
     mutate(CustodyStatusChangeArrestID=seq(n()))
@@ -287,7 +291,7 @@ buildChangeTables <- function(txTableList, codeTableList) {
   nextPersonID <- as.integer(max(txTableList$Person$PersonID) + 1)
 
   ChangedPerson <- txTableList$Person %>%
-    filter(PersonID %in% changedBookings$PersonID) %>%
+    right_join(changedBookings %>% select(PersonID), by=c("PersonID"="PersonID")) %>%
     mutate(PersonID=as.integer(nextPersonID + row_number()))
 
   writeLines(paste0("Adding ", nrow(ChangedPerson), " rows to Person table for CustodyStatusChange records."))

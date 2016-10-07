@@ -218,11 +218,16 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
                                                 "where Booking.BookingID=CustodyStatusChange.BookingID and ",
                                                 "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' order by CustodyStatusChangeTimestamp"))
 
+  # note that it is possible to have multiple CSC records for a single booking.  if this is the case, we take the most recent one.
+  Booking <- Booking %>% group_by(BookingID) %>% filter(row_number()==n()) %>% ungroup()
+
   BookingChargeDisposition <- getQuery(stagingConnection, paste0("select CustodyStatusChange.BookingID, ChargeDisposition from ",
                                                                  "Booking inner join CustodyStatusChange on Booking.BookingID=CustodyStatusChange.BookingID ",
                                                                  "left join CustodyStatusChangeArrest on CustodyStatusChange.CustodyStatusChangeID=CustodyStatusChangeArrest.CustodyStatusChangeID ",
                                                                  "left join CustodyStatusChangeCharge on CustodyStatusChangeArrest.CustodyStatusChangeArrestID=CustodyStatusChangeCharge.CustodyStatusChangeArrestID ",
                                                                  "where CustodyStatusChange.BookingDate <= '", currentStagingDate, "' and CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' order by CustodyStatusChangeTimestamp"))
+
+  BookingChargeDisposition <- BookingChargeDisposition %>% group_by(BookingID) %>% filter(row_number()==n()) %>% ungroup()
 
   ret$JailEpisodeEdits <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, 'CustodyStatusChange')
 
