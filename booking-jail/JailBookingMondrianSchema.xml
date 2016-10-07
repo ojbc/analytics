@@ -225,7 +225,7 @@
 	</Dimension>
 	
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="BehavioralHealthEvaluationType">
-		<Hierarchy name="Behavioral Health Evaluation Type]"  visible="true" hasAll="true" primaryKey="BehavioralHealthEvaluationTypeID" caption="Diagnosis">
+		<Hierarchy name="Behavioral Health Evaluation Type"  visible="true" hasAll="true" primaryKey="BehavioralHealthEvaluationTypeID" caption="Diagnosis">
 			<Table name="BehavioralHealthEvaluationType"/>
 			<Level name="Diagnosis" visible="true" table="BehavioralHealthEvaluationType" column="BehavioralHealthEvaluationTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
@@ -310,7 +310,7 @@
 		<DimensionUsage source="BondStatus" name="Bond Status" visible="true" foreignKey="BondStatusTypeID" highCardinality="false"/>
 		<DimensionUsage source="Bond" name="Bond Type" visible="true" foreignKey="BondTypeID" highCardinality="false"/>
 		<DimensionUsage source="MedicaidStatus" name="Medicaid Status" visible="true" foreignKey="MedicaidStatusTypeID" highCardinality="false"/>
-		<DimensionUsage source="BehavioralHealthEvaluationType" name="Behavioral Health Evaluation Type" visible="true" foreignKey="BehavioralHealthEvaluationTypeID" highCardinality="false"/>
+		<DimensionUsage source="BehavioralHealthEvaluationType" name="Diagnosis" visible="true" foreignKey="BehavioralHealthEvaluationTypeID" highCardinality="false"/>
 		<DimensionUsage source="Medication" name="Prescribed Medication" visible="true" foreignKey="PrescribedMedicationID" highCardinality="false"/>
 		<DimensionUsage source="TreatmentStatus" name="Treatment Status" visible="true" foreignKey="TreatmentStatusTypeID" highCardinality="false"/>
 		<DimensionUsage source="TreatmentAdmissionReason" name="Treatment Admission Reason" visible="true" foreignKey="TreatmentAdmissionReasonTypeID" highCardinality="false"/>
