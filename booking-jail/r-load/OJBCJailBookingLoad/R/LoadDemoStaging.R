@@ -263,17 +263,33 @@ buildChangeTables <- function(txTableList, codeTableList) {
   # 20% of bookings have edits
   changedBookings <- txTableList$Booking %>% sample_frac(.2) %>% select(-BookingTimestamp)
 
-  multipleCsc <- changedBookings %>% sample_n(size=100)
-  changedBookings <- bind_rows(changedBookings, multipleCsc) %>%
+  multipleCsc <- changedBookings %>% sample_n(size=10)
+  futureBookingEdits <- changedBookings %>% sample_n(size=10) %>% mutate(BookingID=NA, BookingNumber=paste0(BookingNumber, 'F'))
+  changedBookings <- bind_rows(changedBookings, multipleCsc, futureBookingEdits) %>%
     mutate(CustodyStatusChangeID=seq(n()))
 
+  futureBookingEdits <- changedBookings %>% filter(is.na(BookingID))
+
   changedArrests <- txTableList$BookingArrest %>% filter(BookingID %in% changedBookings$BookingID) %>%
-    inner_join(changedBookings %>% select(BookingID, CustodyStatusChangeID), by=c("BookingID"="BookingID")) %>% select(-BookingID, -BookingArrestTimestamp) %>%
-    mutate(CustodyStatusChangeArrestID=seq(n()))
+    inner_join(changedBookings %>% select(BookingID, CustodyStatusChangeID), by=c("BookingID"="BookingID"))
+
+  futureBookingArrests <- txTableList$BookingArrest %>% sample_n(size=10)
+  futureBookingArrests$CustodyStatusChangeID <- futureBookingEdits$CustodyStatusChangeID
+
+  changedArrests <- bind_rows(changedArrests, futureBookingArrests) %>%
+    mutate(CustodyStatusChangeArrestID=seq(n())) %>% select(-BookingID, -BookingArrestTimestamp)
+
+  futureBookingArrests <- changedArrests %>% filter(CustodyStatusChangeID %in% futureBookingArrests$CustodyStatusChangeID)
+
   changedCharges <- txTableList$BookingCharge %>% filter(BookingArrestID %in% changedArrests$BookingArrestID) %>%
-    inner_join(changedArrests %>% select(BookingArrestID, CustodyStatusChangeArrestID), by=c("BookingArrestID"="BookingArrestID")) %>%
-    select(-BookingArrestID, -BookingChargeTimestamp) %>%
-    mutate(CustodyStatusChangeChargeID=seq(n()))
+    inner_join(changedArrests %>% select(BookingArrestID, CustodyStatusChangeArrestID), by=c("BookingArrestID"="BookingArrestID"))
+
+  futureBookingCharges <- txTableList$BookingCharge %>% sample_n(size=10)
+  futureBookingCharges$CustodyStatusChangeArrestID <- futureBookingArrests$CustodyStatusChangeArrestID
+
+  changedCharges <- bind_rows(changedCharges, futureBookingCharges) %>%
+    mutate(CustodyStatusChangeChargeID=seq(n())) %>%
+    select(-BookingArrestID, -BookingChargeTimestamp)
 
   changedArrests <- changedArrests %>%
     select(-BookingArrestID) %>%

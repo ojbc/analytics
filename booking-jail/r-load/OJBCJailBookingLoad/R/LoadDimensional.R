@@ -298,7 +298,7 @@ buildArrestTables <- function(stagingConnection, adsConnection, lastLoadTime, cu
     Arrest <- getQuery(stagingConnection, paste0("select BookingDate, ", parentBookingTable, ".BookingID, ", arrestTable, "ID as pk, LocationLatitude, LocationLongitude, ArrestAgencyID ",
                                                  "from (", arrestTable, " inner join ", parentBookingTable,
                                                  " on ", arrestTable, ".", parentBookingTable, "ID=", parentBookingTable, ".", parentBookingTable, "ID) ",
-                                                 "left join Location on ", arrestTable, ".LocationID=Location.LocationID where ",
+                                                 "left join Location on ", arrestTable, ".LocationID=Location.LocationID where ", parentBookingTable, ".BookingID is not null and ",
                                                  parentBookingTable, "Timestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
     totalRows <- nrow(Arrest)
@@ -343,7 +343,7 @@ buildChargeTables <- function(stagingConnection, adsConnection, lastLoadTime, cu
                                                  grandparentBookingTable, ".BookingID as GrandparentBookingID, ",
                                                  "ChargeCode, ChargeDisposition, AgencyID, BondTypeID, BondAmount, ChargeJurisdictionTypeID, ",
                                                  "BondStatusTypeID, ChargeClassTypeID from ",
-                                                 grandparentBookingTable, ", ", parentArrestTable, ", ", chargeTable, " where ",
+                                                 grandparentBookingTable, ", ", parentArrestTable, ", ", chargeTable, " where ", grandparentBookingTable, ".BookingID is not null and ",
                                                  chargeTable, ".", parentArrestTable, "ID=", parentArrestTable, ".", parentArrestTable, "ID and ",
                                                  parentArrestTable, ".", grandparentBookingTable, "ID=", grandparentBookingTable, ".", grandparentBookingTable, "ID and ",
                                                  grandparentBookingTable, "Timestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
@@ -663,7 +663,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
 
   ret$Date <- loadDateDimension(adsConnection, ret, unknownCodeTableValue, noneCodeTableValue, writeToDatabase)
 
-  persistTables(adsConnection, ret, unknownCodeTableValue)
+  persistTables(adsConnection, ret, unknownCodeTableValue, currentLoadTime)
 
   determineRecidivism(adsConnection)
 
@@ -784,7 +784,7 @@ determineRecidivism <- function(adsConnection) {
 
 }
 
-persistTables <- function(adsConnection, dfs, unknownCodeTableValue) {
+persistTables <- function(adsConnection, dfs, unknownCodeTableValue, currentLoadTime) {
 
   checkForAndRemoveDuplicateBookings(adsConnection, dfs)
 
@@ -803,7 +803,7 @@ persistTables <- function(adsConnection, dfs, unknownCodeTableValue) {
   writeLines("Done writing main transaction tables to database")
 
   writeLines("Applying JailEpisodeEdits")
-  applyEdits(adsConnection, dfs)
+  applyEdits(adsConnection, dfs, currentLoadTime)
 
   writeLines("Processing releases")
   persistReleases(adsConnection, dfs, unknownCodeTableValue)
@@ -863,7 +863,7 @@ checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs) {
 
 }
 
-applyEdits <- function(adsConnection, dfs) {
+applyEdits <- function(adsConnection, dfs, currentLoadTime) {
 
   if (nrow(dfs$JailEpisodeEdits)) {
 
