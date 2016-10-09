@@ -319,7 +319,7 @@
 
 		<Measure name="Booking Count" column="JailEpisodeID" aggregator="distinct-count" visible="true"/>
 		<Measure name="Arrest Count" column="JailEpisodeArrestID" aggregator="distinct-count" visible="true"/>
-		<Measure name="Active Booking Count" column="IsActiveBookingCount" aggregator="sum" visible="true"/>
+		<Measure name="Active Booking Count" column="IsActiveBookingCount" aggregator="distinct-count" visible="true"/>
 		<Measure name="Average Length Of Stay" column="LengthOfStay" aggregator="avg" visible="true"/>
 		<Measure name="SixMonthRebookingCount" column="SixMonthRebookingCount" aggregator="distinct-count"  visible="false"/>
 		<Measure name="OneYearRebookingCount" column="OneYearRebookingCount" aggregator="distinct-count"  visible="false"/>
