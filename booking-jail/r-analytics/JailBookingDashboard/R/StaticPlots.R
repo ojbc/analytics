@@ -96,8 +96,8 @@ plotStaticJailUtilization <- function(jurisdiction, originatingAgency, targetPop
   df <- df %>%
     filterDataFrameForRollups(jurisdiction, originatingAgency, targetPopulationOnly, "") %>%
     filter(Date == maxDate) %>%
-    select(Population) %>% mutate(Capacity=JailCapacity) %>%
-    gather() %>% arrange(value)
+    select(Population) %>% mutate(Capacity=JailCapacity-Population) %>%
+    gather() %>% arrange(desc(value))
 
   ret <- ggplot() + theme_void()
 
@@ -105,7 +105,7 @@ plotStaticJailUtilization <- function(jurisdiction, originatingAgency, targetPop
 
     plot <- ggplot(data=df, aes(x=1, y=value, fill=key)) +
       geom_bar(stat="identity") + coord_flip() + theme_void() + theme(legend.position="none") +
-      scale_fill_manual(values=c('#9ecae1', '#deebf7')) + geom_text(aes(label=value, hjust=1.5), position="stack")
+      scale_fill_manual(values=c('#9ecae1', '#deebf7')) + geom_text(aes(label=cumsum(value), hjust=1.5), position="stack")
 
     ret <- plot
 
@@ -134,8 +134,8 @@ plotStaticSMI <- function(jurisdiction, originatingAgency, targetPopulationOnly,
   df <- df %>%
     filterDataFrameForRollups(jurisdiction, originatingAgency, targetPopulationOnly, "") %>%
     filter(Date == maxDate) %>%
-    select(Population, SMIPopulation) %>%
-    gather() %>% arrange(value)
+    select(Population, SMIPopulation) %>% mutate(Population=Population-SMIPopulation) %>%
+    gather() %>% arrange(desc(value))
 
   ret <- ggplot() + theme_void()
 
@@ -143,7 +143,7 @@ plotStaticSMI <- function(jurisdiction, originatingAgency, targetPopulationOnly,
 
     plot <- ggplot(data=df, aes(x=1, y=value, fill=key)) +
       geom_bar(stat="identity") + coord_flip() + theme_void() + theme(legend.position="none") +
-      scale_fill_manual(values=c('#9ecae1', '#deebf7')) + geom_text(aes(label=value, hjust=1.5), position="stack")
+      scale_fill_manual(values=c('#9ecae1', '#deebf7')) + geom_text(aes(label=cumsum(value), hjust=1.5), position="stack")
 
     ret <- plot
 
