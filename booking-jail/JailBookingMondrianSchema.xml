@@ -66,61 +66,55 @@
 		<Hierarchy name="Charge" visible="true" hasAll="true" primaryKey="ChargeTypeID" caption="Charge">
 			<Table name="ChargeType"/>
 			<Level name="ChargeType" visible="true" table="ChargeType" column="ChargeTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-			<Level name="ChargeCitationType" visible="true" table="ChargeType" column="ChargeTypeCitation" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="ChargeDisposition">
 		<Hierarchy name="Charge Disposition" visible="true" hasAll="true" primaryKey="ChargeDispositionTypeID" caption="Charge Disposition">
 			<Table name="ChargeDispositionType"/>
-			<Level name="Charge Disposition" visible="true" table="ChargeDispositionType" column="ChargeDispositionTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Charge Disposition" visible="true" table="ChargeDispositionType" column="ChargeDispositionTypeCategory" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="BondStatus">
 		<Hierarchy name="Bond Status" visible="true" hasAll="true" primaryKey="BondStatusTypeID" caption="Bond Status">
 			<Table name="BondStatusType"/>
-			<Level name="Bond Status" visible="true" table="BondStatusType" column="BondStatusTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-			<Level name="Bond Status Category" visible="true" table="BondStatusType" column="BondStatusTypeCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Bond Status" visible="true" table="BondStatusType" column="BondStatusTypeCategory" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Bond">
 		<Hierarchy name="Bond Type" visible="true" hasAll="true" primaryKey="BondTypeID" caption="Bond Type">
 			<Table name="BondType"/>
-			<Level name="Bond Type" visible="true" table="BondType" column="BondTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-			<Level name="Bond Category" visible="true" table="BondType" column="BondTypeCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Bond Type" visible="true" table="BondType" column="BondTypeCategory" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Jurisdiction">
 		<Hierarchy name="Jurisdiction" visible="true" hasAll="true" primaryKey="JurisdictionTypeID" caption="Jurisdiction">
 			<Table name="JurisdictionType"/>
-			<Level name="Jurisdiction" visible="true" table="JurisdictionType" column="JurisdictionTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-			<Level name="Jurisdiction Category" visible="true" table="JurisdictionType" column="JurisdictionCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Jurisdiction" visible="true" table="JurisdictionType" column="JurisdictionCategory" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="CaseStatus">
 		<Hierarchy name="Case Status" visible="true" hasAll="true" primaryKey="CaseStatusTypeID" caption="Case Status">
 			<Table name="CaseStatusType"/>
-			<Level name="Case Status" visible="true" table="CaseStatusType" column="CaseStatusTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Case Status" visible="true" table="CaseStatusType" column="CaseStatusTypeCategory" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Arrest Agency">
-		<Hierarchy name="Agency" visible="true" hasAll="true" primaryKey="AgencyID" caption="Arrest Agency">
-			<Table name="Agency"/>
-			<Level name="Arrest Agency" visible="true" table="Agency" column="AgencyDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-			<Level name="Arrest Agency Category" visible="true" table="Agency" column="AgencyCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-		</Hierarchy>
+			<Hierarchy name="Agency" visible="true" hasAll="true" primaryKey="AgencyID" caption="Arrest Agency">
+				<Table name="Agency"/>
+			<Level name="Arrest Agency" visible="true" table="Agency" column="AgencyCategory" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
+			</Hierarchy>
 	</Dimension>
 	
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Hold for Agency">
 		<Hierarchy name="Agency" visible="true" hasAll="true" primaryKey="AgencyID" caption="Hold for Agency">
 			<Table name="Agency"/>
-			<Level name="Hold for Agency" visible="true" table="Agency" column="AgencyDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-			<Level name="Hold for Agency Category" visible="true" table="Agency" column="AgencyCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Hold for Agency" visible="true" table="Agency" column="AgencyCategory" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
@@ -204,9 +198,7 @@
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Medication">
 		<Hierarchy name="Medication"  visible="true" hasAll="true" primaryKey="MedicationTypeID" caption="Medication">
 			<Table name="MedicationType"/>
-			<Level name="Medication" visible="true" table="MedicationType" column="MedicationTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-			<Level name="MedicationCategory" visible="true" table="MedicationType" column="MedicationTypeCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
-			<Level name="MedicationCode" visible="true" table="MedicationType" column="MedicationTypeCode" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Medication" visible="true" table="MedicationType" column="MedicationTypeCategory" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
