@@ -186,7 +186,8 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
         TwoYearRebooking='N',
         DaysSinceLastEpisode=NA,
         DaysUntilNextEpisode=NA,
-        LoadHistoryID=loadHistoryID)
+        LoadHistoryID=loadHistoryID,
+        StagingPK=pk)
 
     if (nrow(StagingBookingChargeDispositionDf)) {
       args <- list()
@@ -201,7 +202,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
 
   ret <- list()
 
-  Booking <- getQuery(stagingConnection, paste0("select BookingNumber, BookingID, PersonID, BookingDate, ",
+  Booking <- getQuery(stagingConnection, paste0("select BookingNumber, BookingID, PersonID, BookingDate, BookingID as pk, ",
                                                 "FacilityID, SupervisionUnitTypeID, InmateJailResidentIndicator from Booking ",
                                                 " where BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
@@ -210,16 +211,19 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
                                                                  "left join BookingCharge on BookingArrest.BookingArrestID=BookingCharge.BookingArrestID ",
                                                                  "where BookingDate <= '", currentStagingDate, "' and BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
-  ret$JailEpisode <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, 'JailEpisode')
+  ret$JailEpisode <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, 'JailEpisode') %>%
+    select(-StagingPK)
 
   Booking <- getQuery(stagingConnection, paste0("select Booking.BookingNumber, CustodyStatusChange.BookingID, CustodyStatusChange.PersonID, CustodyStatusChange.BookingDate, ",
-                                                "CustodyStatusChange.FacilityID, CustodyStatusChange.SupervisionUnitTypeID, ",
+                                                "CustodyStatusChange.FacilityID, CustodyStatusChange.SupervisionUnitTypeID, CustodyStatusChangeID as pk, ",
                                                 "CustodyStatusChange.InmateJailResidentIndicator from Booking, CustodyStatusChange ",
                                                 "where Booking.BookingID=CustodyStatusChange.BookingID and ",
                                                 "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' order by CustodyStatusChangeTimestamp"))
 
   # note that it is possible to have multiple CSC records for a single booking.  if this is the case, we take the most recent one.
+  total <- nrow(Booking)
   Booking <- Booking %>% group_by(BookingID) %>% filter(row_number()==n()) %>% ungroup()
+  writeLines(paste0("Removed ", total-nrow(Booking), " custody status change records that are replaced by a more recent custody status change"))
 
   BookingChargeDisposition <- getQuery(stagingConnection, paste0("select CustodyStatusChange.BookingID, ChargeDisposition from ",
                                                                  "Booking inner join CustodyStatusChange on Booking.BookingID=CustodyStatusChange.BookingID ",
@@ -291,11 +295,12 @@ buildPersonTable <- function(stagingConnection, lastLoadTime, unknownCodeTableVa
 
 }
 
-buildArrestTables <- function(stagingConnection, adsConnection, lastLoadTime, currentStagingDate, unknownCodeTableValue, codeTableList, codeTableValueTranslator) {
+buildArrestTables <- function(stagingConnection, adsConnection, lastLoadTime, currentStagingDate, unknownCodeTableValue, codeTableList, codeTableValueTranslator, jailEpisodeEditPKs) {
 
   buildTable <- function(parentBookingTable, arrestTable, baseArrestID) {
 
-    Arrest <- getQuery(stagingConnection, paste0("select BookingDate, ", parentBookingTable, ".BookingID, ", arrestTable, "ID as pk, LocationLatitude, LocationLongitude, ArrestAgencyID ",
+    Arrest <- getQuery(stagingConnection, paste0("select BookingDate, ", parentBookingTable, ".BookingID, ", arrestTable, "ID as pk, LocationLatitude, LocationLongitude, ArrestAgencyID, ",
+                                                 arrestTable, ".", parentBookingTable, "ID as parentFK ",
                                                  "from (", arrestTable, " inner join ", parentBookingTable,
                                                  " on ", arrestTable, ".", parentBookingTable, "ID=", parentBookingTable, ".", parentBookingTable, "ID) ",
                                                  "left join Location on ", arrestTable, ".LocationID=Location.LocationID where ", parentBookingTable, ".BookingID is not null and ",
@@ -311,7 +316,7 @@ buildArrestTables <- function(stagingConnection, adsConnection, lastLoadTime, cu
                 ArrestLocationLatitude=LocationLatitude,
                 ArrestLocationLongitude=LocationLongitude,
                 AgencyID=translateCodeTableValue(codeTableValueTranslator, ArrestAgencyID, "Agency", unknownCodeTableValue, codeTableList),
-                StagingPK=pk)
+                StagingPK=pk, StagingParentFK=parentFK)
 
     Arrest
 
@@ -328,12 +333,21 @@ buildArrestTables <- function(stagingConnection, adsConnection, lastLoadTime, cu
 
   ret$ArrestEdits <- buildTable('CustodyStatusChange', 'CustodyStatusChangeArrest', baseArrestID)
 
+  total <- nrow(ret$ArrestEdits)
+
+  ret$ArrestEdits <- ret$ArrestEdits %>%
+    filter(StagingParentFK %in% jailEpisodeEditPKs) %>%
+    select(-StagingParentFK)
+
+  writeLines(paste0("Removed ", total-nrow(ret$ArrestEdits), " arrest edits that are replaced by a more recent custody status change"))
+
   ret
 
 }
 
 buildChargeTables <- function(stagingConnection, adsConnection, lastLoadTime, currentStagingDate, unknownCodeTableValue,
-                              chargeCodeTypeTextConverter, dispositionTextConverter, ArrestDf, ArrestEditsDf, codeTableList, codeTableValueTranslator) {
+                              chargeCodeTypeTextConverter, dispositionTextConverter, ArrestDf, ArrestEditsDf, codeTableList,
+                              codeTableValueTranslator) {
 
   buildTable <- function(grandparentBookingTable, parentArrestTable, chargeTable, baseChargeID) {
 
@@ -631,8 +645,10 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
                                  occupationTextValueConverter, codeTableList, codeTableValueTranslator)
   writeLines(paste0("Loaded Person table with ", nrow(ret$Person), " rows"))
 
+  jailEpisodeEditPKs <- unique(ret$JailEpisodeEdits$StagingPK)
+
   writeLines("Loading Arrest tables")
-  arrestTables <- buildArrestTables(stagingConnection, adsConnection, lastLoadTime, currentStagingDate, unknownCodeTableValue, codeTableList, codeTableValueTranslator)
+  arrestTables <- buildArrestTables(stagingConnection, adsConnection, lastLoadTime, currentStagingDate, unknownCodeTableValue, codeTableList, codeTableValueTranslator, jailEpisodeEditPKs)
   ret <- c(ret, arrestTables)
   writeLines(paste0("Loaded Arrest with ", nrow(ret$Arrest), " rows and ArrestEdits with ", nrow(ret$ArrestEdits), " rows"))
 
@@ -643,7 +659,8 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   ret <- c(ret, chargeTables)
   writeLines(paste0("Loaded Charge with ", nrow(ret$Charge), " rows and ChargeEdits with ", nrow(ret$ChargeEdits), " rows"))
 
-  ret$Arrest <- ret$Arrest %>% select(-StagingPK)
+  ret$JailEpisodeEdits <- ret$JailEpisodeEdits %>% select(-StagingPK)
+  ret$Arrest <- ret$Arrest %>% select(-StagingPK, -StagingParentFK)
 
   writeLines("Loading Behavioral Health tables")
   ret$BehavioralHealthAssessment <- buildBHAssessmentTable(stagingConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator)
@@ -868,6 +885,8 @@ applyEdits <- function(adsConnection, dfs, currentLoadTime) {
   if (nrow(dfs$JailEpisodeEdits)) {
 
     writeLines(paste0("Applying ", nrow(dfs$JailEpisodeEdits), " JailEpisodeEdits"))
+    writeLines(paste0("Applying ", nrow(dfs$ArrestEdits), " ArrestEdits"))
+    writeLines(paste0("Applying ", nrow(dfs$ChargeEdits), " ChargeEdits"))
 
     removeBookingsAndChildren(adsConnection, dfs$JailEpisodeEdits$JailEpisodeID)
 
