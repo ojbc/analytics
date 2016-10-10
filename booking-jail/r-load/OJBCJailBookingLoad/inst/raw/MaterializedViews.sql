@@ -55,7 +55,8 @@ select
     if(OneYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID as OneYearRebookingCount, 
     if(TwoYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID as TwoYearRebookingCount, 
     if(IsActive='Y', 1, 0) * JailEpisode.JailEpisodeID as IsActiveBookingCount,
-    if(InTreatmentAtBooking='Y', 1, 0) * JailEpisode.JailEpisodeID as InTreatmentAtBookingCount
+    if(InTreatmentAtBooking='Y', 1, 0) * JailEpisode.JailEpisodeID as InTreatmentAtBookingCount,
+    if(SevereMentalIllnessIndicator=1, 1, 0) * JailEpisode.JailEpisodeID as SevereMentalIllnessBookingCount
 from
     JailEpisode inner join Person on JailEpisode.PersonID=Person.PersonID
     left join JailEpisodeArrest on JailEpisode.JailEpisodeID=JailEpisodeArrest.JailEpisodeID

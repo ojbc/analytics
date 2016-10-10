@@ -321,7 +321,7 @@
  		<Measure name="Evaluation Count" column="BehavioralHealthEvaluationID" aggregator="distinct-count" visible="true"/>
  		<Measure name="Treatment Count" column="BehavioralHealthTreatmentID" aggregator="distinct-count" visible="true"/>
  		<Measure name="Prescription Count" column="PrescribedMedicationID" aggregator="distinct-count" visible="true"/>
-		<Measure name="SMI Rate" column="SevereMentalIllnessIndicator" aggregator="avg" formatString="#0.0%" caption="SMI Rate" visible="true"/>
+		<Measure name="SMICount" column="SevereMentalIllnessBookingCount" aggregator="distinct-count" visible="false"/>
 		<Measure name="Treatment At Booking Rate" column="InTreatmentAtBookingCount" aggregator="avg" formatString="#0.0%" caption="In Treatment at Booking Rate" visible="true"/>
 
 		<!--  We have to subtract 1 in the numerator because all of the zeros (from multiplying the JailEpisodeID * not-a-recidivist) will count as 1-->
@@ -335,6 +335,10 @@
 		</CalculatedMember>
 		<CalculatedMember name="TwoYearRebookRate" caption="Two Year Rebooking Rate" dimension="Measures">
 			<Formula><![CDATA[IIf([Measures].[Booking Count] > 0,  ([Measures].[TwoYearRebookingCount] -1)/ [Measures].[Booking Count], 0)]]></Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+		</CalculatedMember>
+		<CalculatedMember name="SMI Rate" caption="SMI Rate" dimension="Measures">
+			<Formula><![CDATA[IIf([Measures].[Booking Count] > 0,  ([Measures].[SevereMentalIllnessBookingCount] -1)/ [Measures].[Booking Count], 0)]]></Formula>
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
 		</CalculatedMember>
 		
