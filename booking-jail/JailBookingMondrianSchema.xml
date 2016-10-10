@@ -42,14 +42,14 @@
 	</Dimension>
 	
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Sex">
-		<Hierarchy name="Sex" visible="true" hasAll="true" primaryKey="PersonSexTypeID" caption="Race">
+		<Hierarchy name="Sex" visible="true" hasAll="true" primaryKey="PersonSexTypeID" caption="Sex">
 			<Table name="PersonSexType"/>
 			<Level name="Sex" visible="true" table="PersonSexType" column="PersonSexTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Ethnicity">
-		<Hierarchy name="Ethnicity" visible="true" hasAll="true" primaryKey="PersonEthnicityTypeID" caption="Race">
+		<Hierarchy name="Ethnicity" visible="true" hasAll="true" primaryKey="PersonEthnicityTypeID" caption="Ethnicity">
 			<Table name="PersonEthnicityType"/>
 			<Level name="Ethnicity" visible="true" table="PersonEthnicityType" column="PersonEthnicityTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
