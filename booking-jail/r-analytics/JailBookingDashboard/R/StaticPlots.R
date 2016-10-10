@@ -20,7 +20,7 @@ plotStaticCaseStatus <- function(jurisdiction, originatingAgency, targetPopulati
 #' @export
 plotStaticOriginatingAgency <- function(jurisdiction, originatingAgency, targetPopulationOnly, measure) {
   # , height=1.8, width=4, horizontal = FALSE
-  plotBar(measure, "Agency", "ChargeAgencyID", jurisdiction, originatingAgency, targetPopulationOnly, height=2.5)
+  plotBar(measure, "Agency", "ArrestAgencyID", jurisdiction, originatingAgency, targetPopulationOnly, height=2.5)
 }
 
 #' @export

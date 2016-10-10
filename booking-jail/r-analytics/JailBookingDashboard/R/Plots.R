@@ -163,12 +163,12 @@ filterDataFrameForRollups <- function(df, jurisdictionLabel, agencyLabel, target
 
   if (agencyLabel != allAgenciesLabel) {
     agencyID <- (agencyCodeTable %>% filter(AgencyLabel == agencyLabel))[1, 1]
-    filteredDf <- filter(filteredDf, ChargeAgencyID == agencyID)
+    filteredDf <- filter(filteredDf, ArrestAgencyID == agencyID)
   } else {
     if ('Agency' == dimensionTableName) {
-      filteredDf <- filter(filteredDf, ChargeAgencyID != allRollupID)
+      filteredDf <- filter(filteredDf, ArrestAgencyID != allRollupID)
     } else {
-      filteredDf <- filter(filteredDf, ChargeAgencyID == allRollupID)
+      filteredDf <- filter(filteredDf, ArrestAgencyID == allRollupID)
     }
   }
 

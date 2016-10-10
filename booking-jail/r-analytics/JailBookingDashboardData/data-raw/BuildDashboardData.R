@@ -24,7 +24,7 @@ allRollupID <- -1
 adsConnection <- dbConnect(MySQL(), host="localhost", dbname="ojbc_booking_analytics_demo", username="root")
 
 rollupTables <- list(
-  Agency=c('AgencyCategory', 'ChargeAgencyID'),
+  Agency=c('AgencyCategory', 'ArrestAgencyID'),
   JurisdictionType=c('JurisdictionCategory', 'JurisdictionTypeID'),
   PopulationType=c('PopulationTypeDescription', 'PopulationTypeID')
 )
@@ -43,7 +43,7 @@ dimensionTables <- list(
   ChargeDispositionType=c('ChargeDispositionTypeCategory', 'JailEpisodeChargeID'),
   BehavioralHealthEvaluationType=c('BehavioralHealthEvaluationTypeDescription', 'JailEpisodeID'),
   PersonAgeRangeType=c("AgeRange", "JailEpisodeID"),
-  Agency=c('AgencyCategory', 'JailEpisodeChargeID', 'ChargeAgencyID'),
+  Agency=c('AgencyCategory', 'JailEpisodeArrestID', 'ArrestAgencyID'),
   BondType=c('BondTypeCategory', 'JailEpisodeChargeID'),
   PersonRaceType=c("PersonRaceTypeDescription", "JailEpisodeID")
 )

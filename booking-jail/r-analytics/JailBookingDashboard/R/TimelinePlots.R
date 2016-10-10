@@ -19,7 +19,7 @@ plotTimelineCaseStatus <- function(jurisdiction, originatingAgency, targetPopula
 
 #' @export
 plotTimelineOriginatingAgency <- function(jurisdiction, originatingAgency, targetPopulationOnly, periodFilterDays, measure) {
-  plotTimeline(measure, "Agency", "ChargeAgencyID", jurisdiction, originatingAgency, targetPopulationOnly, periodFilterDays)
+  plotTimeline(measure, "Agency", "ArrestAgencyID", jurisdiction, originatingAgency, targetPopulationOnly, periodFilterDays)
 }
 
 #' @export
