@@ -135,7 +135,7 @@ plotStaticSMI <- function(jurisdiction, originatingAgency, targetPopulationOnly,
     filterDataFrameForRollups(jurisdiction, originatingAgency, targetPopulationOnly, "") %>%
     filter(Date == maxDate) %>%
     select(Population, SMIPopulation) %>% mutate(Population=Population-SMIPopulation) %>%
-    gather() %>% arrange(desc(value))
+    gather() %>% arrange(value)
 
   ret <- ggplot() + theme_void()
 
