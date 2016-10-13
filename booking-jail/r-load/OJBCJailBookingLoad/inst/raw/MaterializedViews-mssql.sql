@@ -1,6 +1,4 @@
 drop table if exists FullBookingView;
-
-create table FullBookingView as
 select
     JailEpisode.JailEpisodeID,
     BookingNumber,
@@ -57,6 +55,7 @@ select
     iif(IsActive='Y', 1, 0) * JailEpisode.JailEpisodeID as IsActiveBookingCount,
     iif(InTreatmentAtBooking='Y', 1, 0) * JailEpisode.JailEpisodeID as InTreatmentAtBookingCount,
     iif(SevereMentalIllnessIndicator=1, 1, 0) * JailEpisode.JailEpisodeID as SevereMentalIllnessBookingCount
+into FullBookingView     
 from
     JailEpisode inner join Person on JailEpisode.PersonID=Person.PersonID
     left join JailEpisodeArrest on JailEpisode.JailEpisodeID=JailEpisodeArrest.JailEpisodeID
