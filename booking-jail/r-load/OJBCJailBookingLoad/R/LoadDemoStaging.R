@@ -170,7 +170,7 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
 
   df$FacilityID <- generateRandomIDsFromCodeTable(codeTableList, "Facility", nrow(df))
   df$SupervisionUnitTypeID <- generateRandomIDsFromCodeTable(codeTableList, "SupervisionUnitType", nrow(df))
-  df$InmateJailResidentIndicator <- as.logical(rbinom(n=nrow(df), size=1, prob=.8))
+  df$InmateJailResidentIndicator <- rbinom(n=nrow(df), size=1, prob=.8)
 
   df$BookingDate <- baseDate - ddays(df$DaysAgo)
 
