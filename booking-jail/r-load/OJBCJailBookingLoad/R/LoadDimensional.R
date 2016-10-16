@@ -36,7 +36,6 @@ defaultOccupationTextValueConverter <- function(textValues, unknownCodeTableValu
   ret <- as.integer(gsub(x=textValues, pattern="Occupation ([0-9]+)", replacement="\\1"))
   ret[is.na(ret)] <- unknownCodeTableValue
   ret
-  ret
 }
 
 defaultDiagnosisTextValueConverter <- function(textValues, unknownCodeTableValue) {
@@ -231,6 +230,8 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
                                                                  "left join CustodyStatusChangeCharge on CustodyStatusChangeArrest.CustodyStatusChangeArrestID=CustodyStatusChangeCharge.CustodyStatusChangeArrestID ",
                                                                  "where CustodyStatusChange.BookingDate <= '", currentStagingDate, "' and CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' order by CustodyStatusChangeTimestamp"))
 
+  # todo: fix this...you are only taking one charge per booking...
+
   BookingChargeDisposition <- BookingChargeDisposition %>% group_by(BookingID) %>% filter(row_number()==n()) %>% ungroup()
 
   ret$JailEpisodeEdits <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, 'CustodyStatusChange')
@@ -239,7 +240,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
 
 }
 
-buildPersonTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, educationTextValueConverter,
+buildPersonTable <- function(stagingConnection, lastLoadTime, currentStagingDate, unknownCodeTableValue, educationTextValueConverter,
                              occupationTextValueConverter, codeTableList, codeTableValueTranslator) {
 
   selectStatement <- paste0("select Person.PersonID as PersonID, PersonUniqueIdentifier, PersonUniqueIdentifier2, PersonAgeAtBooking, PersonBirthDate, ",
@@ -271,7 +272,8 @@ buildPersonTable <- function(stagingConnection, lastLoadTime, unknownCodeTableVa
               PopulationTypeID=unknownCodeTableValue,
               EducationLevelTypeID=unknownCodeTableValue,
               OccupationTypeID=unknownCodeTableValue,
-              PersonAgeTypeID=ifelse(is.na(PersonBirthDate), PersonAgeAtBooking, (PersonBirthDate %--% BookingDate) %/% years(1))
+              PersonAgeTypeID=ifelse(is.na(PersonBirthDate) | PersonBirthDate > currentStagingDate, ifelse(is.na(PersonAgeAtBooking), unknownCodeTableValue, PersonAgeAtBooking),
+                                     (PersonBirthDate %--% BookingDate) %/% years(1))
     ) %>%
     mutate(PersonAgeTypeID=as.integer(ifelse(is.na(PersonAgeTypeID), unknownCodeTableValue, PersonAgeTypeID)))
 
@@ -435,7 +437,7 @@ buildBHAssessmentTable <- function(stagingConnection, lastLoadTime, unknownCodeT
               InTreatmentAtBooking=recode(CareEpisodeEndDate, .default='Y', .missing='N'),
               EndedDaysBeforeBooking=(CareEpisodeEndDate %--% BookingDate) %/% days(1)
     ) %>%
-    mutate(EndedDaysBeforeBooking=as.integer(ifelse(is.na(EndedDaysBeforeBooking), unknownCodeTableValue, EndedDaysBeforeBooking)))
+    mutate(EndedDaysBeforeBooking=as.integer(ifelse(is.na(EndedDaysBeforeBooking) | EndedDaysBeforeBooking < 0, unknownCodeTableValue, EndedDaysBeforeBooking)))
 
   BHAssessment
 
@@ -475,7 +477,7 @@ buildBHTreatmentTable <- function(stagingConnection, lastLoadTime, unknownCodeTa
               TreatmentProviderTypeID=unknownCodeTableValue,
               DaysBeforeBooking=(TreatmentStartDate %--% BookingDate) %/% days(1)
     ) %>%
-    mutate(DaysBeforeBooking=as.integer(ifelse(is.na(DaysBeforeBooking), unknownCodeTableValue, DaysBeforeBooking)))
+    mutate(DaysBeforeBooking=as.integer(ifelse(is.na(DaysBeforeBooking) | DaysBeforeBooking < 0, unknownCodeTableValue, DaysBeforeBooking)))
 
   if (nrow(BHTreatment)) {
     args <- list()
@@ -556,9 +558,7 @@ buildReleaseTable <- function(stagingConnection, lastLoadTime, currentStagingDat
 
 }
 
-buildAndLoadHistoricalPeriodTable <- function(adsConnection, unknownCodeTableValue, noneCodeTableValue, completeLoad, writeToDatabase) {
-
-  lookbackPeriod <- as.integer(365*10) # ten years
+buildAndLoadHistoricalPeriodTable <- function(adsConnection, lookbackPeriod, unknownCodeTableValue, noneCodeTableValue, completeLoad, writeToDatabase) {
 
   df <- data.frame(HistoricalPeriodTypeID=0:lookbackPeriod,
                    DaysAgo=0:lookbackPeriod) %>%
@@ -601,6 +601,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
                                     unknownCodeTableValue=as.integer(99999),
                                     noneCodeTableValue=as.integer(99998),
                                     materializedViewsSqlFile=system.file("raw", "MaterializedViews.sql", package=getPackageName()),
+                                    historicalPeriodLookback=365*10,
                                     completeLoad=TRUE,
                                     writeToDatabase=FALSE) {
 
@@ -626,7 +627,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   codeTableList <- loadCodeTables(adsConnection, codeTableSpreadsheetFile, writeToDatabase & completeLoad)
   ret <- c(ret, codeTableList)
 
-  historicalPeriodType <- buildAndLoadHistoricalPeriodTable(adsConnection, unknownCodeTableValue, noneCodeTableValue, completeLoad, writeToDatabase)
+  historicalPeriodType <- buildAndLoadHistoricalPeriodTable(adsConnection, historicalPeriodLookback, unknownCodeTableValue, noneCodeTableValue, completeLoad, writeToDatabase)
   ret <- c(ret, historicalPeriodType)
 
   currentStagingDate <- getQuery(adsConnection, paste0("select MostRecentStagingTimestamp from LoadHistory where LoadHistoryID=", loadHistoryID))
@@ -641,7 +642,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   writeLines(paste0("Loaded JailEpisode with ", nrow(ret$JailEpisode), " rows and JailEpisodeEdits with ", nrow(ret$JailEpisodeEdits), " rows"))
 
   writeLines("Loading Person table")
-  ret$Person <- buildPersonTable(stagingConnection, lastLoadTime, unknownCodeTableValue, educationTextValueConverter,
+  ret$Person <- buildPersonTable(stagingConnection, lastLoadTime, currentStagingDate, unknownCodeTableValue, educationTextValueConverter,
                                  occupationTextValueConverter, codeTableList, codeTableValueTranslator)
   writeLines(paste0("Loaded Person table with ", nrow(ret$Person), " rows"))
 
