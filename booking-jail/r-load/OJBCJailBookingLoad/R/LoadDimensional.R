@@ -189,6 +189,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
         StagingPK=pk)
 
     if (nrow(StagingBookingChargeDispositionDf)) {
+      writeLines(paste0("Aggregating ", nrow(StagingBookingChargeDispositionDf), " charge disposition records under ", tableName))
       args <- list()
       args$BookingChargeDispositionDataFrame <- StagingBookingChargeDispositionDf
       args$unknownCodeTableValue <- unknownCodeTableValue
@@ -224,15 +225,17 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
   Booking <- Booking %>% group_by(BookingID) %>% filter(row_number()==n()) %>% ungroup()
   writeLines(paste0("Removed ", total-nrow(Booking), " custody status change records that are replaced by a more recent custody status change"))
 
-  BookingChargeDisposition <- getQuery(stagingConnection, paste0("select CustodyStatusChange.BookingID, ChargeDisposition from ",
+  BookingChargeDisposition <- getQuery(stagingConnection, paste0("select CustodyStatusChange.BookingID, ChargeDisposition, CustodyStatusChange.CustodyStatusChangeID from ",
                                                                  "Booking inner join CustodyStatusChange on Booking.BookingID=CustodyStatusChange.BookingID ",
                                                                  "left join CustodyStatusChangeArrest on CustodyStatusChange.CustodyStatusChangeID=CustodyStatusChangeArrest.CustodyStatusChangeID ",
                                                                  "left join CustodyStatusChangeCharge on CustodyStatusChangeArrest.CustodyStatusChangeArrestID=CustodyStatusChangeCharge.CustodyStatusChangeArrestID ",
                                                                  "where CustodyStatusChange.BookingDate <= '", currentStagingDate, "' and CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' order by CustodyStatusChangeTimestamp"))
 
-  # todo: fix this...you are only taking one charge per booking...
-
-  BookingChargeDisposition <- BookingChargeDisposition %>% group_by(BookingID) %>% filter(row_number()==n()) %>% ungroup()
+  total <- nrow(BookingChargeDisposition)
+  BookingChargeDisposition <- BookingChargeDisposition %>%
+    inner_join(Booking %>% select(pk), by=c("CustodyStatusChangeID"="pk")) %>%
+    select(-CustodyStatusChangeID)
+  writeLines(paste0("Removed ", total-nrow(BookingChargeDisposition), " custody status change charge dispo records that are replaced by a more recent custody status change"))
 
   ret$JailEpisodeEdits <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, 'CustodyStatusChange')
 
