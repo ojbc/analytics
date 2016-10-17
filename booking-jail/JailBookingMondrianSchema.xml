@@ -219,7 +219,8 @@
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="BehavioralHealthEvaluationType">
 		<Hierarchy name="Behavioral Health Evaluation Type"  visible="true" hasAll="true" primaryKey="BehavioralHealthEvaluationTypeID" caption="Diagnosis">
 			<Table name="BehavioralHealthEvaluationType"/>
-			<Level name="Diagnosis" visible="true" table="BehavioralHealthEvaluationType" column="BehavioralHealthEvaluationTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Diagnosis Category" visible="true" table="BehavioralHealthEvaluationType" column="BehavioralHealthEvaluationTypeCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Diagnosis" visible="true" table="BehavioralHealthEvaluationType" column="BehavioralHealthEvaluationTypeDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
