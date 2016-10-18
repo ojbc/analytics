@@ -320,9 +320,6 @@
 		<Measure name="TwoYearRebookingCount" column="TwoYearRebookingCount" aggregator="distinct-count"  visible="false"/>
 		<Measure name="Charge Count" column="JailEpisodeChargeID" aggregator="count" visible="true"/>
  		<Measure name="Average Bond Amount" column="BondAmount" aggregator="avg" formatString="$0.00" visible="true"/>
- 		<Measure name="Evaluation Count" column="BehavioralHealthEvaluationID" aggregator="distinct-count" visible="true"/>
- 		<Measure name="Treatment Count" column="BehavioralHealthTreatmentID" aggregator="distinct-count" visible="true"/>
- 		<Measure name="Prescription Count" column="PrescribedMedicationID" aggregator="distinct-count" visible="true"/>
 		<Measure name="SMICount" column="SevereMentalIllnessBookingCount" aggregator="distinct-count" visible="false"/>
 		<Measure name="Treatment At Booking Rate" column="InTreatmentAtBookingCount" aggregator="avg" formatString="#0.0%" caption="In Treatment at Booking Rate" visible="true"/>
 
