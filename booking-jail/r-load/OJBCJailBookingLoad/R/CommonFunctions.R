@@ -18,19 +18,22 @@
 #' @import RMySQL
 #' @importFrom readr write_delim
 #' @export
-writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk = FALSE) {
+writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk = FALSE, writeToDatabase=TRUE, forceConnectionType=NULL) {
 
   # replacing dbWriteTable with our own, because found it to be buggy and inconsistent across platforms...
   #dbWriteTable(conn, tableName, x, row.names=FALSE, append=append)
 
   executeSQL <- function(sql) {
-    #writeLines(sql)
+    if (!writeToDatabase) {
+      writeLines(sql)
+    } else {
     tryCatch(
       dbClearResult(dbSendStatement(conn, sql)),
       error = function(e) {
         writeLines(paste0("Attempted SQL: ", sql))
         stop(e)
       })
+    }
   }
 
   formatValue <- function(value) {
@@ -49,17 +52,19 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
 
   if (viaBulk) {
     cc <- class(conn)
+    if (!is.null(forceConnectionType)) {
+      cc <- forceConnectionType
+    }
+    f <- NULL
+    if (Sys.info()['sysname'] == 'Windows') {
+      f <- gsub(x=tempfile(tmpdir='C:/dev', pattern=tableName), pattern='\\\\', replacement='/')
+    } else {
+      f <- tempfile(tmpdir = "/tmp", pattern = tableName)
+    }
     if ('MySQLConnection'==cc) {
       if (nrow(x) > 0) {
         if (!append) {
           executeSQL(paste0("delete from ", tableName))
-        }
-
-        f <- NULL
-        if (Sys.info()['sysname'] == 'Windows') {
-            f <- gsub(x=tempfile(tmpdir='c:\\tmp', pattern=tableName), pattern='\\\\', replacement='/')
-        } else {
-            f <- tempfile(tmpdir = "/tmp", pattern = tableName)
         }
 
         write_delim(x=x, path=f, na="\\N", delim="|", col_names=FALSE)
@@ -76,17 +81,15 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
 
         sql <- paste0("load data infile '", f, "' into table ", tableName, " fields terminated by \"|\" ", fieldList, " ", setString)
         executeSQL(sql)
-        file.remove(f)
+        if (writeToDatabase) {
+          file.remove(f)
+        }
       }
     } else if ('SQLServerConnection'==cc) {
       if (nrow(x) > 0) {
         if (!append) {
           executeSQL(paste0("delete from ", tableName))
         }
-
-        columnNames <- dbListFields(conn, tableName)
-        #writeLines(paste0(colnames(x), ","))
-        #writeLines(paste0(tableName, ","))
 
         x <- select_(x, .dots=dbListFields(conn, tableName))
 
@@ -97,14 +100,16 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
         # To avoid the scientific notation. Ideally, we should use the options(scipen=999)
         # but in readr version 1.0.0, it does not for write_delim -HW.
 
-        x <- mutate_if(x, function(col) !is.na(col) && is.numeric(col), function(x) trimws(format(x, scientific=FALSE)))
+        x <- mutate_if(x, function(col) is.numeric(col), function(v) ifelse(is.na(v), NA, trimws(format(v, scientific=FALSE))))
 
-        f <- tempfile(tmpdir = "C:/dev", pattern = tableName)
+        #f <- tempfile(tmpdir = "C:/dev", pattern = tableName) # remove this in favor of proper logic above
         write_delim(x=x, path=f, na="", delim="|", col_names=FALSE)
 
         sql <- paste0("BULK INSERT ", tableName, " FROM '" , f, "' WITH ( KEEPIDENTITY, FIELDTERMINATOR ='|', ROWTERMINATOR ='\n' ) ")
         executeSQL(sql)
-        file.remove(f)
+        if (writeToDatabase) {
+          file.remove(f)
+        }
       }
     }else {
       stop(paste0("Bulk loading on unsupported database: ", cc))
