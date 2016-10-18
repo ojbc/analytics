@@ -102,7 +102,6 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
 
         x <- mutate_if(x, function(col) is.numeric(col), function(v) ifelse(is.na(v), NA, trimws(format(v, scientific=FALSE))))
 
-        #f <- tempfile(tmpdir = "C:/dev", pattern = tableName) # remove this in favor of proper logic above
         write_delim(x=x, path=f, na="", delim="|", col_names=FALSE)
 
         sql <- paste0("BULK INSERT ", tableName, " FROM '" , f, "' WITH ( KEEPIDENTITY, FIELDTERMINATOR ='|', ROWTERMINATOR ='\n' ) ")
