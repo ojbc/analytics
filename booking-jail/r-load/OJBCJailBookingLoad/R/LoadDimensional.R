@@ -603,7 +603,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
                                     codeTableValueTranslator=defaultCodeTableValueTranslator,
                                     unknownCodeTableValue=as.integer(99999),
                                     noneCodeTableValue=as.integer(99998),
-                                    materializedViewsSqlFile=system.file("raw", "MaterializedViews.sql", package=getPackageName()),
+                                    materializedViewsSqlFileName="MaterializedViews.sql",
                                     historicalPeriodLookback=365*10,
                                     completeLoad=TRUE,
                                     writeToDatabase=FALSE) {
@@ -694,6 +694,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   args$writeToDatabase <- writeToDatabase
   do.call(populationTypeConverter, args)
 
+  materializedViewsSqlFile=system.file("raw", materializedViewsSqlFileName, package=getPackageName())
   createMaterializedViews(adsConnection, materializedViewsSqlFile)
 
   dbDisconnect(stagingConnection)
