@@ -191,7 +191,7 @@
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="AssessmentCategory">
 		<Hierarchy name="AssessmentCategory"  visible="true" hasAll="true" primaryKey="AssessmentCategoryTypeID" caption="Assessment Category">
 			<Table name="AssessmentCategoryType"/>
-			<Level name="AssessmentCategory" visible="true" table="AssessmentCategoryType" column="AssessmentCategoryTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Assessment Category" visible="true" table="AssessmentCategoryType" column="AssessmentCategoryTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
@@ -309,6 +309,7 @@
 		<DimensionUsage source="TreatmentAdmissionReason" name="Treatment Admission Reason" visible="true" foreignKey="TreatmentAdmissionReasonTypeID" highCardinality="false"/>
 		<DimensionUsage source="TreatmentProvider" name="Treatment Provider" visible="true" foreignKey="TreatmentProviderTypeID" highCardinality="false"/>
 		<DimensionUsage source="SevereMentalIllness" name="Severe Mental Illness" visible="true" foreignKey="SevereMentalIllnessIndicatorDimension" highCardinality="false"/>
+		<DimensionUsage source="AssessmentCategory" name="Assessment Category" visible="true" foreignKey="AssessmentCategoryTypeID" highCardinality="false"/>
 
 		<Measure name="Booking Count" column="JailEpisodeID" aggregator="distinct-count" visible="true"/>
 		<Measure name="Arrest Count" column="JailEpisodeArrestID" aggregator="distinct-count" visible="true"/>
