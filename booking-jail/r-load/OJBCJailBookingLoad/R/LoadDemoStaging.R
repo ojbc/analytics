@@ -370,7 +370,7 @@ buildBookingChildTables <- function(bookingID, bookingNumber, releaseDateTime, c
   recs <- nrow(BookingCharge)
   BookingCharge$ChargeCode <- paste0("Charge Code ", sample(1:200, size=recs, replace=TRUE))
   BookingCharge$ChargeDisposition <- paste0("Charge Disposition ", sample(1:10, size=recs, replace=TRUE))
-  BookingCharge$BondAmount <- sample(c(10000, 5000, 2500, 1000, 500, 50), size=recs, replace=TRUE, prob=c(10,40,30,10,5,5))
+  BookingCharge$BondAmount <- sample(c(10000, 5000, 2500, 1000, 500, 50, NA), size=recs, replace=TRUE, prob=c(10,40,30,10,5,4,1))
   BookingCharge$AgencyID <- generateRandomIDsFromCodeTable(codeTableList, "Agency", recs)
   BookingCharge$BondTypeID <- generateRandomIDsFromCodeTable(codeTableList, "BondType", recs)
   BookingCharge$ChargeJurisdictionTypeID <- generateRandomIDsFromCodeTable(codeTableList, "JurisdictionType", recs)
