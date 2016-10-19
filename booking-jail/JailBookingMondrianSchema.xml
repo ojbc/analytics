@@ -244,7 +244,7 @@
 			<Level name="Treatment Status" visible="true" table="TreatmentStatusType" column="TreatmentStatusTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
-
+	
 	<Dimension name="SevereMentalIllness">
 		<Hierarchy hasAll="true" primaryKey="SevereMentalIllnessID">
 			<InlineTable alias="SevereMentalIllness">
@@ -271,8 +271,16 @@
 		</Hierarchy>
 	</Dimension>
 	
+
+
+	
 	<Cube name="Jail-Booking-Analytics" visible="true">
-			<Table name="FullBookingView"/>
+		<Table name="FullBookingView"/>
+		<Dimension type="StandardDimension" visible="true" highCardinality="false" name="EpisodeStatus">
+			<Hierarchy name="Episode Status"  visible="true" hasAll="true"  caption="Episode Status">
+				<Level name="Episode Status" visible="true" column="IsActiveDimension" uniqueMembers="true"  hideMemberIf="Never"/>
+		</Hierarchy>
+		</Dimension>
 		<!-- Person Dimensions -->
 		<DimensionUsage source="Age" name="Age" visible="true" foreignKey="PersonAgeTypeID" highCardinality="false"/>
 		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="PersonRaceTypeID" highCardinality="false"/>
@@ -313,7 +321,6 @@
 
 		<Measure name="Booking Count" column="JailEpisodeID" aggregator="distinct-count" visible="true"/>
 		<Measure name="Arrest Count" column="JailEpisodeArrestID" aggregator="distinct-count" visible="true"/>
-		<Measure name="Active Booking Count" column="IsActiveBookingCount" aggregator="distinct-count" visible="true"/>
 		<Measure name="Average Length Of Stay" column="LengthOfStay" aggregator="avg" visible="true"/>
 		<Measure name="SixMonthRebookingCount" column="SixMonthRebookingCount" aggregator="distinct-count"  visible="false"/>
 		<Measure name="OneYearRebookingCount" column="OneYearRebookingCount" aggregator="distinct-count"  visible="false"/>
