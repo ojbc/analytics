@@ -14,6 +14,8 @@ select
     isnull(ChargeTypeID, 99998)as  ChargeTypeID, 
     isnull(ChargeDispositionTypeID, 99998) as ChargeDispositionTypeID, 
     isnull(JurisdictionTypeID, 99998) as JurisdictionTypeID, 
+    IsActive,
+    iif(IsActive='Y', 'Active', 'Inactive') as IsActiveDimension,
     BondAmount,
     OccupationTypeID,
     SexOffenderStatusTypeID,
