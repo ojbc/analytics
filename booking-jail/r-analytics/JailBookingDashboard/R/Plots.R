@@ -35,8 +35,8 @@ emptyGraphic <- ggplot2::ggplot(data=data.frame(x=1:3, y=1:3), mapping=ggplot2::
 plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly,
                     horizontal=TRUE, width=5, height=3, svgMode=TRUE, excludedCodeValues=c('None'), showBasedOnNLabel = FALSE) {
 
-  df <- JailBookingDashboardData::SummaryDataFrameList[[dimensionTableName]]
-  ct <- JailBookingDashboardData::CodeTableDataFrameList[[dimensionTableName]]
+  df <- summaryDataFrameList[[dimensionTableName]]
+  ct <- codeTableDataFrameList[[dimensionTableName]]
 
   dates <- max(df$Date)
 
@@ -101,8 +101,8 @@ plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, juris
 plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, periodFilterDays,
                          horizontal=TRUE, width=10.5, height=4.5, svgMode=TRUE, excludedCodeValues=c('None')) {
 
-  df <- JailBookingDashboardData::SummaryDataFrameList[[dimensionTableName]]
-  ct <- JailBookingDashboardData::CodeTableDataFrameList[[dimensionTableName]]
+  df <- summaryDataFrameList[[dimensionTableName]]
+  ct <- codeTableDataFrameList[[dimensionTableName]]
 
   maxDate <- max(df$Date)
   dates <- maxDate - lubridate::days(seq(periodFilterDays))
@@ -151,9 +151,9 @@ plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, 
 #' @import dplyr
 filterDataFrameForRollups <- function(df, jurisdictionLabel, agencyLabel, targetPopulationOnly, dimensionTableName) {
 
-  jurisdictionTypeCodeTable <- JailBookingDashboardData::CodeTableDataFrameList[['JurisdictionType']]
-  agencyCodeTable <- JailBookingDashboardData::CodeTableDataFrameList[['Agency']]
-  populationTypeCodeTable <- JailBookingDashboardData::CodeTableDataFrameList[['PopulationType']]
+  jurisdictionTypeCodeTable <- codeTableDataFrameList[['JurisdictionType']]
+  agencyCodeTable <- codeTableDataFrameList[['Agency']]
+  populationTypeCodeTable <- codeTableDataFrameList[['PopulationType']]
 
   filteredDf <- df
 

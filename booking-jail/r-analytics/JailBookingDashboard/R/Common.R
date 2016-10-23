@@ -12,6 +12,17 @@
 #
 # Copyright 2012-2016 Open Justice Broker Consortium
 
+# pointers to data frame lists (typically loaded from a Data package)
+
+summaryDataFrameList <- JailBookingDashboardData::SummaryDataFrameList
+codeTableDataFrameList <- JailBookingDashboardData::CodeTableDataFrameList
+smiSummaryDataFrame <- JailBookingDashboardData::SMISummaryDataFrame
+
+#' @export
+getLastLoadTime <- function() {
+  JailBookingDashboardData::DimensionalMetadata$LastLoadTime
+}
+
 # R script of functions shared across the package
 
 allRollupID <- -1

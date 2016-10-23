@@ -89,7 +89,7 @@ plotStaticJailUtilization <- function(jurisdiction, originatingAgency, targetPop
 
   # for now, we are just doing population, regardless of the selected measure
 
-  df <- JailBookingDashboardData::SMISummaryDataFrame
+  df <- smiSummaryDataFrame
 
   maxDate <- max(df$Date)
 
@@ -127,7 +127,7 @@ plotStaticSMI <- function(jurisdiction, originatingAgency, targetPopulationOnly,
 
   # for now, we are just doing the SMI count.  Later on, we can see about doing a bar with the different measures...
 
-  df <- JailBookingDashboardData::SMISummaryDataFrame
+  df <- smiSummaryDataFrame
 
   maxDate <- max(df$Date)
 
