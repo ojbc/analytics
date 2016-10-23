@@ -33,7 +33,7 @@ emptyGraphic <- ggplot2::ggplot(data=data.frame(x=1:3, y=1:3), mapping=ggplot2::
 #' @import dplyr
 #' @export
 plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly,
-                    horizontal=TRUE, width=5, height=3, svgMode=TRUE) {
+                    horizontal=TRUE, width=5, height=3, svgMode=TRUE, excludedCodeValues=c('None')) {
 
   df <- JailBookingDashboardData::SummaryDataFrameList[[dimensionTableName]]
   ct <- JailBookingDashboardData::CodeTableDataFrameList[[dimensionTableName]]
@@ -42,7 +42,8 @@ plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, juris
 
   label <- paste0(dimensionTableName, 'Label')
 
-  filteredDf <- filterDataFrame(df, ct, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, dates)
+  filteredDf <- filterDataFrame(df, ct, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly,
+                                dates, excludedCodeValues)
 
   ret <- emptyGraphic
 
@@ -92,7 +93,7 @@ plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, juris
 #' @importFrom lubridate days
 #' @export
 plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, periodFilterDays,
-                         horizontal=TRUE, width=10.5, height=4.5, svgMode=TRUE) {
+                         horizontal=TRUE, width=10.5, height=4.5, svgMode=TRUE, excludedCodeValues=c('None')) {
 
   df <- JailBookingDashboardData::SummaryDataFrameList[[dimensionTableName]]
   ct <- JailBookingDashboardData::CodeTableDataFrameList[[dimensionTableName]]
@@ -108,7 +109,7 @@ plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, 
 
   ret <- emptyGraphic
 
-  filteredDf <- filterDataFrame(df, ct, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, dates)
+  filteredDf <- filterDataFrame(df, ct, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, dates, excludedCodeValues)
 
   if (nrow(filteredDf)) {
 
@@ -185,7 +186,7 @@ filterDataFrameForRollups <- function(df, jurisdictionLabel, agencyLabel, target
 
 #' @importFrom lazyeval interp
 #' @import dplyr
-filterDataFrame <- function(df, ct, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, dates) {
+filterDataFrame <- function(df, ct, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, dates, excludedCodeValues) {
 
   label <- paste0(dimensionTableName, 'Label')
   id <- paste0(dimensionTableName, 'ID')
@@ -194,9 +195,11 @@ filterDataFrame <- function(df, ct, dimensionTableName, factTableJoinColumn, jur
     filter(Date %in% dates) %>%
     filterDataFrameForRollups(jurisdictionLabel, agencyLabel, targetPopulationOnly, dimensionTableName)
 
-  filteredDf <- filteredDf %>%
-    inner_join(ct, by=setNames(id, nm=factTableJoinColumn)) %>%
-    filter_(.dots=lazyeval::interp(~ col != 'None', col=as.name(label)))
+  if (length(excludedCodeValues)) {
+    filteredDf <- filteredDf %>%
+      inner_join(ct, by=setNames(id, nm=factTableJoinColumn)) %>%
+      filter_(.dots=lazyeval::interp(~ !(col %in% excludedCodeValues), col=as.name(label)))
+  }
 
   filteredDf
 

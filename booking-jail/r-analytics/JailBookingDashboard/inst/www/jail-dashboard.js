@@ -75,39 +75,15 @@ drawImages = function(opencpuSession) {
 			image.attr("src", opencpuSession.getLoc() + "files/" + rFunction + ".svg");
 			image.fadeIn(1000);
 		}
+		hideWaitPane();
 	});
 }
 
-drawPanel = function(panelLabel, args) {
-
-	fn = chartNameRFunctionLookup[panelLabel];
-
-	//console.log("Drawing panel, panelLabel=" + panelLabel + ", args=" + JSON.stringify(args) + ", function=" + fn)
-
-	if (!localTesting) {
-		//console.log("Stack length = " + ocpuCallStack.length);
-		if (!ocpuCallStack.length) {
-			//console.log("Showing wait pane");
-			showWaitPane();
-		}
-		ocpuCallStack.push(panelLabel);
-		ocpu.call(fn, args, drawImages)
-		.fail(function(req) {
-			alert("Error: " + req.responseText);
-		})
-		.always(function(req) {
-			ocpuCallStack.pop();
-			//console.log("Call complete, stack length=" + ocpuCallStack.length);
-			if (!ocpuCallStack.length) {
-				hideWaitPane();
-			}
-		});
-	} else {
-		console.log("Skipping call to opencpu, disabled in code.")
-	}
+drawAllPanels = function(args) {
+	drawAllPanelsWithRetry(args, 1);
 }
 
-drawAllPanels = function(args) {
+drawAllPanelsWithRetry = function(args, retryCount) {
 
 	var selectedDashboardLabel = $("#dashboard-select").val();
 	//console.log("Active dashboard is " + selectedDashboardLabel);
@@ -116,18 +92,18 @@ drawAllPanels = function(args) {
 
 	if (!localTesting) {
 
-		showWaitPane();
+		showWaitPane(retryCount);
 
 		ocpu.call(functionName, args, drawImages)
 		.fail(function(req) {
-			alert("Error: " + req.responseText);
-		})
-		.always(function(req) {
-			if (!ocpuCallStack.length) {
+			if (retryCount > 4) {
 				hideWaitPane();
+				alert("Dashboard unavailable.\nError: " + req.responseText);
+			} else {
+				retryCount = retryCount + 1;
+				setTimeout(drawAllPanelsWithRetry(args, retryCount), 5000);
 			}
 		});
-
 
 	} else {
 		console.log("Skipping call to opencpu, disabled in code.")
@@ -135,12 +111,15 @@ drawAllPanels = function(args) {
 
 }
 
-showWaitPane = function() {
+showWaitPane = function(retries) {
 
 	var waitPaneDiv =  $("#wait-pane");
 
 	waitPaneDiv.height($(window).height());
 	waitPaneDiv.width($(window).width());
+	if (retries > 1) {
+		waitPaneDiv.html("Retries: " + retries)
+	}
 
 	waitPaneDiv.show();
 
