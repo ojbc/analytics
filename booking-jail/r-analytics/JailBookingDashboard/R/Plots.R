@@ -33,7 +33,7 @@ emptyGraphic <- ggplot2::ggplot(data=data.frame(x=1:3, y=1:3), mapping=ggplot2::
 #' @import dplyr
 #' @export
 plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly,
-                    horizontal=TRUE, width=5, height=3, svgMode=TRUE, excludedCodeValues=c('None')) {
+                    horizontal=TRUE, width=5, height=3, svgMode=TRUE, excludedCodeValues=c('None'), showBasedOnNLabel = FALSE) {
 
   df <- JailBookingDashboardData::SummaryDataFrameList[[dimensionTableName]]
   ct <- JailBookingDashboardData::CodeTableDataFrameList[[dimensionTableName]]
@@ -64,10 +64,16 @@ plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, juris
     }
 
     plot <- plot +
-      getTheme() + theme(axis.title.y = element_blank(), axis.title.x = element_blank())
+      getTheme() + theme(axis.title.y = element_blank(), axis.title.x = element_blank(),
+                         plot.title=element_text(size=rel(.7), face="italic", hjust=0))
 
     if (!horizontal) {
       plot <- plot + theme(axis.text.x = element_text(angle = 60, hjust = 1))
+    }
+
+    if (showBasedOnNLabel) {
+      totalN <- sum(filteredDf$Population)
+      plot <- plot + labs(title=paste0("Based on N=", as.character(totalN)))
     }
 
     ret <- plot
