@@ -26,47 +26,52 @@ defaultDimensionalConnectionBuilder <- function() {
   adsConnection
 }
 
+#' @importFrom openxlsx read.xlsx
 defaultEducationTextValueConverter <- function(textValues, unknownCodeTableValue) {
-  ret <- as.integer(gsub(x=textValues, pattern="Education Level ([0-9]+)", replacement="\\1"))
+  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='EducationLevelType')
+  ret <- match(textValues, ct$EducationLevelTypeDescription)
   ret[is.na(ret)] <- unknownCodeTableValue
   ret
 }
 
 defaultOccupationTextValueConverter <- function(textValues, unknownCodeTableValue) {
-  ret <- as.integer(gsub(x=textValues, pattern="Occupation ([0-9]+)", replacement="\\1"))
+  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='OccupationType')
+  ret <- match(textValues, ct$OccupationTypeDescription)
   ret[is.na(ret)] <- unknownCodeTableValue
   ret
 }
 
 defaultDiagnosisTextValueConverter <- function(textValues, unknownCodeTableValue) {
-  units <- as.integer(gsub(x=textValues, pattern="Diagnosis ([0-9]+)", replacement="\\1"))
-  units <- (units %/% 10) + 1
-  units <- ifelse(is.na(units) | units > 10, unknownCodeTableValue, units)
-  units
+  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='BehavioralHealthEvaluationType')
+  ret <- match(textValues, ct$BehavioralHealthEvaluationTypeDescription)
+  ret[is.na(ret)] <- unknownCodeTableValue
+  ret
 }
 
 defaultMedicationTextValueConverter <- function(textValues, unknownCodeTableValue) {
-  units <- as.integer(gsub(x=textValues, pattern="Medication ([0-9]+)", replacement="\\1"))
-  units <- (units %/% 10) + 1
-  units <- ifelse(is.na(units) | units > 10, unknownCodeTableValue, units)
-  units
+  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='MedicationType')
+  ret <- match(textValues, ct$MedicationTypeDescription)
+  ret[is.na(ret)] <- unknownCodeTableValue
+  ret
 }
 
 defaultDispositionTextConverter <- function(textValues, unknownCodeTableValue) {
-  ret <- as.integer(gsub(x=textValues, pattern="Charge Disposition ([0-9]+)", replacement="\\1"))
+  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='ChargeDispositionType')
+  ret <- match(textValues, ct$ChargeDispositionTypeDescription)
   ret[is.na(ret)] <- unknownCodeTableValue
   ret
 }
 
 defaultChargeCodeTextConverter <- function(textValues, unknownCodeTableValue) {
-  units <- as.integer(gsub(x=textValues, pattern="Charge Code ([0-9]+)", replacement="\\1"))
-  units <- (units %% 10) + 1
-  units <- ifelse(is.na(units) | units > 7, unknownCodeTableValue, units)
-  units
+  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='ChargeType')
+  ret <- match(textValues, ct$ChargeTypeDescription)
+  ret[is.na(ret)] <- unknownCodeTableValue
+  ret
 }
 
 defaultProviderTextValueConverter <- function(textValues, unknownCodeTableValue) {
-  ret <- as.integer(gsub(x=textValues, pattern="Treatment Provider ([0-9]+)", replacement="\\1"))
+  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='TreatmentProviderType')
+  ret <- match(textValues, ct$TreatmentProviderTypeDescription)
   ret[is.na(ret)] <- unknownCodeTableValue
   ret
 }

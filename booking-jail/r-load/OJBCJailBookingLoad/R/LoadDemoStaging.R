@@ -368,8 +368,8 @@ buildBookingChildTables <- function(bookingID, bookingNumber, releaseDateTime, c
   BookingCharge <- data.frame(BookingArrestID=rep(bookingArrestID, times=n_Charge)) %>%
     mutate(BookingChargeID=seq(n()))
   recs <- nrow(BookingCharge)
-  BookingCharge$ChargeCode <- paste0("Charge Code ", sample(1:200, size=recs, replace=TRUE))
-  BookingCharge$ChargeDisposition <- paste0("Charge Disposition ", sample(1:10, size=recs, replace=TRUE))
+  BookingCharge$ChargeCode <- generateRandomLabelFromDimensionalCodeTable('ChargeType', recs)
+  BookingCharge$ChargeDisposition <- generateRandomLabelFromDimensionalCodeTable('ChargeDispositionType', recs)
   BookingCharge$BondAmount <- sample(c(10000, 5000, 2500, 1000, 500, 50, NA), size=recs, replace=TRUE, prob=c(10,40,30,10,5,4,1))
   BookingCharge$AgencyID <- generateRandomIDsFromCodeTable(codeTableList, "Agency", recs)
   BookingCharge$BondTypeID <- generateRandomIDsFromCodeTable(codeTableList, "BondType", recs)
@@ -411,7 +411,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
 
   bha$MedicaidStatusTypeID <- generateRandomIDsFromCodeTable(codeTableList, "MedicaidStatusType", recs)
   bha$SeriousMentalIllnessIndicator <- as.integer(rbinom(n=recs, size=1, prob=.3))
-  bha$EnrolledProviderName <- paste0("Enrolled Provider ", sample(1:10, recs, prob=tenProbs, replace=TRUE))
+  bha$EnrolledProviderName <- generateRandomLabelFromDimensionalCodeTable('TreatmentProviderType', recs)
   bha$BehavioralHealthAssessmentID <- seq(recs)
   bha$BehavioralHealthAssessmentTimestamp <- NA
 
@@ -445,7 +445,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
 
   tmt$TreatmentAdmissionReasonTypeID <- generateRandomIDsFromCodeTable(codeTableList, "TreatmentAdmissionReasonType", recs)
   tmt$TreatmentStatusTypeID <- generateRandomIDsFromCodeTable(codeTableList, "TreatmentStatusType", recs)
-  tmt$TreatmentProviderName <- paste0("Treatment Provider ", sample(1:10, recs, prob=tenProbs, replace=TRUE))
+  tmt$TreatmentProviderName <- generateRandomLabelFromDimensionalCodeTable('TreatmentProviderType', recs)
   tmt$TreatmentTimestamp <- NA
 
   tmt$TreatmentID <- seq(nrow(tmt))
@@ -463,7 +463,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
 
   ev <- data.frame(BehavioralHealthAssessmentID=bhaIDs)
   recs <- nrow(ev)
-  ev$BehavioralHealthDiagnosisDescription <- paste0("Diagnosis ", sample(1:100, recs, prob=sample(100), replace=TRUE))
+  ev$BehavioralHealthDiagnosisDescription <- generateRandomLabelFromDimensionalCodeTable('BehavioralHealthEvaluationType', recs)
   ev$BehavioralHealthEvaluationID <- seq(recs)
   ev$BehavioralHealthEvaluationTimestamp <- NA
 
@@ -483,7 +483,8 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   recs <- nrow(med)
 
   # leaving dispensing date null for now...don't think we will use it
-  med$MedicationDescription <- paste0("Medication ", sample(1:100, recs, prob=sample(100), replace=TRUE))
+
+  med$MedicationDescription <- generateRandomLabelFromDimensionalCodeTable('MedicationType', recs)
   med$MedicationDoseMeasure <- paste0(sample(c("5", "10", "50", "500", "1000"), size=recs, replace=TRUE),
                                       sample(c(" mg", " oz", " Units", " ml"), size=recs, replace=TRUE))
   med$PrescribedMedicationID <- seq(recs)
@@ -521,6 +522,19 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
 
 }
 
+#' @importFrom openxlsx read.xlsx
+#' @import dplyr
+#' @importFrom lazyeval interp
+generateRandomLabelFromDimensionalCodeTable <- function(codeTableName, n) {
+  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet=codeTableName) %>%
+    filter_(interp(~ !(v %in% s), v=as.name(paste0(codeTableName, "ID")), s=c(99998,99999)))
+  labelColumn <- paste0(codeTableName, 'Description')
+  labels <- ct[[labelColumn]]
+  ret <- sample(labels, n, TRUE, prob=sample(seq(length(labels)), length(labels), TRUE))
+  ret[as.logical(rbinom(n=length(ret), size=1, prob=.02))] <- NA
+  ret
+}
+
 #' @importFrom lubridate dyears %--% years
 buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDate) {
 
@@ -542,8 +556,8 @@ buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDa
   ret$PersonRaceTypeID <- generateRandomIDsFromCodeTable(codeTableList, "PersonRaceType", nPeople)
   ret$PersonEthnicityTypeID <- generateRandomIDsFromCodeTable(codeTableList, "PersonEthnicityType", nPeople)
   ret$MilitaryServiceStatusTypeID <- generateRandomIDsFromCodeTable(codeTableList, "MilitaryServiceStatusType", nPeople)
-  ret$Occupation <- paste0("Occupation ", sample(1:10, nPeople, prob=tenProbs, replace=TRUE))
-  ret$EducationLevel <- paste0("Education Level ", sample(1:10, nPeople, prob=tenProbs, replace=TRUE))
+  ret$Occupation <- generateRandomLabelFromDimensionalCodeTable('OccupationType', nPeople)
+  ret$EducationLevel <- generateRandomLabelFromDimensionalCodeTable('EducationLevelType', nPeople)
   ret$DomicileStatusTypeID <- generateRandomIDsFromCodeTable(codeTableList, "DomicileStatusType", nPeople)
   ret$ProgramEligibilityTypeID <- generateRandomIDsFromCodeTable(codeTableList, "ProgramEligibilityType", nPeople)
   ret$WorkReleaseStatusTypeID <- generateRandomIDsFromCodeTable(codeTableList, "WorkReleaseStatusType", nPeople)
