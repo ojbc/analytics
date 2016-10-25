@@ -41,7 +41,7 @@ dimensionTables <- list(
   ChargeClassType=c('ChargeClassTypeDescription', 'JailEpisodeChargeID'),
   JurisdictionType=c('JurisdictionCategory', 'JailEpisodeChargeID'),
   ChargeDispositionType=c('ChargeDispositionTypeCategory', 'JailEpisodeChargeID'),
-  BehavioralHealthEvaluationType=c('BehavioralHealthEvaluationTypeDescription', 'JailEpisodeID'),
+  BehavioralHealthEvaluationType=c('BehavioralHealthEvaluationTypeCategory', 'JailEpisodeID'),
   PersonAgeRangeType=c("AgeRange", "JailEpisodeID"),
   Agency=c('AgencyCategory', 'JailEpisodeArrestID', 'ArrestAgencyID'),
   BondType=c('BondTypeCategory', 'JailEpisodeChargeID'),
@@ -58,9 +58,9 @@ CodeTableDataFrameList <- DashboardDataFrameLists$CodeTableDataFrameList
 SMISummaryDataFrame <- DashboardDataFrameLists$SMISummaryDataFrame
 DimensionalMetadata <- DashboardDataFrameLists$DimensionalMetadata
 
-devtools::use_data(SummaryDataFrameList, CodeTableDataFrameList, SMISummaryDataFrame, DimensionalMetadata, overwrite = TRUE)
+devtools::use_data(SummaryDataFrameList, CodeTableDataFrameList, SMISummaryDataFrame, DimensionalMetadata, allRollupID, overwrite = TRUE)
 
 packageFile <- devtools::build()
 install.packages(packageFile, repos=NULL)
-# note: you either need to restart the R session, or unloadNamespace("JailBookingDashboardData") followed by loadNamespace("JailBookingDashboardData")
+# note: you either need to restart the R session, or unloadNamespace("DemoJailBookingDashboardData") followed by loadNamespace("DemoJailBookingDashboardData")
 

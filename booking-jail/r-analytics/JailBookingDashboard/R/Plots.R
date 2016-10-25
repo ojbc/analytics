@@ -12,10 +12,6 @@
 #
 # Copyright 2012-2016 Open Justice Broker Consortium
 
-allJurisdictionsLabel <- 'All Jurisdictions'
-allAgenciesLabel <- 'All Agencies'
-targetPopulationLabel <- 'Target Population'
-
 # list contains data for each measure:  measure formula, geom_bar 'stat' value, and whether to format as a percentage
 barMeasureList <- list("Population Count"=c('Population/sum(Population)', 'identity', TRUE),
                        "Length of Stay"=c('TotalLengthOfStay/Population', 'identity', FALSE),
@@ -32,7 +28,8 @@ emptyGraphic <- ggplot2::ggplot(data=data.frame(x=1:3, y=1:3), mapping=ggplot2::
 #' @import scales
 #' @import dplyr
 #' @export
-plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly,
+plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, filterDimensionList, filterValues,
+                    summaryDataFrameList, codeTableDataFrameList, theme, allRollupID,
                     horizontal=TRUE, width=5, height=3, svgMode=TRUE, excludedCodeValues=c('None'), showBasedOnNLabel = FALSE) {
 
   df <- summaryDataFrameList[[dimensionTableName]]
@@ -42,8 +39,8 @@ plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, juris
 
   label <- paste0(dimensionTableName, 'Label')
 
-  filteredDf <- filterDataFrame(df, ct, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly,
-                                dates, excludedCodeValues)
+  filteredDf <- filterDataFrame(df, ct, dimensionTableName, factTableJoinColumn, filterDimensionList, filterValues,
+                                dates, excludedCodeValues, codeTableDataFrameList, allRollupID)
 
   ret <- emptyGraphic
 
@@ -64,7 +61,7 @@ plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, juris
     }
 
     plot <- plot +
-      getTheme() + theme(axis.title.y = element_blank(), axis.title.x = element_blank(),
+      theme + theme(axis.title.y = element_blank(), axis.title.x = element_blank(),
                          plot.title=element_text(size=rel(.7), face="italic", hjust=0))
 
     if (!horizontal) {
@@ -98,7 +95,8 @@ plotBar <- function(measureLabel, dimensionTableName, factTableJoinColumn, juris
 #' @import dplyr
 #' @importFrom lubridate days
 #' @export
-plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, periodFilterDays,
+plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, filterDimensionList,
+                         summaryDataFrameList, codeTableDataFrameList, theme, allRollupID, filterValues, periodFilterDays,
                          horizontal=TRUE, width=10.5, height=4.5, svgMode=TRUE, excludedCodeValues=c('None')) {
 
   df <- summaryDataFrameList[[dimensionTableName]]
@@ -115,7 +113,8 @@ plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, 
 
   ret <- emptyGraphic
 
-  filteredDf <- filterDataFrame(df, ct, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, dates, excludedCodeValues)
+  filteredDf <- filterDataFrame(df, ct, dimensionTableName, factTableJoinColumn, filterDimensionList,
+                                filterValues, dates, excludedCodeValues, codeTableDataFrameList, allRollupID)
 
   if (nrow(filteredDf)) {
 
@@ -124,7 +123,7 @@ plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, 
 
     plot <- ggplot(data=filteredDf, mapping=aes_string(x='Date', y=measure, color=label))  + geom_line(size=1.2) +
       scale_x_date() +
-      getTheme() +
+      theme +
       theme(axis.title.y = element_blank(), axis.title.x = element_blank(), legend.title = element_blank(), legend.position = "bottom")
 
     if (percentage) {
@@ -149,7 +148,9 @@ plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, 
 }
 
 #' @import dplyr
-filterDataFrameForRollups <- function(df, jurisdictionLabel, agencyLabel, targetPopulationOnly, dimensionTableName) {
+#' @importFrom lazyeval interp
+#' @export
+filterDataFrameForRollups <- function(df, filterDimensionList, filterValues, dimensionTableName, codeTableDataFrameList, allRollupID) {
 
   jurisdictionTypeCodeTable <- codeTableDataFrameList[['JurisdictionType']]
   agencyCodeTable <- codeTableDataFrameList[['Agency']]
@@ -157,33 +158,30 @@ filterDataFrameForRollups <- function(df, jurisdictionLabel, agencyLabel, target
 
   filteredDf <- df
 
-  if (jurisdictionLabel != allJurisdictionsLabel) {
-    jurisdictionTypeID <- (jurisdictionTypeCodeTable %>% filter(JurisdictionTypeLabel == jurisdictionLabel))[1, 1]
-    filteredDf <- filter(filteredDf, JurisdictionTypeID == jurisdictionTypeID)
-  } else {
-    if ('JurisdictionType' == dimensionTableName) {
-      filteredDf <- filter(filteredDf, JurisdictionTypeID != allRollupID)
-    } else {
-      filteredDf <- filter(filteredDf, JurisdictionTypeID == allRollupID)
-    }
-  }
+  for (filterDimensionName in names(filterDimensionList)) {
 
-  if (agencyLabel != allAgenciesLabel) {
-    agencyID <- (agencyCodeTable %>% filter(AgencyLabel == agencyLabel))[1, 1]
-    filteredDf <- filter(filteredDf, ArrestAgencyID == agencyID)
-  } else {
-    if ('Agency' == dimensionTableName) {
-      filteredDf <- filter(filteredDf, ArrestAgencyID != allRollupID)
-    } else {
-      filteredDf <- filter(filteredDf, ArrestAgencyID == allRollupID)
-    }
-  }
+    filterDimension <- filterDimensionList[[filterDimensionName]]
+    ct <- codeTableDataFrameList[[filterDimensionName]]
 
-  if (targetPopulationOnly) {
-    populationTypeID <- (populationTypeCodeTable %>% filter(PopulationTypeLabel == targetPopulationLabel))[1, 1]
-    filteredDf <- filter(filteredDf, PopulationTypeID==populationTypeID)
-  } else {
-    filteredDf <- filter(filteredDf, PopulationTypeID==allRollupID)
+    queryLabel <- filterValues[filterDimensionName]
+    allLabel <- filterDimension$AllLabel
+    dimensionTableID <- filterDimension$FactTableFK
+
+    if (queryLabel != allLabel) {
+      filterCriteria <- interp(~ v1 == v2, v1=as.name(paste0(filterDimensionName, 'Label')), v2=queryLabel)
+      id <- (ct %>% filter_(filterCriteria))[1, 1]
+      filterCriteria <- interp(~ v1 == v2, v1=as.name(dimensionTableID), v2=id)
+      filteredDf <- filteredDf %>% filter_(filterCriteria)
+    } else {
+      if (filterDimensionName == dimensionTableName) {
+        filterCriteria <- interp(~ v1 != v2, v1=as.name(dimensionTableID), v2=allRollupID)
+        filteredDf <- filter_(filteredDf, filterCriteria)
+      } else {
+        filterCriteria <- interp(~ v1 == v2, v1=as.name(dimensionTableID), v2=allRollupID)
+        filteredDf <- filter_(filteredDf, filterCriteria)
+      }
+    }
+
   }
 
   filteredDf
@@ -192,14 +190,16 @@ filterDataFrameForRollups <- function(df, jurisdictionLabel, agencyLabel, target
 
 #' @importFrom lazyeval interp
 #' @import dplyr
-filterDataFrame <- function(df, ct, dimensionTableName, factTableJoinColumn, jurisdictionLabel, agencyLabel, targetPopulationOnly, dates, excludedCodeValues) {
+#' @export
+filterDataFrame <- function(df, ct, dimensionTableName, factTableJoinColumn, filterDimensionList, filterValues,
+                            dates, excludedCodeValues, codeTableDataFrameList, allRollupID) {
 
   label <- paste0(dimensionTableName, 'Label')
   id <- paste0(dimensionTableName, 'ID')
 
   filteredDf <- df %>%
     filter(Date %in% dates) %>%
-    filterDataFrameForRollups(jurisdictionLabel, agencyLabel, targetPopulationOnly, dimensionTableName)
+    filterDataFrameForRollups(filterDimensionList, filterValues, dimensionTableName, codeTableDataFrameList, allRollupID)
 
   if (length(excludedCodeValues)) {
     filteredDf <- filteredDf %>%
@@ -209,5 +209,18 @@ filterDataFrame <- function(df, ct, dimensionTableName, factTableJoinColumn, jur
 
   filteredDf
 
+}
+
+#' Print a plot to an SVG file
+#'
+#' @import svglite
+#' @export
+svgPrint <- function(plot, filename, width, height) {
+  w <- width
+  h <- height
+  svglite(filename, width=w, height=h)
+  print(plot)
+  dev.off()
+  invisible()
 }
 

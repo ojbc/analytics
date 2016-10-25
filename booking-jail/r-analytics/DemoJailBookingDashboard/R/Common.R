@@ -14,18 +14,18 @@
 
 # pointers to data frame lists (typically loaded from a Data package)
 
-summaryDataFrameList <- JailBookingDashboardData::SummaryDataFrameList
-codeTableDataFrameList <- JailBookingDashboardData::CodeTableDataFrameList
-smiSummaryDataFrame <- JailBookingDashboardData::SMISummaryDataFrame
+summaryDataFrameList <- DemoJailBookingDashboardData::SummaryDataFrameList
+codeTableDataFrameList <- DemoJailBookingDashboardData::CodeTableDataFrameList
+smiSummaryDataFrame <- DemoJailBookingDashboardData::SMISummaryDataFrame
 
 #' @export
 getLastLoadTime <- function() {
-  JailBookingDashboardData::DimensionalMetadata$LastLoadTime
+  DemoJailBookingDashboardData::DimensionalMetadata$LastLoadTime
 }
 
 # R script of functions shared across the package
 
-allRollupID <- -1
+allRollupID <- DemoJailBookingDashboardData::allRollupID
 JailCapacity <- 150
 
 #' Get the theme for graphics on the dashboard
@@ -35,14 +35,20 @@ getTheme <- function() {
   ggthemes::theme_hc()
 }
 
-#' Print a plot to an SVG file
-#'
-#' @import svglite
-svgPrint <- function(plot, filename, width, height) {
-  w <- width
-  h <- height
-  svglite(filename, width=w, height=h)
-  print(plot)
-  dev.off()
-  invisible()
+filterDimensionList <- list()
+filterDimension <- list()
+filterDimension$AllLabel <- 'All Jurisdictions'
+filterDimension$FactTableFK <- 'JurisdictionTypeID'
+filterDimensionList$JurisdictionType <- filterDimension
+filterDimension <- list()
+filterDimension$AllLabel <- 'All Agencies'
+filterDimension$FactTableFK <- 'ArrestAgencyID'
+filterDimensionList$Agency <- filterDimension
+filterDimension <- list()
+filterDimension$AllLabel <- 'All Populations'
+filterDimension$FactTableFK <- 'PopulationTypeID'
+filterDimensionList$PopulationType <- filterDimension
+
+getPopulationTypeLabelFromBoolean <- function(targetPopulationOnlyBoolean) {
+  ifelse(targetPopulationOnlyBoolean, 'Target Population', 'All Populations')
 }
