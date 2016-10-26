@@ -19,5 +19,10 @@ Subdirectories contain the following artifacts:
 6. Install the `devtools` package into your R environment
 7. Use `devtools::install_github('ojbc/analytics/booking-jail/r-load/OJBCJailBookingLoad')` to install the load package.  Alternatively, you can pull the source, open the RStudio project, and build there.
 8. Run `OJBCJailBookingLoad::loadDemoStaging()` to populate your staging database.  Note the various parameters (documented with roxygen) that control the load.  For example, you can choose the size of the demo jurisdiction's jail population, the length of time into the past to generate bookings, etc.
-9. Run 'OJBCJailBookingLoad::loadDimensionalDatabase()` to populate the dimensional database with data from the staging database you just loaded.  *Note: both of these functions can take awhile to run...be patient!*
+9. Run `OJBCJailBookingLoad::loadDimensionalDatabase()` to populate the dimensional database with data from the staging database you just loaded.  *Note: the staging and dimensional load functions can take awhile to run...be patient!*
 10. Now that you have the dimensional database, you can setup a [Saiku](http://community.meteorite.bi/) instance and load the Mondrian schema into it, to begin exploring the data.  Continue on if you'd also like to get dashboards working.
+
+## How to get the dashboards running locally
+
+1. It is easiest to do the following in RStudio.  Pull the analytics repo, and open the `DemoJailBookingDashboardData` project in RStudio.  Run the BuildDashboardData.R source file.  This will read your local dimensional database and generate a bunch of summary data frames and code table data frames.  It will then build the `DemoJailBookingDashboardData` package and install it locally.  *Note: when you run the R source file, you may find that you have not yet installed some required packages; to fix this, just `install.packages(...)`*
+2. Now open the `DemoJailBookingDashboard` project in RStudio.  Make sure you have installed the `opencpu` package from CRAN.  Build and Reload the `DemoJailBookingDashboard` project, and then `library(opencpu)`.  When the `opencpu` package loads, it will show you the URL where the dashboard lives.  To illustrate, if opencpu says it is running at localhost:1234/ocpu, then the dashboards will be at http://localhost:1234/ocpu/library/DemoJailBookingDashboard/www/index.html
