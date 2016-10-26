@@ -201,9 +201,11 @@ filterDataFrame <- function(df, ct, dimensionTableName, factTableJoinColumn, fil
     filter(Date %in% dates) %>%
     filterDataFrameForRollups(filterDimensionList, filterValues, dimensionTableName, codeTableDataFrameList, allRollupID)
 
+  filteredDf <- filteredDf %>%
+    inner_join(ct, by=setNames(id, nm=factTableJoinColumn))
+
   if (length(excludedCodeValues)) {
     filteredDf <- filteredDf %>%
-      inner_join(ct, by=setNames(id, nm=factTableJoinColumn)) %>%
       filter_(.dots=lazyeval::interp(~ !(col %in% excludedCodeValues), col=as.name(label)))
   }
 
