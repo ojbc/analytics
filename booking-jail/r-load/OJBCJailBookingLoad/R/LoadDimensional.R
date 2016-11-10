@@ -689,9 +689,9 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
 
   ret$Date <- loadDateDimension(adsConnection, ret, unknownCodeTableValue, noneCodeTableValue, writeToDatabase)
 
-  persistTables(adsConnection, ret, unknownCodeTableValue, currentLoadTime)
+  persistTables(adsConnection, ret, unknownCodeTableValue, currentLoadTime, writeToDatabase=writeToDatabase)
 
-  determineRecidivism(adsConnection)
+  determineRecidivism(adsConnection, writeToDatabase=writeToDatabase)
 
   args <- list()
   args$adsConnection <- adsConnection
@@ -749,7 +749,7 @@ loadDateDimension <- function(adsConnection, dfs, unknownCodeTableValue, noneCod
 
 }
 
-determineRecidivism <- function(adsConnection) {
+determineRecidivism <- function(adsConnection, writeToDatabase) {
 
   writeLines("Determining recidivism")
 
@@ -767,42 +767,48 @@ determineRecidivism <- function(adsConnection) {
 
   writeLines(paste0("Found ", length(recidivistIndices), " recidivist booking records out of ", nrow(df), " total booking records"))
 
-  executeQuery(adsConnection, "update JailEpisode set DaysSinceLastEpisode=NULL, DaysUntilNextEpisode=NULL, SixMonthRebooking='N', OneYearRebooking='N', TwoYearRebooking='N'")
+  if (writeToDatabase) {
 
-  for (i in recidivistIndices) {
+    executeQuery(adsConnection, "update JailEpisode set DaysSinceLastEpisode=NULL, DaysUntilNextEpisode=NULL, SixMonthRebooking='N', OneYearRebooking='N', TwoYearRebooking='N'")
 
-    bookingDate <- df[[i, 'EpisodeStartDate']]
-    first <- df[[i, 'first']]
-    last <- df[[i, 'last']]
-    priorBookingDate <- as.Date(NA)
-    nextBookingDate <- as.Date(NA)
+    for (i in recidivistIndices) {
 
-    if (!first) {
-      priorBookingDate <- df[[i-1, "EpisodeStartDate"]]
+      bookingDate <- df[[i, 'EpisodeStartDate']]
+      first <- df[[i, 'first']]
+      last <- df[[i, 'last']]
+      priorBookingDate <- as.Date(NA)
+      nextBookingDate <- as.Date(NA)
+
+      if (!first) {
+        priorBookingDate <- df[[i-1, "EpisodeStartDate"]]
+      }
+
+      if (!last) {
+        nextBookingDate <- df[[i+1, "EpisodeStartDate"]]
+      }
+
+      # lubridate took considerably longer
+      DaysUntilNextEpisode <- as.numeric(nextBookingDate - bookingDate) # (bookingDate %--% nextBookingDate) %/% days(1)
+      DaysSinceLastEpisode <- as.numeric(bookingDate - priorBookingDate) # (priorBookingDate %--% bookingDate) %/% days(1)
+      SixMonthRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 180, 'Y', 'N')
+      OneYearRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 365, 'Y', 'N')
+      TwoYearRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 730, 'Y', 'N')
+
+      JailEpisodeID <- df[[i, 'JailEpisodeID']]
+
+      sql <- paste0("update JailEpisode set ",
+                    "DaysSinceLastEpisode=", ifelse(is.na(DaysSinceLastEpisode), 'NULL', as.character(DaysSinceLastEpisode)), ",",
+                    "DaysUntilNextEpisode=", ifelse(is.na(DaysUntilNextEpisode), 'NULL', as.character(DaysUntilNextEpisode)), ",",
+                    "SixMonthRebooking='", SixMonthRebooking, "', ",
+                    "OneYearRebooking='", OneYearRebooking, "', ",
+                    "TwoYearRebooking='", TwoYearRebooking, "' where JailEpisodeID=", JailEpisodeID)
+
+      executeQuery(adsConnection, sql)
+
     }
 
-    if (!last) {
-      nextBookingDate <- df[[i+1, "EpisodeStartDate"]]
-    }
-
-    # lubridate took considerably longer
-    DaysUntilNextEpisode <- as.numeric(nextBookingDate - bookingDate) # (bookingDate %--% nextBookingDate) %/% days(1)
-    DaysSinceLastEpisode <- as.numeric(bookingDate - priorBookingDate) # (priorBookingDate %--% bookingDate) %/% days(1)
-    SixMonthRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 180, 'Y', 'N')
-    OneYearRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 365, 'Y', 'N')
-    TwoYearRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 730, 'Y', 'N')
-
-    JailEpisodeID <- df[[i, 'JailEpisodeID']]
-
-    sql <- paste0("update JailEpisode set ",
-                  "DaysSinceLastEpisode=", ifelse(is.na(DaysSinceLastEpisode), 'NULL', as.character(DaysSinceLastEpisode)), ",",
-                  "DaysUntilNextEpisode=", ifelse(is.na(DaysUntilNextEpisode), 'NULL', as.character(DaysUntilNextEpisode)), ",",
-                  "SixMonthRebooking='", SixMonthRebooking, "', ",
-                  "OneYearRebooking='", OneYearRebooking, "', ",
-                  "TwoYearRebooking='", TwoYearRebooking, "' where JailEpisodeID=", JailEpisodeID)
-
-    executeQuery(adsConnection, sql)
-
+  } else {
+    writeLines("No actual recividivism updates persisted, because writeToDatabase=FALSE")
   }
 
   writeLines("Recidivism determination complete")
@@ -811,29 +817,29 @@ determineRecidivism <- function(adsConnection) {
 
 }
 
-persistTables <- function(adsConnection, dfs, unknownCodeTableValue, currentLoadTime) {
+persistTables <- function(adsConnection, dfs, unknownCodeTableValue, currentLoadTime, writeToDatabase) {
 
-  checkForAndRemoveDuplicateBookings(adsConnection, dfs)
+  checkForAndRemoveDuplicateBookings(adsConnection, dfs, writeToDatabase=writeToDatabase)
 
   writeLines("Writing main transaction tables to database")
 
-  writeDataFrameToDatabase(adsConnection, dfs$Person, "Person", viaBulk = TRUE)
-  writeDataFrameToDatabase(adsConnection, dfs$JailEpisode, "JailEpisode", viaBulk = TRUE)
-  writeDataFrameToDatabase(adsConnection, dfs$Arrest, "JailEpisodeArrest", viaBulk = TRUE)
-  writeDataFrameToDatabase(adsConnection, dfs$Charge, "JailEpisodeCharge", viaBulk = TRUE)
-  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthAssessment, "BehavioralHealthAssessment", viaBulk = TRUE)
-  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthAssessmentCategory, "BehavioralHealthAssessmentCategory", viaBulk = TRUE)
-  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthTreatment, "BehavioralHealthTreatment", viaBulk = TRUE)
-  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthEvaluation, "BehavioralHealthEvaluation", viaBulk = TRUE)
-  writeDataFrameToDatabase(adsConnection, dfs$PrescribedMedication, "PrescribedMedication", viaBulk = TRUE)
+  writeDataFrameToDatabase(adsConnection, dfs$Person, "Person", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$JailEpisode, "JailEpisode", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$Arrest, "JailEpisodeArrest", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$Charge, "JailEpisodeCharge", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthAssessment, "BehavioralHealthAssessment", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthAssessmentCategory, "BehavioralHealthAssessmentCategory", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthTreatment, "BehavioralHealthTreatment", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthEvaluation, "BehavioralHealthEvaluation", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$PrescribedMedication, "PrescribedMedication", viaBulk = TRUE, writeToDatabase=writeToDatabase)
 
   writeLines("Done writing main transaction tables to database")
 
   writeLines("Applying JailEpisodeEdits")
-  applyEdits(adsConnection, dfs, currentLoadTime)
+  applyEdits(adsConnection, dfs, currentLoadTime, writeToDatabase=writeToDatabase)
 
   writeLines("Processing releases")
-  persistReleases(adsConnection, dfs, unknownCodeTableValue)
+  persistReleases(adsConnection, dfs, unknownCodeTableValue, writeToDatabase=writeToDatabase)
 
 }
 
@@ -851,7 +857,7 @@ createMaterializedViews <- function(adsConnection, sqlFile) {
 
 }
 
-checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs) {
+checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs, writeToDatabase) {
 
   writeLines("Checking for Jail Episode records with prior recorded booking number...")
 
@@ -882,7 +888,7 @@ checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs) {
       dupBookingIDs <- c(dupBookingIDs, bookingIDDf$JailEpisodeID)
     }
 
-    removeBookingsAndChildren(adsConnection, dupBookingIDs)
+    removeBookingsAndChildren(adsConnection, dupBookingIDs, writeToDatabase=writeToDatabase)
 
   } else {
     writeLines("...no duplicates found")
@@ -890,7 +896,7 @@ checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs) {
 
 }
 
-applyEdits <- function(adsConnection, dfs, currentLoadTime) {
+applyEdits <- function(adsConnection, dfs, currentLoadTime, writeToDatabase) {
 
   if (nrow(dfs$JailEpisodeEdits)) {
 
@@ -898,12 +904,12 @@ applyEdits <- function(adsConnection, dfs, currentLoadTime) {
     writeLines(paste0("Applying ", nrow(dfs$ArrestEdits), " ArrestEdits"))
     writeLines(paste0("Applying ", nrow(dfs$ChargeEdits), " ChargeEdits"))
 
-    removeBookingsAndChildren(adsConnection, dfs$JailEpisodeEdits$JailEpisodeID)
+    removeBookingsAndChildren(adsConnection, dfs$JailEpisodeEdits$JailEpisodeID, writeToDatabase=writeToDatabase)
 
     writeLines("Adding edited Booking, Arrest, and Charge records")
-    writeDataFrameToDatabase(adsConnection, dfs$JailEpisodeEdits, "JailEpisode", viaBulk = TRUE)
-    writeDataFrameToDatabase(adsConnection, dfs$ArrestEdits %>% select(-StagingPK), "JailEpisodeArrest", viaBulk = TRUE)
-    writeDataFrameToDatabase(adsConnection, dfs$ChargeEdits %>% select(-StagingPK), "JailEpisodeCharge", viaBulk = TRUE)
+    writeDataFrameToDatabase(adsConnection, dfs$JailEpisodeEdits, "JailEpisode", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+    writeDataFrameToDatabase(adsConnection, dfs$ArrestEdits %>% select(-StagingPK), "JailEpisodeArrest", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+    writeDataFrameToDatabase(adsConnection, dfs$ChargeEdits %>% select(-StagingPK), "JailEpisodeCharge", viaBulk = TRUE, writeToDatabase=writeToDatabase)
 
   } else {
     writeLines("No Jail Episode edits found in this load")
@@ -911,53 +917,59 @@ applyEdits <- function(adsConnection, dfs, currentLoadTime) {
 
 }
 
-removeBookingsAndChildren <- function(adsConnection, BookingIDs, groupSize=50) {
+removeBookingsAndChildren <- function(adsConnection, BookingIDs, groupSize=50, writeToDatabase) {
 
   # split the booking edits into chunks and delete them in groups
 
   writeLines(paste0("Removing ", length(BookingIDs), " bookings and all their children"))
 
-  episodeIDGroups <- split(BookingIDs, ceiling(seq_along(BookingIDs)/groupSize))
+  if (!writeToDatabase) {
+    writeLines("Skipping actual database updates, since writeToDatabase=FALSE")
+  } else {
 
-  orphanedPersonIDs <- integer()
+    episodeIDGroups <- split(BookingIDs, ceiling(seq_along(BookingIDs)/groupSize))
 
-  for (g in episodeIDGroups) {
-    idList <- paste0(g, collapse=",")
-    executeQuery(adsConnection, paste0("delete from JailEpisodeCharge where JailEpisodeArrestID in (select JailEpisodeArrestID from JailEpisodeArrest where JailEpisodeID in (", idList, "))"))
-    executeQuery(adsConnection, paste0("delete from JailEpisodeArrest where JailEpisodeID in (", idList, ")"))
-    personDf <- getQuery(adsConnection, paste0("select PersonID from JailEpisode where JailEpisodeID in (", idList, ")"))
-    orphanedPersonIDs <- c(orphanedPersonIDs, personDf$PersonID)
-    executeQuery(adsConnection, paste0("delete from JailEpisode where JailEpisodeID in (", idList, ")"))
-  }
+    orphanedPersonIDs <- integer()
 
-  orphanedBHAssessmentIDs <- integer()
+    for (g in episodeIDGroups) {
+      idList <- paste0(g, collapse=",")
+      executeQuery(adsConnection, paste0("delete from JailEpisodeCharge where JailEpisodeArrestID in (select JailEpisodeArrestID from JailEpisodeArrest where JailEpisodeID in (", idList, "))"))
+      executeQuery(adsConnection, paste0("delete from JailEpisodeArrest where JailEpisodeID in (", idList, ")"))
+      personDf <- getQuery(adsConnection, paste0("select PersonID from JailEpisode where JailEpisodeID in (", idList, ")"))
+      orphanedPersonIDs <- c(orphanedPersonIDs, personDf$PersonID)
+      executeQuery(adsConnection, paste0("delete from JailEpisode where JailEpisodeID in (", idList, ")"))
+    }
 
-  personIDGroups <- split(orphanedPersonIDs, ceiling(seq_along(orphanedPersonIDs)/groupSize))
+    orphanedBHAssessmentIDs <- integer()
 
-  for (g in personIDGroups) {
-    idList <- paste0(g, collapse=",")
-    bhDf <- getQuery(adsConnection, paste0("select BehavioralHealthAssessmentID from BehavioralHealthAssessment where PersonID in (", idList, ")"))
-    orphanedBHAssessmentIDs <- c(orphanedBHAssessmentIDs, bhDf$BehavioralHealthAssessmentID)
-  }
+    personIDGroups <- split(orphanedPersonIDs, ceiling(seq_along(orphanedPersonIDs)/groupSize))
 
-  writeLines(paste0("Removing ", length(orphanedBHAssessmentIDs), " orphaned BH assessment records"))
+    for (g in personIDGroups) {
+      idList <- paste0(g, collapse=",")
+      bhDf <- getQuery(adsConnection, paste0("select BehavioralHealthAssessmentID from BehavioralHealthAssessment where PersonID in (", idList, ")"))
+      orphanedBHAssessmentIDs <- c(orphanedBHAssessmentIDs, bhDf$BehavioralHealthAssessmentID)
+    }
 
-  bhIDGroups <- split(orphanedBHAssessmentIDs, ceiling(seq_along(orphanedBHAssessmentIDs)/groupSize))
+    writeLines(paste0("Removing ", length(orphanedBHAssessmentIDs), " orphaned BH assessment records"))
 
-  for (g in bhIDGroups) {
-    idList <- paste0(g, collapse=",")
-    executeQuery(adsConnection, paste0("delete from BehavioralHealthAssessmentCategory where BehavioralHealthAssessmentID in (", idList, ")"))
-    executeQuery(adsConnection, paste0("delete from PrescribedMedication where BehavioralHealthAssessmentID in (", idList, ")"))
-    executeQuery(adsConnection, paste0("delete from BehavioralHealthEvaluation where BehavioralHealthAssessmentID in (", idList, ")"))
-    executeQuery(adsConnection, paste0("delete from BehavioralHealthTreatment where BehavioralHealthAssessmentID in (", idList, ")"))
-    executeQuery(adsConnection, paste0("delete from BehavioralHealthAssessment where BehavioralHealthAssessmentID in (", idList, ")"))
-  }
+    bhIDGroups <- split(orphanedBHAssessmentIDs, ceiling(seq_along(orphanedBHAssessmentIDs)/groupSize))
 
-  writeLines(paste0("Removing ", length(orphanedPersonIDs), " orphaned person records"))
+    for (g in bhIDGroups) {
+      idList <- paste0(g, collapse=",")
+      executeQuery(adsConnection, paste0("delete from BehavioralHealthAssessmentCategory where BehavioralHealthAssessmentID in (", idList, ")"))
+      executeQuery(adsConnection, paste0("delete from PrescribedMedication where BehavioralHealthAssessmentID in (", idList, ")"))
+      executeQuery(adsConnection, paste0("delete from BehavioralHealthEvaluation where BehavioralHealthAssessmentID in (", idList, ")"))
+      executeQuery(adsConnection, paste0("delete from BehavioralHealthTreatment where BehavioralHealthAssessmentID in (", idList, ")"))
+      executeQuery(adsConnection, paste0("delete from BehavioralHealthAssessment where BehavioralHealthAssessmentID in (", idList, ")"))
+    }
 
-  for (g in personIDGroups) {
-    idList <- paste0(g, collapse=",")
-    executeQuery(adsConnection, paste0("delete from Person where PersonID in (", idList, ")"))
+    writeLines(paste0("Removing ", length(orphanedPersonIDs), " orphaned person records"))
+
+    for (g in personIDGroups) {
+      idList <- paste0(g, collapse=",")
+      executeQuery(adsConnection, paste0("delete from Person where PersonID in (", idList, ")"))
+    }
+
   }
 
   invisible()
@@ -965,7 +977,7 @@ removeBookingsAndChildren <- function(adsConnection, BookingIDs, groupSize=50) {
 }
 
 #' @importFrom lubridate %--%
-persistReleases <- function(adsConnection, dfs, unknownCodeTableValue) {
+persistReleases <- function(adsConnection, dfs, unknownCodeTableValue, writeToDatabase) {
 
   bookingDf <- getQuery(adsConnection, "select JailEpisodeID, EpisodeStartDate from JailEpisode")
 
@@ -986,12 +998,17 @@ persistReleases <- function(adsConnection, dfs, unknownCodeTableValue) {
         sql <- paste0("update JailEpisode set IsActive='N', LengthOfStay=", lengthOfStay, ", EpisodeEndDate='", episodeEndDateS, "'",
                       ", EpisodeEndDateID=", episodeEndDateID,
                       " where JailEpisodeID=", bookingID)
-        executeQuery(adsConnection, sql)
+        if (writeToDatabase) {
+          executeQuery(adsConnection, sql)
+        }
       }
 
     }
 
     writeLines(paste0("Updated ", nrow(bookingDf), " JailEpisode records with release information"))
+    if (!writeToDatabase) {
+      writeLines("No JailEpisode records actually updated, because writeToDatabase=FALSE")
+    }
 
   } else {
     writeLines("No releases found")
