@@ -152,10 +152,6 @@ plotTimeline <- function(measureLabel, dimensionTableName, factTableJoinColumn, 
 #' @export
 filterDataFrameForRollups <- function(df, filterDimensionList, filterValues, dimensionTableName, codeTableDataFrameList, allRollupID) {
 
-  jurisdictionTypeCodeTable <- codeTableDataFrameList[['JurisdictionType']]
-  agencyCodeTable <- codeTableDataFrameList[['Agency']]
-  populationTypeCodeTable <- codeTableDataFrameList[['PopulationType']]
-
   filteredDf <- df
 
   for (filterDimensionName in names(filterDimensionList)) {
