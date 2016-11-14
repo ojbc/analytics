@@ -2,6 +2,7 @@
 
 export(filterDataFrame)
 export(filterDataFrameForRollups)
+export(getBarChartDataList)
 export(plotBar)
 export(plotTimeline)
 export(svgPrint)
