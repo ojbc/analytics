@@ -58,7 +58,8 @@
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="ChargeClass">
 		<Hierarchy name="ChargeClass" visible="true" hasAll="true" primaryKey="ChargeClassTypeID" caption="Charge Class" allMemberCaption="All Classes">
 			<Table name="ChargeClassType"/>
-			<Level name="ChargeClass" visible="true" table="ChargeClassType" column="ChargeClassTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Charge Category" visible="true" table="ChargeClassType" column="ChargeClassTypeCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+			<Level name="Charge Class" visible="true" table="ChargeClassType" column="ChargeClassTypeDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	
