@@ -162,10 +162,14 @@ makeSummaryDf <- function(df, distinctIDColumn, dimensionColumn, dimensionTableN
 #' @import dplyr
 buildCodeTable <- function(adsConnection, tableList, name) {
   infoVector <- tableList[[name]]
+  physicalName <- name
+  if (length(infoVector) == 4) {
+    physicalName <- infoVector[4]
+  }
   writeLines(paste0("Creating code table data frame for dimension ", name))
-  labels <- getQuery(adsConnection, paste0("select distinct ", infoVector[1], " as ", name, "Label from ", name))
+  labels <- getQuery(adsConnection, paste0("select distinct ", infoVector[1], " as ", name, "Label from ", physicalName))
   labels$DimensionID <- seq(nrow(labels))
-  ct <- getQuery(adsConnection, paste0("select ", name, "ID, ", infoVector[1], " as ", name, "Label from ", name))
+  ct <- getQuery(adsConnection, paste0("select ", physicalName, "ID as ", name, "ID, ", infoVector[1], " as ", name, "Label from ", physicalName))
   ct %>% inner_join(labels, by=setNames(nm=paste0(name, "Label")))
 }
 

@@ -56,7 +56,8 @@ select
     iif(TwoYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID as TwoYearRebookingCount, 
     iif(IsActive='Y', 1, 0) * JailEpisode.JailEpisodeID as IsActiveBookingCount,
     iif(InTreatmentAtBooking='Y', 1, 0) * JailEpisode.JailEpisodeID as InTreatmentAtBookingCount,
-    iif(SevereMentalIllnessIndicator=1, 1, 0) * JailEpisode.JailEpisodeID as SevereMentalIllnessBookingCount
+    iif(SevereMentalIllnessIndicator=1, 1, 0) * JailEpisode.JailEpisodeID as SevereMentalIllnessBookingCount,
+    isnull(BehavioralHealthAssessmentID, 'N', 'Y') as BehavioralHealthInvolvedIndicator
 into FullBookingView     
 from
     JailEpisode inner join Person on JailEpisode.PersonID=Person.PersonID
