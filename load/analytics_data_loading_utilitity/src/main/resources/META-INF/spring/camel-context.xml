@@ -63,10 +63,20 @@
 		
 			<camel:to uri="exec:R"/>	
 		
+			<camel:wireTap uri="direct:refreshSaikuCache"/>
+			
 			<camel:to uri="bean:rLoadingResultsFileProcessor?method=processResultsFileAndAddAttachment"/>
 			
 			<camel:to uri="mailEndpoint"/>		
 			
+		</camel:route>
+		
+		<route id="refreshSaikuCacheRoute">
+		
+			<from uri="direct:refreshSaikuCache"/>						
+			
+			<log message="Refresh the saiku cache" />
+						
 			<camel:setBody>
 				<constant></constant>
 			</camel:setBody>
@@ -75,7 +85,8 @@
 				<camel:simple>{{analytics.refreshSaiku}} == 'true'</camel:simple>
 				<camel:to uri="http4://{{analytics.saikuRefreshRestURL}}"/>
 			</camel:filter>
-		</camel:route>
+		</route>		
+		
 		
 	</camel:camelContext>
 	
