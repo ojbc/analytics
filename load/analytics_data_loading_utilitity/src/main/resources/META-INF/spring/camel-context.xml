@@ -83,7 +83,12 @@
 		
 			<camel:filter>
 				<camel:simple>{{analytics.refreshSaiku}} == 'true'</camel:simple>
-				<camel:to uri="http4://{{analytics.saikuRefreshRestURL}}"/>
+				<log message="Send to saikuRefreshRestURL" />
+				<setHeader headerName="CamelHttpMethod">
+			        <constant>GET</constant>
+			    </setHeader>				
+    			<camel:to uri="http4://{{analytics.saikuRefreshRestURL}}"/>
+				<log message="Sent" />
 			</camel:filter>
 		</route>		
 		
