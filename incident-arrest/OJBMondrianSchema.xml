@@ -435,35 +435,35 @@
 
 	<Dimension name="Offense Type" key="OffenseTypeID">
         <Attributes>
-            <Attribute name='OffenseTypeID' table="OffenseType" keyColumn='OffenseTypeID' hasHierarchy='false'/>
-            <Attribute name='OffenseDescription' table="OffenseType" keyColumn='OffenseDescription' hasHierarchy='false'/>
-            <Attribute name='IsDrugOffense' table="OffenseType" keyColumn='IsDrugOffense' hasHierarchy='false' caption="Is Drug Offense?"/>
-            <Attribute name='IsDrugOffense' table="OffenseType" keyColumn='IsDrugOffense' hasHierarchy='false' caption="Is Drug Offense?"/>
+            <Attribute name='OffenseTypeID'  keyColumn='OffenseTypeID' table='OffenseType' hasHierarchy='false'/>
+            <Attribute name='OffenseDescription'  keyColumn='OffenseDescription' table='OffenseType' hasHierarchy='false'/>
+            <Attribute name='IsDrugOffense' keyColumn='IsDrugOffense' table='OffenseType' hasHierarchy='false'/>
+            <Attribute name='OffenseSeverity' keyColumn='OffenseSeverity' table='OffenseType' hasHierarchy='false'/>
+<!--             <Attribute name='ReadyCashOffenseCategoryDescription' keyColumn='ReadyCashOffenseCategoryDescription' table='ReadyCashOffenseType' hasHierarchy='false'/> -->
         </Attributes>
-        <Hierarchy name="OffenseType" visible="true" hasAll="true" allMemberName="All Offenses" primaryKey="OffenseTypeID" caption="Offense Type">
-            <Table name="OffenseType"/>
-            <Level name="OffenseType" visible="true" column="OffenseTypeID" nameColumn="OffenseDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" caption="Type of Offense"/>
-        </Hierarchy>
-        <Hierarchy name="Drug Offense" visible="true" hasAll="true" allMemberName="All Offenses" primaryKey="OffenseTypeID" caption="Drug Offense">
-            <Table name="OffenseType"/>
-            <Level name="DrugOffense" visible="true" column="IsDrugOffense" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never" caption="Is Drug Offense"/>
-            <Level name="OffenseType" visible="true" column="OffenseDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" caption="Type of Offense"/>
-        </Hierarchy>
-        <Hierarchy name="Offense Severity" visible="true" hasAll="true" allMemberName="All Severities" allMemberCaption="All Severities" primaryKey="OffenseTypeID" caption="Offense Severity">
-            <Table name="OffenseType"/>
-            <Level name="OffenseSeverity" visible="true" column="OffenseSeverity" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" caption="Severity of Offense"/>
-            <Level name="OffenseType" visible="true" column="OffenseDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" caption="Type of Offense"/>
-        </Hierarchy>
-        <Hierarchy name="Ready Cash Offenses" visible="true" hasAll="true" allMemberName="All Offenses" allMemberCaption="All Offenses" primaryKey="OffenseTypeID" caption="Ready Cash Offenses">
-            <View alias="ReadyCashOffenseType">
-			    <SQL dialect="mysql">
-			        <![CDATA[select OffenseTypeID, OffenseDescription, ReadyCashOffenseCategoryDescription from OffenseType, ReadyCashOffenseCategory
-                    where OffenseType.ReadyCashOffenseCategoryID=ReadyCashOffenseCategory.ReadyCashOffenseCategoryID]]>
-                </SQL>
-            </View>
-            <Level name="ReadyCashOffenseCategory" visible="true" column="ReadyCashOffenseCategoryDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" caption="Ready Cash Offense Category"/>
-            <Level name="OffenseType" visible="true" column="OffenseDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" caption="Type of Offense"/>
-        </Hierarchy>
+          <Hierarchies>
+	        <Hierarchy name="OffenseType" allMemberName="All Offenses" caption="Offense Type">
+	        	<Level attribute='OffenseDescription' capton='Type of Offense'/>
+	        </Hierarchy>
+	        <Hierarchy name="Drug Offense" allMemberName="All Offenses" caption="Drug Offense">
+	            <Level attribute="IsDrugOffense" caption="Is Drug Offense"/>
+	            <Level attribute="OffenseDescription" caption="Type of Offense"/>
+	        </Hierarchy>
+	        <Hierarchy name="Offense Severity" allMemberName="All Severities" caption="Offense Severity">
+	            <Level attribute="OffenseSeverity" caption="Severity of Offense"/>
+	            <Level attribute="OffenseDescription" caption="Type of Offense"/>
+	        </Hierarchy>
+	        <Hierarchy name="Ready Cash Offenses" caption="Ready Cash Offenses">
+<!-- 	            <View alias="ReadyCashOffenseType"> -->
+<!-- 				    <SQL dialect="mysql"> -->
+<!-- 				        <![CDATA[select OffenseTypeID, OffenseDescription, ReadyCashOffenseCategoryDescription from OffenseType, ReadyCashOffenseCategory -->
+<!--    	                  where OffenseType.ReadyCashOffenseCategoryID=ReadyCashOffenseCategory.ReadyCashOffenseCategoryID]]> -->
+<!-- 	                </SQL> -->
+<!-- 	            </View> -->
+<!-- 	            <Level attribute="ReadyCashOffenseCategoryDescription" caption="Ready Cash Offense Category"/> -->
+	            <Level attribute="OffenseDescription" caption="Type of Offense"/>
+	        </Hierarchy>
+	       </Hierarchies>
 	</Dimension>
 
 
@@ -525,13 +525,13 @@
         </Hierarchies>
 	</Dimension>
 
+<!-- TODO: enable the Offense Type dimension and troubleshoot resulting errors -->
 	<Cube name="ArrestCharge" caption="Arrest Charge" visible="true" enabled="true">
 		<Dimensions>
 			<Dimension source="County"/>
 			<Dimension source="Race"/>
 			<Dimension source="Sex"/>
 			<Dimension source="Age"/>
-			<Dimension source="Disposition"/>
 			<Dimension source="Date"/>
 			<Dimension source="Date" name="Disposition Date"/>
 			<Dimension source="Region" name="Pretrial District"/>
@@ -558,16 +558,15 @@
 					<ForeignKeyLink dimension='Disposition' foreignKeyColumn='DispositionID'/>
 					<ForeignKeyLink dimension='Date' foreignKeyColumn='DateID'/>
 					<ForeignKeyLink dimension='Disposition Date' foreignKeyColumn='DispositionDateID'/>
-					<ForeignKeyLink dimension="Region" foreignKeyColumn="RegionID"/>
+					<ForeignKeyLink dimension="Pretrial District" foreignKeyColumn="RegionID"/>
 					<ForeignKeyLink dimension="Agency" foreignKeyColumn="ArrestingAgencyID"/>
 					<ForeignKeyLink dimension="Drug" foreignKeyColumn="InvolvedDrugID"/>
 					<ForeignKeyLink dimension="Offense Type" foreignKeyColumn="ArrestOffenseTypeID"/>
 					<ForeignKeyLink dimension="Disposition Offense Type" foreignKeyColumn="DispositionOffenseTypeID"/>
 					<ForeignKeyLink dimension="Filed Offense Type" foreignKeyColumn="FiledOffenseTypeID"/>
-					<ForeignKeyLink dimension="Disposition" foreignKeyColumn="DispositionID"/>
 					<ForeignKeyLink dimension="Risk Score" foreignKeyColumn="RiskScoreID"/>
 					<ForeignKeyLink dimension="Time Of Day" foreignKeyColumn="TimeID"/>
-					<ForeignKeyLink dimension="YesNoIndicator" foreignKeyColumn="PretrialServicesParticipantIndicator"/>
+					<ForeignKeyLink dimension="Pretrial Services Participant" foreignKeyColumn="PretrialServicesParticipantIndicator"/>
                 </DimensionLinks>
             </MeasureGroup>
         </MeasureGroups>
