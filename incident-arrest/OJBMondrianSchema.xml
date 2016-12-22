@@ -15,7 +15,7 @@
     Copyright 2012-2015 Open Justice Broker Consortium
 
     -->
-<Schema name="Incident_Arrest" metamodelVersion='4.0'>
+<Schema name="Incident_Arrest" metamodelVersion='4.0'  xsi:noNamespaceSchemaLocation="mondrian4.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<PhysicalSchema>
 		<Table name="County"/>
@@ -322,10 +322,10 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='DateYMD' caption="Year/Month/Day" allMemberName="All Years" allMemberCaption="All Years">
-                <Level attribute='Year' levelType="TimeYears"/>
-                <Level attribute='Quarter' levelType="TimeQuarters"/>
-                <Level attribute='Month' levelType="TimeMonths"/>
-                <Level attribute='Day' levelType="TimeDays"/>
+ 				<Level attribute='Year' />
+                <Level attribute='Quarter' />
+                <Level attribute='Month' />
+                <Level attribute='Day' />
             </Hierarchy>
             <Hierarchy name='CalDate' caption="Calendar Date" allMemberName="All Dates" allMemberCaption="All Dates">
                 <Level attribute='Date'/>
@@ -357,7 +357,7 @@
         <Hierarchies>
             <Hierarchy name='Disposition' allMemberName='All Dispositions'>
                 <Level attribute='ConvictionStatusDescription'/>
-                <Level attribute='DispositionDescription' parent="ConvictionStatusDescription"/>
+                <Level attribute='DispositionDescription' parentAttribute="ConvictionStatusDescription"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -379,7 +379,19 @@
         <Hierarchies>
             <Hierarchy name='Age' allMemberName='All Ages'>
                 <Level attribute='AgeRange5' caption="Age Range"/>
-                <Level attribute='AgeInYears' parent="AgeRange5" caption="Age"/>
+                <Level attribute='AgeInYears' parentAttribute="AgeRange5" caption="Age"/>
+            </Hierarchy>
+        </Hierarchies>
+	</Dimension>
+	
+	<Dimension name="Age Range" table="PersonAgeRange" key="PersonAgeRangeID">
+		<Attributes>
+			<Attribute keyColumn="PersonAgeRangeID" hasHierarchy='false' name="PersonAgeRangeID"/>
+			<Attribute keyColumn="AgeRange5" hasHierarchy='false' name="PersonAgeRange"/>
+		</Attributes>
+		<Hierarchies>
+            <Hierarchy name='Age Range' allMemberName='All Age Ranges'>
+                <Level attribute='PersonAgeRange' caption="Age Range"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -396,7 +408,7 @@
         </Hierarchies>
 	</Dimension>
 
-	<Dimension name="Assessed Need" table="RiskScore" key="AssessedNeedID">
+	<Dimension name="Assessed Need" table="AssessedNeed" key="AssessedNeedID">
         <Attributes>
             <Attribute name='AssessedNeedID' keyColumn='AssessedNeedID' hasHierarchy='false'/>
             <Attribute name='AssessedNeedDescription' keyColumn='AssessedNeedDescription' hasHierarchy='false'/>
@@ -417,7 +429,7 @@
         <Hierarchies>
             <Hierarchy name='PretrialService' allMemberName='All Pretrial Services'>
                 <Level attribute='Pretrial Service Participant'/>
-                <Level attribute='PretrialServiceDescription' parent="Pretrial Service Participant"/>
+                <Level attribute='PretrialServiceDescription' parentAttribute="Pretrial Service Participant"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -444,7 +456,7 @@
         </Attributes>
           <Hierarchies>
 	        <Hierarchy name="OffenseType" allMemberName="All Offenses" caption="Offense Type">
-	        	<Level attribute='OffenseDescription' capton='Type of Offense'/>
+	        	<Level attribute='OffenseDescription' caption='Type of Offense'/>
 	        </Hierarchy>
 	        <Hierarchy name="Drug Offense" allMemberName="All Offenses" caption="Drug Offense">
 	            <Level attribute="IsDrugOffense" caption="Is Drug Offense"/>
@@ -501,7 +513,7 @@
 	<Dimension name="Incident Type" key="IncidentTypeID">
         <Attributes>
             <Attribute table="IncidentType" name='IncidentTypeID' keyColumn='IncidentTypeID' hasHierarchy='false'/>
-            <Attribute name='IncidentCategoryDescription' table='IncidentCategory' keyColumn="IncidentCategoryDescription" hasHierarchy='false'/>
+            <Attribute table='IncidentCategory' name='IncidentCategoryDescription'  keyColumn="IncidentCategoryDescription" hasHierarchy='false'/>
             <Attribute table="IncidentType" name='IncidentTypeDescription' hasHierarchy='false'>
                 <Key>
                     <Column table='IncidentCategory' name='IncidentCategoryDescription'/>
@@ -515,7 +527,7 @@
         <Hierarchies>
             <Hierarchy name='Incident Type' allMemberName='All Incident Types'>
                 <Level attribute='IncidentCategoryDescription' caption="Incident Category"/>
-                <Level attribute='IncidentType' parent="IncidentCategoryDescription" caption="Incident Type"/>
+                <Level attribute='IncidentTypeID' parentAttribute="IncidentCategoryDescription" caption="Incident Type"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -627,21 +639,21 @@
             <Dimension source='Year'/>
             <Dimension source='Race'/>
             <Dimension source='Sex'/>
-            <!-- TODO:Add age range -->
-<!--             <Dimension source='Age Range'/> -->
+            <Dimension source='Age Range'/>
         </Dimensions>
 
         <MeasureGroups>
             <MeasureGroup table='Population'>
                 <Measures>
-                    <Measure name='PopulationCount' column='PopulationCount' aggregator='sum'/>
+                	<!-- TODO: this was a sum, but that didn't seem right.  Discuss with Scott -->
+                    <Measure name='PopulationCount' column='PopulationCount' aggregator='distinct-count' datatype="Integer"/>
                 </Measures>
                 <DimensionLinks>
                     <ForeignKeyLink dimension='County' foreignKeyColumn='CountyID'/>
                     <ForeignKeyLink dimension='Year' foreignKeyColumn='Year'/>
                     <ForeignKeyLink dimension='Race' foreignKeyColumn='PersonRaceID'/>
                     <ForeignKeyLink dimension='Sex' foreignKeyColumn='PersonSexID'/>
-<!--                     <ForeignKeyLink dimension='Age Range' foreignKeyColumn='PersonAgeRangeID'/> -->
+                    <ForeignKeyLink dimension='Age Range' foreignKeyColumn='PersonAgeRangeID'/>
                 </DimensionLinks>
             </MeasureGroup>
         </MeasureGroups>
@@ -689,5 +701,148 @@
         </MeasureGroups>
 
     </Cube>
+    <Cube name="IncidentTypeInvolvement" caption="Incident Type Involvement">
+    	<Dimensions>
+    		<Dimension source='Town'/>
+    		<Dimension source='Agency'/>
+    		<Dimension source='Incident Type'/>
+    		<Dimension source='Date'/>
+    		<Dimension source='Time Of Day'/>
+    	</Dimensions>
+    	<MeasureGroups>
+    		<MeasureGroup table="IncidentTypeInvolvement">
+	    		<Measures>
+	    		    <Measure name="IncidentCount" column="IncidentID" datatype="Integer" aggregator="distinct-count" caption="Incident Count" visible="true"/>
+	    		</Measures>
+	    		 <DimensionLinks>
+                    <ForeignKeyLink dimension='Town' foreignKeyColumn='TownID'/>
+                    <ForeignKeyLink dimension='Agency' foreignKeyColumn='ReportingAgencyID'/>
+                    <ForeignKeyLink dimension='Incident Type' foreignKeyColumn="IncidentTypeID"/>
+                    <ForeignKeyLink dimension='Date' foreignKeyColumn='DateID'/>
+                    <ForeignKeyLink dimension='Time Of Day' foreignKeyColumn='TimeID'/>
+	             </DimensionLinks>
+          </MeasureGroup>
+    	</MeasureGroups>
+    </Cube>
+    
+     <Cube name="IncidentType2Involvement" caption="Original Incident Type Involvement">
+    	<Dimensions>
+    		<Dimension source='Town'/>
+    		<Dimension source='Agency'/>
+    		<Dimension source='Original Incident Type'/>
+    		<Dimension source='Date'/>
+    		<Dimension source='Time Of Day'/>
+    	</Dimensions>
+    	<MeasureGroups>
+    		<MeasureGroup table="IncidentType2Involvement">
+	    		<Measures>
+	    		    <Measure name="IncidentCount" column="IncidentID" datatype="Integer" aggregator="distinct-count" caption="Incident Count" visible="true"/>
+	    		</Measures>
+	    		 <DimensionLinks>
+                    <ForeignKeyLink dimension='Town' foreignKeyColumn='TownID'/>
+                    <ForeignKeyLink dimension='Agency' foreignKeyColumn='ReportingAgencyID'/>
+                    <ForeignKeyLink dimension='Original Incident Type' foreignKeyColumn="IncidentTypeID"/>
+                    <ForeignKeyLink dimension='Date' foreignKeyColumn='DateID'/>
+                    <ForeignKeyLink dimension='Time Of Day' foreignKeyColumn='TimeID'/>
+	             </DimensionLinks>
+          </MeasureGroup>
+    	</MeasureGroups>
+    </Cube>
+    
+     <Cube name="PretrialServicesParticipation" caption="Pretrial Services Participation">
+    	<Dimensions>
+    		<Dimension source='YesNoIndicator' caption="Pre Charge Monitoring"/>
+    		<Dimension source='Risk Score'/>
+    		<Dimension source='Race'/>
+    		<Dimension source='Sex'/>
+    		<Dimension source='Age'/>
+    		<Dimension source='County'/>
+    		<Dimension source='Region'/>
+    		<Dimension source='Date'/>
+    	</Dimensions>
+    	<MeasureGroups>
+    		<MeasureGroup table="PretrialServicesParticipation">
+	    		<Measures>
+					<Measure name="PretrialServiceParticipantCount" column="PretrialServiceParticipationID" datatype="Integer" aggregator="distinct-count" caption="Pretrial Service Participant Count" visible="true"/>
+	    		</Measures>
+	    		 <DimensionLinks>
+                    <ForeignKeyLink dimension='YesNoIndicator' foreignKeyColumn='PreChargeMonitoringIndicator'/>
+                    <ForeignKeyLink dimension='Risk Score' foreignKeyColumn='RiskScoreID'/>
+                    <ForeignKeyLink dimension='Race' foreignKeyColumn="ArresteeRaceID"/>
+                    <ForeignKeyLink dimension='Sex' foreignKeyColumn="ArresteeSexID"/>
+                    <ForeignKeyLink dimension='Age' foreignKeyColumn="ArresteeAgeID"/>
+                    <ForeignKeyLink dimension='County' foreignKeyColumn="CountyID"/>
+                    <ForeignKeyLink dimension='Region' foreignKeyColumn='RegionID'/>
+                    <ForeignKeyLink dimension='Date' foreignKeyColumn='IntakeDateID'/>
+	             </DimensionLinks>
+          </MeasureGroup>
+    	</MeasureGroups>
+    </Cube>
+    
+     <Cube name="PretrialServicesNeedsAssessment" caption="Pretrial Services Needs Assesment">
+    	<Dimensions>
+    		<Dimension source='Risk Score'/>
+    		<Dimension source="Assessed Need"/>
+    		<Dimension source='Race'/>
+    		<Dimension source='Sex'/>
+    		<Dimension source='Age'/>
+    		<Dimension source='County'/>
+    		<Dimension source='Region'/>
+    		<Dimension source='Date'/>
+    	</Dimensions>
+    	<MeasureGroups>
+    		<MeasureGroup table="PretrialServicesNeedsAssessment">
+	    		<Measures>
+					<Measure name="PretrialServiceParticipantCount" column="PretrialServiceParticipationID" datatype="Integer" aggregator="distinct-count" caption="Pretrial Service Participant Count" visible="true"/>
+	    		</Measures>
+	    		 <DimensionLinks>
+                    <ForeignKeyLink dimension='Risk Score' foreignKeyColumn='RiskScoreID'/>
+                    <ForeignKeyLink dimension='Assessed Need' foreignKeyColumn='AssessedNeedID'/>
+                    <ForeignKeyLink dimension='Race' foreignKeyColumn="ArresteeRaceID"/>
+                    <ForeignKeyLink dimension='Sex' foreignKeyColumn="ArresteeSexID"/>
+                    <ForeignKeyLink dimension='Age' foreignKeyColumn="ArresteeAgeID"/>
+                    <ForeignKeyLink dimension='County' foreignKeyColumn="CountyID"/>
+                    <ForeignKeyLink dimension='Region' foreignKeyColumn='RegionID'/>
+                    <ForeignKeyLink dimension='Date' foreignKeyColumn='IntakeDateID'/>
+	             </DimensionLinks>
+          </MeasureGroup>
+    	</MeasureGroups>
+    </Cube>
+    
+    <Cube name="PretrialServicesUtilized" caption="Pretrial Services Utilized">
+    	<Dimensions>
+    		<Dimension source='Risk Score'/>
+    		<Dimension source="Pretrial Service"/>
+    		<Dimension source='Race'/>
+    		<Dimension source='Sex'/>
+    		<Dimension source='Age'/>
+    		<Dimension source='County'/>
+    		<Dimension source='Region'/>
+    		<Dimension source='Date'/>
+    	</Dimensions>
+    	<MeasureGroups>
+    		<MeasureGroup table="PretrialServicesUtilized">
+	    		<Measures>
+					<Measure name="PretrialServiceParticipantCount" column="PretrialServiceParticipationID" datatype="Integer" aggregator="distinct-count" caption="Pretrial Service Participant Count" visible="true"/>
+	    		</Measures>
+	    		 <DimensionLinks>
+                    <ForeignKeyLink dimension='Risk Score' foreignKeyColumn='RiskScoreID'/>
+                    <ForeignKeyLink dimension='Pretrial Service' foreignKeyColumn='PretrialServiceID'/>
+                    <ForeignKeyLink dimension='Race' foreignKeyColumn="ArresteeRaceID"/>
+                    <ForeignKeyLink dimension='Sex' foreignKeyColumn="ArresteeSexID"/>
+                    <ForeignKeyLink dimension='Age' foreignKeyColumn="ArresteeAgeID"/>
+                    <ForeignKeyLink dimension='County' foreignKeyColumn="CountyID"/>
+                    <ForeignKeyLink dimension='Region' foreignKeyColumn='RegionID'/>
+                    <ForeignKeyLink dimension='Date' foreignKeyColumn='IntakeDateID'/>
+	             </DimensionLinks>
+          </MeasureGroup>
+    	</MeasureGroups>
+    </Cube>
+    
+<!-- Remaining Cubes -->    
+<!--     <Cube name='CrimeCount' /> -->
+<!--     <Cube name='IncidentOpt' /> -->
+<!--     <Cube name='IncidentTypeInvolvement_Opt' /> -->
+<!--     <Cube name='IncidentType2Involvement_Opt' /> -->
 </Schema>
 
