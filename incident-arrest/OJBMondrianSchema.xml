@@ -625,6 +625,10 @@
         <Dimensions>
             <Dimension source='County'/>
             <Dimension source='Year'/>
+            <Dimension source='Race'/>
+            <Dimension source='Sex'/>
+            <!-- TODO:Add age range -->
+<!--             <Dimension source='Age Range'/> -->
         </Dimensions>
 
         <MeasureGroups>
@@ -635,11 +639,55 @@
                 <DimensionLinks>
                     <ForeignKeyLink dimension='County' foreignKeyColumn='CountyID'/>
                     <ForeignKeyLink dimension='Year' foreignKeyColumn='Year'/>
+                    <ForeignKeyLink dimension='Race' foreignKeyColumn='PersonRaceID'/>
+                    <ForeignKeyLink dimension='Sex' foreignKeyColumn='PersonSexID'/>
+<!--                     <ForeignKeyLink dimension='Age Range' foreignKeyColumn='PersonAgeRangeID'/> -->
                 </DimensionLinks>
             </MeasureGroup>
         </MeasureGroups>
 
     </Cube>
+    
+<!--     <Cube name='CrimeCount' caption='Crime Count'> -->
+<!--     	<Dimensions> -->
+<!--             <Dimension source='County'/> -->
+<!--             <Dimension source='Year'/> -->
+<!--             <Dimension source='Race'/> -->
+<!--             <Dimension source='Sex'/> -->
+<!--             <Dimension source='Age Range'/> -->
+<!--             <Dimension source='Drug'/> -->
+<!--             <Dimension source='Offense Type'/> -->
+<!--         </Dimensions> -->
+<!--     </Cube> -->
 	
+	
+	 <Cube name='Incident' >
+
+        <Dimensions>
+            <Dimension source='Town'/>
+            <Dimension source='County'/>
+            <Dimension source='Agency'/>
+            <Dimension source='Date'/>
+            <Dimension source='Time Of Day'/>
+            <Dimension source='Reporting System'/>
+        </Dimensions>
+
+        <MeasureGroups>
+            <MeasureGroup table='Incident'>
+                <Measures>
+                	<Measure name="IncidentCount" column="IncidentID" datatype="Integer" aggregator="distinct-count" caption="Incident Count" visible="true"/>     
+                </Measures>
+                <DimensionLinks>
+                    <ForeignKeyLink dimension='Town' foreignKeyColumn='TownID'/>
+                    <ForeignKeyLink dimension='County' foreignKeyColumn='CountyID'/>
+                    <ForeignKeyLink dimension='Agency' foreignKeyColumn='ReportingAgencyID'/>
+                    <ForeignKeyLink dimension='Date' foreignKeyColumn='DateID'/>
+                    <ForeignKeyLink dimension='Time Of Day' foreignKeyColumn='TimeID'/>
+                    <ForeignKeyLink dimension='Reporting System' foreignKeyColumn='ReportingSystemID'/>
+                </DimensionLinks>
+            </MeasureGroup>
+        </MeasureGroups>
+
+    </Cube>
 </Schema>
 
