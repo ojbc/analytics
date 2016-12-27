@@ -645,8 +645,7 @@
         <MeasureGroups>
             <MeasureGroup table='Population'>
                 <Measures>
-                	<!-- TODO: this was a sum, but that didn't seem right.  Discuss with Scott -->
-                    <Measure name='PopulationCount' column='PopulationCount' aggregator='distinct-count' datatype="Integer"/>
+                    <Measure name='PopulationCount' column='PopulationCount' aggregator='sum' datatype="Integer"/>
                 </Measures>
                 <DimensionLinks>
                     <ForeignKeyLink dimension='County' foreignKeyColumn='CountyID'/>
