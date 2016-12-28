@@ -700,6 +700,28 @@
         </MeasureGroups>
 
     </Cube>
+    <Cube name='Incident_Optimized' caption='Incident Optimized' visible='false'>
+   	 <Dimensions>
+            <Dimension source='Town'/>
+            <Dimension source='Agency'/>
+            <Dimension source='Date'/>
+            <Dimension source='Time Of Day'/>
+        </Dimensions>
+
+        <MeasureGroups>
+            <MeasureGroup table='IncidentOptHour' name="Incident-Optimized">
+                <Measures>
+                	<Measure name="IncidentCount" column="IncidentCount" datatype="Integer" aggregator="sum" caption="Incident Count" visible="true"/>     
+                </Measures>
+                <DimensionLinks>
+                    <ForeignKeyLink dimension='Town' foreignKeyColumn='TownID'/>
+                    <ForeignKeyLink dimension='Agency' foreignKeyColumn='ReportingAgencyID'/>
+                    <ForeignKeyLink dimension='Date' foreignKeyColumn='DateID'/>
+                    <ForeignKeyLink dimension='Time Of Day' foreignKeyColumn='HourTimeID'/>
+                </DimensionLinks>
+            </MeasureGroup>
+        </MeasureGroups>
+    </Cube>
     <Cube name="IncidentTypeInvolvement" caption="Incident Type Involvement">
     	<Dimensions>
     		<Dimension source='Town'/>
@@ -724,6 +746,30 @@
     	</MeasureGroups>
     </Cube>
     
+    <Cube name="IncidentTypeInvolvement_Optimized" caption="Incident Type Involvement Optimized" visible="false">
+    	<Dimensions>
+    		<Dimension source='Town'/>
+    		<Dimension source='Agency'/>
+    		<Dimension source='Incident Type'/>
+    		<Dimension source='Date'/>
+    		<Dimension source='Time Of Day'/>
+    	</Dimensions>
+    	<MeasureGroups>
+    		<MeasureGroup table="IncidentOptHourType">
+	    		<Measures>
+	    		    <Measure name="IncidentCount" column="IncidentCount" datatype="Integer" aggregator="sum" caption="Incident Count" visible="true"/>
+	    		</Measures>
+	    		 <DimensionLinks>
+                    <ForeignKeyLink dimension='Town' foreignKeyColumn='TownID'/>
+                    <ForeignKeyLink dimension='Agency' foreignKeyColumn='ReportingAgencyID'/>
+                    <ForeignKeyLink dimension='Incident Type' foreignKeyColumn="IncidentTypeID"/>
+                    <ForeignKeyLink dimension='Date' foreignKeyColumn='DateID'/>
+                    <ForeignKeyLink dimension='Time Of Day' foreignKeyColumn='HourTimeID'/>
+	             </DimensionLinks>
+          </MeasureGroup>
+    	</MeasureGroups>
+    </Cube>
+    
      <Cube name="IncidentType2Involvement" caption="Original Incident Type Involvement">
     	<Dimensions>
     		<Dimension source='Town'/>
@@ -743,6 +789,30 @@
                     <ForeignKeyLink dimension='Original Incident Type' foreignKeyColumn="IncidentTypeID"/>
                     <ForeignKeyLink dimension='Date' foreignKeyColumn='DateID'/>
                     <ForeignKeyLink dimension='Time Of Day' foreignKeyColumn='TimeID'/>
+	             </DimensionLinks>
+          </MeasureGroup>
+    	</MeasureGroups>
+    </Cube>
+    
+    <Cube name="IncidentType2Involvement_Modified" caption="Original Incident Type Involvement Optimized" visible="false">
+    	<Dimensions>
+    		<Dimension source='Town'/>
+    		<Dimension source='Agency'/>
+    		<Dimension source='Original Incident Type'/>
+    		<Dimension source='Date'/>
+    		<Dimension source='Time Of Day'/>
+    	</Dimensions>
+    	<MeasureGroups>
+    		<MeasureGroup table="IncidentOptHourType2">
+	    		<Measures>
+	    		    <Measure name="IncidentCount" column="IncidentCount" datatype="Integer" aggregator="sum" caption="Incident Count" visible="true"/>
+	    		</Measures>
+	    		 <DimensionLinks>
+                    <ForeignKeyLink dimension='Town' foreignKeyColumn='TownID'/>
+                    <ForeignKeyLink dimension='Agency' foreignKeyColumn='ReportingAgencyID'/>
+                    <ForeignKeyLink dimension='Original Incident Type' foreignKeyColumn="IncidentTypeID"/>
+                    <ForeignKeyLink dimension='Date' foreignKeyColumn='DateID'/>
+                    <ForeignKeyLink dimension='Time Of Day' foreignKeyColumn='HourTimeID'/>
 	             </DimensionLinks>
           </MeasureGroup>
     	</MeasureGroups>
@@ -840,8 +910,6 @@
     
 <!-- Remaining Cubes -->    
 <!--     <Cube name='CrimeCount' /> -->
-<!--     <Cube name='IncidentOpt' /> -->
-<!--     <Cube name='IncidentTypeInvolvement_Opt' /> -->
-<!--     <Cube name='IncidentType2Involvement_Opt' /> -->
+
 </Schema>
 
