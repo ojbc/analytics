@@ -190,7 +190,7 @@
 	<Dimension name='County' table='County' key='CountyID'>
         <Attributes>
             <Attribute name='CountyID' keyColumn='CountyID' hasHierarchy='false'/>
-            <Attribute name='CountyName' keyColumn='CountyName' hasHierarchy='false'/>
+            <Attribute name='CountyName' keyColumn='CountyName' hasHierarchy='false' caption="County Name"/>
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Counties' allMemberName='All Counties'>
@@ -250,7 +250,7 @@
 	<Dimension name="Race" table="PersonRace" key="PersonRaceID">
         <Attributes>
             <Attribute name='PersonRaceID' keyColumn='PersonRaceID' hasHierarchy='false'/>
-            <Attribute name='PersonRaceDescription' keyColumn='PersonRaceDescription' hasHierarchy='false'/>
+            <Attribute name='PersonRaceDescription' keyColumn='PersonRaceDescription' hasHierarchy='false' caption="Person Race"/>
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Race' allMemberName='All Races'>
@@ -339,7 +339,7 @@
 	<Dimension name="Sex" table="PersonSex" key="PersonSexID">
         <Attributes>
             <Attribute name='PersonSexID' keyColumn='PersonSexID' hasHierarchy='false'/>
-            <Attribute name='PersonSexDescription' keyColumn='PersonSexDescription' hasHierarchy='false'/>
+            <Attribute name='PersonSexDescription' keyColumn='PersonSexDescription' hasHierarchy='false' caption="Person Sex"/>
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Sex' allMemberName='All Sexes'>
@@ -632,45 +632,8 @@
 		</CalculatedMembers>
 	</Cube>
 
-    <Cube name='Population' >
 
-        <Dimensions>
-            <Dimension source='County'/>
-            <Dimension source='Year'/>
-            <Dimension source='Race'/>
-            <Dimension source='Sex'/>
-            <Dimension source='Age Range'/>
-        </Dimensions>
-
-        <MeasureGroups>
-            <MeasureGroup table='Population'>
-                <Measures>
-                    <Measure name='PopulationCount' column='PopulationCount' aggregator='sum' datatype="Integer"/>
-                </Measures>
-                <DimensionLinks>
-                    <ForeignKeyLink dimension='County' foreignKeyColumn='CountyID'/>
-                    <ForeignKeyLink dimension='Year' foreignKeyColumn='Year'/>
-                    <ForeignKeyLink dimension='Race' foreignKeyColumn='PersonRaceID'/>
-                    <ForeignKeyLink dimension='Sex' foreignKeyColumn='PersonSexID'/>
-                    <ForeignKeyLink dimension='Age Range' foreignKeyColumn='PersonAgeRangeID'/>
-                </DimensionLinks>
-            </MeasureGroup>
-        </MeasureGroups>
-
-    </Cube>
     
-<!--     <Cube name='CrimeCount' caption='Crime Count'> -->
-<!--     	<Dimensions> -->
-<!--             <Dimension source='County'/> -->
-<!--             <Dimension source='Year'/> -->
-<!--             <Dimension source='Race'/> -->
-<!--             <Dimension source='Sex'/> -->
-<!--             <Dimension source='Age Range'/> -->
-<!--             <Dimension source='Drug'/> -->
-<!--             <Dimension source='Offense Type'/> -->
-<!--         </Dimensions> -->
-<!--     </Cube> -->
-	
 	
 	 <Cube name='Incident' >
 
@@ -908,8 +871,54 @@
     	</MeasureGroups>
     </Cube>
     
-<!-- Remaining Cubes -->    
-<!--     <Cube name='CrimeCount' /> -->
 
+    
+    <Cube name="CrimeRate" caption="Crime Rate" visible="true">
+    	<Dimensions>
+    		<Dimension source="Year"/>
+    		<Dimension source="County"/>
+    		<Dimension source="Race"/>
+    		<Dimension source="Sex"/>
+    		<Dimension source="Age Range"/>
+    		<!-- TODO: figure out why ignoreUnrelatedDimensions doesn't work -->
+<!--     		<Dimension source="Drug"/> -->
+<!--     		<Dimension source="Offense Type"/> -->
+    	</Dimensions>
+    	 <MeasureGroups>
+            <MeasureGroup table='Population' ignoreUnrelatedDimensions="true">
+                <Measures>
+                    <Measure name='PopulationCount' column='PopulationCount' aggregator='sum' datatype="Integer" caption="Population Count"/>
+                </Measures>
+                <DimensionLinks>
+                    <ForeignKeyLink dimension='County' foreignKeyColumn='CountyID'/>
+                    <ForeignKeyLink dimension='Year' foreignKeyColumn='Year'/>
+                    <ForeignKeyLink dimension='Race' foreignKeyColumn='PersonRaceID'/>
+                    <ForeignKeyLink dimension='Sex' foreignKeyColumn='PersonSexID'/>
+                    <ForeignKeyLink dimension='Age Range' foreignKeyColumn='PersonAgeRangeID'/>
+                </DimensionLinks>
+            </MeasureGroup>
+            <MeasureGroup table="CrimeCount" ignoreUnrelatedDimensions="true">
+    			<Measures>
+    				<Measure name="ArrestCount" column="ArrestCount" datatype="Integer" aggregator="sum" caption="Arrest Count" visible="true"/>
+    			</Measures>
+    			<DimensionLinks>
+                    <ForeignKeyLink dimension="Year" foreignKeyColumn="Year"/>
+                     <ForeignKeyLink dimension="County" foreignKeyColumn="CountyID"/>
+                     <ForeignKeyLink dimension="Race" foreignKeyColumn="ArresteeRaceID"/>
+                     <ForeignKeyLink dimension="Sex" foreignKeyColumn="ArresteeSexID"/>
+                     <ForeignKeyLink dimension="Age Range" foreignKeyColumn="PersonAgeRangeID"/>
+<!--                      <ForeignKeyLink dimension="Drug" foreignKeyColumn="InvolvedDrugID"/> -->
+<!--                      <ForeignKeyLink dimension="Offense Type" foreignKeyColumn="ArrestOffenseTypeID"/> -->
+                </DimensionLinks>
+    		</MeasureGroup>
+        </MeasureGroups>
+        <CalculatedMembers>
+        	<CalculatedMember name="Crime Rate Per 1000" dimension="Measures">
+				<Formula>(1000 * ValidMeasure([Measures].[ArrestCount])) / ValidMeasure([Measures].[PopulationCount])</Formula>
+				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.00"/>
+			</CalculatedMember>
+        </CalculatedMembers>
+    </Cube>
+    
 </Schema>
 
