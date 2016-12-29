@@ -880,14 +880,13 @@
     		<Dimension source="Race"/>
     		<Dimension source="Sex"/>
     		<Dimension source="Age Range"/>
-    		<!-- TODO: figure out why ignoreUnrelatedDimensions doesn't work -->
-<!--     		<Dimension source="Drug"/> -->
-<!--     		<Dimension source="Offense Type"/> -->
+    		<Dimension source="Drug"/>
+    		<Dimension source="Offense Type"/>
     	</Dimensions>
     	 <MeasureGroups>
-            <MeasureGroup table='Population' ignoreUnrelatedDimensions="true">
+            <MeasureGroup table='Population'>
                 <Measures>
-                    <Measure name='PopulationCount' column='PopulationCount' aggregator='sum' datatype="Integer" caption="Population Count"/>
+                    <Measure name='PopulationCount' column='PopulationCount' aggregator='sum' datatype="Integer" caption="Population Count" />
                 </Measures>
                 <DimensionLinks>
                     <ForeignKeyLink dimension='County' foreignKeyColumn='CountyID'/>
@@ -895,9 +894,11 @@
                     <ForeignKeyLink dimension='Race' foreignKeyColumn='PersonRaceID'/>
                     <ForeignKeyLink dimension='Sex' foreignKeyColumn='PersonSexID'/>
                     <ForeignKeyLink dimension='Age Range' foreignKeyColumn='PersonAgeRangeID'/>
+                    <NoLink dimension="Drug"/>
+                    <NoLink dimension="Offense Type"/>
                 </DimensionLinks>
             </MeasureGroup>
-            <MeasureGroup table="CrimeCount" ignoreUnrelatedDimensions="true">
+            <MeasureGroup table="CrimeCount">
     			<Measures>
     				<Measure name="ArrestCount" column="ArrestCount" datatype="Integer" aggregator="sum" caption="Arrest Count" visible="true"/>
     			</Measures>
@@ -907,8 +908,8 @@
                      <ForeignKeyLink dimension="Race" foreignKeyColumn="ArresteeRaceID"/>
                      <ForeignKeyLink dimension="Sex" foreignKeyColumn="ArresteeSexID"/>
                      <ForeignKeyLink dimension="Age Range" foreignKeyColumn="PersonAgeRangeID"/>
-<!--                      <ForeignKeyLink dimension="Drug" foreignKeyColumn="InvolvedDrugID"/> -->
-<!--                      <ForeignKeyLink dimension="Offense Type" foreignKeyColumn="ArrestOffenseTypeID"/> -->
+                     <ForeignKeyLink dimension="Drug" foreignKeyColumn="InvolvedDrugID"/>
+                     <ForeignKeyLink dimension="Offense Type" foreignKeyColumn="ArrestOffenseTypeID"/>
                 </DimensionLinks>
     		</MeasureGroup>
         </MeasureGroups>
@@ -918,7 +919,6 @@
 				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.00"/>
 			</CalculatedMember>
         </CalculatedMembers>
-    </Cube>
-    
+    </Cube>   
 </Schema>
 
