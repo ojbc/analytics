@@ -127,11 +127,11 @@
 	
 	<Dimension name="Age Range" table="PersonAgeRangTypee" key="PersonAgeRangeTypeID">
 		<Attributes>
-			<Attribute keyColumn="PersonAgeRangeTypeID" hasHierarchy='false' name="PersonAgeRangeTypeID"/>
+			<Attribute keyColumn="PersonAgeRangeTypeID" hasHierarchy="false" name="PersonAgeRangeTypeID"/>
 			<Attribute keyColumn="AgeRange" hasHierarchy='false' name="PersonAgeRange"/>
 		</Attributes>
 		<Hierarchies>
-            <Hierarchy name='Age Range' allMemberName='All Age Ranges'>
+            <Hierarchy name="Age Range" allMemberName="All Age Ranges">
                 <Level attribute='PersonAgeRange' caption="Age Range"/>
             </Hierarchy>
         </Hierarchies>
@@ -161,27 +161,18 @@
 		</Hierarchies>
 	</Dimension>
 	
-	<Dimension visible="true" name="ChargeClass" table="ChargeClassType" key="ChargeClassTypeID">
+	<Dimension visible="true" name="ChargeClass" table="ChargeClassType" key="ChargeClassTypeID" caption="Charge Class">
 		<Attributes>
 			<Attribute name="ChargeClassTypeID" keyColumn="ChargeClassTypeID" hasHierarchy="false"/>
 			<Attribute name="ChargeClassTypeDescription" keyColumn="ChargeClassTypeDescription" hasHierarchy="false" caption="Charge Class"/>
-			<Attribute name="ChargeClassTypeCategory" keyColumn="ChargeClassTypeCategory" hasHierarchy="false" caption="Charge Category"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="ChargeClass" visible="true" caption="Ethnicity" allMemberName="All Ethnicities" allMemberCaption="All Ethnicities">	
-				<Level attribute="ChargeClassTypeDescription"/>
-				<Level attribute="ChargeClassTypeCategory"/>
+			<Hierarchy name="ChargeClass" visible="true" caption="Charge Class" allMemberName="All Charge Classes" allMemberCaption="All Charge Classes">	
+				<Level attribute="ChargeClassTypeDescription" caption="Charge Class"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="ChargeClass"> -->
-<!-- 		<Hierarchy name="ChargeClass" visible="true" hasAll="true" primaryKey="ChargeClassTypeID" caption="Charge Class" allMemberCaption="All Classes"> -->
-<!-- 			<Level name="Charge Category" visible="true" table="ChargeClassType" column="ChargeClassTypeCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 			<Level name="Charge Class" visible="true" table="ChargeClassType" column="ChargeClassTypeDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
-	
+		
 <!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Charge"> -->
 <!-- 		<Hierarchy name="Charge" visible="true" hasAll="true" primaryKey="ChargeTypeID" caption="Charge"> -->
 <!-- 			<Level name="ChargeType" visible="true" table="ChargeType" column="ChargeTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
@@ -377,6 +368,8 @@
 			<Dimension source="Race"/>
 			<Dimension source="Sex"/>
 			<Dimension source="Ethnicity"/>
+			<!-- TODO: update ER Diagram to remove charge class category -->
+			<Dimension source="ChargeClass"/>
 			<!-- This is Mondrian 4's way of creating a degenerate dimension -->
 			<Dimension visible="true" name="Episode Status">
 				<Attributes>
@@ -400,6 +393,7 @@
 	    			<ForeignKeyLink dimension="Race" foreignKeyColumn="PersonRaceTypeID"/>
 	    			<ForeignKeyLink dimension="Sex" foreignKeyColumn="PersonSexTypeID"/>
 	    			<ForeignKeyLink dimension="Ethnicity" foreignKeyColumn="PersonEthnicityTypeID"/>
+	    			<ForeignKeyLink dimension="ChargeClass" foreignKeyColumn="ChargeClassTypeID"/>
 	    			<FactLink dimension="Episode Status"/>
 	    		</DimensionLinks>
 	    	</MeasureGroup>
@@ -422,7 +416,6 @@
 <!-- 		<DimensionUsage source="CaseStatus" name="Case Status" visible="true" foreignKey="CaseStatusTypeID" highCardinality="false"/> -->
  		<!--  Charge Dimensions-->
 <!-- 		<DimensionUsage source="Charge" name="Charge Type" visible="true" foreignKey="ChargeTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="ChargeClass" name="Charge Class" visible="true" foreignKey="ChargeClassTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="ChargeDisposition" name="Charge Disposition" visible="true" foreignKey="ChargeDispositionTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="Arrest Agency" name="Arrest Agency" visible="true" foreignKey="ArrestAgencyID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="Jurisdiction" name="Charge Jurisdiction" visible="true" foreignKey="JurisdictionTypeID" highCardinality="false"/> -->
