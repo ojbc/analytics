@@ -37,7 +37,6 @@
 		<Table name="TreatmentStatusType"/>
 		<Table name="TreatmentProviderType"/>
 		<Table name="WorkReleaseStatusType"/>
-		
 		<Table name="FullBookingView"/>
 	</PhysicalSchema>	
 	<Dimension visible="true" name="Date" table="Date" key="DateID" type="TIME">
@@ -91,17 +90,16 @@
                 <Level attribute="Day of Week"/>
             </Hierarchy>
         </Hierarchies>
-
 	</Dimension>
 
 	<Dimension visible="true" name="Race" table="PersonRaceType" key="PersonRaceTypeID">
 		<Attributes>
-			<Attribute name="PersonRaceTypeID" keyColumn="PersonRace" hasHierarchy="false"/>
+			<Attribute name="PersonRaceTypeID" keyColumn="PersonRaceTypeID" hasHierarchy="false"/>
 			<Attribute name="PersonRaceTypeDescription" keyColumn="PersonRaceTypeDescription" hasHierarchy="false" caption="Person Race"/>
 		</Attributes>
 		<Hierarchies>
 			<Hierarchy name="Race" visible="true" caption="Race" allMemberName="All Races" allMemberCaption="All Races">	
-				<Level attribute="PersonRaceTypeDescription"/>
+				<Level attribute="PersonRaceTypeDescription" caption="Person Race"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>	
@@ -127,31 +125,55 @@
         </Hierarchies>
 	</Dimension>
 	
-
-<!-- 	<Dimension name="Age Range" table="PersonAgeRangTypee" key="PersonAgeRangeTypeID"> -->
-<!-- 		<Attributes> -->
-<!-- 			<Attribute keyColumn="PersonAgeRangeTypeID" hasHierarchy='false' name="PersonAgeRangeTypeID"/> -->
-<!-- 			<Attribute keyColumn="AgeRange" hasHierarchy='false' name="PersonAgeRange"/> -->
-<!-- 		</Attributes> -->
-<!-- 		<Hierarchies> -->
-<!--             <Hierarchy name='Age Range' allMemberName='All Age Ranges'> -->
-<!--                 <Level attribute='PersonAgeRange' caption="Age Range"/> -->
-<!--             </Hierarchy> -->
-<!--         </Hierarchies> -->
-<!-- 	</Dimension> -->
+	<Dimension name="Age Range" table="PersonAgeRangTypee" key="PersonAgeRangeTypeID">
+		<Attributes>
+			<Attribute keyColumn="PersonAgeRangeTypeID" hasHierarchy='false' name="PersonAgeRangeTypeID"/>
+			<Attribute keyColumn="AgeRange" hasHierarchy='false' name="PersonAgeRange"/>
+		</Attributes>
+		<Hierarchies>
+            <Hierarchy name='Age Range' allMemberName='All Age Ranges'>
+                <Level attribute='PersonAgeRange' caption="Age Range"/>
+            </Hierarchy>
+        </Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Sex"> -->
-<!-- 		<Hierarchy name="Sex" visible="true" hasAll="true" primaryKey="PersonSexTypeID" caption="Sex" allMemberCaption="All Sexes"> -->
-			
-<!-- 			<Level name="Sex" visible="true" table="PersonSexType" column="PersonSexTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="Sex" table="PersonSexType" key="PersonSexTypeID">
+		<Attributes>
+			<Attribute name="PersonSexTypeID" keyColumn="PersonSexTypeID" hasHierarchy="false"/>
+			<Attribute name="PersonSexTypeDescription" keyColumn="PersonSexTypeDescription" hasHierarchy="false" caption="Person Sex"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Sex" visible="true" caption="Sex" allMemberName="All Sexes" allMemberCaption="All Sexes">	
+				<Level attribute="PersonSexTypeDescription" caption="Person Sex"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Ethnicity"> -->
-<!-- 		<Hierarchy name="Ethnicity" visible="true" hasAll="true" primaryKey="PersonEthnicityTypeID" caption="Ethnicity" allMemberCaption="All Ethnicities"> -->
-<!-- 			<Level name="Ethnicity" visible="true" table="PersonEthnicityType" column="PersonEthnicityTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="Ethnicity" table="PersonEthnicityType" key="PersonEthnicityTypeID">
+		<Attributes>
+			<Attribute name="PersonEthnicityTypeID" keyColumn="PersonEthnicityTypeID" hasHierarchy="false"/>
+			<Attribute name="PersonEthnicityTypeDescription" keyColumn="PersonEthnicityTypeDescription" hasHierarchy="false" caption="Person Ethnicity"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Ethnicity" visible="true" caption="Ethnicity" allMemberName="All Ethnicities" allMemberCaption="All Ethnicities">	
+				<Level attribute="PersonEthnicityTypeDescription" caption="Person Ethnicity"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+	
+	<Dimension visible="true" name="ChargeClass" table="ChargeClassType" key="ChargeClassTypeID">
+		<Attributes>
+			<Attribute name="ChargeClassTypeID" keyColumn="ChargeClassTypeID" hasHierarchy="false"/>
+			<Attribute name="ChargeClassTypeDescription" keyColumn="ChargeClassTypeDescription" hasHierarchy="false" caption="Charge Class"/>
+			<Attribute name="ChargeClassTypeCategory" keyColumn="ChargeClassTypeCategory" hasHierarchy="false" caption="Charge Category"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="ChargeClass" visible="true" caption="Ethnicity" allMemberName="All Ethnicities" allMemberCaption="All Ethnicities">	
+				<Level attribute="ChargeClassTypeDescription"/>
+				<Level attribute="ChargeClassTypeCategory"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
 <!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="ChargeClass"> -->
 <!-- 		<Hierarchy name="ChargeClass" visible="true" hasAll="true" primaryKey="ChargeClassTypeID" caption="Charge Class" allMemberCaption="All Classes"> -->
@@ -345,13 +367,27 @@
 <!-- 		</Hierarchy> -->
 <!-- 	</Dimension> -->
 	
-
+		
 
 	
 	<Cube name="Jail-Booking-Analytics" visible="true">
 		<Dimensions>
 			<Dimension source="Age"/>
 			<Dimension source="Date" caption="Episode Start Date"/>
+			<Dimension source="Race"/>
+			<Dimension source="Sex"/>
+			<Dimension source="Ethnicity"/>
+			<!-- This is Mondrian 4's way of creating a degenerate dimension -->
+			<Dimension visible="true" name="Episode Status">
+				<Attributes>
+					<Attribute name="Episode Status" keyColumn="IsActiveDimension" hasHierarchy="false" table="FullBookingView"/>
+				</Attributes>
+				<Hierarchies>
+					<Hierarchy name="Episode Status"  visible="true" hasAll="true"  caption="Episode Status" allMemberCaption="All Statuses">
+						<Level attribute="Episode Status"/>
+					</Hierarchy>
+				</Hierarchies>
+			</Dimension>
 		</Dimensions>
 		<MeasureGroups>
     		<MeasureGroup table="FullBookingView" name="Jail Booking">
@@ -361,21 +397,16 @@
 	    		<DimensionLinks>
 	    			<ForeignKeyLink dimension="Age" foreignKeyColumn="PersonAgeTypeID"/>
 	    			<ForeignKeyLink dimension="Date" foreignKeyColumn="EpisodeStartDateID"/>
+	    			<ForeignKeyLink dimension="Race" foreignKeyColumn="PersonRaceTypeID"/>
+	    			<ForeignKeyLink dimension="Sex" foreignKeyColumn="PersonSexTypeID"/>
+	    			<ForeignKeyLink dimension="Ethnicity" foreignKeyColumn="PersonEthnicityTypeID"/>
+	    			<FactLink dimension="Episode Status"/>
 	    		</DimensionLinks>
 	    	</MeasureGroup>
 	    </MeasureGroups>
 	  </Cube>
 		
-<!-- 		<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Episode Status"> -->
-<!-- 			<Hierarchy name="Episode Status"  visible="true" hasAll="true"  caption="Episode Status" allMemberCaption="All Statuses"> -->
-<!-- 				<Level name="Episode Status" visible="true" column="IsActiveDimension" uniqueMembers="true"  hideMemberIf="Never"/> -->
-<!-- 			</Hierarchy> -->
-<!-- 		</Dimension> -->
-		<!-- Person Dimensions -->
-<!-- 		<DimensionUsage source="Age" name="Age" visible="true" foreignKey="PersonAgeTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="Race" name="Race" visible="true" foreignKey="PersonRaceTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="Sex" name="Sex" visible="true" foreignKey="PersonSexTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="Ethnicity" name="Ethnicity" visible="true" foreignKey="PersonEthnicityTypeID" highCardinality="false"/> -->
+		
 <!-- 		<DimensionUsage source="EducationLevel" name="Education Level" visible="true" foreignKey="EducationLevelTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="Occupation" name="Occupation" visible="true" foreignKey="OccupationTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="Language" name="Language" visible="true" foreignKey="LanguageTypeID" highCardinality="false"/> -->
@@ -389,7 +420,6 @@
 <!-- 		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="SupervisionUnit" name="Supervision Unit" visible="true" foreignKey="SupervisionUnitTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="CaseStatus" name="Case Status" visible="true" foreignKey="CaseStatusTypeID" highCardinality="false"/> -->
-<!--  		<DimensionUsage source="Date" name="Booking Date" visible="true" foreignKey="EpisodeStartDateID" highCardinality="false"/> -->
  		<!--  Charge Dimensions-->
 <!-- 		<DimensionUsage source="Charge" name="Charge Type" visible="true" foreignKey="ChargeTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="ChargeClass" name="Charge Class" visible="true" foreignKey="ChargeClassTypeID" highCardinality="false"/> -->
