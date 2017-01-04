@@ -242,13 +242,13 @@
 		</Hierarchies>
 	</Dimension>
 	
-	<Dimension visible="true" name="Jurisdiction" table="JurisdictionType" key="JurisdictionTypeID" caption="Jurisdiction">
+	<Dimension visible="true" name="Jurisdiction" table="JurisdictionType" key="JurisdictionTypeID" caption="Charge Jurisdiction">
 		<Attributes>
 			<Attribute name="JurisdictionTypeID" keyColumn="JurisdictionTypeID" hasHierarchy="false"/>
 			<Attribute name="JurisdictionCategory" keyColumn="JurisdictionCategory" hasHierarchy="false" caption="Jurisdiction"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="JurisdictionType" visible="true" caption="Jurisdiction" allMemberName="All Jurisdictions" allMemberCaption="All Jurisdictions">	
+			<Hierarchy name="JurisdictionType" visible="true" caption="Charge Jurisdiction" allMemberName="All Jurisdictions" allMemberCaption="All Jurisdictions">	
 				<Level attribute="JurisdictionCategory" caption="Jurisdiction"/>
 			</Hierarchy>
 		</Hierarchies>
@@ -410,61 +410,106 @@
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-				
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="AssessmentCategory"> -->
-<!-- 		<Hierarchy name="AssessmentCategory"  visible="true" hasAll="true" primaryKey="AssessmentCategoryTypeID" caption="Assessment Category" allMemberCaption="All Categories"> -->
-<!-- 			<Level name="Assessment Category" visible="true" table="AssessmentCategoryType" column="AssessmentCategoryTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Medication"> -->
-<!-- 		<Hierarchy name="Medication"  visible="true" hasAll="true" primaryKey="MedicationTypeID" caption="Medication"> -->
-<!-- 			<Level name="Medication" visible="true" table="MedicationType" column="MedicationTypeCategory" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="AssessmentCategory" table="AssessmentCategoryType" key="AssessmentCategoryTypeID" caption="Assessment Category">
+		<Attributes>
+			<Attribute name="AssessmentCategoryTypeID" keyColumn="AssessmentCategoryTypeID" hasHierarchy="false"/>
+			<Attribute name="AssessmentCategoryTypeDescription" keyColumn="AssessmentCategoryTypeDescription" hasHierarchy="false" caption="Assessment Category"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="AssessmentCategory" visible="true" caption="Assessment Category" allMemberName="All Assessment Categories" allMemberCaption="All Assessment Categories">	
+				<Level attribute="AssessmentCategoryTypeDescription" caption="Assessment Category"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension> 
+	<Dimension visible="true" name="Medication" table="MedicationType" key="MedicationTypeID" caption="Prescribed Medication">
+		<Attributes>
+			<Attribute name="MedicationTypeID" keyColumn="MedicationTypeID" hasHierarchy="false"/>
+			<Attribute name="MedicationTypeDescription" keyColumn="MedicationTypeDescription" hasHierarchy="false" caption="Medication"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Medication" visible="true" caption="Prescribed Medication" allMemberName="All Medications" allMemberCaption="All Medications">	
+				<Level attribute="MedicationTypeDescription" caption="Medication"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+	<Dimension visible="true" name="Occupation" table="OccupationType" key="OccupationTypeID" caption="Occupation">
+		<Attributes>
+			<Attribute name="OccupationTypeID" keyColumn="OccupationTypeID" hasHierarchy="false"/>
+			<Attribute name="OccupationTypeDescription" keyColumn="OccupationTypeDescription" hasHierarchy="false" caption="Occupation"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Occupation" visible="true" caption="Occupation" allMemberName="All Occupations" allMemberCaption="All Occupations">	
+				<Level attribute="OccupationTypeDescription" caption="Occupation"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Occupation"> -->
-<!-- 		<Hierarchy name="Occupation"  visible="true" hasAll="true" primaryKey="OccupationTypeID" caption="Occupation"> -->
-<!-- 			<Level name="Occupation" visible="true" table="OccupationType" column="OccupationTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="MedicaidStatus" table="MedicaidStatusType" key="MedicaidStatusTypeID" caption="Medicaid Status">
+		<Attributes>
+			<Attribute name="MedicaidStatusTypeID" keyColumn="MedicaidStatusTypeID" hasHierarchy="false"/>
+			<Attribute name="MedicaidStatusTypeDescription" keyColumn="MedicaidStatusTypeDescription" hasHierarchy="false" caption="Medicaid Status"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="MedicaidStatus" visible="true" caption="Medicaid Status" allMemberName="All Medicaid Statuses" allMemberCaption="All Medicaid Statuses">	
+				<Level attribute="MedicaidStatusTypeDescription" caption="Medicaid Status"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="MedicaidStatus"> -->
-<!-- 		<Hierarchy name="MedicaidStatus"  visible="true" hasAll="true" primaryKey="MedicaidStatusTypeID" caption="Medicaid Status" allMemberCaption="All Statuses"> -->
-<!-- 			<Level name="MedicaidStatus" visible="true" table="MedicaidStatusType" column="MedicaidStatusTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="BehavioralHealthEvaluationType" table="BehavioralHealthEvaluationType" key="BehavioralHealthEvaluationTypeID" caption="Diagnosis">
+		<Attributes>
+			<Attribute name="BehavioralHealthEvaluationTypeID" keyColumn="BehavioralHealthEvaluationTypeID" hasHierarchy="false"/>
+			<Attribute name="BehavioralHealthEvaluationTypeDescription" keyColumn="BehavioralHealthEvaluationTypeDescription" hasHierarchy="false" caption="Diagnosis"/>
+			<Attribute name="BehavioralHealthEvaluationTypeCategory" keyColumn="BehavioralHealthEvaluationTypeCategory" hasHierarchy="false" caption="Diagnosis Category"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="BehavioralHealthEvaluationType" visible="true" caption="Diagnosis" allMemberName="All Diagnoses" allMemberCaption="All Diagnoses">	
+				<Level attribute="BehavioralHealthEvaluationTypeCategory" caption="Diagnosis Category"/>
+				<Level attribute="BehavioralHealthEvaluationTypeDescription" caption="Diagnosis"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="BehavioralHealthEvaluationType"> -->
-<!-- 		<Hierarchy name="Behavioral Health Evaluation Type"  visible="true" hasAll="true" primaryKey="BehavioralHealthEvaluationTypeID" caption="Diagnosis" allMemberCaption="All Diagnoses"> -->
-<!-- 			<Level name="Diagnosis Category" visible="true" table="BehavioralHealthEvaluationType" column="BehavioralHealthEvaluationTypeCategory" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 			<Level name="Diagnosis" visible="true" table="BehavioralHealthEvaluationType" column="BehavioralHealthEvaluationTypeDescription" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="TreatmentProvider" table="TreatmentProviderType" key="TreatmentProviderTypeID" caption="Treatment Provider">
+		<Attributes>
+			<Attribute name="TreatmentProviderTypeID" keyColumn="TreatmentProviderTypeID" hasHierarchy="false"/>
+			<Attribute name="TreatmentProviderTypeDescription" keyColumn="TreatmentProviderTypeDescription" hasHierarchy="false" caption="Treatment Provider"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="TreatmentProvider" visible="true" caption="Treatment Provider" allMemberName="All Treatment Providers" allMemberCaption="All Treatment Providers">	
+				<Level attribute="TreatmentProviderTypeDescription" caption="Treatment Provider"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="TreatmentProvider"> -->
-<!-- 		<Hierarchy name="Treatment Provider"  visible="true" hasAll="true" primaryKey="TreatmentProviderTypeID" caption="Treatment Provider" allMemberCaption="All Providers"> -->
-<!-- 			<Level name="Treatment Provider" visible="true" table="TreatmentProviderType" column="TreatmentProviderTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="TreatmentStatus" table="TreatmentStatusType" key="TreatmentStatusTypeID" caption="Treatment Status">
+		<Attributes>
+			<Attribute name="TreatmentStatusTypeID" keyColumn="TreatmentStatusTypeID" hasHierarchy="false"/>
+			<Attribute name="TreatmentStatusTypeDescription" keyColumn="TreatmentStatusTypeDescription" hasHierarchy="false" caption="Treatment Status"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="TreatmentStatus" visible="true" caption="Treatment Status" allMemberName="All Treatment Statuses" allMemberCaption="All Treatment Statuses">	
+				<Level attribute="TreatmentStatusTypeDescription" caption="Treatment Status"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+	<Dimension visible="true" name="TreatmentAdmissionReason" table="TreatmentAdmissionReasonType" key="TreatmentAdmissionReasonTypeID" caption="Treatment Admission Reason">
+		<Attributes>
+			<Attribute name="TreatmentAdmissionReasonTypeID" keyColumn="TreatmentAdmissionReasonTypeID" hasHierarchy="false"/>
+			<Attribute name="TreatmentAdmissionReasonTypeDescription" keyColumn="TreatmentAdmissionReasonTypeDescription" hasHierarchy="false" caption="Treatment Admission Reason"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="TreatmentAdmissionReason" visible="true" caption="Treatment Admission Reason" allMemberName="All Treatment Admission Reasons" allMemberCaption="All Treatment Admission Reasons">	
+				<Level attribute="TreatmentAdmissionReasonTypeDescription" caption="Treatment Admission Reason"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="TreatmentAdmissionReason"> -->
-<!-- 		<Hierarchy name="Treatment Admission Reason"  visible="true" hasAll="true" primaryKey="TreatmentAdmissionReasonTypeID" caption="Treatment Admission Reason" allMemberCaption="All Reasons"> -->
-<!-- 			<Level name="Treatment Admission Reason" visible="true" table="TreatmentAdmissionReasonType" column="TreatmentAdmissionReasonTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
-	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="TreatmentStatus"> -->
-<!-- 		<Hierarchy name="Treatment Status"  visible="true" hasAll="true" primaryKey="TreatmentStatusTypeID" caption="Treatment Status" allMemberCaption="All Statuses"> -->
-<!-- 			<Level name="Treatment Status" visible="true" table="TreatmentStatusType" column="TreatmentStatusTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
-	
-
 	<Cube name="Jail-Booking-Analytics" visible="true">
 		<Dimensions>
 			<Dimension source="Age"/>
-			<Dimension source="Date" caption="Episode Start Date"/>
+			<Dimension source="Date" caption="Jail Episode Start Date"/>
 			<Dimension source="Race"/>
 			<Dimension source="Sex"/>
 			<Dimension source="Ethnicity"/>
@@ -487,13 +532,22 @@
 			<Dimension source="EducationLevel"/>
 			<Dimension source="SupervisionUnit"/>
 			<Dimension source="Facility"/>
+			<Dimension source="AssessmentCategory"/>
+			<Dimension source="Medication"/>
+			<Dimension source="Occupation"/>
+			<Dimension source="Population"/>
+			<Dimension source="MedicaidStatus"/>
+			<Dimension source="BehavioralHealthEvaluationType"/>
+			<Dimension source="TreatmentProvider"/>
+			<Dimension source="TreatmentStatus"/>
+			<Dimension source="TreatmentAdmissionReason"/>
 			<!-- This is Mondrian 4's way of creating a degenerate dimension -->
-			<Dimension visible="true" name="Episode Status">
+			<Dimension visible="true" name="Episode Status" caption="Jail Episode Status">
 				<Attributes>
 					<Attribute name="Episode Status" keyColumn="IsActiveDimension" hasHierarchy="false" table="FullBookingView"/>
 				</Attributes>
 				<Hierarchies>
-					<Hierarchy name="Episode Status"  visible="true" hasAll="true"  caption="Episode Status" allMemberCaption="All Statuses">
+					<Hierarchy name="Episode Status"  visible="true" hasAll="true"  caption="Jail Episode Status" allMemberCaption="All Jail Episode Statuses">
 						<Level attribute="Episode Status"/>
 					</Hierarchy>
 				</Hierarchies>
@@ -537,12 +591,21 @@
 	    			<ForeignKeyLink dimension="EducationLevel" foreignKeyColumn="EducationLevelTypeID"/>
 	    			<ForeignKeyLink dimension="SupervisionUnit" foreignKeyColumn="SupervisionUnitTypeID"/>
 	    			<ForeignKeyLink dimension="Facility" foreignKeyColumn="FacilityID"/>
+	    			<ForeignKeyLink dimension="AssessmentCategory" foreignKeyColumn="AssessmentCategoryTypeID"/>
+	    			<ForeignKeyLink dimension="Medication" foreignKeyColumn="MedicationTypeID"/>
+	    			<ForeignKeyLink dimension="Occupation" foreignKeyColumn="OccupationTypeID"/>
+	    			<ForeignKeyLink dimension="Population" foreignKeyColumn="PopulationTypeID"/>
+	    			<ForeignKeyLink dimension="MedicaidStatus" foreignKeyColumn="MedicaidStatusTypeID"/>
+	    			<ForeignKeyLink dimension="BehavioralHealthEvaluationType" foreignKeyColumn="BehavioralHealthEvaluationTypeID"/>
+	    			<ForeignKeyLink dimension="TreatmentProvider" foreignKeyColumn="TreatmentProviderTypeID"/>
+	    			<ForeignKeyLink dimension="TreatmentStatus" foreignKeyColumn="TreatmentStatusTypeID"/>
+	    			<ForeignKeyLink dimension="TreatmentAdmissionReason" foreignKeyColumn="TreatmentAdmissionReasonTypeID"/>
 	    			<FactLink dimension="Episode Status"/>
 	    		</DimensionLinks>
 	    	</MeasureGroup>
 	    </MeasureGroups>
     	  <CalculatedMembers>
-    			<!--  We have to subtract 1 in the numerator because all of the zeros (from multiplying the JailEpisodeID * not-a-recidivist) will count as 1-->
+    		<!--  We have to subtract 1 in the numerator because all of the zeros (from multiplying the JailEpisodeID * not-a-recidivist) will count as 1-->
 			<CalculatedMember name="SixMonthRebookRate" caption="Six Month Rebooking Rate" dimension="Measures">
 				<Formula><![CDATA[IIf([Measures].[Booking Count] > 0, ([Measures].[SixMonthRebookingCount]-1)  / [Measures].[Booking Count], 0)]]></Formula>
 				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
@@ -564,23 +627,5 @@
 				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
 			</CalculatedMember>
     	</CalculatedMembers>
-	  </Cube>
-<!-- 		<DimensionUsage source="Occupation" name="Occupation" visible="true" foreignKey="OccupationTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="Language" name="Language" visible="true" foreignKey="LanguageTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="DomicileStatus" name="Domicile Status" visible="true" foreignKey="DomicileStatusTypeID" highCardinality="false"/>		 -->
-<!-- 		<DimensionUsage source="Population" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="Jurisdiction" name="Charge Jurisdiction" visible="true" foreignKey="JurisdictionTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="MedicaidStatus" name="Medicaid Status" visible="true" foreignKey="MedicaidStatusTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="BehavioralHealthEvaluationType" name="Diagnosis" visible="true" foreignKey="BehavioralHealthEvaluationTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="Medication" name="Prescribed Medication" visible="true" foreignKey="MedicationTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="TreatmentStatus" name="Treatment Status" visible="true" foreignKey="TreatmentStatusTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="TreatmentAdmissionReason" name="Treatment Admission Reason" visible="true" foreignKey="TreatmentAdmissionReasonTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="TreatmentProvider" name="Treatment Provider" visible="true" foreignKey="TreatmentProviderTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="AssessmentCategory" name="Assessment Category" visible="true" foreignKey="AssessmentCategoryTypeID" highCardinality="false"/> -->
-
-		
-
-
-
-		
+	  </Cube>		
 </Schema>
