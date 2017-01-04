@@ -38,6 +38,26 @@
 		<Table name="TreatmentProviderType"/>
 		<Table name="WorkReleaseStatusType"/>
 		<Table name="FullBookingView"/>
+		<InlineTable alias="SevereMentalIllnessType">
+			<ColumnDefs>
+				<ColumnDef name="SevereMentalIllnessTypeID" type="Integer"/>
+				<ColumnDef name="SevereMentalIllnessTypeDescription" type="String"/>
+			</ColumnDefs>
+			<Rows>
+				<Row>
+					<Value column="SevereMentalIllnessTypeID">99998</Value>
+					<Value column="SevereMentalIllnessTypeDescription">Not Assessed</Value>
+				</Row>
+				<Row>
+					<Value column="SevereMentalIllnessTypeID">0</Value>
+					<Value column="SevereMentalIllnessTypeDescription">No</Value>
+				</Row>
+				<Row>
+					<Value column="SevereMentalIllnessTypeID">1</Value>
+					<Value column="SevereMentalIllnessTypeDescription">Yes</Value>
+				</Row>
+			</Rows>
+		</InlineTable>
 	</PhysicalSchema>	
 	<Dimension visible="true" name="Date" table="Date" key="DateID" type="TIME">
 		<Attributes>
@@ -103,11 +123,12 @@
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>	
+		
 	<Dimension name="Age" key="PersonAgeTypeID">
         <Attributes>
-            <Attribute table="PersonAgeType" name="PersonAgeTypeID" keyColumn="PersonAgeTypeID" hasHierarchy="false"/>
-            <Attribute table="PersonAgeRangeType" name="AgeRange"  keyColumn="PersonAgeRangeTypeID" hasHierarchy="false"/>
-            <Attribute table="PersonAgeType" name="AgeInYears" hasHierarchy="false">
+            <Attribute table="PersonAgeType" name="PersonAgeTypeID" keyColumn="PersonAgeTypeID" hasHierarchy="false" />
+            <Attribute table="PersonAgeRangeType" name="AgeRange"  keyColumn="AgeRange" hasHierarchy="false"/>
+            <Attribute table="PersonAgeType" name="AgeInYears" hasHierarchy="false" >
                 <Key>
                     <Column table="PersonAgeRangeType" name="AgeRange"/>
                     <Column name="AgeInYears"/>
@@ -128,7 +149,7 @@
 	<Dimension name="Age Range" table="PersonAgeRangTypee" key="PersonAgeRangeTypeID">
 		<Attributes>
 			<Attribute keyColumn="PersonAgeRangeTypeID" hasHierarchy="false" name="PersonAgeRangeTypeID"/>
-			<Attribute keyColumn="AgeRange" hasHierarchy='false' name="PersonAgeRange"/>
+			<Attribute keyColumn="AgeRange" hasHierarchy='false' name="PersonAgeRange" orderByColumn="AgeRangeSort"/>
 		</Attributes>
 		<Hierarchies>
             <Hierarchy name="Age Range" allMemberName="All Age Ranges">
@@ -284,7 +305,7 @@
 	<Dimension visible="true" name="ProgramEligibility" table="ProgramEligibilityType" key="ProgramEligibilityTypeID" caption="Program Eligibility">
 		<Attributes>
 			<Attribute name="ProgramEligibilityTypeID" keyColumn="ProgramEligibilityTypeID" hasHierarchy="false"/>
-			<Attribute name="ProgramEligibilityTypeDescription" keyColumn="ProgramEligibilityTypeDescription" hasHierarchy="false" caption="Sex Offender Status"/>
+			<Attribute name="ProgramEligibilityTypeDescription" keyColumn="ProgramEligibilityTypeDescription" hasHierarchy="false" caption="Program Eligibility"/>
 		</Attributes>
 		<Hierarchies>
 			<Hierarchy name="ProgramEligibility" visible="true" caption="Program Eligibility" allMemberName="All Program Eligibilities" allMemberCaption="All Program Eligibilities">	
@@ -293,48 +314,103 @@
 		</Hierarchies>
 	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="MilitaryServiceStatus"> -->
-<!-- 		<Hierarchy name="MilitaryServiceStatus"  visible="true" hasAll="true" primaryKey="MilitaryServiceStatusTypeID" caption="Military Service Status" allMemberCaption="All Statuses"> -->
-<!-- 			<Level name="Military Service Status" visible="true" table="MilitaryServiceStatusType" column="MilitaryServiceStatusTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="MilitaryServiceStatus" table="MilitaryServiceStatusType" key="MilitaryServiceStatusTypeID" caption="Military Service Status">
+		<Attributes>
+			<Attribute name="MilitaryServiceStatusTypeID" keyColumn="MilitaryServiceStatusTypeID" hasHierarchy="false"/>
+			<Attribute name="MilitaryServiceStatusTypeDescription" keyColumn="MilitaryServiceStatusTypeDescription" hasHierarchy="false" caption="Military Service Status"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="MilitaryServiceStatus" visible="true" caption="Military Service Status" allMemberName="All Military Service Statuses" allMemberCaption="All Military Service Statuses">	
+				<Level attribute="MilitaryServiceStatusTypeDescription" caption="Military Service Status"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="DomicileStatus"> -->
-<!-- 		<Hierarchy name="DomicileStatus"  visible="true" hasAll="true" primaryKey="DomicileStatusTypeID" caption="Domicile Status" allMemberCaption="All Statuses"> -->
-<!-- 			<Level name="Domicile Status" visible="true" table="DomicileStatusType" column="DomicileStatusTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+
+	<Dimension visible="true" name="SeverMentalIllness" table="SevereMentalIllnessType" key="SevereMentalIllnessTypeID" caption="Severe Mental Illness">
+		<Attributes>
+			<Attribute name="SevereMentalIllnessTypeID" keyColumn="SevereMentalIllnessTypeID" hasHierarchy="false"/>
+			<Attribute name="SevereMentalIllnessTypeDescription" keyColumn="SevereMentalIllnessTypeDescription" hasHierarchy="false" caption="Severe Mental Illness"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="SevereMentalIllness" visible="true" caption="Severe Mental Illness" allMemberName="All Severe Mental Illnesses" allMemberCaption="All Severe Mental Illnesses">	
+				<Level attribute="SevereMentalIllnessTypeDescription" caption="Severe Mental Illness"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Population"> -->
-<!-- 		<Hierarchy name="Population"  visible="true" hasAll="true" primaryKey="PopulationTypeID" caption="Population" allMemberCaption="General Population"> -->
-<!-- 			<Level name="Population" visible="true" table="PopulationType" column="PopulationTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="DomicileStatus" table="DomicileStatusType" key="DomicileStatusTypeID" caption="Domicile Status">
+		<Attributes>
+			<Attribute name="DomicileStatusTypeID" keyColumn="DomicileStatusTypeID" hasHierarchy="false"/>
+			<Attribute name="DomicileStatusTypeDescription" keyColumn="DomicileStatusTypeDescription" hasHierarchy="false" caption="Domicile Status"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="DomicileStatus" visible="true" caption="Domicile Status" allMemberName="All Domicile Statuses" allMemberCaption="All Domicile Statuses">	
+				<Level attribute="DomicileStatusTypeDescription" caption="Domicile Status"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Language"> -->
-<!-- 		<Hierarchy name="Language"  visible="true" hasAll="true" primaryKey="LanguageTypeID" caption="Language"> -->
-<!-- 			<Level name="Language" visible="true" table="LanguageType" column="LanguageTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="Population" table="PopulationType" key="PopulationTypeID" caption="Population">
+		<Attributes>
+			<Attribute name="PopulationTypeID" keyColumn="PopulationTypeID" hasHierarchy="false"/>
+			<Attribute name="PopulationTypeDescription" keyColumn="PopulationTypeDescription" hasHierarchy="false" caption="Population"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Population" visible="true" caption="Population" allMemberName="All Populations" allMemberCaption="All Populations">	
+				<Level attribute="PopulationTypeDescription" caption="Population"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="EducationLevel"> -->
-<!-- 		<Hierarchy name="EducationLevel"  visible="true" hasAll="true" primaryKey="EducationLevelTypeID" caption="Education Level"> -->
-<!-- 			<Level name="Education Level" visible="true" table="EducationLevelType" column="EducationLevelTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="Language" table="LanguageType" key="LanguageTypeID" caption="Language">
+		<Attributes>
+			<Attribute name="LanguageTypeID" keyColumn="LanguageTypeID" hasHierarchy="false"/>
+			<Attribute name="LanguageTypeDescription" keyColumn="LanguageTypeDescription" hasHierarchy="false" caption="Language"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Language" visible="true" caption="Language" allMemberName="All Languages" allMemberCaption="All Languages">	
+				<Level attribute="LanguageTypeDescription" caption="Language"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="SupervisionUnit"> -->
-<!-- 		<Hierarchy name="SupervisionUnit"  visible="true" hasAll="true" primaryKey="SupervisionUnitTypeID" caption="Supervision Unit"> -->
-<!-- 			<Level name="SupervisionUnit" visible="true" table="SupervisionUnitType" column="SupervisionUnitTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="EducationLevel" table="EducationLevelType" key="EducationLevelTypeID" caption="Education Level">
+		<Attributes>
+			<Attribute name="EducationLevelTypeID" keyColumn="EducationLevelTypeID" hasHierarchy="false"/>
+			<Attribute name="EducationLevelTypeDescription" keyColumn="EducationLevelTypeDescription" hasHierarchy="false" caption="Education Level"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="EducationLevel" visible="true" caption="Education Level" allMemberName="All Education Levels" allMemberCaption="All Education Levels">	
+				<Level attribute="EducationLevelTypeDescription" caption="Education Level"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
-<!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="Facility"> -->
-<!-- 		<Hierarchy name="Facility"  visible="true" hasAll="true" primaryKey="FacilityID" caption="Facility" allMemberCaption="All Facilities"> -->
-<!-- 			<Level name="Facility" visible="true" table="Facility" column="FacilityDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
+	<Dimension visible="true" name="SupervisionUnit" table="SupervisionUnitType" key="SupervisionUnitTypeID" caption="Supervision Unit">
+		<Attributes>
+			<Attribute name="SupervisionUnitTypeID" keyColumn="SupervisionUnitTypeID" hasHierarchy="false"/>
+			<Attribute name="SupervisionUnitTypeDescription" keyColumn="SupervisionUnitTypeDescription" hasHierarchy="false" caption="Supervision Unit"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="SupervisionUnit" visible="true" caption="Supervision Unit" allMemberName="All Supervision Units" allMemberCaption="All Supervision Units">	
+				<Level attribute="SupervisionUnitTypeDescription" caption="Supervision Unit"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
 	
+	<Dimension visible="true" name="Facility" table="Facility" key="FacilityID" caption="Facility">
+		<Attributes>
+			<Attribute name="FacilityID" keyColumn="FacilityID" hasHierarchy="false"/>
+			<Attribute name="FacilityDescription" keyColumn="FacilityDescription" hasHierarchy="false" caption="Facility"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Facility" visible="true" caption="Facility" allMemberName="All Facilities" allMemberCaption="All Facilities">	
+				<Level attribute="FacilityDescription" caption="Facility"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+				
 <!-- 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="AssessmentCategory"> -->
 <!-- 		<Hierarchy name="AssessmentCategory"  visible="true" hasAll="true" primaryKey="AssessmentCategoryTypeID" caption="Assessment Category" allMemberCaption="All Categories"> -->
 <!-- 			<Level name="Assessment Category" visible="true" table="AssessmentCategoryType" column="AssessmentCategoryTypeDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/> -->
@@ -384,35 +460,7 @@
 <!-- 		</Hierarchy> -->
 <!-- 	</Dimension> -->
 	
-<!-- 	<Dimension name="SevereMentalIllness"> -->
-<!-- 		<Hierarchy hasAll="true" primaryKey="SevereMentalIllnessID" caption="Severe Mental Illness" allMemberCaption="All"> -->
-<!-- 			<InlineTable alias="SevereMentalIllness"> -->
-<!-- 				<ColumnDefs> -->
-<!-- 					<ColumnDef name="SevereMentalIllnessID" type="Integer"/> -->
-<!-- 					<ColumnDef name="SevereMentalIllnessDescription" type="String"/> -->
-<!-- 				</ColumnDefs> -->
-<!-- 				<Rows> -->
-<!-- 					<Row> -->
-<!-- 						<Value column="SevereMentalIllnessID">99998</Value> -->
-<!-- 						<Value column="SevereMentalIllnessDescription">Not Assessed</Value> -->
-<!-- 					</Row> -->
-<!-- 					<Row> -->
-<!-- 						<Value column="SevereMentalIllnessID">0</Value> -->
-<!-- 						<Value column="SevereMentalIllnessDescription">No</Value> -->
-<!-- 					</Row> -->
-<!-- 					<Row> -->
-<!-- 						<Value column="SevereMentalIllnessID">1</Value> -->
-<!-- 						<Value column="SevereMentalIllnessDescription">Yes</Value> -->
-<!-- 					</Row> -->
-<!-- 				</Rows> -->
-<!-- 			</InlineTable> -->
-<!-- 			<Level name="SevereMentalIllness" column="SevereMentalIllnessID" nameColumn="SevereMentalIllnessDescription" uniqueMembers="true"/> -->
-<!-- 		</Hierarchy> -->
-<!-- 	</Dimension> -->
-	
-		
 
-	
 	<Cube name="Jail-Booking-Analytics" visible="true">
 		<Dimensions>
 			<Dimension source="Age"/>
@@ -432,7 +480,13 @@
 			<Dimension source="SexOffenderStatus"/>
 			<Dimension source="WorkReleaseStatus"/>
 			<Dimension source="ProgramEligibility"/>
-			
+			<Dimension source="MilitaryServiceStatus"/>
+			<Dimension source="SeverMentalIllness"/>
+			<Dimension source="DomicileStatus"/>
+			<Dimension source="Language"/>
+			<Dimension source="EducationLevel"/>
+			<Dimension source="SupervisionUnit"/>
+			<Dimension source="Facility"/>
 			<!-- This is Mondrian 4's way of creating a degenerate dimension -->
 			<Dimension visible="true" name="Episode Status">
 				<Attributes>
@@ -449,6 +503,15 @@
     		<MeasureGroup table="FullBookingView" name="Jail Booking">
 	    		<Measures>
 	    			<Measure name="Booking Count" column="JailEpisodeID" aggregator="distinct-count" visible="true" caption="Jail Episode Count"/>
+	    			<Measure name="Arrest Count" column="JailEpisodeArrestID" aggregator="distinct-count" visible="true" caption="Arrest Count"/>
+	    			<Measure name="Average Length Of Stay" column="LengthOfStay" aggregator="avg" visible="true"/>
+	    			<Measure name="SixMonthRebookingCount" column="SixMonthRebookingCount" aggregator="distinct-count"  visible="false"/>
+					<Measure name="OneYearRebookingCount" column="OneYearRebookingCount" aggregator="distinct-count"  visible="false"/>
+					<Measure name="TwoYearRebookingCount" column="TwoYearRebookingCount" aggregator="distinct-count"  visible="false"/>
+					<Measure name="Charge Count" column="JailEpisodeChargeID" aggregator="count" visible="true"/>
+			 		<Measure name="Average Bond Amount" column="BondAmount" aggregator="avg" formatString="$0.00" visible="true"/>
+					<Measure name="SMICount" column="SevereMentalIllnessBookingCount" aggregator="distinct-count" visible="false"/>
+					<Measure name="InTreatmentAtBookingCount" column="InTreatmentAtBookingCount" aggregator="distinct-count" visible="false"/>
 	    		</Measures>
 	    		<DimensionLinks>
 	    			<ForeignKeyLink dimension="Age" foreignKeyColumn="PersonAgeTypeID"/>
@@ -467,23 +530,45 @@
 	    			<ForeignKeyLink dimension="SexOffenderStatus" foreignKeyColumn="SexOffenderStatusTypeID"/>
 	    			<ForeignKeyLink dimension="WorkReleaseStatus" foreignKeyColumn="WorkReleaseStatusTypeID"/>
 	    			<ForeignKeyLink dimension="ProgramEligibility" foreignKeyColumn="ProgramEligibilityTypeID"/>
+	    			<ForeignKeyLink dimension="MilitaryServiceStatus" foreignKeyColumn="MilitaryServiceStatusTypeID"/>
+	    			<ForeignKeyLink dimension="SeverMentalIllness" foreignKeyColumn="SevereMentalIllnessIndicatorDimension"/>
+	    			<ForeignKeyLink dimension="DomicileStatus" foreignKeyColumn="DomicileStatusTypeID"/>
+	    			<ForeignKeyLink dimension="Language" foreignKeyColumn="LanguageTypeID"/>
+	    			<ForeignKeyLink dimension="EducationLevel" foreignKeyColumn="EducationLevelTypeID"/>
+	    			<ForeignKeyLink dimension="SupervisionUnit" foreignKeyColumn="SupervisionUnitTypeID"/>
+	    			<ForeignKeyLink dimension="Facility" foreignKeyColumn="FacilityID"/>
 	    			<FactLink dimension="Episode Status"/>
 	    		</DimensionLinks>
 	    	</MeasureGroup>
 	    </MeasureGroups>
+    	  <CalculatedMembers>
+    			<!--  We have to subtract 1 in the numerator because all of the zeros (from multiplying the JailEpisodeID * not-a-recidivist) will count as 1-->
+			<CalculatedMember name="SixMonthRebookRate" caption="Six Month Rebooking Rate" dimension="Measures">
+				<Formula><![CDATA[IIf([Measures].[Booking Count] > 0, ([Measures].[SixMonthRebookingCount]-1)  / [Measures].[Booking Count], 0)]]></Formula>
+				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+			</CalculatedMember>
+			<CalculatedMember name="OneYearRebookRate" caption="One Year Rebooking Rate" dimension="Measures">
+				<Formula><![CDATA[IIf([Measures].[Booking Count] > 0, ([Measures].[OneYearRebookingCount] -1)/ [Measures].[Booking Count], 0)]]></Formula>
+				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+			</CalculatedMember>
+			<CalculatedMember name="TwoYearRebookRate" caption="Two Year Rebooking Rate" dimension="Measures">
+				<Formula><![CDATA[IIf([Measures].[Booking Count] > 0,  ([Measures].[TwoYearRebookingCount] -1)/ [Measures].[Booking Count], 0)]]></Formula>
+				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+			</CalculatedMember>
+			<CalculatedMember name="InTreatmentAtBookingRate" caption="In Treatment at Booking Rate" dimension="Measures">
+				<Formula><![CDATA[IIf([Measures].[Booking Count] > 0,  ([Measures].[InTreatmentAtBookingCount] -1)/ [Measures].[Booking Count], 0)]]></Formula>
+				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+			</CalculatedMember>
+			<CalculatedMember name="SMI Rate" caption="SMI Rate" dimension="Measures">
+				<Formula><![CDATA[IIf([Measures].[Booking Count] > 0,  ([Measures].[SMICount] -1)/ [Measures].[Booking Count], 0)]]></Formula>
+				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+			</CalculatedMember>
+    	</CalculatedMembers>
 	  </Cube>
-		
-		
-<!-- 		<DimensionUsage source="EducationLevel" name="Education Level" visible="true" foreignKey="EducationLevelTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="Occupation" name="Occupation" visible="true" foreignKey="OccupationTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="Language" name="Language" visible="true" foreignKey="LanguageTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="MilitaryServiceStatus" name="Military Service Status" visible="true" foreignKey="MilitaryServiceStatusTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="DomicileStatus" name="Domicile Status" visible="true" foreignKey="DomicileStatusTypeID" highCardinality="false"/>		 -->
-		<!-- Booking Dimensions -->
 <!-- 		<DimensionUsage source="Population" name="Population Type" visible="true" foreignKey="PopulationTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="Facility" name="Facility" visible="true" foreignKey="FacilityID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="SupervisionUnit" name="Supervision Unit" visible="true" foreignKey="SupervisionUnitTypeID" highCardinality="false"/> -->
- 		<!--  Charge Dimensions-->
 <!-- 		<DimensionUsage source="Jurisdiction" name="Charge Jurisdiction" visible="true" foreignKey="JurisdictionTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="MedicaidStatus" name="Medicaid Status" visible="true" foreignKey="MedicaidStatusTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="BehavioralHealthEvaluationType" name="Diagnosis" visible="true" foreignKey="BehavioralHealthEvaluationTypeID" highCardinality="false"/> -->
@@ -491,40 +576,11 @@
 <!-- 		<DimensionUsage source="TreatmentStatus" name="Treatment Status" visible="true" foreignKey="TreatmentStatusTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="TreatmentAdmissionReason" name="Treatment Admission Reason" visible="true" foreignKey="TreatmentAdmissionReasonTypeID" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="TreatmentProvider" name="Treatment Provider" visible="true" foreignKey="TreatmentProviderTypeID" highCardinality="false"/> -->
-<!-- 		<DimensionUsage source="SevereMentalIllness" name="Severe Mental Illness" visible="true" foreignKey="SevereMentalIllnessIndicatorDimension" highCardinality="false"/> -->
 <!-- 		<DimensionUsage source="AssessmentCategory" name="Assessment Category" visible="true" foreignKey="AssessmentCategoryTypeID" highCardinality="false"/> -->
 
 		
-<!-- 		<Measure name="Arrest Count" column="JailEpisodeArrestID" aggregator="distinct-count" visible="true"/> -->
-<!-- 		<Measure name="Average Length Of Stay" column="LengthOfStay" aggregator="avg" visible="true"/> -->
-<!-- 		<Measure name="SixMonthRebookingCount" column="SixMonthRebookingCount" aggregator="distinct-count"  visible="false"/> -->
-<!-- 		<Measure name="OneYearRebookingCount" column="OneYearRebookingCount" aggregator="distinct-count"  visible="false"/> -->
-<!-- 		<Measure name="TwoYearRebookingCount" column="TwoYearRebookingCount" aggregator="distinct-count"  visible="false"/> -->
-<!-- 		<Measure name="Charge Count" column="JailEpisodeChargeID" aggregator="count" visible="true"/> -->
-<!--  		<Measure name="Average Bond Amount" column="BondAmount" aggregator="avg" formatString="$0.00" visible="true"/> -->
-<!-- 		<Measure name="SMICount" column="SevereMentalIllnessBookingCount" aggregator="distinct-count" visible="false"/> -->
-<!-- 		<Measure name="InTreatmentAtBookingCount" column="InTreatmentAtBookingCount" aggregator="distinct-count" visible="false"/> -->
 
-		<!--  We have to subtract 1 in the numerator because all of the zeros (from multiplying the JailEpisodeID * not-a-recidivist) will count as 1-->
-<!-- 		<CalculatedMember name="SixMonthRebookRate" caption="Six Month Rebooking Rate" dimension="Measures"> -->
-<!-- 			<Formula><![CDATA[IIf([Measures].[Booking Count] > 0, ([Measures].[SixMonthRebookingCount]-1)  / [Measures].[Booking Count], 0)]]></Formula> -->
-<!-- 			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/> -->
-<!-- 		</CalculatedMember> -->
-<!-- 		<CalculatedMember name="OneYearRebookRate" caption="One Year Rebooking Rate" dimension="Measures"> -->
-<!-- 			<Formula><![CDATA[IIf([Measures].[Booking Count] > 0, ([Measures].[OneYearRebookingCount] -1)/ [Measures].[Booking Count], 0)]]></Formula> -->
-<!-- 			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/> -->
-<!-- 		</CalculatedMember> -->
-<!-- 		<CalculatedMember name="TwoYearRebookRate" caption="Two Year Rebooking Rate" dimension="Measures"> -->
-<!-- 			<Formula><![CDATA[IIf([Measures].[Booking Count] > 0,  ([Measures].[TwoYearRebookingCount] -1)/ [Measures].[Booking Count], 0)]]></Formula> -->
-<!-- 			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/> -->
-<!-- 		</CalculatedMember> -->
-<!-- 		<CalculatedMember name="InTreatmentAtBookingRate" caption="In Treatment at Booking Rate" dimension="Measures"> -->
-<!-- 			<Formula><![CDATA[IIf([Measures].[Booking Count] > 0,  ([Measures].[InTreatmentAtBookingCount] -1)/ [Measures].[Booking Count], 0)]]></Formula> -->
-<!-- 			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/> -->
-<!-- 		</CalculatedMember> -->
-<!-- 		<CalculatedMember name="SMI Rate" caption="SMI Rate" dimension="Measures"> -->
-<!-- 			<Formula><![CDATA[IIf([Measures].[Booking Count] > 0,  ([Measures].[SMICount] -1)/ [Measures].[Booking Count], 0)]]></Formula> -->
-<!-- 			<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/> -->
-<!-- 		</CalculatedMember> -->
+
+
 		
 </Schema>
