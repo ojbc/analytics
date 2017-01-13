@@ -194,7 +194,7 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Counties' allMemberName='All Counties'>
-                <Level attribute='CountyName'/>
+                <Level attribute='CountyName' caption="County Name"/>
             </Hierarchy>
         </Hierarchies>
     </Dimension>
@@ -206,7 +206,7 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Reporting System' allMemberName='All Systems'>
-                <Level attribute='ReportingSystemDescription'/>
+                <Level attribute='ReportingSystemDescription' caption="Reporting System"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -218,7 +218,7 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Region' allMemberName='All Regions'>
-                <Level attribute='RegionDescription'/>
+                <Level attribute='RegionDescription' caption="Region"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -230,7 +230,7 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Town' allMemberName='All Towns'>
-                <Level attribute='TownDescription'/>
+                <Level attribute='TownDescription' caption="Town"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -238,11 +238,11 @@
 	<Dimension name="Agency" table="Agency" key="AgencyID">
         <Attributes>
             <Attribute name='AgencyID' keyColumn='AgencyID' hasHierarchy='false'/>
-            <Attribute name='AgencyName' keyColumn='AgencyName' hasHierarchy='false'/>
+            <Attribute name='AgencyName' keyColumn='AgencyName' hasHierarchy='false' caption="Agency Name"/>
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Agency' allMemberName='All Agencies'>
-                <Level attribute='AgencyName'/>
+                <Level attribute='AgencyName' caption="Agency Name"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -254,7 +254,7 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Race' allMemberName='All Races'>
-                <Level attribute='PersonRaceDescription'/>
+                <Level attribute='PersonRaceDescription' caption="Person Race"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -266,7 +266,7 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Drug' allMemberName='All Drugs'>
-                <Level attribute='InvolvedDrugDescription'/>
+                <Level attribute='InvolvedDrugDescription' caption="Involved Drug"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -278,7 +278,7 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Year' allMemberName='All Years'>
-                <Level attribute='YearLabel'/>
+                <Level attribute='YearLabel' caption="Year"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -343,7 +343,7 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Sex' allMemberName='All Sexes'>
-                <Level attribute='PersonSexDescription'/>
+                <Level attribute='PersonSexDescription' caption="Person Sex"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -356,8 +356,8 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Disposition' allMemberName='All Dispositions'>
-                <Level attribute='ConvictionStatusDescription'/>
-                <Level attribute='DispositionDescription' parentAttribute="ConvictionStatusDescription"/>
+                <Level attribute='ConvictionStatusDescription' caption="Conviction Status"/>
+                <Level attribute='DispositionDescription' parentAttribute="ConvictionStatusDescription" caption="Disposition"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -403,7 +403,7 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='RiskScore' allMemberName='All Risk Scores'>
-                <Level attribute='RiskScoreDescription'/>
+                <Level attribute='RiskScoreDescription' caption="Risk Score"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -415,7 +415,7 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='AssessedNeed' allMemberName='All Assessed Needs'>
-                <Level attribute='AssessedNeedDescription'/>
+                <Level attribute='AssessedNeedDescription' caption="Assessed Need"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -429,7 +429,7 @@
         <Hierarchies>
             <Hierarchy name='PretrialService' allMemberName='All Pretrial Services'>
                 <Level attribute='Pretrial Service Participant'/>
-                <Level attribute='PretrialServiceDescription' parentAttribute="Pretrial Service Participant"/>
+                <Level attribute='PretrialServiceDescription' parentAttribute="Pretrial Service Participant" caption="Pretrail Service Description"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -480,8 +480,8 @@
             <Attribute name='DispositionOffenseTypeDescription' keyColumn='DispositionOffenseTypeDescription' hasHierarchy='false'/>
         </Attributes>
         <Hierarchies>
-            <Hierarchy name='Disposition Offense Type' allMemberName='All Offense Types'>
-                <Level attribute='DispositionOffenseTypeDescription'/>
+            <Hierarchy name='Disposition Offense Type' allMemberName='All Disposition Offense Types'>
+                <Level attribute='DispositionOffenseTypeDescription' caption="Dispsition Offense Type"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -493,7 +493,7 @@
         </Attributes>
         <Hierarchies>
             <Hierarchy name='Original Incident Type' allMemberName='All Incident Types'>
-                <Level attribute='IncidentTypeDescription'/>
+                <Level attribute='IncidentTypeDescription' caption="Incident Type"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
