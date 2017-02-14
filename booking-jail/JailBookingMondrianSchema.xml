@@ -202,8 +202,22 @@
 		</Attributes>
 		<Hierarchies>
 			<Hierarchy name="ChargeType" visible="true" caption="Charge Type" allMemberName="All Charge Types" allMemberCaption="All Charge Types">	
-				<Level attribute="ChargeTypeDescription" caption="Charge Type"/>
 				<Level attribute="ChargeTypeCategory" caption="Charge Category"/>
+				<Level attribute="ChargeTypeDescription" caption="Charge Type"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+	
+	<Dimension visible="true" name="BehavioralHealthEvaluationType" table="BehavioralHealthEvaluationType" key="BehavioralHealthEvaluationTypeID" caption="Diagnosis">
+		<Attributes>
+			<Attribute name="BehavioralHealthEvaluationTypeID" keyColumn="BehavioralHealthEvaluationTypeID" hasHierarchy="false"/>
+			<Attribute name="BehavioralHealthEvaluationTypeDescription" keyColumn="BehavioralHealthEvaluationTypeDescription" hasHierarchy="false" caption="Diagnosis"/>
+			<Attribute name="BehavioralHealthEvaluationTypeCategory" keyColumn="BehavioralHealthEvaluationTypeCategory" hasHierarchy="false" caption="Diagnosis Category"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="BehavioralHealthEvaluationType" visible="true" caption="Diagnosis" allMemberName="All Diagnoses" allMemberCaption="All Diagnoses">	
+				<Level attribute="BehavioralHealthEvaluationTypeCategory" caption="Diagnosis Category"/>
+				<Level attribute="BehavioralHealthEvaluationTypeDescription" caption="Diagnosis"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
@@ -459,19 +473,7 @@
 		</Hierarchies>
 	</Dimension>
 	
-	<Dimension visible="true" name="BehavioralHealthEvaluationType" table="BehavioralHealthEvaluationType" key="BehavioralHealthEvaluationTypeID" caption="Diagnosis">
-		<Attributes>
-			<Attribute name="BehavioralHealthEvaluationTypeID" keyColumn="BehavioralHealthEvaluationTypeID" hasHierarchy="false"/>
-			<Attribute name="BehavioralHealthEvaluationTypeDescription" keyColumn="BehavioralHealthEvaluationTypeDescription" hasHierarchy="false" caption="Diagnosis"/>
-			<Attribute name="BehavioralHealthEvaluationTypeCategory" keyColumn="BehavioralHealthEvaluationTypeCategory" hasHierarchy="false" caption="Diagnosis Category"/>
-		</Attributes>
-		<Hierarchies>
-			<Hierarchy name="BehavioralHealthEvaluationType" visible="true" caption="Diagnosis" allMemberName="All Diagnoses" allMemberCaption="All Diagnoses">	
-				<Level attribute="BehavioralHealthEvaluationTypeCategory" caption="Diagnosis Category"/>
-				<Level attribute="BehavioralHealthEvaluationTypeDescription" caption="Diagnosis"/>
-			</Hierarchy>
-		</Hierarchies>
-	</Dimension>
+	
 	
 	<Dimension visible="true" name="TreatmentProvider" table="TreatmentProviderType" key="TreatmentProviderTypeID" caption="Treatment Provider">
 		<Attributes>
