@@ -156,8 +156,11 @@ defaultCodeTableValueTranslator <- function(stagingValue, codeTableName, unknown
 }
 
 translateCodeTableValue <- function(codeTableValueTranslator, stagingValue, codeTableName, unknownCodeTableValue, codeTableList) {
-  args <- as.list(match.call())[-1]
-  args$codeTableValueTranslator <- NULL
+  args <- list()
+  args$stagingValue <- stagingValue
+  args$codeTableName <- codeTableName
+  args$unknownCodeTableValue <- unknownCodeTableValue
+  args$codeTableList <- codeTableList
   do.call(codeTableValueTranslator, args)
 }
 
@@ -626,7 +629,6 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   }
 
   lastLoadTime <- getLastLoadingTime(adsConnection)
-  writeLines(paste0("lastLoadTime=", lastLoadTime))
 
   currentLoadTime <- now()
   loadHistoryID <- updateLoadHistory(adsConnection, stagingConnection, currentLoadTime)
