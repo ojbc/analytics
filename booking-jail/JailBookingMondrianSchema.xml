@@ -198,10 +198,12 @@
 		<Attributes>
 			<Attribute name="ChargeTypeID" keyColumn="ChargeTypeID" hasHierarchy="false"/>
 			<Attribute name="ChargeTypeDescription" keyColumn="ChargeTypeDescription" hasHierarchy="false" caption="Charge Type"/>
+			<Attribute name="ChargeTypeCategory" keyColumn="ChargeTypeCategory" hasHierarchy="false" caption="Charge Category"/>
 		</Attributes>
 		<Hierarchies>
 			<Hierarchy name="ChargeType" visible="true" caption="Charge Type" allMemberName="All Charge Types" allMemberCaption="All Charge Types">	
 				<Level attribute="ChargeTypeDescription" caption="Charge Type"/>
+				<Level attribute="ChargeTypeCategory" caption="Charge Category"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
