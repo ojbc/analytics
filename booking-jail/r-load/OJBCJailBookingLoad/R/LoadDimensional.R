@@ -440,6 +440,17 @@ buildBHAssessmentTable <- function(stagingConnection, lastLoadTime, unknownCodeT
                                                      "Booking.PersonID=Person.PersonID and ",
                                                      "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
+  BHAssessmentCSC <- getQuery(stagingConnection, paste0("select BehavioralHealthAssessmentID, Person.PersonID, SeriousMentalIllnessIndicator, MedicaidStatusTypeID,",
+                                                        " CareEpisodeStartDate, CareEpisodeEndDate, BookingDate from ",
+                                                        "BehavioralHealthAssessment, Person, CustodyStatusChange where ",
+                                                        "BehavioralHealthAssessment.PersonID=Person.PersonID and ",
+                                                        "CustodyStatusChange.PersonID=Person.PersonID and ",
+                                                        "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  if (nrow(BHAssessmentCSC)) {
+    BHAssessment <- bind_rows(BHAssessment, BHAssessmentCSC)
+  }
+
   BHAssessment <- BHAssessment %>%
     transmute(BehavioralHealthAssessmentID=BehavioralHealthAssessmentID,
               PersonID=PersonID,
@@ -461,6 +472,15 @@ buildBHAssessmentCategoryTable <- function(stagingConnection, lastLoadTime, unkn
                                                              "bhac.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
                                                              "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
+  BHAssessmentCategoryCSC <- getQuery(stagingConnection, paste0("select BehavioralHealthAssessmentCategoryID, bha.BehavioralHealthAssessmentID, AssessmentCategoryTypeID from ",
+                                                                "BehavioralHealthAssessment bha, BehavioralHealthAssessmentCategory bhac, Person p, CustodyStatusChange b where ",
+                                                                "bhac.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
+                                                                "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  if (nrow(BHAssessmentCategoryCSC)) {
+    BHAssessmentCategory <- bind_rows(BHAssessmentCategory, BHAssessmentCategoryCSC)
+  }
+
   BHAssessmentCategory <- BHAssessmentCategory %>%
     transmute(BehavioralHealthAssessmentCategoryID=BehavioralHealthAssessmentCategoryID,
               BehavioralHealthAssessmentID=BehavioralHealthAssessmentID,
@@ -478,6 +498,16 @@ buildBHTreatmentTable <- function(stagingConnection, lastLoadTime, unknownCodeTa
                                                     "BehavioralHealthAssessment bha, Treatment bht, Person p, Booking b where ",
                                                     "bht.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
                                                     "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  BHTreatmentCSC <- getQuery(stagingConnection, paste0("select TreatmentID, bha.BehavioralHealthAssessmentID, TreatmentStatusTypeID, TreatmentAdmissionReasonTypeID, ",
+                                                       "TreatmentProviderName, TreatmentStartDate, BookingDate from ",
+                                                       "BehavioralHealthAssessment bha, Treatment bht, Person p, CustodyStatusChange b where ",
+                                                       "bht.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
+                                                       "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  if (nrow(BHTreatmentCSC)) {
+    BHTreatment <- bind_rows(BHTreatment, BHTreatmentCSC)
+  }
 
   BHTreatment <- BHTreatment %>%
     transmute(BehavioralHealthTreatmentID=TreatmentID,
@@ -508,6 +538,15 @@ buildBHEvaluationTable <- function(stagingConnection, lastLoadTime, unknownCodeT
                                                      "bhe.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
                                                      "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
+  BHEvaluationCSC <- getQuery(stagingConnection, paste0("select BehavioralHealthEvaluationID, bhe.BehavioralHealthAssessmentID, BehavioralHealthDiagnosisDescription from ",
+                                                        "BehavioralHealthAssessment bha, BehavioralHealthEvaluation bhe, Person p, CustodyStatusChange b where ",
+                                                        "bhe.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
+                                                        "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  if (nrow(BHEvaluationCSC)) {
+    BHEvaluation <- bind_rows(BHEvaluation, BHEvaluationCSC)
+  }
+
   BHEvaluation <- BHEvaluation %>%
     mutate(BehavioralHealthEvaluationTypeID=unknownCodeTableValue) %>%
     select(BehavioralHealthEvaluationID, BehavioralHealthAssessmentID, BehavioralHealthDiagnosisDescription)
@@ -529,6 +568,15 @@ buildMedicationTable <- function(stagingConnection, lastLoadTime, unknownCodeTab
                                                              "BehavioralHealthAssessment bha, PrescribedMedication pm, Person p, Booking b where ",
                                                              "pm.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
                                                              "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  PrescribedMedicationCSC <- getQuery(stagingConnection, paste0("select PrescribedMedicationID, pm.BehavioralHealthAssessmentID, MedicationDescription from ",
+                                                                "BehavioralHealthAssessment bha, PrescribedMedication pm, Person p, CustodyStatusChange b where ",
+                                                                "pm.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
+                                                                "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  if (nrow(PrescribedMedicationCSC)) {
+    PrescribedMedication <- bind_rows(PrescribedMedication, PrescribedMedicationCSC)
+  }
 
   PrescribedMedication <- PrescribedMedication %>%
     mutate(MedicationTypeID=unknownCodeTableValue) %>%

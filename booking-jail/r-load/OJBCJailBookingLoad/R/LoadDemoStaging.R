@@ -241,6 +241,12 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   changeTableList <- buildChangeTables(ret, codeTableList)
 
   ret$Person <- NULL
+  ret$BehavioralHealthAssessment <- NULL
+  ret$Treatment <- NULL
+  ret$BehavioralHealthEvaluation <- NULL
+  ret$BehavioralHealthAssessmentCategory <- NULL
+  ret$PrescribedMedication <- NULL
+
   ret <- c(ret, changeTableList)
 
   chargeDf <- changeTableList$CustodyStatusChangeCharge
@@ -323,6 +329,31 @@ buildChangeTables <- function(txTableList, codeTableList) {
   ret$CustodyStatusChangeCharge <- changedCharges
   writeLines(paste0("Created CustodyStatusChangeCharge table with ", nrow(changedCharges), " rows."))
 
+  changedBHPerson <- ChangedPerson %>%
+    inner_join(changedBookings, by='PersonID') %>%
+    sample_n(5) %>%
+    select(PersonID, BookingDate)
+
+  startingBehavioralHealthAssessmentID <- nrow(txTableList$BehavioralHealthAssessment) + 1
+  startingTreatmentID <- nrow(txTableList$Treatment) + 1
+  startingBehavioralHealthEvaluationID <- nrow(txTableList$BehavioralHealthEvaluation) + 1
+  startingBehavioralHealthAssessmentCategoryID <- nrow(txTableList$BehavioralHealthAssessmentCategory) + 1
+  startingPrescribedMedicationID <- nrow(txTableList$PrescribedMedication) + 1
+
+  bhTables <- buildBehavioralHealthTables(changedBHPerson$PersonID, changedBHPerson$BookingDate, 1, codeTableList,
+                                          startingBehavioralHealthAssessmentID,
+                                          startingTreatmentID,
+                                          startingBehavioralHealthEvaluationID,
+                                          startingBehavioralHealthAssessmentCategoryID,
+                                          startingPrescribedMedicationID
+  )
+
+  ret$BehavioralHealthAssessment <- txTableList$BehavioralHealthAssessment %>% bind_rows(bhTables$BehavioralHealthAssessment)
+  ret$Treatment <- txTableList$Treatment %>% bind_rows(bhTables$Treatment)
+  ret$BehavioralHealthEvaluation <- txTableList$BehavioralHealthEvaluation %>% bind_rows(bhTables$BehavioralHealthEvaluation)
+  ret$BehavioralHealthAssessmentCategory <- txTableList$BehavioralHealthAssessmentCategory %>% bind_rows(bhTables$BehavioralHealthAssessmentCategory)
+  ret$PrescribedMedication <- txTableList$PrescribedMedication %>% bind_rows(bhTables$PrescribedMedication)
+
   ret
 
 }
@@ -388,7 +419,12 @@ buildBookingChildTables <- function(bookingID, bookingNumber, releaseDateTime, c
 
 #' @importFrom dplyr sample_frac mutate select left_join
 #' @importFrom lubridate ddays %--% days
-buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessments, codeTableList) {
+buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessments, codeTableList,
+                                        startingBehavioralHealthAssessmentID=1,
+                                        startingTreatmentID=1,
+                                        startingBehavioralHealthEvaluationID=1,
+                                        startingBehavioralHealthAssessmentCategoryID=1,
+                                        startingPrescribedMedicationID=1) {
 
   tenProbs <- sample(10)
 
@@ -412,7 +448,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   bha$MedicaidStatusTypeID <- generateRandomIDsFromCodeTable(codeTableList, "MedicaidStatusType", recs)
   bha$SeriousMentalIllnessIndicator <- as.integer(rbinom(n=recs, size=1, prob=.3))
   bha$EnrolledProviderName <- generateRandomLabelFromDimensionalCodeTable('TreatmentProviderType', recs)
-  bha$BehavioralHealthAssessmentID <- seq(recs)
+  bha$BehavioralHealthAssessmentID <- seq(recs) + startingBehavioralHealthAssessmentID - 1
   bha$BehavioralHealthAssessmentTimestamp <- NA
 
   bha$n_Treatment <- sample(1:4, size=recs, replace=TRUE)
@@ -448,7 +484,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   tmt$TreatmentProviderName <- generateRandomLabelFromDimensionalCodeTable('TreatmentProviderType', recs)
   tmt$TreatmentTimestamp <- NA
 
-  tmt$TreatmentID <- seq(nrow(tmt))
+  tmt$TreatmentID <- seq(nrow(tmt)) + startingTreatmentID - 1
 
   writeLines(paste0("Created Treatment table with ", nrow(tmt), " rows."))
 
@@ -464,7 +500,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   ev <- data.frame(BehavioralHealthAssessmentID=bhaIDs)
   recs <- nrow(ev)
   ev$BehavioralHealthDiagnosisDescription <- generateRandomLabelFromDimensionalCodeTable('BehavioralHealthEvaluationType', recs)
-  ev$BehavioralHealthEvaluationID <- seq(recs)
+  ev$BehavioralHealthEvaluationID <- seq(recs) + startingBehavioralHealthEvaluationID - 1
   ev$BehavioralHealthEvaluationTimestamp <- NA
 
   writeLines(paste0("Created BH Evaluation table with ", recs, " rows."))
@@ -487,7 +523,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   med$MedicationDescription <- generateRandomLabelFromDimensionalCodeTable('MedicationType', recs)
   med$MedicationDoseMeasure <- paste0(sample(c("5", "10", "50", "500", "1000"), size=recs, replace=TRUE),
                                       sample(c(" mg", " oz", " Units", " ml"), size=recs, replace=TRUE))
-  med$PrescribedMedicationID <- seq(recs)
+  med$PrescribedMedicationID <- seq(recs) + startingPrescribedMedicationID - 1
   med$MedicationDispensingDate <- NA
   med$PrescribedMedicationTimestamp <- NA
 
@@ -508,7 +544,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   bhc <- bhc %>% distinct() # avoid duplicate categories per assessment
   bhc$BehavioralHealthAssessmentCategoryTimestamp <- NA
   recs <- nrow(bhc)
-  bhc$BehavioralHealthAssessmentCategoryID <- seq(recs)
+  bhc$BehavioralHealthAssessmentCategoryID <- seq(recs) + startingBehavioralHealthAssessmentCategoryID - 1
 
   writeLines(paste0("Created BH Assessment Category table with ", recs, " rows."))
 
