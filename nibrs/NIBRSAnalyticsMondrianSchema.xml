@@ -326,8 +326,8 @@
 	<Cube name="Offense" visible="true" enabled="true">
 		<View alias="Offense">
 			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*, IncidentHour,
-			if(OffenseAttemptedCompleted='1', 'Y', 'N') as OffenseAttemptedCompletedYN,
-			AdministrativeSegment.AgencyID, AdministrativeSegment.ClearedExceptionallyTypeID from OffenseSegment, AdministrativeSegment where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID]]></SQL>
+			if(OffenseAttemptedCompleted='1', 'Y', 'N') as OffenseAttemptedCompletedYN, 
+ 			AdministrativeSegment.AgencyID, AdministrativeSegment.ClearedExceptionallyTypeID from OffenseSegment, AdministrativeSegment where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID]]></SQL>
 		</View>
 		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
@@ -350,7 +350,9 @@
 	</Cube>
 	<Cube name="OffenseOffenderSuspectedOfUsing" visible="true" enabled="true" caption="Offense - Offender Suspected Usage">
 		<View alias="OffenseOffenderSuspectedOfUsing">
-			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*, AdministrativeSegment.AgencyID, OffenderSuspectedOfUsingTypeID	from OffenseSegment, AdministrativeSegment, OffenderSuspectedOfUsing where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and	OffenseSegment.OffenseSegmentID=OffenderSuspectedOfUsing.OffenseSegmentID]]></SQL>
+			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*, AdministrativeSegment.AgencyID, OffenderSuspectedOfUsingTypeID,
+			if(OffenseAttemptedCompleted='1', 'Y', 'N') as OffenseAttemptedCompletedYN	
+			from OffenseSegment, AdministrativeSegment, OffenderSuspectedOfUsing where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and	OffenseSegment.OffenseSegmentID=OffenderSuspectedOfUsing.OffenseSegmentID]]></SQL>
 		</View>
 		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
@@ -368,7 +370,10 @@
 	</Cube>
 	<Cube name="OffenseCriminalActivity" visible="true" enabled="true" caption="Offense - Criminal Activity">
 		<View alias="OffenseCriminalActivity">
-			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*, AdministrativeSegment.AgencyID, TypeOfCriminalActivityTypeID	from OffenseSegment, AdministrativeSegment, TypeCriminalActivity where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and	OffenseSegment.OffenseSegmentID=TypeCriminalActivity.OffenseSegmentID]]></SQL>
+			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*, AdministrativeSegment.AgencyID, TypeOfCriminalActivityTypeID,
+			if(OffenseAttemptedCompleted='1', 'Y', 'N') as OffenseAttemptedCompletedYN		
+			
+			from OffenseSegment, AdministrativeSegment, TypeCriminalActivity where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and	OffenseSegment.OffenseSegmentID=TypeCriminalActivity.OffenseSegmentID]]></SQL>
 		</View>
 		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
@@ -386,7 +391,10 @@
 	</Cube>
 	<Cube name="OffenseWeaponForce" visible="true" enabled="true" caption="Offense - Weapon/Force">
 		<View alias="OffenseWeaponForce">
-			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*, AdministrativeSegment.AgencyID, TypeOfWeaponForceInvolvedTypeID	from OffenseSegment, AdministrativeSegment, TypeOfWeaponForceInvolved where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and OffenseSegment.OffenseSegmentID=TypeOfWeaponForceInvolved.TypeOfWeaponForceInvolvedTypeID]]></SQL>
+			<SQL dialect="mysql"><![CDATA[select OffenseSegment.*, AdministrativeSegment.AgencyID, TypeOfWeaponForceInvolvedTypeID,
+			if(OffenseAttemptedCompleted='1', 'Y', 'N') as OffenseAttemptedCompletedYN		
+			
+			from OffenseSegment, AdministrativeSegment, TypeOfWeaponForceInvolved where OffenseSegment.AdministrativeSegmentID=AdministrativeSegment.AdministrativeSegmentID and OffenseSegment.OffenseSegmentID=TypeOfWeaponForceInvolved.TypeOfWeaponForceInvolvedTypeID]]></SQL>
 		</View>
 		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
