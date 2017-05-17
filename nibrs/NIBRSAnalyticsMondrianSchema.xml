@@ -88,6 +88,30 @@
 			<Level name="SexOfPerson" visible="true" column="SexOfPersonDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="SexOfOffender">
+		<Hierarchy name="SexOfOffender" visible="true" hasAll="true" allMemberName="All Offender Sexes" allMemberCaption="All Offender Sexes" primaryKey="SexOfPersonTypeID">
+			<Table name="SexOfPersonType" alias="SexOfOffender"/>
+			<Level name="SexOfOffender" visible="true" column="SexOfPersonDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="SexOfVictim">
+		<Hierarchy name="SexOfVictim" visible="true" hasAll="true" allMemberName="All Victim Sexes" allMemberCaption="All Victim Sexes" primaryKey="SexOfPersonTypeID">
+			<Table name="SexOfPersonType" alias="SexOfVictim"/>
+			<Level name="SexOfVictim" visible="true" column="SexOfPersonDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="RaceOfOffender">
+		<Hierarchy name="RaceOfOffender" visible="true" hasAll="true" allMemberName="All Offender Races" allMemberCaption="All Offender Races" primaryKey="RaceOfPersonTypeID">
+			<Table name="RaceOfPersonType" alias="RaceOfOffender"/>
+			<Level name="RaceOfOffender" visible="true" column="RaceOfPersonDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="RaceOfVictim">
+		<Hierarchy name="RaceOfVictim" visible="true" hasAll="true" allMemberName="All Victim Races" allMemberCaption="All Victim Races" primaryKey="RaceOfPersonTypeID">
+			<Table name="RaceOfPersonType" alias="RaceOfVictim"/>
+			<Level name="RaceOfVictim" visible="true" column="RaceOfPersonDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="RaceOfPerson">
 		<Hierarchy name="RaceOfPerson" visible="true" hasAll="true" allMemberName="All Races" allMemberCaption="All Races" primaryKey="RaceOfPersonTypeID">
 			<Table name="RaceOfPersonType"/>
@@ -98,6 +122,18 @@
 		<Hierarchy name="EthnicityOfPerson" visible="true" hasAll="true" allMemberName="All Ethnicities" allMemberCaption="All Ethnicities" primaryKey="EthnicityOfPersonTypeID">
 			<Table name="EthnicityOfPersonType"/>
 			<Level name="EthnicityOfPerson" visible="true" column="EthnicityOfPersonDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="EthnicityOfOffender">
+		<Hierarchy name="EthnicityOfOffender" visible="true" hasAll="true" allMemberName="All Offender Ethnicities" allMemberCaption="All Offender Ethnicities" primaryKey="EthnicityOfPersonTypeID">
+			<Table name="EthnicityOfPersonType" alias="EthnicityOfOffender"/>
+			<Level name="EthnicityOfOffender" visible="true" column="EthnicityOfPersonDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="EthnicityOfVictim">
+		<Hierarchy name="EthnicityOfVictim" visible="true" hasAll="true" allMemberName="All Victim Ethnicities" allMemberCaption="All Victim Ethnicities" primaryKey="EthnicityOfPersonTypeID">
+			<Table name="EthnicityOfPersonType" alias="EthnicityOfVictim"/>
+			<Level name="EthnicityOfVictim" visible="true" column="EthnicityOfPersonDescription" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never"/>
 		</Hierarchy>
 	</Dimension>
 	<Dimension type="StandardDimension" visible="true" highCardinality="false" name="TypeOfCriminalActivity">
@@ -171,8 +207,15 @@
 	</Dimension>
 	<Cube name="VictimOffender" caption="Victim-Offender Relationship" visible="true" enabled="true">
 		<View alias="VictimOffender">
-			<SQL dialect="mysql"><![CDATA[select VictimSegment.*,
-				OffenderSegment.AgeOfOffender, OffenderSegment.SexOfPersonTypeID as SexOfPersonTypeID_Offender,
+			<SQL dialect="mysql"><![CDATA[select 
+				VictimSegment.AgeOfVictim, 
+				VictimSegment.SexOfPersonTypeID as SexOfPersonTypeID_Victim,
+				VictimSegment.RaceOfPersonTypeID as RaceOfPersonTypeID_Victim,
+				VictimSegment.EthnicityOfPersonTypeID as EthnicityOfPersonTypeID_Victim,
+				VictimSegment.TypeOfVictimTypeID,
+				VictimSegment.ResidentStatusOfPersonTypeID,
+				OffenderSegment.AgeOfOffender, 
+				OffenderSegment.SexOfPersonTypeID as SexOfPersonTypeID_Offender,
 				OffenderSegment.RaceOfPersonTypeID as RaceOfPersonTypeID_Offender,
 				OffenderSegment.EthnicityOfPersonTypeID as EthnicityOfPersonTypeID_Offender,   
 				VictimOffenderAssociationID, VictimOffenderRelationshipTypeID, AdministrativeSegment.AgencyID, AdministrativeSegment.ClearedExceptionallyTypeID
@@ -185,9 +228,9 @@
 		<DimensionUsage source="County" name="County" visible="true" foreignKey="AgencyID" highCardinality="false"/>
 		<DimensionUsage source="Agency" name="Agency" visible="true" foreignKey="AgencyID" highCardinality="false"/>
 		<DimensionUsage source="ClearedExceptionally" name="ClearedExceptionally" caption="Exceptional Clearance" visible="true" foreignKey="ClearedExceptionallyTypeID" highCardinality="false"/>
-		<DimensionUsage source="SexOfPerson" name="SexOfPerson_Victim" caption="Victim Sex" visible="true" foreignKey="SexOfPersonTypeID" highCardinality="false"/>
-		<DimensionUsage source="RaceOfPerson" name="RaceOfPerson_Victim" caption="Victim Race" visible="true" foreignKey="RaceOfPersonTypeID" highCardinality="false"/>
-		<DimensionUsage source="EthnicityOfPerson" name="EthnicityOfPerson_Victim" caption="Victim Ethnicity" visible="true" foreignKey="EthnicityOfPersonTypeID" highCardinality="false"/>
+		<DimensionUsage source="SexOfVictim" name="SexOfPerson_Victim" caption="Victim Sex" visible="true" foreignKey="SexOfPersonTypeID_Victim" highCardinality="false"/>
+		<DimensionUsage source="RaceOfVictim" name="RaceOfPerson_Victim" caption="Victim Race" visible="true" foreignKey="RaceOfPersonTypeID_Victim" highCardinality="false"/>
+		<DimensionUsage source="EthnicityOfVictim" name="EthnicityOfPerson_Victim" caption="Victim Ethnicity" visible="true" foreignKey="EthnicityOfPersonTypeID_Victim" highCardinality="false"/>
 		<DimensionUsage source="ResidentStatusOfPerson" name="ResidentStatusOfPerson_Victim" caption="Victim Residence Status" visible="true" foreignKey="ResidentStatusOfPersonTypeID" highCardinality="false"/>
 		<DimensionUsage source="TypeOfVictim" name="TypeOfVictim" caption="Victim Type" visible="true" foreignKey="TypeOfVictimTypeID" highCardinality="false"/>
 		<Dimension name="AgeOfPerson_Victim" caption="Victim Age">
@@ -195,9 +238,9 @@
 				<Level name="Victim Age" column="AgeOfVictim" uniqueMembers="true"/>
 			</Hierarchy>
 		</Dimension>
-		<DimensionUsage source="SexOfPerson" name="SexOfPerson_Offender" caption="Offender Sex" visible="true" foreignKey="SexOfPersonTypeID_Offender" highCardinality="false"/>
-		<DimensionUsage source="RaceOfPerson" name="RaceOfPerson_Offender" caption="Offender Race" visible="true" foreignKey="RaceOfPersonTypeID_Offender" highCardinality="false"/>
-		<DimensionUsage source="EthnicityOfPerson" name="EthnicityOfPerson_Offender" caption="Offender Ethnicity" visible="true" foreignKey="EthnicityOfPersonTypeID_Offender" highCardinality="false"/>
+		<DimensionUsage source="SexOfOffender" name="SexOfPerson_Offender" caption="Offender Sex" visible="true" foreignKey="SexOfPersonTypeID_Offender" highCardinality="false"/>
+		<DimensionUsage source="RaceOfOffender" name="RaceOfPerson_Offender" caption="Offender Race" visible="true" foreignKey="RaceOfPersonTypeID_Offender" highCardinality="false"/>
+		<DimensionUsage source="EthnicityOfOffender" name="EthnicityOfPerson_Offender" caption="Offender Ethnicity" visible="true" foreignKey="EthnicityOfPersonTypeID_Offender" highCardinality="false"/>
 		<Dimension name="AgeOfPerson_Offender" caption="Offender Age">
 			<Hierarchy hasAll="true">
 				<Level name="Offender Age" column="AgeOfOffender" uniqueMembers="true"/>
