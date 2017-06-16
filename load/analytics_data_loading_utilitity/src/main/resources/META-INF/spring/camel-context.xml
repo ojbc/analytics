@@ -128,7 +128,7 @@
 	<bean id="rLoadingResultsFileProcessor"  class="org.ojbc.bundles.utilities.analytics.dataloading.RLoadingResultsFileProcessor">
 		<property name="loadingOutputDirectory" value="${analytics.loadingOutputDirectory}"/>
 		<property name="loadingWorkingDirectory" value="${analytics.loadingWorkingDirectory}"/>
-		<property name="buildDashboardWorkingDirectory" value="${analytics.buildDashboardWorkingDirectory}"/>
+		<property name="buildDashboardWorkingDirectory" value="${analytics.buildDashboardDataWorkingDirectory}"/>
 	</bean>
 
 </beans>
