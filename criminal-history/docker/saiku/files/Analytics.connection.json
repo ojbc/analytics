@@ -1,0 +1,1 @@
+{"connectionname":"Analytics","connectiontype":"MONDRIAN","jdbcurl":"jdbc:mysql://db-analytics-cch/ojbc_analytics_cch_maine","schema":"/datasources/Analytics.xml","driver":"com.mysql.jdbc.Driver","username":"analytics","password":"","security_type":null}
