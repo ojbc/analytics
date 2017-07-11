@@ -19,7 +19,7 @@ library(stringr)
 library(RMySQL)
 
 # Assumes Arrest dataframe has already been created
-source('LoadData.R')
+#source('LoadData.R')
 
 # edit mysql connection info here
 connection <- dbConnect(MySQL(), host="localhost", dbname="ojbc_analytics_cch_maine", username="root")
@@ -261,6 +261,13 @@ ChargeSeverityType <- Arrest %>% select(ChargeSeverity) %>% distinct() %>%
   rename(ChargeSeverityTypeDescription=ChargeSeverity) %>%
   mutate(ChargeSeverityTypeID=row_number())
 
+DispositionType <- Arrest %>% select(DispositionType) %>% distinct() %>%
+  filter(!is.na(DispositionType)) %>%
+  arrange(DispositionType) %>%
+  rename(DispositionTypeDescription=DispositionType) %>%
+  mutate(DispositionTypeID=row_number()) %>%
+  bind_rows(tibble(DispositionTypeID=NONE_VALUE, DispositionTypeDescription='None'))
+
 ChargeOriginType <- Arrest %>% select(ChargeOrigin) %>% distinct() %>%
   arrange(ChargeOrigin) %>%
   mutate(ChargeOriginTypeDescription=str_to_title(ChargeOrigin)) %>%
@@ -382,6 +389,7 @@ ArrestOut <- Arrest2 %>%
   inner_join(RaceType, by='ArresteeRace') %>%
   inner_join(ChargeOriginType, by='ChargeOrigin') %>%
   left_join(CourtType, by='CourtName') %>%
+  left_join(DispositionType, by=c('DispositionType'='DispositionTypeDescription')) %>%
   mutate(AgeOfRecord=(EXTRACT_DATE - ArrestDate) / ddays(1)) %>%
   mutate(ArrestDateTypeID=as.integer(format(ArrestDate, '%Y%m%d')),
          DispositionDateTypeID=case_when(
@@ -399,6 +407,7 @@ ArrestOut <- Arrest2 %>%
            TRUE ~ 'Yes'),
          DaysToDispose=(DispositionDate - ArrestDate) / ddays(1),
          CourtTypeID=case_when(is.na(.$CourtTypeID) ~ NONE_VALUE, TRUE ~ .$CourtTypeID),
+         DispositionTypeID=case_when(is.na(.$DispositionTypeID) ~ NONE_VALUE, TRUE ~ .$DispositionTypeID),
          DaysSincePriorArrestDurationTypeID=convertDaysToDurationType(DaysSincePriorArrest),
          DaysToDisposeDurationTypeID=convertDaysToDurationType(DaysToDispose),
          ArrestID=row_number()) %>%
@@ -416,7 +425,8 @@ ArrestOut <- Arrest2 %>%
          DaysToDispose,
          DaysToDisposeDurationTypeID,
          CourtTypeID,
-         DispositionDateTypeID)
+         DispositionDateTypeID,
+         DispositionTypeID)
 
 DateType <- buildDateDimensionTable(min(Arrest$ArrestDate), max(Arrest$ArrestDate))
 
@@ -430,6 +440,7 @@ writeTable('SexType', SexType, 'ArresteeSex')
 writeTable('RaceType', RaceType, 'ArresteeRace')
 writeTable('ChargeSeverityType', ChargeSeverityType)
 writeTable('ChargeOriginType', ChargeOriginType, 'ChargeOrigin')
+writeTable('DispositionType', DispositionType)
 writeTable('AgeGroupType', AgeGroupType)
 writeTable('AgeYearsType', AgeYearsType)
 writeTable('CourtType', CourtType, 'CourtName')
@@ -439,3 +450,5 @@ writeTable('DateType', DateType)
 writeTable('DaysDurationType', DaysDurationType)
 writeTable('Arrest', ArrestOut)
 dbClearResult(dbSendStatement(connection, paste0('set foreign_key_checks=1')))
+
+dbDisconnect(connection)

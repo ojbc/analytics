@@ -61,7 +61,7 @@ Statutes <- read_csv(STATUTE_FILE_PATH,
   )
 
 Disposition <- Disposition %>%
-  select(ChargeID, DispositionDate, CourtName) %>%
+  select(ChargeID, DispositionDate, CourtName, DispositionType) %>%
   inner_join(Charge %>% select(ChargeID, ArrestID), by='ChargeID') %>%
   arrange(ArrestID, DispositionDate) %>%
   group_by(ArrestID) %>%

@@ -11,6 +11,7 @@
 		<Table name="DaysDurationType" keyColumn="DaysDurationTypeID"/>
 		<Table name="RaceType"/>
 		<Table name="SexType"/>
+		<Table name="DispositionType"/>
 		<Table name="AgeYearsType" keyColumn="AgeYearsTypeID"/>
 		<Table name="AgeGroupType" keyColumn="AgeGroupTypeID"/>
 		<Link source="AgeGroupType" target="AgeYearsType">
@@ -146,6 +147,18 @@
 		</Hierarchies>
 	</Dimension>
 
+	<Dimension visible="true" name="Disposition Type" table="DispositionType" key="DispositionTypeID">
+		<Attributes>
+			<Attribute name="DispositionTypeID" keyColumn="DispositionTypeID" hasHierarchy="false"/>
+			<Attribute name="DispositionTypeDescription" keyColumn="DispositionTypeDescription" hasHierarchy="false" caption="Disposition Type" orderByColumn="DispositionTypeID"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Disposition Type" visible="true" caption="Disposition Type" allMemberName="All Types" allMemberCaption="All Types">
+				<Level attribute="DispositionTypeDescription" caption="Disposition Type"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
 	<Dimension visible="true" name="DaysDuration" table="DaysDurationType" key="DaysDurationTypeID">
 		<Attributes>
 			<Attribute name="DaysDurationTypeID" keyColumn="DaysDurationTypeID" hasHierarchy="false"/>
@@ -252,6 +265,7 @@
 			<Dimension source="Arrestee Race"/>
 			<Dimension source="Court"/>
 			<Dimension source="Arresting Agency"/>
+			<Dimension source="Disposition Type"/>
 			<Dimension source="DaysDuration" name="DaysToDisposition" caption="Days to Disposition"/>
 			<Dimension source="DaysDuration" name="DaysSincePriorArrest" caption="Days Since Prior Arrest"/>
 
@@ -288,6 +302,7 @@
 	    			<ForeignKeyLink dimension="DaysToDisposition" foreignKeyColumn="DaysToDisposeDurationTypeID"/>
 	    			<ForeignKeyLink dimension="DaysSincePriorArrest" foreignKeyColumn="DaysSincePriorArrestDurationTypeID"/>
 	    			<ForeignKeyLink dimension="Arresting Agency" foreignKeyColumn="ArrestingAgencyTypeID"/>
+	    			<ForeignKeyLink dimension="Disposition Type" foreignKeyColumn="DispositionTypeID"/>
 	    			<FactLink dimension="Disposition Status"/>
 	    		</DimensionLinks>
 	    	</MeasureGroup>
