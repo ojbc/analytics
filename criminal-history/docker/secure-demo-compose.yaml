@@ -1,0 +1,47 @@
+# docker compose file for cch demo
+
+version: "3"
+
+services:
+
+ # db-analytics-cch:
+    #container_name: db-analytics-cch
+    #image: db-analytics-cch
+    #expose:
+    #  - 3306
+    # uncomment to be able to query the db via mysql client like:  mysql -u analytics -h localhost -P 13306 --protocol=tcp
+    #ports:
+    #  - 13306:3306
+   # networks:
+   #   - cch-demo
+
+#  saiku-analytics-cch:
+#    container_name: saiku-analytics-cch
+#    image: saiku-analytics-cch
+#    ports:
+#      - 8080:80
+#    networks:
+#      - cch-demo
+#    depends_on:
+#      - db-analytics-cch
+      
+  httpd-proxy-cch:
+    container_name: httpd-proxy-cch
+    image: httpd-proxy-cch
+    ports:
+      - 443:443
+    networks:
+      - cch-demo
+      
+  ojb-web-util:
+    container_name: ojb-web-util
+    image: ojbc/ojb-web-util
+    networks:
+      - cch-demo
+ 
+ 
+networks:
+  cch-demo:
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
