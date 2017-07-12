@@ -6,7 +6,7 @@ services:
 
   db-analytics-cch:
     container_name: db-analytics-cch
-    image: db-analytics-cch
+    image: ojbc/db-analytics-cch
     expose:
       - 3306
     # uncomment to be able to query the db via mysql client like:  mysql -u analytics -h localhost -P 13306 --protocol=tcp
@@ -17,7 +17,7 @@ services:
 
   saiku-analytics-cch:
     container_name: saiku-analytics-cch
-    image: saiku-analytics-cch
+    image: ojbc/saiku-analytics-cch
     ports:
       - 8080:80
     networks:
