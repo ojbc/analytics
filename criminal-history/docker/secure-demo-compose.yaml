@@ -1,5 +1,5 @@
 # docker compose file for cch demo
-# docker-compose -f local-demo-compose.yaml up -d
+# docker-compose -f secure-demo-compose.yaml up -d
 version: "3"
 
 services:
@@ -25,7 +25,7 @@ services:
       
   httpd-proxy-cch:
     container_name: httpd-proxy-cch
-    image: httpd-proxy-cch
+    image: ojbc/httpd-proxy-cch
     ports:
       - 443:443
     networks:
