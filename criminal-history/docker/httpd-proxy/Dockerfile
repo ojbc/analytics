@@ -29,10 +29,10 @@ WORKDIR /tmp
 
 # change apache server name and retrieve the demostate trust fabric
 RUN sed -i "s/ServerName portal.ojbc.local:80/ServerName demo.search.org:80/g" /etc/apache2/httpd.conf && \
-	echo "ProxyPass /saiku http://saiku-analytics-cch:80/saiku " >> /etc/apache2/conf.d/proxy.conf && \
-	echo "ProxyPassReverse /saiku http://saiku-analytics-cch:80/saiku" >> /etc/apache2/conf.d/proxy.conf && \
-	echo "ProxyPass /saiku-ui http://saiku-analytics-cch:80/saiku-ui " >> /etc/apache2/conf.d/proxy.conf && \
-	echo "ProxyPassReverse /saiku-ui http://saiku-analytics-cch:80/saiku-ui" >> /etc/apache2/conf.d/proxy.conf  && \
+	echo "ProxyPass /saiku ajp://saiku-analytics-cch:8009/saiku " >> /etc/apache2/conf.d/proxy.conf && \
+	echo "ProxyPassReverse /saiku ajp://saiku-analytics-cch:8009/saiku" >> /etc/apache2/conf.d/proxy.conf && \
+	echo "ProxyPass /saiku-ui ajp://saiku-analytics-cch:8009/saiku-ui " >> /etc/apache2/conf.d/proxy.conf && \
+	echo "ProxyPassReverse /saiku-ui ajp://saiku-analytics-cch:8009/saiku-ui" >> /etc/apache2/conf.d/proxy.conf  && \
 	echo "ProxyPass /ojb-web-util ajp://saiku-analytics-cch:8009/ojb-web-util" >> /etc/apache2/conf.d/proxy.conf && \
 	echo "ProxyPassReverse /ojb-web-util ajp://saiku-analytics-cch:8009/ojb-web-util" >> /etc/apache2/conf.d/proxy.conf
 

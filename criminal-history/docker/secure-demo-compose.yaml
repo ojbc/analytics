@@ -1,29 +1,27 @@
 # docker compose file for cch demo
-
+# docker-compose -f local-demo-compose.yaml up -d
 version: "3"
 
 services:
 
- # db-analytics-cch:
-    #container_name: db-analytics-cch
-    #image: db-analytics-cch
-    #expose:
-    #  - 3306
+  db-analytics-cch:
+    container_name: db-analytics-cch
+    image: ojbc/db-analytics-cch
+    expose:
+      - 3306
     # uncomment to be able to query the db via mysql client like:  mysql -u analytics -h localhost -P 13306 --protocol=tcp
     #ports:
     #  - 13306:3306
-   # networks:
-   #   - cch-demo
+    networks:
+      - cch-demo
 
-#  saiku-analytics-cch:
-#    container_name: saiku-analytics-cch
-#    image: saiku-analytics-cch
-#    ports:
-#      - 8080:80
-#    networks:
-#      - cch-demo
-#    depends_on:
-#      - db-analytics-cch
+  saiku-analytics-cch:
+    container_name: saiku-analytics-cch
+    image: ojbc/saiku-analytics-cch
+    networks:
+      - cch-demo
+    depends_on:
+      - db-analytics-cch
       
   httpd-proxy-cch:
     container_name: httpd-proxy-cch
@@ -40,8 +38,8 @@ services:
       - cch-demo
  
  
-networks:
-  cch-demo:
-    ipam:
-      config:
-        - subnet: 172.25.0.0/16
+  networks:
+    cch-demo:
+      ipam:
+        config:
+          - subnet: 172.25.0.0/16
