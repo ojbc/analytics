@@ -2,6 +2,11 @@
 # docker-compose -f secure-demo-compose.yaml up -d
 version: "3"
 
+networks:
+   cch-demo:
+     ipam:
+       config:
+         - subnet: 172.25.0.0/16
 services:
 
   db-analytics-cch:
@@ -25,7 +30,7 @@ services:
       
   httpd-proxy-cch:
     container_name: httpd-proxy-cch
-    image: ojbc/httpd-proxy-cch
+    image: ojbc/maine-httpd-proxy-cch-analytics
     ports:
       - 443:443
     networks:
@@ -36,10 +41,3 @@ services:
     image: ojbc/ojb-web-util
     networks:
       - cch-demo
- 
- 
-  networks:
-    cch-demo:
-      ipam:
-        config:
-          - subnet: 172.25.0.0/16
