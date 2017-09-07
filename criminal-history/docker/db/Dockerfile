@@ -28,6 +28,7 @@ RUN bin/mysql_install_db --user=root
 
 COPY files/server-config.sh /tmp
 COPY files/ojbc_analytics_cch_maine.sql.gz /tmp
+COPY files/create-views.sql /tmp
 RUN chmod a+x /tmp/server-config.sh
 RUN /tmp/server-config.sh
 

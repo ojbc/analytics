@@ -17,4 +17,5 @@ gunzip ojbc_analytics_cch_maine.sql.gz
 
 echo "create database ojbc_analytics_cch_maine" | mysql -u root
 mysql -u root ojbc_analytics_cch_maine < /tmp/ojbc_analytics_cch_maine.sql
+mysql -u root ojbc_analytics_cch_maine < /tmp/create-views.sql
 rm -f /tmp/ojbc_analytics_cch_maine.sql
