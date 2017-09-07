@@ -1,0 +1,157 @@
+<html>
+
+  <head>
+    <title>Embedding Vega-Lite</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.1/vega.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-lite/2.0.0-beta.15/vega-lite.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-embed/3.0.0-beta.20/vega-embed.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- Change this to a dynamic ajax one, that has implementations to invoke the mondrian-rest api, for production -->
+    <script src="js/static-demo-data.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="container-fluid">
+
+      <div class="page-header clearfix">
+        <div class="pull-left">
+          <h2>OJBC Demostate Criminal History Dashboard</h2>
+        </div>
+        <div class="pull-right">
+          <button type="button" id="randomize-button" class="btn btn-default">Randomize</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Widget 1</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart1"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Widget 2</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart2"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Widget 3</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Widget 4</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart4"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Widget 5</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart5"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Widget 6</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart6"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <script type="text/javascript">
+
+      getDataFor = function(divName, callbackFunction) {
+        callbackFunction(staticDataMap[divName]);
+      }
+
+      refreshData = function() {
+
+        getDataFor("chart1", function(v) {
+          var s = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v2.0.0-beta.15.json",
+            "mark": "bar",
+            "encoding": {
+              "x": {"field": "a", "type": "ordinal"},
+              "y": {"field": "b", "type": "quantitative"}
+            }
+          };
+          s.data = v;
+          s.width = $("#chart1").width()*.8;
+          s.height = 200;
+          vega.embed("#chart1", s, {"actions" : false});
+        });
+
+        getDataFor("chart2", function(v) {
+          console.log(v);
+          var s = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v2.0.0-beta.15.json",
+            "mark": "bar",
+            "encoding": {
+              "y" : {"field":  "Character", "type" : "nominal"},
+              "x" : {"field" : "Age", "type" : "quantitative"}
+            }
+          };
+          s.data = v;
+          s.width = $("#chart2").width()*.8;
+          s.height = 200;
+         vega.embed("#chart2", s, {"actions" : false});
+        });
+
+      }
+
+      $(window).resize(function() {
+        refreshData();
+      });
+
+      $("#randomize-button").click(function() {
+        refreshData();
+      });
+
+      $(function() {
+        refreshData();
+      })
+
+    </script>
+
+  </body>
+
+</html>
