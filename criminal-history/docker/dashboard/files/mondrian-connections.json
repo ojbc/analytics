@@ -1,0 +1,9 @@
+{
+	"cch" : {
+		"JdbcDrivers" : "com.mysql.jdbc.Driver",
+		"Jdbc" : "jdbc:mysql://db-analytics-cch/ojbc_analytics_cch_maine",
+		"Catalog" : "/MondrianSchema.xml",
+		"JdbcUser" : "analytics",
+		"Description" : "Maine CCH Cube"
+	}
+}
