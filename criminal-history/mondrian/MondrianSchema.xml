@@ -59,14 +59,14 @@
                     <Column name="CalendarQuarter"/>
                 </Name>
             </Attribute>
-            <Attribute name="Month" hasHierarchy="false" levelType="TimeMonths">
+            <Attribute name="Month" hasHierarchy="false" levelType="TimeMonths" orderByColumn="Month">
             	<Key>
                     <Column name="YearLabel"/>
                     <Column name="CalendarQuarter"/>
                     <Column name="Month"/>
                 </Key>
                 <Name>
-                    <Column name="Month"/>
+                    <Column name="MonthName"/>
                 </Name>
             </Attribute>
             <Attribute name="Day" hasHierarchy="false" levelType="TimeDays">
@@ -82,6 +82,7 @@
             </Attribute>
             <Attribute name="Date" keyColumn="CalendarDate" hasHierarchy="false" levelType="TimeDays"/>            
             <Attribute name="Day of Week" keyColumn="DayOfWeek" hasHierarchy="false" levelType="TimeDays"/>  
+            <Attribute name="Month of Year" keyColumn="MonthName" hasHierarchy="false" levelType="TimeMonths" orderByColumn="Month"/>  
 		</Attributes>
 		<Hierarchies>
             <Hierarchy name="DateYMD" caption="Year/Month/Day" allMemberName="All Years" allMemberCaption="All Years">
@@ -95,6 +96,9 @@
             </Hierarchy>
             <Hierarchy name="Day of Week" caption="Day of Week" allMemberName="All Days" allMemberCaption="All Days">
                 <Level attribute="Day of Week"/>
+            </Hierarchy>
+            <Hierarchy name="Month of Year" caption="Month of Year" allMemberName="All Months" allMemberCaption="All Months">
+                <Level attribute="Month of Year"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
