@@ -1,3 +1,7 @@
+getDataFor = function(divName, callbackFunction) {
+    callbackFunction(staticDataMap[divName]);
+}
+
 getRandomValue = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);

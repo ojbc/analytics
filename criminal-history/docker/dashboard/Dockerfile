@@ -7,3 +7,4 @@ RUN mkdir /opt/tomcat/sharedcp && \
 COPY files/mondrian-connections.json /opt/tomcat/sharedcp
 COPY files/MondrianSchema.xml /opt/tomcat/sharedcp
 COPY files/mysql-connector-java-5.1.43-bin.jar /opt/tomcat/sharedcp
+COPY files/dashboard.war /opt/tomcat/webapps
