@@ -11,6 +11,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-tooltip/0.3.3/vega-tooltip.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/vega-tooltip/0.3.3/vega-tooltip.min.css">
+
     <!-- Change this to a dynamic ajax one, that has implementations to invoke the mondrian-rest api, for production -->
     <script src="js/static-demo-data.js"></script>
 
@@ -24,16 +27,13 @@
         <div class="pull-left">
           <h2>OJBC Demostate Criminal History Dashboard</h2>
         </div>
-        <div class="pull-right">
-          <button type="button" id="randomize-button" class="btn btn-default">Randomize</button>
-        </div>
       </div>
 
       <div class="row">
         <div class="col-md-4">
           <div class="panel panel-primary">
             <div class="panel-heading">
-              <h3 class="panel-title">Widget 1</h3>
+              <h3 class="panel-title">Disposition Rate by County and Charge Severity</h3>
             </div>
             <div class="panel-body">
               <div id="chart1"></div>
@@ -43,7 +43,7 @@
         <div class="col-md-4">
           <div class="panel panel-primary">
             <div class="panel-heading">
-              <h3 class="panel-title">Widget 2</h3>
+              <h3 class="panel-title">Days to Disposition by Court (Top Ten)</h3>
             </div>
             <div class="panel-body">
               <div id="chart2"></div>
@@ -53,7 +53,7 @@
         <div class="col-md-4">
           <div class="panel panel-primary">
             <div class="panel-heading">
-              <h3 class="panel-title">Widget 3</h3>
+              <h3 class="panel-title">Charge Severity by Month</h3>
             </div>
             <div class="panel-body">
               <div id="chart3"></div>
@@ -66,7 +66,7 @@
         <div class="col-md-4">
           <div class="panel panel-primary">
             <div class="panel-heading">
-              <h3 class="panel-title">Widget 4</h3>
+              <h3 class="panel-title">Days to Disposition - Timeline</h3>
             </div>
             <div class="panel-body">
               <div id="chart4"></div>
@@ -76,7 +76,7 @@
         <div class="col-md-4">
           <div class="panel panel-primary">
             <div class="panel-heading">
-              <h3 class="panel-title">Widget 5</h3>
+              <h3 class="panel-title">Disposition Rate - Timeline</h3>
             </div>
             <div class="panel-body">
               <div id="chart5"></div>
@@ -86,7 +86,7 @@
         <div class="col-md-4">
           <div class="panel panel-primary">
             <div class="panel-heading">
-              <h3 class="panel-title">Widget 6</h3>
+              <h3 class="panel-title">Arrest Volume and Days to Disposition by County/Agency</h3>
             </div>
             <div class="panel-body">
               <div id="chart6"></div>
@@ -108,32 +108,166 @@
         getDataFor("chart1", function(v) {
           var s = {
             "$schema": "https://vega.github.io/schema/vega-lite/v2.0.0-beta.15.json",
-            "mark": "bar",
+            "mark": "circle",
+            "transform": [
+              {"calculate": "100*datum['Disposition Rate']", "as": "dr"},
+            ],
             "encoding": {
-              "x": {"field": "a", "type": "ordinal"},
-              "y": {"field": "b", "type": "quantitative"}
+              "y": {"field": "ChargeSeverityTypeDescription", "type": "nominal", "scale": {"domain" : ["Felony", "Mixed", "Misdemeanor"]}, "axis" : {"title" : ""}},
+              "x": {"field": "County", "type": "nominal", "axis" : {"title" : ""}},
+              "size" : {
+                "field" : "Disposition Rate",
+                "type" : "quantitative",
+                "aggregate" : "mean",
+                "scale": {
+                  "domain" : [.7, 1],
+                  "range" : [30, 380],
+                  "zero" : false
+                },
+                "legend" : { "values" : [.7,.80,.90,1.00], "title" : "Rate", "format" : "%"}
+              },
+              "tooltip" : {"field" : "Disposition Rate", "type" : "quantitative"}
             }
           };
           s.data = v;
-          s.width = $("#chart1").width()*.8;
+          s.width = $("#chart1").width()*.7;
           s.height = 200;
-          vega.embed("#chart1", s, {"actions" : false});
+          vega.embed("#chart1", s, {"actions" : false, "renderer" : "svg"});
         });
 
         getDataFor("chart2", function(v) {
-          console.log(v);
           var s = {
             "$schema": "https://vega.github.io/schema/vega-lite/v2.0.0-beta.15.json",
             "mark": "bar",
             "encoding": {
-              "y" : {"field":  "Character", "type" : "nominal"},
-              "x" : {"field" : "Age", "type" : "quantitative"}
+              "y" : {"field":  "CourtTypeDescription", "type" : "nominal", "axis" : {"title" : ""}},
+              "x" : {"field" : "Avg Days to Disposition", "type" : "quantitative"}
             }
           };
           s.data = v;
-          s.width = $("#chart2").width()*.8;
+          s.width = $("#chart2").width()*.6;
           s.height = 200;
          vega.embed("#chart2", s, {"actions" : false});
+        });
+
+        getDataFor("chart3", function(v) {
+          var s = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v2.0.0-beta.15.json",
+            "mark": "bar",
+            "encoding": {
+              "x" : {
+                "field":  "Month of Year",
+                "type" : "nominal",
+                "axis" : {"title" : ""},
+                "scale" : {
+                  "domain" : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+                }
+              },
+              "y" : {"field" : "Arrests", "type" : "quantitative", "aggregate" : "sum", "axis" : {"title" : "Arrests"}},
+              "color": {
+                "field": "ChargeSeverityTypeDescription",
+                "type": "nominal",
+                "scale": {"scheme" : "Accent", "domain" : ["Felony", "Mixed", "Misdemeanor"]},
+                "legend" : {"title": "Severity"}
+              }
+            }
+          };
+          s.data = v;
+          s.width = $("#chart3").width()*.7;
+          s.height = 200;
+         vega.embed("#chart3", s, {"actions" : false});
+        });
+
+        getDataFor("chart4", function(v) {
+
+          // example of how to doctor values before feeding them into the spec
+          v.values.forEach(function(val) {
+            val.dd = new Date(val.Month + ' 1, ' + val.Year);
+          });
+
+          var s = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v2.0.0-beta.15.json",
+            "mark": "line",
+            "encoding": {
+              "x" : {
+                "field":  "dd",
+                "type" : "temporal",
+                "axis" : {"title" : "", "format" : "%b"}
+              },
+              "y" : {"field" : "Avg Days to Disposition", "type" : "quantitative"},
+              "color": {
+                "field": "ChargeSeverityTypeDescription",
+                "type": "nominal",
+                "scale": {"scheme" : "Accent", "domain" : ["Felony", "Mixed", "Misdemeanor"]},
+                "legend" : {"title": "Severity"}
+              }
+            }
+          };
+          s.data = v;
+          s.width = $("#chart4").width()*.7;
+          s.height = 200;
+         vega.embed("#chart4", s, {"actions" : false});
+        });
+
+        getDataFor("chart5", function(v) {
+
+          // example of how to doctor values before feeding them into the spec
+          v.values.forEach(function(val) {
+            val.dd = new Date(val.Month + ' 1, ' + val.Year);
+          });
+
+          var s = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v2.0.0-beta.15.json",
+            "mark": "line",
+            "encoding": {
+              "x" : {
+                "field":  "dd",
+                "type" : "temporal",
+                "axis" : {"title" : "", "format" : "%b"}
+              },
+              "y" : {"field" : "Disposition Rate", "type" : "quantitative", "axis" : {"format" : "%"}},
+              "color": {
+                "field": "ChargeSeverityTypeDescription",
+                "type": "nominal",
+                "scale": {"scheme" : "Accent", "domain" : ["Felony", "Mixed", "Misdemeanor"]},
+                "legend" : {"title": "Severity"}
+              }
+            }
+          };
+          s.data = v;
+          s.width = $("#chart5").width()*.7;
+          s.height = 200;
+         vega.embed("#chart5", s, {"actions" : false});
+        });
+
+        getDataFor("chart6", function(v) {
+          var s = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v2.0.0-beta.15.json",
+            "mark": "tick",
+            "encoding": {
+              "x" : {"field":  "Arrests", "type" : "quantitative", "scale" : {"type" : "log"}, "axis" : {"values" : [10,100,1000,10000]}},
+              "y" : {"field" : "County", "type" : "nominal", "axis" : {"title" : ""}},
+              "color" : {
+                "field" : "Avg Days to Disposition",
+                "type" : "quantitative",
+                "scale": {"scheme": {"name" : "blues", "extent" : [.5, 1]}}
+              }
+            }
+          };
+          s.data = v;
+          s.width = $("#chart6").width()*.6;
+          s.height = 200;
+          vega.embed("#chart6", s, {"actions" : false}).then(function(result) {
+            var tooltipOption = {
+              "showAllFields": false,
+              "fields": [
+                { "field": "AgencyTypeDescription", "title" : "Agency" },
+                { "field": "Arrests" },
+                { "field": "Avg Days to Disposition", "title" : "ADTD" }
+              ]
+            };
+            vegaTooltip.vegaLite(result.view, s, tooltipOption);
+          }).catch(console.error);
         });
 
       }
