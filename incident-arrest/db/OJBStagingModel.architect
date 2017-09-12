@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<architect-project version="1.0" appversion="1.0.6">
+<architect-project version="1.0" appversion="1.0.8">
  <project-name>OJBStagingModel</project-name>
  <print-settings numCopies="1" zoom="0.6" pageNumbersPrinted="false" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
@@ -654,54 +654,116 @@
     </index>
    </folder>
   </table>
+  <table id="TAB182" populated="true" UUID="30599a92-2718-496a-aafc-59cf29739655" name="TrafficStop" objectType="TABLE" physicalName="TrafficStop" >
+   <remarks></remarks>
+   <folder id="FOLTAB1821" populated="true" name="Columns" physicalName="Columns" type="1">
+    <column id="COL183" populated="true" UUID="09fa8d07-2871-4571-a761-89ae734a9e4b" autoIncrement="false" autoIncrementSequenceName="TrafficStop_TrafficStopID_seq" defaultValue="" name="TrafficStopID" nullable="0" physicalName="TrafficStopID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+     <remarks></remarks>
+    </column>
+    <column id="COL184" populated="true" UUID="475dc053-b867-4b68-9350-dffd2c27b831" autoIncrement="false" autoIncrementSequenceName="Incident_IncidentID_seq" defaultValue="" name="IncidentID" nullable="0" physicalName="IncidentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+     <remarks></remarks>
+    </column>
+    <column id="COL185" populated="true" UUID="d98b2435-5bba-41b4-a298-a5d5ff6eb7fc" autoIncrement="false" autoIncrementSequenceName="TrafficStop_TrafficStopReasonDescription_seq" defaultValue="" name="TrafficStopReasonDescription" nullable="1" physicalName="TrafficStopReasonDescription" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL186" populated="true" UUID="bf249041-31ea-4a52-9bef-0b1fe89700cf" autoIncrement="false" autoIncrementSequenceName="TrafficStop_TrafficStopSearchTypeDescription_seq" defaultValue="" name="TrafficStopSearchTypeDescription" nullable="1" physicalName="TrafficStopSearchTypeDescription" precision="3" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL187" populated="true" UUID="d8e10112-6530-4daa-8026-fc2e626a1085" autoIncrement="false" autoIncrementSequenceName="TrafficStop_TrafficStopContrabandStatus_seq" defaultValue="" name="TrafficStopContrabandStatus" nullable="1" physicalName="TrafficStopContrabandStatus" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL188" populated="true" UUID="8d3afa0c-4034-4dcb-bd74-acbbd65d6089" autoIncrement="false" autoIncrementSequenceName="TrafficStop_TrafficStopOutcomeDescription_seq" defaultValue="" name="TrafficStopOutcomeDescription" nullable="1" physicalName="TrafficStopOutcomeDescription" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL189" populated="true" UUID="333f0b9e-ecec-401d-b892-4c07290f4514" autoIncrement="false" autoIncrementSequenceName="TrafficStop_DriverAge_seq" defaultValue="" name="DriverAge" nullable="1" physicalName="DriverAge" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+     <remarks></remarks>
+    </column>
+    <column id="COL190" populated="true" UUID="64435bdc-99c7-435a-9302-ffd437664b59" autoIncrement="false" autoIncrementSequenceName="TrafficStop_DriverSex_seq" defaultValue="" name="DriverSex" nullable="1" physicalName="DriverSex" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL191" populated="true" UUID="ecaccfef-20d4-4641-a811-dfbe0a68a7bb" autoIncrement="false" autoIncrementSequenceName="TrafficStop_DriverRace_seq" defaultValue="" name="DriverRace" nullable="1" physicalName="DriverRace" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL192" populated="true" UUID="1eecf9cf-8c51-45d3-9519-ad50db4d8dba" autoIncrement="false" autoIncrementSequenceName="TrafficStop_DriverResidenceTown_seq" defaultValue="" name="DriverResidenceTown" nullable="1" physicalName="DriverResidenceTown" precision="80" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL193" populated="true" UUID="e918a434-5f80-4f33-bc3a-46218f011cc8" autoIncrement="false" autoIncrementSequenceName="TrafficStop_DriverResidenceState_seq" defaultValue="" name="DriverResidenceState" nullable="1" physicalName="DriverResidenceState" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL194" populated="true" UUID="ca6d2923-72f8-4ac5-b30d-fc91f8ae6096" autoIncrement="false" autoIncrementSequenceName="TrafficStop_VehicleMake_seq" defaultValue="" name="VehicleMake" nullable="1" physicalName="VehicleMake" precision="20" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL195" populated="true" UUID="45d309d7-2c80-4be0-b68c-aa27fe101808" autoIncrement="false" autoIncrementSequenceName="TrafficStop_VehicleModel_seq" defaultValue="" name="VehicleModel" nullable="1" physicalName="VehicleModel" precision="20" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL196" populated="true" UUID="1fd5e4a6-6f05-488b-afb7-546fd112e351" autoIncrement="false" autoIncrementSequenceName="TrafficStop_VehicleYear_seq" defaultValue="" name="VehicleYear" nullable="1" physicalName="VehicleYear" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+     <remarks></remarks>
+    </column>
+    <column id="COL197" populated="true" UUID="9765c12d-09b4-4a16-b408-609fe4892093" autoIncrement="false" autoIncrementSequenceName="TrafficStop_VehicleRegistrationState_seq" defaultValue="" name="VehicleRegistrationState" nullable="1" physicalName="VehicleRegistrationState" precision="2" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    </folder>
+    <folder id="FOLTAB1823" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
+    </folder>
+    <folder id="FOLTAB1822" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
+    </folder>
+    <folder id="FOLTAB1824" populated="true" name="Indices" physicalName="Indices" type="4">
+    <index id="IDX198" populated="true" UUID="f05ebb45-49d9-4f06-b814-5256bab35c41" clustered="false" name="TrafficStopID" physicalName="TrafficStopID" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC199" populated="true" UUID="76b50f09-f464-4fc6-a86b-113878bb661b" ascendingOrDescending="UNSPECIFIED" column-ref="COL183" name="TrafficStopID" physicalName="TrafficStopID" />
+    </index>
+   </folder>
+  </table>
   <relationships>
-   <relationship id="REL182" populated="true" UUID="5ca04b11-8db6-42c7-891c-5fdcf58eef94" deferrability="7" deleteRule="3" fk-table-ref="TAB62" fkCardinality="7" identifying="false" name="Incident_Arrest_fk" physicalName="Incident_Arrest_fk" pk-table-ref="TAB47" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP183" populated="true" UUID="0bf6395f-185d-4fbc-aa97-5c6aca17c95d" fk-column-ref="COL65" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL48" />
+   <relationship id="REL200" populated="true" UUID="5ca04b11-8db6-42c7-891c-5fdcf58eef94" deferrability="7" deleteRule="3" fk-table-ref="TAB62" fkCardinality="7" identifying="false" name="Incident_Arrest_fk" physicalName="Incident_Arrest_fk" pk-table-ref="TAB47" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP201" populated="true" UUID="0bf6395f-185d-4fbc-aa97-5c6aca17c95d" fk-column-ref="COL65" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL48" />
    </relationship>
-   <relationship id="REL184" populated="true" UUID="1e5798b1-9c85-43c2-9800-5ae1aa0324e2" deferrability="7" deleteRule="3" fk-table-ref="TAB170" fkCardinality="7" identifying="false" name="Incident_IncidentCircumstance_fk" physicalName="Incident_IncidentCircumstance_fk" pk-table-ref="TAB47" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP185" populated="true" UUID="460ee8fe-ea56-4545-ae4b-fae87dab4d12" fk-column-ref="COL172" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL48" />
+   <relationship id="REL202" populated="true" UUID="1e5798b1-9c85-43c2-9800-5ae1aa0324e2" deferrability="7" deleteRule="3" fk-table-ref="TAB170" fkCardinality="7" identifying="false" name="Incident_IncidentCircumstance_fk" physicalName="Incident_IncidentCircumstance_fk" pk-table-ref="TAB47" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP203" populated="true" UUID="460ee8fe-ea56-4545-ae4b-fae87dab4d12" fk-column-ref="COL172" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL48" />
    </relationship>
-   <relationship id="REL186" populated="true" UUID="fe21be71-0421-4284-97c0-2bc859775991" deferrability="7" deleteRule="3" fk-table-ref="TAB176" fkCardinality="7" identifying="false" name="Incident_IncidentType_fk" physicalName="Incident_IncidentType_fk" pk-table-ref="TAB47" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP187" populated="true" UUID="15298fd5-fcb8-420c-a97c-3a6962d2fbf2" fk-column-ref="COL178" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL48" />
+   <relationship id="REL204" populated="true" UUID="fe21be71-0421-4284-97c0-2bc859775991" deferrability="7" deleteRule="3" fk-table-ref="TAB176" fkCardinality="7" identifying="false" name="Incident_IncidentType_fk" physicalName="Incident_IncidentType_fk" pk-table-ref="TAB47" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP205" populated="true" UUID="15298fd5-fcb8-420c-a97c-3a6962d2fbf2" fk-column-ref="COL178" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL48" />
    </relationship>
-   <relationship id="REL188" populated="true" UUID="ef553465-e12e-4f6f-b40a-2f9f9696b0bf" deferrability="7" deleteRule="3" fk-table-ref="TAB122" fkCardinality="6" identifying="false" name="ArrestCharge_Charge_fk" physicalName="ArrestCharge_Charge_fk" pk-table-ref="TAB62" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP189" populated="true" UUID="bd19a835-e1e2-4f49-8b3c-226058877980" fk-column-ref="COL124" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL63" />
+   <relationship id="REL206" populated="true" UUID="db188097-c8d2-4bd9-ba7f-ae55b711a8a3" deferrability="7" deleteRule="3" fk-table-ref="TAB182" fkCardinality="7" identifying="false" name="Incident_TrafficStop_fk" physicalName="Incident_TrafficStop_fk" pk-table-ref="TAB47" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP207" populated="true" UUID="d289dcff-af75-4ea8-85bf-85c647f39c3b" fk-column-ref="COL184" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL48" />
    </relationship>
-   <relationship id="REL190" populated="true" UUID="fe73593a-d90f-43a1-90c2-3ef0f0c4ff0f" deferrability="7" deleteRule="3" fk-table-ref="TAB129" fkCardinality="7" identifying="false" name="PersonRace_Person_fk" physicalName="PersonRace_Person_fk" pk-table-ref="TAB73" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP191" populated="true" UUID="539f0f42-9d58-4ede-955c-e788dbdcf305" fk-column-ref="COL132" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL74" />
+   <relationship id="REL208" populated="true" UUID="ef553465-e12e-4f6f-b40a-2f9f9696b0bf" deferrability="7" deleteRule="3" fk-table-ref="TAB122" fkCardinality="6" identifying="false" name="ArrestCharge_Charge_fk" physicalName="ArrestCharge_Charge_fk" pk-table-ref="TAB62" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP209" populated="true" UUID="bd19a835-e1e2-4f49-8b3c-226058877980" fk-column-ref="COL124" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL63" />
    </relationship>
-   <relationship id="REL192" populated="true" UUID="fbae1ddd-c63c-4579-8214-e7f74701f965" deferrability="7" deleteRule="3" fk-table-ref="TAB109" fkCardinality="7" identifying="false" name="County_PretrialServiceParticipation_fk" physicalName="County_PretrialServiceParticipation_fk" pk-table-ref="TAB78" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP193" populated="true" UUID="cede8d4e-f32a-40f8-8e3b-b9425f8637db" fk-column-ref="COL112" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL79" />
+   <relationship id="REL210" populated="true" UUID="fe73593a-d90f-43a1-90c2-3ef0f0c4ff0f" deferrability="7" deleteRule="3" fk-table-ref="TAB129" fkCardinality="7" identifying="false" name="PersonRace_Person_fk" physicalName="PersonRace_Person_fk" pk-table-ref="TAB73" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP211" populated="true" UUID="539f0f42-9d58-4ede-955c-e788dbdcf305" fk-column-ref="COL132" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL74" />
    </relationship>
-   <relationship id="REL194" populated="true" UUID="a5167cef-a220-4429-a4e6-f5991281c341" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="7" identifying="false" name="Agency_Incident_fk" physicalName="Agency_Incident_fk" pk-table-ref="TAB83" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP195" populated="true" UUID="6c555722-ffe1-4df3-8ba1-c5b495986218" fk-column-ref="COL49" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL84" />
+   <relationship id="REL212" populated="true" UUID="fbae1ddd-c63c-4579-8214-e7f74701f965" deferrability="7" deleteRule="3" fk-table-ref="TAB109" fkCardinality="7" identifying="false" name="County_PretrialServiceParticipation_fk" physicalName="County_PretrialServiceParticipation_fk" pk-table-ref="TAB78" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP213" populated="true" UUID="cede8d4e-f32a-40f8-8e3b-b9425f8637db" fk-column-ref="COL112" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL79" />
    </relationship>
-   <relationship id="REL196" populated="true" UUID="bc306541-b665-4fbc-a8d3-bfff59df6bee" deferrability="7" deleteRule="3" fk-table-ref="TAB164" fkCardinality="7" identifying="false" name="PretrialService_PretrialServiceAssociation_fk" physicalName="PretrialService_PretrialServiceAssociation_fk" pk-table-ref="TAB89" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP197" populated="true" UUID="76b59323-fa29-4cab-9149-2cfd4ab80880" fk-column-ref="COL166" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL90" />
+   <relationship id="REL214" populated="true" UUID="a5167cef-a220-4429-a4e6-f5991281c341" deferrability="7" deleteRule="3" fk-table-ref="TAB47" fkCardinality="7" identifying="false" name="Agency_Incident_fk" physicalName="Agency_Incident_fk" pk-table-ref="TAB83" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP215" populated="true" UUID="6c555722-ffe1-4df3-8ba1-c5b495986218" fk-column-ref="COL49" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL84" />
    </relationship>
-   <relationship id="REL198" populated="true" UUID="f1beb963-8655-4a61-aa2e-f1136d006558" deferrability="7" deleteRule="3" fk-table-ref="TAB137" fkCardinality="7" identifying="false" name="DispositionType_Disposition_fk" physicalName="DispositionType_Disposition_fk" pk-table-ref="TAB94" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP199" populated="true" UUID="9c2102c6-d519-47af-9c82-a12d2d5b4966" fk-column-ref="COL140" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL95" />
+   <relationship id="REL216" populated="true" UUID="bc306541-b665-4fbc-a8d3-bfff59df6bee" deferrability="7" deleteRule="3" fk-table-ref="TAB164" fkCardinality="7" identifying="false" name="PretrialService_PretrialServiceAssociation_fk" physicalName="PretrialService_PretrialServiceAssociation_fk" pk-table-ref="TAB89" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP217" populated="true" UUID="76b59323-fa29-4cab-9149-2cfd4ab80880" fk-column-ref="COL166" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL90" />
    </relationship>
-   <relationship id="REL200" populated="true" UUID="237d2a29-a248-405f-9b8d-2502148aa9dc" deferrability="7" deleteRule="3" fk-table-ref="TAB129" fkCardinality="7" identifying="false" name="PersonSex_Person_fk" physicalName="PersonSex_Person_fk" pk-table-ref="TAB99" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP201" populated="true" UUID="2cb01a25-941c-4767-8799-57a08485d531" fk-column-ref="COL131" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL100" />
+   <relationship id="REL218" populated="true" UUID="f1beb963-8655-4a61-aa2e-f1136d006558" deferrability="7" deleteRule="3" fk-table-ref="TAB137" fkCardinality="7" identifying="false" name="DispositionType_Disposition_fk" physicalName="DispositionType_Disposition_fk" pk-table-ref="TAB94" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP219" populated="true" UUID="9c2102c6-d519-47af-9c82-a12d2d5b4966" fk-column-ref="COL140" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL95" />
    </relationship>
-   <relationship id="REL202" populated="true" UUID="69a89eac-b2b9-4f39-88cb-061d759f1dd8" deferrability="7" deleteRule="3" fk-table-ref="TAB158" fkCardinality="7" identifying="false" name="AssessedNeed_PretrialServiceAssessedNeed_fk" physicalName="AssessedNeed_PretrialServiceAssessedNeed_fk" pk-table-ref="TAB104" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP203" populated="true" UUID="f97998b7-944f-4e36-89db-d29593a341f1" fk-column-ref="COL160" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL105" />
+   <relationship id="REL220" populated="true" UUID="237d2a29-a248-405f-9b8d-2502148aa9dc" deferrability="7" deleteRule="3" fk-table-ref="TAB129" fkCardinality="7" identifying="false" name="PersonSex_Person_fk" physicalName="PersonSex_Person_fk" pk-table-ref="TAB99" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP221" populated="true" UUID="2cb01a25-941c-4767-8799-57a08485d531" fk-column-ref="COL131" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL100" />
    </relationship>
-   <relationship id="REL204" populated="true" UUID="f50f1cb5-cca2-4faf-a81e-a33666a07e89" deferrability="7" deleteRule="3" fk-table-ref="TAB158" fkCardinality="7" identifying="false" name="PretrialServiceParticipation_PretrialServiceAssessedNeed_fk" physicalName="PretrialServiceParticipation_PretrialServiceAssessedNeed_fk" pk-table-ref="TAB109" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP205" populated="true" UUID="5e13757d-839a-46af-ac64-abc5ad2da354" fk-column-ref="COL161" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL110" />
+   <relationship id="REL222" populated="true" UUID="69a89eac-b2b9-4f39-88cb-061d759f1dd8" deferrability="7" deleteRule="3" fk-table-ref="TAB158" fkCardinality="7" identifying="false" name="AssessedNeed_PretrialServiceAssessedNeed_fk" physicalName="AssessedNeed_PretrialServiceAssessedNeed_fk" pk-table-ref="TAB104" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP223" populated="true" UUID="f97998b7-944f-4e36-89db-d29593a341f1" fk-column-ref="COL160" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL105" />
    </relationship>
-   <relationship id="REL206" populated="true" UUID="faaaa3af-3d8b-4a4a-9afb-3a59b9d8a374" deferrability="7" deleteRule="3" fk-table-ref="TAB164" fkCardinality="7" identifying="false" name="PretrialServiceParticipation_PretrialServiceAssociation_fk" physicalName="PretrialServiceParticipation_PretrialServiceAssociation_fk" pk-table-ref="TAB109" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP207" populated="true" UUID="4729ad4d-e020-4c53-9b3c-c7b0677a2f06" fk-column-ref="COL167" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL110" />
+   <relationship id="REL224" populated="true" UUID="f50f1cb5-cca2-4faf-a81e-a33666a07e89" deferrability="7" deleteRule="3" fk-table-ref="TAB158" fkCardinality="7" identifying="false" name="PretrialServiceParticipation_PretrialServiceAssessedNeed_fk" physicalName="PretrialServiceParticipation_PretrialServiceAssessedNeed_fk" pk-table-ref="TAB109" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP225" populated="true" UUID="5e13757d-839a-46af-ac64-abc5ad2da354" fk-column-ref="COL161" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL110" />
    </relationship>
-   <relationship id="REL208" populated="true" UUID="536958a4-e868-4e9c-a28a-29e82a9615ea" deferrability="7" deleteRule="3" fk-table-ref="TAB62" fkCardinality="7" identifying="false" name="Person_Arrest_fk" physicalName="Person_Arrest_fk" pk-table-ref="TAB129" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP209" populated="true" UUID="0bf69d8a-4c77-4686-bc89-2e14e030ebe9" fk-column-ref="COL64" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL130" />
+   <relationship id="REL226" populated="true" UUID="faaaa3af-3d8b-4a4a-9afb-3a59b9d8a374" deferrability="7" deleteRule="3" fk-table-ref="TAB164" fkCardinality="7" identifying="false" name="PretrialServiceParticipation_PretrialServiceAssociation_fk" physicalName="PretrialServiceParticipation_PretrialServiceAssociation_fk" pk-table-ref="TAB109" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP227" populated="true" UUID="4729ad4d-e020-4c53-9b3c-c7b0677a2f06" fk-column-ref="COL167" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL110" />
    </relationship>
-   <relationship id="REL210" populated="true" UUID="a9dd5b6c-424d-4123-aa95-94c28f6dcdeb" deferrability="7" deleteRule="3" fk-table-ref="TAB137" fkCardinality="7" identifying="false" name="Person_Disposition_fk" physicalName="Person_Disposition_fk" pk-table-ref="TAB129" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP211" populated="true" UUID="071337a1-8b04-416a-931a-1896ed226470" fk-column-ref="COL139" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL130" />
+   <relationship id="REL228" populated="true" UUID="536958a4-e868-4e9c-a28a-29e82a9615ea" deferrability="7" deleteRule="3" fk-table-ref="TAB62" fkCardinality="7" identifying="false" name="Person_Arrest_fk" physicalName="Person_Arrest_fk" pk-table-ref="TAB129" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP229" populated="true" UUID="0bf69d8a-4c77-4686-bc89-2e14e030ebe9" fk-column-ref="COL64" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL130" />
    </relationship>
-   <relationship id="REL212" populated="true" UUID="21fff31d-8eb1-4614-8541-443e10549e83" deferrability="7" deleteRule="3" fk-table-ref="TAB109" fkCardinality="7" identifying="false" name="Person_PretrialServiceParticipation_fk" physicalName="Person_PretrialServiceParticipation_fk" pk-table-ref="TAB129" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP213" populated="true" UUID="2232ce22-c406-4595-88f1-8ebfa836efb9" fk-column-ref="COL111" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL130" />
+   <relationship id="REL230" populated="true" UUID="a9dd5b6c-424d-4123-aa95-94c28f6dcdeb" deferrability="7" deleteRule="3" fk-table-ref="TAB137" fkCardinality="7" identifying="false" name="Person_Disposition_fk" physicalName="Person_Disposition_fk" pk-table-ref="TAB129" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP231" populated="true" UUID="071337a1-8b04-416a-931a-1896ed226470" fk-column-ref="COL139" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL130" />
+   </relationship>
+   <relationship id="REL232" populated="true" UUID="21fff31d-8eb1-4614-8541-443e10549e83" deferrability="7" deleteRule="3" fk-table-ref="TAB109" fkCardinality="7" identifying="false" name="Person_PretrialServiceParticipation_fk" physicalName="Person_PretrialServiceParticipation_fk" pk-table-ref="TAB129" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP233" populated="true" UUID="2232ce22-c406-4595-88f1-8ebfa836efb9" fk-column-ref="COL111" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL130" />
    </relationship>
   </relationships>
  </target-database>
@@ -709,39 +771,41 @@
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
-  <table-pane table-ref="TAB47" x="20" y="20" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB62" x="451" y="291" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB73" x="1201" y="850" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB78" x="449" y="683" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB83" x="528" y="92" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB89" x="912" y="862" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB94" x="759" y="763" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB99" x="1199" y="319" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB104" x="149" y="462" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB109" x="189" y="935" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB122" x="481" y="556" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB129" x="1287" y="51" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB137" x="767" y="379" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB158" x="110" y="656" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB164" x="552" y="882" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB170" x="612" y="190" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB176" x="32" y="352" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-link relationship-ref="REL194" pkConnection="0.38095238095238093" fkConnection="0.6521739130434783" rLineColor="0x4daf4a" pkLabelText="" fkLabelText="" orientation="18"/>
-  <table-link relationship-ref="REL192" pkConnection="0.056179775280898875" fkConnection="0.7052631578947368" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
-  <table-link relationship-ref="REL188" pkConnection="0.527972027972028" fkConnection="0.3760330578512397" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
-  <table-link relationship-ref="REL200" pkConnection="0.6238938053097345" fkConnection="0.17733990147783252" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="72"/>
-  <table-link relationship-ref="REL190" pkConnection="0.4979253112033195" fkConnection="0.812807881773399" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="72"/>
-  <table-link relationship-ref="REL198" pkConnection="0.4609053497942387" fkConnection="0.5294117647058824" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="72"/>
-  <table-link relationship-ref="REL182" pkConnection="0.8599033816425121" fkConnection="0.4276729559748428" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
-  <table-link relationship-ref="REL208" pkConnection="0.35664335664335667" fkConnection="0.16783216783216784" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
-  <table-link relationship-ref="REL210" pkConnection="0.6363636363636364" fkConnection="0.1949685534591195" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
-  <table-link relationship-ref="REL212" pkConnection="0.9507389162561576" fkConnection="0.6289308176100629" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="20"/>
-  <table-link relationship-ref="REL202" pkConnection="0.0842911877394636" fkConnection="0.5084175084175084" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
-  <table-link relationship-ref="REL204" pkConnection="0.08421052631578947" fkConnection="0.7083333333333334" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="72"/>
-  <table-link relationship-ref="REL196" pkConnection="0.5238095238095238" fkConnection="0.5949367088607594" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
-  <table-link relationship-ref="REL206" pkConnection="0.25142857142857145" fkConnection="0.6455696202531646" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
-  <table-link relationship-ref="REL184" pkConnection="0.7892376681614349" fkConnection="0.4050632911392405" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
-  <table-link relationship-ref="REL186" pkConnection="0.5151515151515151" fkConnection="0.490272373540856" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
+  <table-pane table-ref="TAB47" x="336" y="20" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB62" x="767" y="291" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB73" x="1545" y="493" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB78" x="765" y="683" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB83" x="841" y="58" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB89" x="1287" y="908" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB94" x="1115" y="768" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB99" x="1509" y="252" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB104" x="382" y="518" bgColor="0xf6bcbc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB109" x="505" y="935" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB122" x="797" y="556" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB129" x="1603" y="51" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB137" x="1097" y="378" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB158" x="303" y="679" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB164" x="882" y="847" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB170" x="920" y="154" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB176" x="348" y="352" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB182" x="20" y="274" bgColor="0xc8dccc" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-link relationship-ref="REL214" pkConnection="0.38095238095238093" fkConnection="0.30493273542600896" rLineColor="0x4daf4a" pkLabelText="" fkLabelText="" orientation="18"/>
+  <table-link relationship-ref="REL212" pkConnection="0.1607843137254902" fkConnection="0.8314917127071824" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
+  <table-link relationship-ref="REL208" pkConnection="0.40764331210191085" fkConnection="0.3760330578512397" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
+  <table-link relationship-ref="REL220" pkConnection="0.48184818481848185" fkConnection="0.17733990147783252" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="72"/>
+  <table-link relationship-ref="REL210" pkConnection="0.9276729559748428" fkConnection="0.812807881773399" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="72"/>
+  <table-link relationship-ref="REL218" pkConnection="0.4609053497942387" fkConnection="0.5294117647058824" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="72"/>
+  <table-link relationship-ref="REL200" pkConnection="0.8599033816425121" fkConnection="0.09235668789808917" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="129"/>
+  <table-link relationship-ref="REL228" pkConnection="0.35664335664335667" fkConnection="0.16783216783216784" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
+  <table-link relationship-ref="REL230" pkConnection="0.6363636363636364" fkConnection="0.1949685534591195" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
+  <table-link relationship-ref="REL232" pkConnection="0.9507389162561576" fkConnection="0.6289308176100629" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="20"/>
+  <table-link relationship-ref="REL222" pkConnection="0.34911242603550297" fkConnection="0.5084175084175084" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
+  <table-link relationship-ref="REL224" pkConnection="0.08421052631578947" fkConnection="0.596401028277635" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="72"/>
+  <table-link relationship-ref="REL216" pkConnection="0.28059701492537314" fkConnection="0.43037974683544306" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="24"/>
+  <table-link relationship-ref="REL226" pkConnection="0.25142857142857145" fkConnection="0.43646408839779005" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="65"/>
+  <table-link relationship-ref="REL202" pkConnection="0.7443946188340808" fkConnection="0.4050632911392405" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-link relationship-ref="REL204" pkConnection="0.5737704918032787" fkConnection="0.490272373540856" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132"/>
+  <table-link relationship-ref="REL206" pkConnection="0.5605381165919282" fkConnection="0.5033112582781457" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="130"/>
  </play-pen>
  <critic-manager>
   <critic-grouping platformType="Generic" enabled="true">
