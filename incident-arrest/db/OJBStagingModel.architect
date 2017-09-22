@@ -198,7 +198,7 @@
      <remarks></remarks>
     </column>
     <column id="COL58" populated="true" UUID="e71164ca-a49f-4ecc-b7c0-08ed9ef1339d" autoIncrement="false" autoIncrementSequenceName="Incident_RecordType_seq" defaultValue="" name="RecordType" nullable="0" physicalName="RecordType" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
-     <remarks>ete</remarks>
+     <remarks>N for new record, U for update to previous record, D for delete</remarks>
     </column>
     <column id="COL59" populated="true" UUID="4a1f82dc-a511-4431-bd97-c7a67d275c28" autoIncrement="false" autoIncrementSequenceName="Incident_Timestamp_seq" defaultValue="CURRENT_TIMESTAMP()" name="Timestamp" nullable="0" physicalName="Timestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
@@ -657,10 +657,10 @@
   <table id="TAB182" populated="true" UUID="30599a92-2718-496a-aafc-59cf29739655" name="TrafficStop" objectType="TABLE" physicalName="TrafficStop" >
    <remarks></remarks>
    <folder id="FOLTAB1821" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL183" populated="true" UUID="09fa8d07-2871-4571-a761-89ae734a9e4b" autoIncrement="false" autoIncrementSequenceName="TrafficStop_TrafficStopID_seq" defaultValue="" name="TrafficStopID" nullable="0" physicalName="TrafficStopID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL183" populated="true" UUID="09fa8d07-2871-4571-a761-89ae734a9e4b" autoIncrement="true" autoIncrementSequenceName="TrafficStop_TrafficStopID_seq" defaultValue="" name="TrafficStopID" nullable="0" physicalName="TrafficStopID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL184" populated="true" UUID="475dc053-b867-4b68-9350-dffd2c27b831" autoIncrement="false" autoIncrementSequenceName="Incident_IncidentID_seq" defaultValue="" name="IncidentID" nullable="0" physicalName="IncidentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL184" populated="true" UUID="475dc053-b867-4b68-9350-dffd2c27b831" autoIncrement="false" autoIncrementSequenceName="Incident_IncidentID_seq_1_1_1" defaultValue="" name="IncidentID" nullable="0" physicalName="IncidentID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
     <column id="COL185" populated="true" UUID="d98b2435-5bba-41b4-a298-a5d5ff6eb7fc" autoIncrement="false" autoIncrementSequenceName="TrafficStop_TrafficStopReasonDescription_seq" defaultValue="" name="TrafficStopReasonDescription" nullable="1" physicalName="TrafficStopReasonDescription" precision="1" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -767,7 +767,7 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="true"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="0.8408964152537146" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
