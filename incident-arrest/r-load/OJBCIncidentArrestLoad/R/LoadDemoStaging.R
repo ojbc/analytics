@@ -1,11 +1,22 @@
+#' Creates randomly-generated data in the staging DB tables, and writes those tables to the staging database via the provided connection object
+#' @param connection the DBI connection to use for writing the data
+#' @param incidentCount the number of Incident records to create and write
+#' @param maxIncidentDate the latest Incident::IncidentDate to generate
+#' @param minIncidentDate the earliest Incident::IncidentDate to generate, either as a date object, or a function that takes the maxIncidentDate value and
+#' returns a date object
+#' @param seed the seed to use for random data generation (set this to the same value for subsequent runs to get the same data generated)
 #' @import DBI
 #' @import purrr
 #' @import dplyr
-#' @importFrom lubridate dyears as_date
+#' @importFrom lubridate dyears ddays as_date
 #' @importFrom openxlsx read.xlsx getSheetNames
 #' @importFrom stringi stri_rand_strings
 #' @export
-loadDemoStaging <- function(connection, incidentCount=1000, maxIncidentDate=Sys.Date(), minIncidentDate=function(d) {d-dyears(3)}) {
+loadDemoStaging <- function(connection, incidentCount=1000, maxIncidentDate=Sys.Date(), minIncidentDate=function(d) {d-dyears(3)}, seed=NULL) {
+
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
 
   spreadsheetFile <- system.file("raw", "StagingCodeTables.xlsx", package=getPackageName())
   codeTableNames <- getSheetNames(spreadsheetFile)
