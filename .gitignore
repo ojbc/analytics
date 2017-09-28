@@ -19,3 +19,9 @@ booking-jail/r-analytics/DemoJailBookingDashboard/man
 booking-jail/r-analytics/DemoJailBookingDashboardData/data
 booking-jail/r-analytics/DemoJailBookingDashboardData/man
 DemoJailBookingDashboard_0.1.tar.gz
+ojbc_analytics_cch_maine.sql.gz
+mysql-connector-java-5.1.43-bin.jar
+MondrianSchema.xml
+criminal-history/dashboard/target
+dashboard.war
+static-demo-data-secure.js

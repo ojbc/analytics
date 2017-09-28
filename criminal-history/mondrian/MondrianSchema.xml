@@ -1,0 +1,358 @@
+<Schema name="Criminal Histories" metamodelVersion='4.0' xsi:noNamespaceSchemaLocation="mondrian4.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<PhysicalSchema>
+
+		<Table name="AgencyType" keyColumn="AgencyTypeID"/>
+		<Table name="ChargeOriginType"/>
+		<Table name="ChargeSeverityType"/>
+		<Table name="CountyType" keyColumn="CountyTypeID"/>
+		<Table name="CourtType"/>
+		<Table name="DateType"/>
+		<Table name="DaysDurationType" keyColumn="DaysDurationTypeID"/>
+		<Table name="RaceType"/>
+		<Table name="SexType"/>
+		<Table name="DispositionType"/>
+		<Table name="AgeYearsType" keyColumn="AgeYearsTypeID"/>
+		<Table name="AgeGroupType" keyColumn="AgeGroupTypeID"/>
+		<Link source="AgeGroupType" target="AgeYearsType">
+			<ForeignKey>
+				<Column name="AgeGroupTypeID"/>
+			</ForeignKey>
+		</Link>
+		<Link source="CountyType" target="AgencyType">
+			<ForeignKey>
+				<Column name="CountyTypeID"/>
+			</ForeignKey>
+		</Link>
+
+		<Table name="Arrest">
+			<ColumnDefs>
+				<CalculatedColumnDef name='DispositionIndicator' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="HasDisposition"/> = 'No', 0, 1)
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='PriorArrestIndicator' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysSincePriorArrest"/> IS NULL, 0, 1)
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+			</ColumnDefs>
+		</Table>
+
+	</PhysicalSchema>
+
+	<Dimension visible="true" name="Date" table="DateType" key="DateTypeID" type="TIME">
+		<Attributes>
+			 <Attribute name="DateTypeID" keyColumn="DateTypeID" hasHierarchy="false"/>
+			 <Attribute name="Year" keyColumn="YearLabel" hasHierarchy="false"/>
+			 <Attribute name="Quarter" hasHierarchy="false" levelType="TimeQuarters">
+            	<Key>
+                    <Column name="YearLabel"/>
+                    <Column name="CalendarQuarter"/>
+                </Key>
+                <Name>
+                    <Column name="CalendarQuarter"/>
+                </Name>
+            </Attribute>
+            <Attribute name="Month" hasHierarchy="false" levelType="TimeMonths" orderByColumn="Month">
+            	<Key>
+                    <Column name="YearLabel"/>
+                    <Column name="CalendarQuarter"/>
+                    <Column name="Month"/>
+                </Key>
+                <Name>
+                    <Column name="MonthName"/>
+                </Name>
+            </Attribute>
+            <Attribute name="Day" hasHierarchy="false" levelType="TimeDays">
+            	<Key>
+                    <Column name="YearLabel"/>
+                    <Column name="CalendarQuarter"/>
+                    <Column name="Month"/>
+                    <Column name="Day"/>
+                </Key>
+                <Name>
+                    <Column name="Day"/>
+                </Name>
+            </Attribute>
+            <Attribute name="Date" keyColumn="CalendarDate" hasHierarchy="false" levelType="TimeDays"/>            
+            <Attribute name="Day of Week" keyColumn="DayOfWeek" hasHierarchy="false" levelType="TimeDays"/>  
+            <Attribute name="Month of Year" keyColumn="MonthName" hasHierarchy="false" levelType="TimeMonths" orderByColumn="Month"/>  
+		</Attributes>
+		<Hierarchies>
+            <Hierarchy name="DateYMD" caption="Year/Month/Day" allMemberName="All Years" allMemberCaption="All Years">
+ 				<Level attribute="Year" />
+                <Level attribute="Quarter" />
+                <Level attribute="Month" />
+                <Level attribute="Day" />
+            </Hierarchy>
+            <Hierarchy name="CalDate" caption="Calendar Date" allMemberName="All Dates" allMemberCaption="All Dates">
+                <Level attribute="Date"/>
+            </Hierarchy>
+            <Hierarchy name="Day of Week" caption="Day of Week" allMemberName="All Days" allMemberCaption="All Days">
+                <Level attribute="Day of Week"/>
+            </Hierarchy>
+            <Hierarchy name="Month of Year" caption="Month of Year" allMemberName="All Months" allMemberCaption="All Months">
+                <Level attribute="Month of Year"/>
+            </Hierarchy>
+        </Hierarchies>
+	</Dimension>
+
+	<Dimension visible="true" name="Charge Origin" table="ChargeOriginType" key="ChargeOriginTypeID">
+		<Attributes>
+			<Attribute name="ChargeOriginTypeID" keyColumn="ChargeOriginTypeID" hasHierarchy="false"/>
+			<Attribute name="ChargeOriginTypeDescription" keyColumn="ChargeOriginTypeDescription" hasHierarchy="false" caption="Charge Origin"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Charge Origin" visible="true" caption="Charge Origin" allMemberName="All Origins" allMemberCaption="All Origins">	
+				<Level attribute="ChargeOriginTypeDescription" caption="Charge Origin"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
+	<Dimension visible="true" name="Charge Severity" table="ChargeSeverityType" key="ChargeSeverityTypeID">
+		<Attributes>
+			<Attribute name="ChargeSeverityTypeID" keyColumn="ChargeSeverityTypeID" hasHierarchy="false"/>
+			<Attribute name="ChargeSeverityTypeDescription" keyColumn="ChargeSeverityTypeDescription" hasHierarchy="false" caption="Charge Severity"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Charge Severity" visible="true" caption="Charge Severity" allMemberName="All Severities" allMemberCaption="All Severities">	
+				<Level attribute="ChargeSeverityTypeDescription" caption="Charge Severity"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
+	<Dimension visible="true" name="Arrestee Sex" table="SexType" key="SexTypeID">
+		<Attributes>
+			<Attribute name="SexTypeID" keyColumn="SexTypeID" hasHierarchy="false"/>
+			<Attribute name="SexTypeDescription" keyColumn="SexTypeDescription" hasHierarchy="false" caption="Arrestee Sex"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Arrestee Sex" visible="true" caption="Arrestee Sex" allMemberName="All Sexes" allMemberCaption="All Sexes">	
+				<Level attribute="SexTypeDescription" caption="Arrestee Sex"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
+	<Dimension visible="true" name="Arrestee Race" table="RaceType" key="RaceTypeID">
+		<Attributes>
+			<Attribute name="RaceTypeID" keyColumn="RaceTypeID" hasHierarchy="false"/>
+			<Attribute name="RaceTypeDescription" keyColumn="RaceTypeDescription" hasHierarchy="false" caption="Arrestee Race"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Arrestee Race" visible="true" caption="Arrestee Race" allMemberName="All Races" allMemberCaption="All Races">	
+				<Level attribute="RaceTypeDescription" caption="Arrestee Race"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
+	<Dimension visible="true" name="Disposition Type" table="DispositionType" key="DispositionTypeID">
+		<Attributes>
+			<Attribute name="DispositionTypeID" keyColumn="DispositionTypeID" hasHierarchy="false"/>
+			<Attribute name="DispositionTypeDescription" keyColumn="DispositionTypeDescription" hasHierarchy="false" caption="Disposition Type" orderByColumn="DispositionTypeID"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Disposition Type" visible="true" caption="Disposition Type" allMemberName="All Types" allMemberCaption="All Types">
+				<Level attribute="DispositionTypeDescription" caption="Disposition Type"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
+	<Dimension visible="true" name="DaysDuration" table="DaysDurationType" key="DaysDurationTypeID">
+		<Attributes>
+			<Attribute name="DaysDurationTypeID" keyColumn="DaysDurationTypeID" hasHierarchy="false"/>
+			<Attribute name="WithinSixMonths" keyColumn="WithinSixMonths" hasHierarchy="false" caption="Within 6 Months" orderByColumn="WithinSixMonthsSort"/>
+			<Attribute name="WithinOneYear" hasHierarchy="false" caption="Within 1 Year" orderByColumn="WithinOneYearSort">
+				<Key>
+					<Column name="WithinSixMonths"/>
+					<Column name="WithinOneYear"/>
+				</Key>
+				<Name>
+					<Column name="WithinOneYear"/>
+				</Name>
+			</Attribute>
+			<Attribute name="WithinTwoYears" hasHierarchy="false" caption="Within 2 Years" orderByColumn="WithinTwoYearsSort">
+				<Key>
+					<Column name="WithinSixMonths"/>
+					<Column name="WithinOneYear"/>
+					<Column name="WithinTwoYears"/>
+				</Key>
+				<Name>
+					<Column name="WithinTwoYears"/>
+				</Name>
+			</Attribute>
+			<Attribute name="DaysRangeLabel" keyColumn="DaysRangeLabel" caption="Range" orderByColumn="DaysRangeLabelSort"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="DaysRange" visible="true" caption="Range" allMemberName="All Ranges" allMemberCaption="All Ranges">	
+				<Level attribute="DaysRangeLabel" caption="# Days"/>
+			</Hierarchy>
+			<Hierarchy name="FixedPeriods" visible="true" caption="Periods" allMemberName="All Periods" allMemberCaption="All Periods">	
+				<Level attribute="WithinSixMonths" caption="Within 6 Months"/>
+				<Level attribute="WithinOneYear" caption="Within 1 Year"/>
+				<Level attribute="WithinTwoYears" caption="Within 2 Years"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
+	<Dimension visible="true" name="Court" table="CourtType" key="CourtTypeID">
+		<Attributes>
+			<Attribute name="CourtTypeID" keyColumn="CourtTypeID" hasHierarchy="false"/>
+			<Attribute name="CourtTypeDescription" keyColumn="CourtTypeDescription" hasHierarchy="false" caption="Court"/>
+			<Attribute name="CourtTypeCategory" keyColumn="CourtTypeCategory" hasHierarchy="false" caption="Court Level"/>
+			<Attribute name="CourtJurisdictionName" keyColumn="CourtJurisdictionName" hasHierarchy="false" caption="Region"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Court by Region" visible="true" caption="Court (by Region)" allMemberName="All Courts" allMemberCaption="All Courts">	
+				<Level attribute="CourtJurisdictionName" caption="Region"/>
+				<Level attribute="CourtTypeDescription" caption="Court"/>
+			</Hierarchy>
+			<Hierarchy name="Court by Level" visible="true" caption="Court (by Level)" allMemberName="All Courts" allMemberCaption="All Courts">	
+				<Level attribute="CourtTypeCategory" caption="Level"/>
+				<Level attribute="CourtTypeDescription" caption="Court"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
+	<Dimension visible="true" name="Arresting Agency" key="AgencyTypeID">
+		<Attributes>
+			<Attribute name="AgencyTypeID" keyColumn="AgencyTypeID" hasHierarchy="false" table="AgencyType"/>
+			<Attribute name="ParentAgencyDescription" keyColumn="ParentAgencyDescription" hasHierarchy="false" caption="Parent Agency" table="AgencyType"/>
+			<Attribute name="AgencyTypeCategory" keyColumn="AgencyTypeCategory" hasHierarchy="false" caption="Agency Level" table="AgencyType"/>
+			<Attribute name="AgencyTypeDetailCategory" keyColumn="AgencyTypeDetailCategory" hasHierarchy="false" caption="Agency Type" table="AgencyType"/>
+			<Attribute name="County" keyColumn="CountyName" hasHierarchy="false" caption="County" table="CountyType" orderByColumn="CountyTypeID"/>
+			<Attribute name="AgencyTypeDescription" keyColumn="AgencyTypeDescription" hasHierarchy="false" caption="Agency" table="AgencyType"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="ArrestingAgencyByType" visible="true" caption="Arresting Agency (By Type)" allMemberName="All Agencies" allMemberCaption="All Agencies">	
+				<Level attribute="AgencyTypeCategory" caption="Agency Level"/>
+				<Level attribute="AgencyTypeDetailCategory" caption="Agency Type"/>
+				<Level attribute="ParentAgencyDescription" caption="Parent Agency"/>
+				<Level attribute="AgencyTypeDescription" caption="Agency"/>
+			</Hierarchy>
+			<Hierarchy name="ArrestingAgencyByCounty" visible="true" caption="Arresting Agency (By Geography)" allMemberName="Statewide" allMemberCaption="Statewide">	
+				<Level attribute="County" caption="County" uniqueMembers="true"/>
+				<Level attribute="AgencyTypeDescription" caption="Agency"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
+	<Dimension name="Age at Arrest" key="AgeYearsTypeID">
+        <Attributes>
+            <Attribute table="AgeYearsType" name="AgeYearsTypeID" keyColumn="AgeYearsTypeID" hasHierarchy="false"/>
+            <Attribute table="AgeGroupType" name="AgeGroupType1Description"  keyColumn="AgeGroupType1Description" hasHierarchy="false" caption="Age Group" orderByColumn="AgeGroupTypeID"/>
+            <Attribute table="AgeYearsType" name="AgeYearsTypeDescription" keyColumn="AgeYearsTypeDescription" hasHierarchy="false" caption="Age at Arrest" type="Numeric"/>
+        </Attributes>
+        <Hierarchies>
+            <Hierarchy name="Age at Arrest" allMemberName="All Ages">
+                <Level attribute="AgeGroupType1Description" caption="Age Group"/>
+                <Level attribute="AgeYearsTypeDescription" caption="Age"/>
+            </Hierarchy>
+        </Hierarchies>
+	</Dimension>
+
+	<Cube name="Criminal Histories" visible="true">
+
+		<Dimensions>
+
+			<Dimension source="Date" name="ArrestDate" caption="Arrest Date"/>
+			<Dimension source="Date" name="DispositionDate" caption="Disposition Date"/>
+			<Dimension source="Charge Origin"/>
+			<Dimension source="Charge Severity"/>
+			<Dimension source="Age at Arrest"/>
+			<Dimension source="Arrestee Sex"/>
+			<Dimension source="Arrestee Race"/>
+			<Dimension source="Court"/>
+			<Dimension source="Arresting Agency"/>
+			<Dimension source="Disposition Type"/>
+			<Dimension source="DaysDuration" name="DaysToDisposition" caption="Days to Disposition"/>
+			<Dimension source="DaysDuration" name="DaysSincePriorArrest" caption="Days Since Prior Arrest"/>
+
+			<Dimension visible="true" name="Disposition Status" caption="Disposition Status">
+				<Attributes>
+					<Attribute name="Disposition Status" keyColumn="HasDisposition" hasHierarchy="false" table="Arrest" orderByColumn="HasDispositionSort"/>
+				</Attributes>
+				<Hierarchies>
+					<Hierarchy name="Disposition Status"  visible="true" hasAll="true"  caption="Disposition Status" allMemberCaption="All Disposition Statuses">
+						<Level attribute="Disposition Status"/>
+					</Hierarchy>
+				</Hierarchies>
+			</Dimension>
+
+		</Dimensions>
+
+		<MeasureGroups>
+    		<MeasureGroup table="Arrest" name="Arrests">
+	    		<Measures>
+	    			<Measure name="Arrests" column="ArrestID" aggregator="distinct-count" visible="true" caption="Arrests"/>
+	    			<Measure name="Disposition Rate" column="DispositionIndicator" aggregator="avg" visible="true" caption="Disposition Rate" formatString="0.00"/>
+	    			<Measure name="Rearrest Rate" column="PriorArrestIndicator" aggregator="avg" visible="true" caption="Rearrest Rate" formatString="0.00"/>
+	    			<Measure name="Avg Days to Disposition" column="DaysToDispose" aggregator="avg" visible="true" caption="Avg Days to Disposition" formatString="#,##0.00"/>
+	    		</Measures>
+	    		<DimensionLinks>
+	    			<ForeignKeyLink dimension="ArrestDate" foreignKeyColumn="ArrestDateTypeID"/>
+	    			<ForeignKeyLink dimension="DispositionDate" foreignKeyColumn="DispositionDateTypeID"/>
+	    			<ForeignKeyLink dimension="Charge Origin" foreignKeyColumn="ChargeOriginTypeID"/>
+	    			<ForeignKeyLink dimension="Charge Severity" foreignKeyColumn="ChargeSeverityTypeID"/>
+	    			<ForeignKeyLink dimension="Age at Arrest" foreignKeyColumn="ArresteeAgeYearsTypeID"/>
+	    			<ForeignKeyLink dimension="Arrestee Sex" foreignKeyColumn="ArresteeSexTypeID"/>
+	    			<ForeignKeyLink dimension="Arrestee Race" foreignKeyColumn="ArresteeRaceTypeID"/>
+	    			<ForeignKeyLink dimension="Court" foreignKeyColumn="CourtTypeID"/>
+	    			<ForeignKeyLink dimension="DaysToDisposition" foreignKeyColumn="DaysToDisposeDurationTypeID"/>
+	    			<ForeignKeyLink dimension="DaysSincePriorArrest" foreignKeyColumn="DaysSincePriorArrestDurationTypeID"/>
+	    			<ForeignKeyLink dimension="Arresting Agency" foreignKeyColumn="ArrestingAgencyTypeID"/>
+	    			<ForeignKeyLink dimension="Disposition Type" foreignKeyColumn="DispositionTypeID"/>
+	    			<FactLink dimension="Disposition Status"/>
+	    		</DimensionLinks>
+	    	</MeasureGroup>
+	    </MeasureGroups>
+
+<!--
+	    <CalculatedMembers>
+			<CalculatedMember name="PerCapitaCalls" dimension="Measures" formula="1000*[Measures].[Call Count] / [Measures].[SumPopulation]" caption="Calls Per 1000 Residents"/>
+			<CalculatedMember name="PctVomitingSymptoms" dimension="Measures" formula="[Measures].[AvgVomitingSymptoms]" caption="% Vomiting Symptoms">
+				<CalculatedMemberProperty name="FORMAT_STRING" value="0.00%"/>
+			</CalculatedMember>
+			<CalculatedMember name="PctFeverSymptoms" dimension="Measures" formula="[Measures].[AvgFeverSymptoms]" caption="% Fever Symptoms">
+				<CalculatedMemberProperty name="FORMAT_STRING" value="0.00%"/>
+			</CalculatedMember>
+			<CalculatedMember name="PctDiarrheaSymptoms" dimension="Measures" formula="[Measures].[AvgDiarrheaSymptoms]" caption="% Diarrhea Symptoms">
+				<CalculatedMemberProperty name="FORMAT_STRING" value="0.00%"/>
+			</CalculatedMember>
+			<CalculatedMember name="PctWeaknessSymptoms" dimension="Measures" formula="[Measures].[AvgWeaknessSymptoms]" caption="% Weakness Symptoms">
+				<CalculatedMemberProperty name="FORMAT_STRING" value="0.00%"/>
+			</CalculatedMember>
+			<CalculatedMember name="PctHeadacheSymptoms" dimension="Measures" formula="[Measures].[AvgHeadacheSymptoms]" caption="% Headache Symptoms">
+				<CalculatedMemberProperty name="FORMAT_STRING" value="0.00%"/>
+			</CalculatedMember>
+			<CalculatedMember name="PctMuscleJointPainSymptoms" dimension="Measures" formula="[Measures].[AvgMuscleJointPainSymptoms]" caption="% Muscle/Joint Pain Symptoms">
+				<CalculatedMemberProperty name="FORMAT_STRING" value="0.00%"/>
+			</CalculatedMember>
+			<CalculatedMember name="PctBleedingSymptoms" dimension="Measures" formula="[Measures].[AvgBleedingSymptoms]" caption="% Bleeding Symptoms">
+				<CalculatedMemberProperty name="FORMAT_STRING" value="0.00%"/>
+			</CalculatedMember>
+			<CalculatedMember name="PctRashSymptoms" dimension="Measures" formula="[Measures].[AvgRashSymptoms]" caption="% Rash Symptoms">
+				<CalculatedMemberProperty name="FORMAT_STRING" value="0.00%"/>
+			</CalculatedMember>
+			<CalculatedMember name="PctAbdominalPainSymptoms" dimension="Measures" formula="[Measures].[AvgAbdominalPainSymptoms]" caption="% Abdominal Pain Symptoms">
+				<CalculatedMemberProperty name="FORMAT_STRING" value="0.00%"/>
+			</CalculatedMember>
+			<CalculatedMember name="PctDifficultySwallowingSymptoms" dimension="Measures" formula="[Measures].[AvgDifficultySwallowingSymptoms]" caption="% Difficulty Swallowing Symptoms">
+				<CalculatedMemberProperty name="FORMAT_STRING" value="0.00%"/>
+			</CalculatedMember>
+			<CalculatedMember name="PctHiccupSymptoms" dimension="Measures" formula="[Measures].[AvgHiccupSymptoms]" caption="% Hiccup Symptoms">
+				<CalculatedMemberProperty name="FORMAT_STRING" value="0.00%"/>
+			</CalculatedMember>
+		</CalculatedMembers>
+
+	-->
+
+	</Cube>
+
+</Schema>
+
