@@ -4,8 +4,8 @@
  <print-settings numCopies="1" zoom="1.0" pageNumbersPrinted="true" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
+   <property key="Logical" value="mysql" />
    <property key="Connection Type" value="MySQL" />
-   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:mysql://localhost:3306/rapback" />
    <property key="UID" value="root" />
    <property key="PWD" value="" />
@@ -106,7 +106,7 @@
     <folder id="FOLTAB12" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB14" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX28" populated="true" UUID="5b4cf9e3-7cda-440d-a308-0ee6ea1d8ec1" clustered="false" name="Arrest_ID" physicalName="Arrest_ID" primaryKeyIndex="true" unique="false" >
+    <index id="IDX28" populated="true" UUID="5b4cf9e3-7cda-440d-a308-0ee6ea1d8ec1" clustered="false" name="Arrest_ID" physicalName="arrest_id" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC29" populated="true" UUID="6c25354b-3430-4ef7-bc76-5dfdbf06e175" ascendingOrDescending="UNSPECIFIED" column-ref="COL2" name="ArrestID" physicalName="ArrestID" />
     </index>
    </folder>
@@ -132,7 +132,7 @@
     <folder id="FOLTAB302" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB304" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX35" populated="true" UUID="4e015e42-be37-472c-9f34-b19654b55fd3" clustered="false" name="ArrestAgencyID" physicalName="ArrestAgencyID" primaryKeyIndex="true" unique="false" >
+    <index id="IDX35" populated="true" UUID="4e015e42-be37-472c-9f34-b19654b55fd3" clustered="false" name="ArrestAgencyID" physicalName="arrestagencyid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC36" populated="true" UUID="da5b49bf-fa5d-4e1d-b4ae-37d8474fc239" ascendingOrDescending="UNSPECIFIED" column-ref="COL31" name="ArrestAgencyID" physicalName="ArrestAgencyID" />
     </index>
    </folder>
@@ -170,7 +170,7 @@
     <folder id="FOLTAB372" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB374" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX46" populated="true" UUID="423f69ae-b8de-4b02-84b4-8cd6f49e82b4" clustered="false" name="ArrestChargeID" physicalName="ArrestChargeID" primaryKeyIndex="true" unique="false" >
+    <index id="IDX46" populated="true" UUID="423f69ae-b8de-4b02-84b4-8cd6f49e82b4" clustered="false" name="ArrestChargeID" physicalName="arrestchargeid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC47" populated="true" UUID="2a714d46-4b55-4bb3-922c-746a47eaeaa1" ascendingOrDescending="UNSPECIFIED" column-ref="COL38" name="ArrestChargeID" physicalName="ArrestChargeID" />
     </index>
    </folder>
@@ -223,7 +223,7 @@
     <folder id="FOLTAB482" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB484" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX62" populated="true" UUID="eb92c440-f376-4737-ab52-1a9b9be31995" clustered="false" name="ProbationId" physicalName="ProbationId" primaryKeyIndex="true" unique="false" >
+    <index id="IDX62" populated="true" UUID="eb92c440-f376-4737-ab52-1a9b9be31995" clustered="false" name="ProbationId" physicalName="probationid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC63" populated="true" UUID="c2395410-837e-4cc5-94a6-1c140253a446" ascendingOrDescending="UNSPECIFIED" column-ref="COL49" name="ProbationID" physicalName="ProbationID" />
     </index>
    </folder>
@@ -249,21 +249,21 @@
     <folder id="FOLTAB642" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB644" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX69" populated="true" UUID="d3b1181c-37a4-4702-8e57-241cfa1ba320" clustered="false" name="ProbationTerminationID" physicalName="ProbationTerminationID" primaryKeyIndex="true" unique="false" >
+    <index id="IDX69" populated="true" UUID="d3b1181c-37a4-4702-8e57-241cfa1ba320" clustered="false" name="ProbationTerminationID" physicalName="probationterminationid" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC70" populated="true" UUID="85f3e75b-6d99-421e-be38-21a21464c163" ascendingOrDescending="UNSPECIFIED" column-ref="COL65" name="ProbationTerminationID" physicalName="ProbationTerminationID" />
     </index>
    </folder>
   </table>
   <relationships>
-   <relationship id="REL71" populated="true" UUID="cc9cbeae-73e3-4750-9d61-178bb6c1cca9" deferrability="7" deleteRule="3" fk-table-ref="TAB37" fkCardinality="7" identifying="false" name="Arrest_ArrestCharge_fk" physicalName="Arrest_ArrestCharge_fk" pk-table-ref="TAB1" pkCardinality="2" updateRule="3" >
+   <relationship id="REL71" populated="true" UUID="cc9cbeae-73e3-4750-9d61-178bb6c1cca9" deferrability="7" deleteRule="3" fk-table-ref="TAB37" fkCardinality="7" identifying="false" name="Arrest_ArrestCharge_fk" physicalName="arrest_arrestcharge_fk" pk-table-ref="TAB1" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP72" populated="true" UUID="94bbedcb-16c3-48b1-9487-43a444beca19" fk-column-ref="COL39" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL2" />
    </relationship>
-   <relationship id="REL73" populated="true" UUID="1252d4a6-5926-46f9-a136-c2a5f8e6ace8" deferrability="7" deleteRule="3" fk-table-ref="TAB1" fkCardinality="7" identifying="false" name="ArrestAgencyID_Arrest_fk" physicalName="ArrestAgencyID_Arrest_fk" pk-table-ref="TAB30" pkCardinality="2" updateRule="3" >
+   <relationship id="REL73" populated="true" UUID="1252d4a6-5926-46f9-a136-c2a5f8e6ace8" deferrability="7" deleteRule="3" fk-table-ref="TAB1" fkCardinality="7" identifying="false" name="ArrestAgencyID_Arrest_fk" physicalName="arrestagencyid_arrest_fk" pk-table-ref="TAB30" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP74" populated="true" UUID="d7fc93db-4cb7-44f5-8a72-ce8c5fa35f31" fk-column-ref="COL3" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL31" />
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="false" target-schema="ojbc_community_corrections_staging"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="0.8408964152537145" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
