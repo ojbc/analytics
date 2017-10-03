@@ -4,8 +4,8 @@
  <print-settings numCopies="1" zoom="1.0" pageNumbersPrinted="true" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
-   <property key="Logical" value="mysql" />
    <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:mysql://localhost:3306/rapback" />
    <property key="UID" value="root" />
    <property key="PWD" value="" />
@@ -124,7 +124,7 @@
     <folder id="FOLTAB12" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB14" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX34" populated="true" UUID="5b4cf9e3-7cda-440d-a308-0ee6ea1d8ec1" clustered="false" name="Arrest_ID" physicalName="arrest_id" primaryKeyIndex="true" unique="false" >
+    <index id="IDX34" populated="true" UUID="5b4cf9e3-7cda-440d-a308-0ee6ea1d8ec1" clustered="false" name="Arrest_ID" physicalName="Arrest_ID" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC35" populated="true" UUID="6c25354b-3430-4ef7-bc76-5dfdbf06e175" ascendingOrDescending="UNSPECIFIED" column-ref="COL2" name="ArrestID" physicalName="ArrestID" />
     </index>
    </folder>
@@ -150,7 +150,7 @@
     <folder id="FOLTAB362" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB364" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX41" populated="true" UUID="4e015e42-be37-472c-9f34-b19654b55fd3" clustered="false" name="ArrestAgencyID" physicalName="arrestagencyid" primaryKeyIndex="true" unique="false" >
+    <index id="IDX41" populated="true" UUID="4e015e42-be37-472c-9f34-b19654b55fd3" clustered="false" name="ArrestAgencyID" physicalName="ArrestAgencyID" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC42" populated="true" UUID="da5b49bf-fa5d-4e1d-b4ae-37d8474fc239" ascendingOrDescending="UNSPECIFIED" column-ref="COL37" name="ArrestAgencyID" physicalName="ArrestAgencyID" />
     </index>
    </folder>
@@ -188,7 +188,7 @@
     <folder id="FOLTAB432" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB434" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX52" populated="true" UUID="423f69ae-b8de-4b02-84b4-8cd6f49e82b4" clustered="false" name="ArrestChargeID" physicalName="arrestchargeid" primaryKeyIndex="true" unique="false" >
+    <index id="IDX52" populated="true" UUID="423f69ae-b8de-4b02-84b4-8cd6f49e82b4" clustered="false" name="ArrestChargeID" physicalName="ArrestChargeID" primaryKeyIndex="true" unique="false" >
      <index-column id="IDC53" populated="true" UUID="2a714d46-4b55-4bb3-922c-746a47eaeaa1" ascendingOrDescending="UNSPECIFIED" column-ref="COL44" name="ArrestChargeID" physicalName="ArrestChargeID" />
     </index>
    </folder>
@@ -199,34 +199,40 @@
     <column id="COL55" populated="true" UUID="255316ef-104d-414f-949b-a9c9b6546f41" autoIncrement="true" autoIncrementSequenceName="Probation_ProbationID_seq" defaultValue="" name="ProbationID" nullable="0" physicalName="ProbationID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL56" populated="true" UUID="a7505522-87ae-4f35-a22c-05a4fd1704e1" autoIncrement="false" autoIncrementSequenceName="Probation_SupervisorID_seq" defaultValue="" name="SupervisorID" nullable="0" physicalName="SupervisorID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL56" populated="true" UUID="58ffa25b-92e1-4324-b999-9fc9ec4bf015" autoIncrement="false" autoIncrementSequenceName="Probation_ProbationIdentification_seq" defaultValue="" name="ProbationIdentification" nullable="0" physicalName="ProbationIdentification" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL57" populated="true" UUID="58ffa25b-92e1-4324-b999-9fc9ec4bf015" autoIncrement="false" autoIncrementSequenceName="Probation_ProbationIdentification_seq" defaultValue="" name="ProbationIdentification" nullable="0" physicalName="ProbationIdentification" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL57" populated="true" UUID="3c728760-dd1f-49b6-8404-f72a31a62da4" autoIncrement="false" autoIncrementSequenceName="Probation_SupervisionPersonStatus_seq" defaultValue="" name="SupervisionPersonStatus" nullable="1" physicalName="SupervisionPersonStatus" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL58" populated="true" UUID="3c728760-dd1f-49b6-8404-f72a31a62da4" autoIncrement="false" autoIncrementSequenceName="Probation_SupervisionPersonStatus_seq" defaultValue="" name="SupervisionPersonStatus" nullable="1" physicalName="SupervisionPersonStatus" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL58" populated="true" UUID="728a15f9-2707-4ca7-a137-c7ecff27ed7d" autoIncrement="false" defaultValue="" name="SupervisionStartDate" nullable="0" physicalName="SupervisionStartDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
      <remarks></remarks>
     </column>
-    <column id="COL59" populated="true" UUID="728a15f9-2707-4ca7-a137-c7ecff27ed7d" autoIncrement="false" defaultValue="" name="SupervisionStartDate" nullable="0" physicalName="SupervisionStartDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+    <column id="COL59" populated="true" UUID="1ed4bb2d-df89-4431-a4f7-12fc079b9789" autoIncrement="false" defaultValue="" name="SupervisionLevelText" nullable="0" physicalName="SupervisionLevelText" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL60" populated="true" UUID="1ed4bb2d-df89-4431-a4f7-12fc079b9789" autoIncrement="false" defaultValue="" name="SupervisionLevelText" nullable="0" physicalName="SupervisionLevelText" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL60" populated="true" UUID="2b8a2732-05c8-496d-a091-813ada3145d6" autoIncrement="false" defaultValue="" name="ProbationOfficerBagdeID" nullable="1" physicalName="ProbationOfficerBagdeID" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL61" populated="true" UUID="d87aeb95-a135-4d8c-9f23-23c31218f7d0" autoIncrement="false" defaultValue="" name="PersonUniqueIdentifier" nullable="0" physicalName="PersonUniqueIdentifier" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL61" populated="true" UUID="705ecf6e-60ad-485c-94d9-47560324ffeb" autoIncrement="false" defaultValue="" name="ProbationOfficerSupervisorBadgeID" nullable="1" physicalName="ProbationOfficerSupervisorBadgeID" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL62" populated="true" UUID="028ea50d-22ec-446e-9d8e-d12255d3350b" autoIncrement="false" defaultValue="" name="PersonBirthDate" nullable="1" physicalName="PersonBirthDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+    <column id="COL62" populated="true" UUID="24b40c9c-ea58-429d-99d3-a1d35a624266" autoIncrement="false" defaultValue="" name="ProbationAgencyORI" nullable="1" physicalName="ProbationAgencyORI" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL63" populated="true" UUID="67672d89-ab33-4a2c-b40c-dc24a5e72539" autoIncrement="false" defaultValue="" name="PersonRaceText" nullable="1" physicalName="PersonRaceText" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL63" populated="true" UUID="d87aeb95-a135-4d8c-9f23-23c31218f7d0" autoIncrement="false" defaultValue="" name="PersonUniqueIdentifier" nullable="0" physicalName="PersonUniqueIdentifier" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL64" populated="true" UUID="553b043b-e185-48e9-bb39-eb661ad18847" autoIncrement="false" defaultValue="" name="PersonSexText" nullable="1" physicalName="PersonSexText" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL64" populated="true" UUID="028ea50d-22ec-446e-9d8e-d12255d3350b" autoIncrement="false" defaultValue="" name="PersonBirthDate" nullable="1" physicalName="PersonBirthDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
      <remarks></remarks>
     </column>
-    <column id="COL65" populated="true" UUID="6e64a59a-b14e-4ce5-8ddb-1bc5358e5bd5" autoIncrement="false" autoIncrementSequenceName="Probation_SupervisionTimestamp_seq" defaultValue="now() " name="SupervisionTimestamp" nullable="0" physicalName="SupervisionTimestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL65" populated="true" UUID="67672d89-ab33-4a2c-b40c-dc24a5e72539" autoIncrement="false" defaultValue="" name="PersonRaceText" nullable="1" physicalName="PersonRaceText" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL66" populated="true" UUID="553b043b-e185-48e9-bb39-eb661ad18847" autoIncrement="false" defaultValue="" name="PersonSexText" nullable="1" physicalName="PersonSexText" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL67" populated="true" UUID="6e64a59a-b14e-4ce5-8ddb-1bc5358e5bd5" autoIncrement="false" autoIncrementSequenceName="Probation_SupervisionTimestamp_seq" defaultValue="now() " name="SupervisionTimestamp" nullable="0" physicalName="SupervisionTimestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     </folder>
@@ -235,111 +241,47 @@
     <folder id="FOLTAB542" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB544" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX66" populated="true" UUID="eb92c440-f376-4737-ab52-1a9b9be31995" clustered="false" name="ProbationId" physicalName="probationid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC67" populated="true" UUID="c2395410-837e-4cc5-94a6-1c140253a446" ascendingOrDescending="UNSPECIFIED" column-ref="COL55" name="ProbationID" physicalName="ProbationID" />
+    <index id="IDX68" populated="true" UUID="eb92c440-f376-4737-ab52-1a9b9be31995" clustered="false" name="ProbationId" physicalName="ProbationId" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC69" populated="true" UUID="c2395410-837e-4cc5-94a6-1c140253a446" ascendingOrDescending="UNSPECIFIED" column-ref="COL55" name="ProbationID" physicalName="ProbationID" />
     </index>
    </folder>
   </table>
-  <table id="TAB68" populated="true" UUID="fe419f9f-6c2c-471b-b104-aa4b51ef3c15" name="Supervisor" objectType="TABLE" physicalName="Supervisor" >
+  <table id="TAB70" populated="true" UUID="43698613-c29a-4465-8f4c-d9d9e353e48d" name="ProbationTermination" objectType="TABLE" physicalName="ProbationTermination" >
    <remarks></remarks>
-   <folder id="FOLTAB681" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL69" populated="true" UUID="db34695c-ebfb-4cf9-a930-d10763bd6ee4" autoIncrement="true" autoIncrementSequenceName="Supervisor_SupervisorID_seq" defaultValue="" name="SupervisorID" nullable="0" physicalName="SupervisorID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+   <folder id="FOLTAB701" populated="true" name="Columns" physicalName="Columns" type="1">
+    <column id="COL71" populated="true" UUID="504ea6a3-0d9d-4597-9249-c02ea6fc80b9" autoIncrement="true" autoIncrementSequenceName="ProbationTermination_ProbationTerminationID_seq" defaultValue="" name="ProbationTerminationID" nullable="0" physicalName="ProbationTerminationID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL70" populated="true" UUID="8f418521-2ab9-4336-aab5-4efee80ced0a" autoIncrement="false" defaultValue="" name="SupervisorGivenName" nullable="0" physicalName="SupervisorGivenName" precision="200" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL72" populated="true" UUID="6f644a76-32cd-41e2-9813-c3106e7f1176" autoIncrement="false" autoIncrementSequenceName="Probation_ProbationIdentification_seq_1" defaultValue="" name="ProbationIdentification" nullable="0" physicalName="ProbationIdentification" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL71" populated="true" UUID="41fff14d-a7ef-48cf-8f8b-684974c38c98" autoIncrement="false" defaultValue="" name="SupervisorSurName" nullable="0" physicalName="SupervisorSurName" precision="200" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL73" populated="true" UUID="f8dd5e73-e8c6-44a2-8d54-cbdc0d80fb6c" autoIncrement="false" autoIncrementSequenceName="ProbationTermination_TerminationDate_seq" defaultValue="" name="TerminationDate" nullable="0" physicalName="TerminationDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
      <remarks></remarks>
     </column>
-    <column id="COL72" populated="true" UUID="655eb087-b167-46c5-9d26-3293d143d7ab" autoIncrement="false" defaultValue="" name="SupervisorORI" nullable="1" physicalName="SupervisorORI" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
-     <remarks></remarks>
-    </column>
-    <column id="COL73" populated="true" UUID="3bb76d33-39f0-4f04-81bc-2e61208f817d" autoIncrement="false" autoIncrementSequenceName="Arrest_SupervisorTimestamp_seq" defaultValue="now() " name="SupervisorTimestamp" nullable="0" physicalName="SupervisorTimestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+    <column id="COL74" populated="true" UUID="4b46d0bb-3403-4700-a745-aac37b86e20e" autoIncrement="false" autoIncrementSequenceName="ProbationTermination_ProbationTerminationTimestamp_seq" defaultValue="now()" name="ProbationTerminationTimestamp" nullable="0" physicalName="ProbationTerminationTimestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     </folder>
-    <folder id="FOLTAB683" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
+    <folder id="FOLTAB703" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
     </folder>
-    <folder id="FOLTAB682" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
+    <folder id="FOLTAB702" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
-    <folder id="FOLTAB684" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX74" populated="true" UUID="007a26d2-402c-4486-8a85-6d642df771a5" clustered="false" name="SupervisorID" physicalName="supervisorid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC75" populated="true" UUID="451f128c-7b5c-43da-9cc0-63f3df6f6640" ascendingOrDescending="UNSPECIFIED" column-ref="COL69" name="SupervisorID" physicalName="SupervisorID" />
-    </index>
-   </folder>
-  </table>
-  <table id="TAB76" populated="true" UUID="061f4f80-6b2d-421a-a97d-4a92a9d56d00" name="OtherIdentification" objectType="TABLE" physicalName="OtherIdentification" >
-   <remarks>Supervisor Other Identification</remarks>
-   <folder id="FOLTAB761" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL77" populated="true" UUID="5e055a98-4246-4083-ae64-1b346b68cca8" autoIncrement="true" defaultValue="" name="OtherIdentificationIdentificationID" nullable="0" physicalName="OtherIdentificationIdentificationID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
-     <remarks></remarks>
-    </column>
-    <column id="COL78" populated="true" UUID="8666e974-ffe6-47b8-b8f7-c519403551af" autoIncrement="false" autoIncrementSequenceName="Supervisor_SupervisorID_seq_1" defaultValue="" name="SupervisorID" nullable="0" physicalName="SupervisorID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
-     <remarks></remarks>
-    </column>
-    <column id="COL79" populated="true" UUID="67da9fc3-a162-4a25-928b-36a43651e535" autoIncrement="false" defaultValue="" name="OtherIdentificationValue" nullable="0" physicalName="OtherIdentificationValue" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
-     <remarks></remarks>
-    </column>
-    <column id="COL80" populated="true" UUID="7ba73c51-3996-4667-a72b-13ae301c2291" autoIncrement="false" defaultValue="" name="OtherIdentificationType" nullable="0" physicalName="OtherIdentificationType" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
-     <remarks></remarks>
-    </column>
-    <column id="COL81" populated="true" UUID="3df6a669-5a02-401b-84d9-a8b42721e47d" autoIncrement="false" autoIncrementSequenceName="Arrest_OtherIdentificationTimestamp_seq" defaultValue="now() " name="OtherIdentificationTimestamp" nullable="0" physicalName="OtherIdentificationTimestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
-     <remarks></remarks>
-    </column>
-    </folder>
-    <folder id="FOLTAB763" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
-    </folder>
-    <folder id="FOLTAB762" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
-    </folder>
-    <folder id="FOLTAB764" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX82" populated="true" UUID="5574c1b5-a860-49ce-8158-2b406a47e080" clustered="false" name="OtherIdentificationIdentificationID" physicalName="otheridentificationidentificationid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC83" populated="true" UUID="a9ad8ad8-8f23-4dca-8ba0-f263c8a097cb" ascendingOrDescending="UNSPECIFIED" column-ref="COL77" name="OtherIdentificationIdentificationID" physicalName="OtherIdentificationIdentificationID" />
-    </index>
-   </folder>
-  </table>
-  <table id="TAB84" populated="true" UUID="43698613-c29a-4465-8f4c-d9d9e353e48d" name="ProbationTermination" objectType="TABLE" physicalName="ProbationTermination" >
-   <remarks></remarks>
-   <folder id="FOLTAB841" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL85" populated="true" UUID="504ea6a3-0d9d-4597-9249-c02ea6fc80b9" autoIncrement="true" autoIncrementSequenceName="ProbationTermination_ProbationTerminationID_seq" defaultValue="" name="ProbationTerminationID" nullable="0" physicalName="ProbationTerminationID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
-     <remarks></remarks>
-    </column>
-    <column id="COL86" populated="true" UUID="6f644a76-32cd-41e2-9813-c3106e7f1176" autoIncrement="false" autoIncrementSequenceName="Probation_ProbationIdentification_seq_1" defaultValue="" name="ProbationIdentification" nullable="0" physicalName="ProbationIdentification" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
-     <remarks></remarks>
-    </column>
-    <column id="COL87" populated="true" UUID="f8dd5e73-e8c6-44a2-8d54-cbdc0d80fb6c" autoIncrement="false" autoIncrementSequenceName="ProbationTermination_TerminationDate_seq" defaultValue="" name="TerminationDate" nullable="0" physicalName="TerminationDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
-     <remarks></remarks>
-    </column>
-    <column id="COL88" populated="true" UUID="4b46d0bb-3403-4700-a745-aac37b86e20e" autoIncrement="false" autoIncrementSequenceName="ProbationTermination_ProbationTerminationTimestamp_seq" defaultValue="now()" name="ProbationTerminationTimestamp" nullable="0" physicalName="ProbationTerminationTimestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
-     <remarks></remarks>
-    </column>
-    </folder>
-    <folder id="FOLTAB843" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
-    </folder>
-    <folder id="FOLTAB842" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
-    </folder>
-    <folder id="FOLTAB844" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX89" populated="true" UUID="d3b1181c-37a4-4702-8e57-241cfa1ba320" clustered="false" name="ProbationTerminationID" physicalName="probationterminationid" primaryKeyIndex="true" unique="false" >
-     <index-column id="IDC90" populated="true" UUID="85f3e75b-6d99-421e-be38-21a21464c163" ascendingOrDescending="UNSPECIFIED" column-ref="COL85" name="ProbationTerminationID" physicalName="ProbationTerminationID" />
+    <folder id="FOLTAB704" populated="true" name="Indices" physicalName="Indices" type="4">
+    <index id="IDX75" populated="true" UUID="d3b1181c-37a4-4702-8e57-241cfa1ba320" clustered="false" name="ProbationTerminationID" physicalName="ProbationTerminationID" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC76" populated="true" UUID="85f3e75b-6d99-421e-be38-21a21464c163" ascendingOrDescending="UNSPECIFIED" column-ref="COL71" name="ProbationTerminationID" physicalName="ProbationTerminationID" />
     </index>
    </folder>
   </table>
   <relationships>
-   <relationship id="REL91" populated="true" UUID="cc9cbeae-73e3-4750-9d61-178bb6c1cca9" deferrability="7" deleteRule="3" fk-table-ref="TAB43" fkCardinality="7" identifying="false" name="Arrest_ArrestCharge_fk" physicalName="arrest_arrestcharge_fk" pk-table-ref="TAB1" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP92" populated="true" UUID="94bbedcb-16c3-48b1-9487-43a444beca19" fk-column-ref="COL45" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL2" />
+   <relationship id="REL77" populated="true" UUID="cc9cbeae-73e3-4750-9d61-178bb6c1cca9" deferrability="7" deleteRule="3" fk-table-ref="TAB43" fkCardinality="7" identifying="false" name="Arrest_ArrestCharge_fk" physicalName="Arrest_ArrestCharge_fk" pk-table-ref="TAB1" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP78" populated="true" UUID="94bbedcb-16c3-48b1-9487-43a444beca19" fk-column-ref="COL45" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL2" />
    </relationship>
-   <relationship id="REL93" populated="true" UUID="1252d4a6-5926-46f9-a136-c2a5f8e6ace8" deferrability="7" deleteRule="3" fk-table-ref="TAB1" fkCardinality="7" identifying="false" name="ArrestAgencyID_Arrest_fk" physicalName="arrestagencyid_arrest_fk" pk-table-ref="TAB36" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP94" populated="true" UUID="d7fc93db-4cb7-44f5-8a72-ce8c5fa35f31" fk-column-ref="COL3" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL37" />
-   </relationship>
-   <relationship id="REL95" populated="true" UUID="b1c4117e-aebe-43d9-8d11-65d95ab382ea" deferrability="7" deleteRule="3" fk-table-ref="TAB54" fkCardinality="3" identifying="false" name="Supervisor_Supervision_fk" physicalName="supervisor_supervision_fk" pk-table-ref="TAB68" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP96" populated="true" UUID="62123a8b-65b1-4ff4-afd9-00769b67ee56" fk-column-ref="COL56" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL69" />
-   </relationship>
-   <relationship id="REL97" populated="true" UUID="381665ae-897f-4c22-8c2b-0ca4cd91cb72" deferrability="7" deleteRule="3" fk-table-ref="TAB76" fkCardinality="7" identifying="false" name="Supervisor_OtherIdentification_fk" physicalName="supervisor_otheridentification_fk" pk-table-ref="TAB68" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP98" populated="true" UUID="c1513883-a29e-4f2b-b6f8-65a4536500d3" fk-column-ref="COL78" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL69" />
+   <relationship id="REL79" populated="true" UUID="1252d4a6-5926-46f9-a136-c2a5f8e6ace8" deferrability="7" deleteRule="3" fk-table-ref="TAB1" fkCardinality="7" identifying="false" name="ArrestAgencyID_Arrest_fk" physicalName="ArrestAgencyID_Arrest_fk" pk-table-ref="TAB36" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP80" populated="true" UUID="d7fc93db-4cb7-44f5-8a72-ce8c5fa35f31" fk-column-ref="COL3" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL37" />
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.H2DDLGenerator" allow-connection="false" target-schema="ojbc_community_corrections_staging"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="0.8408964152537145" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
@@ -347,13 +289,9 @@
   <table-pane table-ref="TAB36" x="101" y="225" bgColor="0xdfedce" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB43" x="105" y="37" bgColor="0xdfedce" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB54" x="88" y="501" bgColor="0xdfedce" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB68" x="554" y="651" bgColor="0xdfedce" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB76" x="950" y="489" bgColor="0xdfedce" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB84" x="953" y="252" bgColor="0xdfedce" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-link relationship-ref="REL93" pkConnection="0.5684210526315789" fkConnection="0.47697974217311234" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
-  <table-link relationship-ref="REL91" pkConnection="0.3836477987421384" fkConnection="0.759493670886076" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
-  <table-link relationship-ref="REL95" pkConnection="0.3153153153153153" fkConnection="0.893719806763285" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
-  <table-link relationship-ref="REL97" pkConnection="0.4774774774774775" fkConnection="0.24874371859296482" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="65"/>
+  <table-pane table-ref="TAB70" x="528" y="616" bgColor="0xdfedce" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-link relationship-ref="REL79" pkConnection="0.5684210526315789" fkConnection="0.47697974217311234" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-link relationship-ref="REL77" pkConnection="0.3836477987421384" fkConnection="0.759493670886076" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
  </play-pen>
  <critic-manager>
   <critic-grouping platformType="Generic" enabled="true">
