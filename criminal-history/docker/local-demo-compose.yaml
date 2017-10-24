@@ -24,6 +24,16 @@ services:
       - cch-demo
     depends_on:
       - db-analytics-cch
+      
+  dashboard:
+    container_name: dashboard
+    image: ojbc/dashboard
+    ports:
+      - 8081:80
+    networks:
+      - cch-demo
+    depends_on:
+      - db-analytics-cch
 
 networks:
   cch-demo:

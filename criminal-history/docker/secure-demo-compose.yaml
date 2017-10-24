@@ -40,4 +40,12 @@ services:
     container_name: ojb-web-util
     image: ojbc/ojb-web-util
     networks:
+      - cch-demo  
+      
+  dashboard:
+    container_name: dashboard
+    image: ojbc/dashboard
+    networks:
       - cch-demo
+    depends_on:
+      - db-analytics-cch
