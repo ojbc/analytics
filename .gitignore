@@ -25,3 +25,5 @@ MondrianSchema.xml
 criminal-history/dashboard/target
 dashboard.war
 static-demo-data-secure.js
+CommunityCorrectionsMondrianSchema.xml
+ojbc_cc_dimensional_demo.sql.gz
