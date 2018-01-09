@@ -61,6 +61,7 @@ drop table if exists ProbationTermArrestView;
 
 create table ProbationTermArrestView as
 select
+  Arrest.ArrestID,
   ifnull(Arrest.AgencyID, 98) as ArrestAgencyID,
   ifnull(Arrest.ArrestDateTypeID, 99998) as ArrestDateTypeID,
   ifnull(Booking.BookingDateTypeID, 99998) as BookingDateTypeID,

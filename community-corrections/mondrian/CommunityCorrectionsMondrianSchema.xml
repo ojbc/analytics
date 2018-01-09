@@ -98,6 +98,21 @@
             </SQL>
           </ExpressionView>
         </CalculatedColumnDef>
+        <CalculatedColumnDef name='ProbationTermArrestStatus' type='Integer'>
+          <ExpressionView>
+            <SQL dialect="mysql">
+              CASE WHEN <Column name="ArrestID"/> IS NULL THEN 0
+                ELSE 1 END
+            </SQL>
+          </ExpressionView>
+        </CalculatedColumnDef>
+        <CalculatedColumnDef name='ProbationArrestCount' type='Integer'>
+          <ExpressionView>
+            <SQL dialect="mysql">
+              if(<Column name="ArrestID"/> IS NULL, 1, 0) * ProbationSupervisionID
+            </SQL>
+          </ExpressionView>
+        </CalculatedColumnDef>
       </ColumnDefs>
     </Table>
 
@@ -109,19 +124,19 @@ SELECT PersonAgeTypeID, AgeInYears, AgeRange, AgeRangeSort from PersonAgeType in
       </ExpressionView>
     </Query>
 
-    <InlineTable alias="RebookingStatusType">
+    <InlineTable alias="BinaryIndicatorStatusType">
       <ColumnDefs>
-        <ColumnDef name="RebookingStatusTypeID" type="Integer"/>
-        <ColumnDef name="RebookingStatusTypeDescription" type="String"/>
+        <ColumnDef name="BinaryIndicatorStatusTypeID" type="Integer"/>
+        <ColumnDef name="BinaryIndicatorStatusTypeDescription" type="String"/>
       </ColumnDefs>
       <Rows>
         <Row>
-          <Value column="RebookingStatusTypeID">1</Value>
-          <Value column="RebookingStatusDescription">Yes</Value>
+          <Value column="BinaryIndicatorStatusTypeID">1</Value>
+          <Value column="BinaryIndicatorStatusTypeDescription">Yes</Value>
         </Row>
         <Row>
-          <Value column="RebookingStatusTypeID">0</Value>
-          <Value column="RebookingStatusTypeDescription">No</Value>
+          <Value column="BinaryIndicatorStatusTypeID">0</Value>
+          <Value column="BinaryIndicatorStatusTypeDescription">No</Value>
         </Row>
       </Rows>
     </InlineTable>
@@ -317,14 +332,25 @@ SELECT PersonAgeTypeID, AgeInYears, AgeRange, AgeRangeSort from PersonAgeType in
       </Hierarchy>
     </Hierarchies>
   </Dimension>
-  <Dimension visible="true" name="Rebooking Status" key="RebookingStatusTypeID" table="RebookingStatusType">
+  <Dimension visible="true" name="Rebooking Status" key="BinaryIndicatorStatusTypeID" table="BinaryIndicatorStatusType">
    <Attributes>
-     <Attribute name="RebookingStatusTypeID" keyColumn="RebookingStatusTypeID" hasHierarchy="false"/>
-     <Attribute name="RebookingStatusTypeDescription" keyColumn="RebookingStatusTypeDescription" hasHierarchy="false"/>
+     <Attribute name="BinaryIndicatorStatusTypeID" keyColumn="BinaryIndicatorStatusTypeID" hasHierarchy="false"/>
+     <Attribute name="BinaryIndicatorStatusTypeDescription" keyColumn="BinaryIndicatorStatusTypeDescription" hasHierarchy="false"/>
     </Attributes>
     <Hierarchies>
       <Hierarchy name="RebookingStatus" allMemberName="All Statuses" caption="Rebooking Status">
-        <Level attribute="RebookingStatusTypeDescription" caption="Previously Booked?"/>
+        <Level attribute="BinaryIndicatorStatusTypeDescription" caption="Previously Booked?"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Probation Arrest Status" key="BinaryIndicatorStatusTypeID" table="BinaryIndicatorStatusType">
+   <Attributes>
+     <Attribute name="BinaryIndicatorStatusTypeID" keyColumn="BinaryIndicatorStatusTypeID" hasHierarchy="false"/>
+     <Attribute name="BinaryIndicatorStatusTypeDescription" keyColumn="BinaryIndicatorStatusTypeDescription" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="ProbationArrestStatus" allMemberName="All Statuses" caption="Probation Arrest Status">
+        <Level attribute="BinaryIndicatorStatusTypeDescription" caption="Arrested During Supervision?"/>
       </Hierarchy>
     </Hierarchies>
   </Dimension>
@@ -407,7 +433,7 @@ SELECT PersonAgeTypeID, AgeInYears, AgeRange, AgeRangeSort from PersonAgeType in
       </MeasureGroups>
   </Cube>
 
-  <Cube name="Probation" visible="true" caption="Probation">
+  <Cube name="Probation" visible="false" caption="Probation">
     <Dimensions>
       <Dimension source="Agency"/>
       <Dimension name="TermStartDate" source="Date" caption="Supervision Start Date"/>
@@ -465,6 +491,7 @@ SELECT PersonAgeTypeID, AgeInYears, AgeRange, AgeRangeSort from PersonAgeType in
       <Dimension source="Rebooking Status" caption="Six Month Rebooking Status" name="Six Month Rebooking Status"/>
       <Dimension source="Rebooking Status" caption="One Year Rebooking Status" name="One Year Rebooking Status"/>
       <Dimension source="Rebooking Status" caption="Two Year Rebooking Status" name="Two Year Rebooking Status"/>
+      <Dimension source="Probation Arrest Status" caption="Probation Arrest Status"/>
     </Dimensions>
     <MeasureGroups>
         <MeasureGroup table="ProbationTermArrestView" name="Probation-Arrest">
@@ -474,6 +501,7 @@ SELECT PersonAgeTypeID, AgeInYears, AgeRange, AgeRangeSort from PersonAgeType in
             <Measure name="Six Month Rebooking Rate" column="SixMonthRebookingStatus" aggregator="avg" visible="true" formatString="#0.00 %"/>
             <Measure name="One Year Rebooking Rate" column="OneYearRebookingStatus" aggregator="avg" visible="true" formatString="#0.00 %"/>
             <Measure name="Two Year Rebooking Rate" column="TwoYearRebookingStatus" aggregator="avg" visible="true" formatString="#0.00 %"/>
+            <Measure name="ProbationArrestCount" column="ProbationArrestCount" aggregator="distinct-count" visible="false"/>
           </Measures>
           <DimensionLinks>
             <ForeignKeyLink dimension="ProbationAgency" foreignKeyColumn="ProbationAgencyID"/>
@@ -499,9 +527,16 @@ SELECT PersonAgeTypeID, AgeInYears, AgeRange, AgeRangeSort from PersonAgeType in
             <ForeignKeyLink dimension="Six Month Rebooking Status" foreignKeyColumn="SixMonthRebookingStatus"/>
             <ForeignKeyLink dimension="One Year Rebooking Status" foreignKeyColumn="OneYearRebookingStatus"/>
             <ForeignKeyLink dimension="Two Year Rebooking Status" foreignKeyColumn="TwoYearRebookingStatus"/>
+            <ForeignKeyLink dimension="Probation Arrest Status" foreignKeyColumn="ProbationTermArrestStatus"/>
           </DimensionLinks>
         </MeasureGroup>
       </MeasureGroups>
+      <CalculatedMembers>
+  			<CalculatedMember name="Probation Arrest Rate" caption="Probation Arrest Rate" dimension="Measures">
+  				<Formula><![CDATA[IIf([Measures].[Case Count] > 0, ([Measures].[ProbationArrestCount]-1)  / [Measures].[Case Count], NULL)]]></Formula>
+  				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+  			</CalculatedMember>
+      </CalculatedMembers>
   </Cube>
 
 </Schema>
