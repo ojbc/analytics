@@ -33,19 +33,22 @@
 #' @param percentAssessments Percentage of booked individuals that have Behavioral Health Assessments
 #' @param baseDate the "current date" for the database...the date from which the lookback period begins
 #' @param writeToDatabase whether to write to the database, or just create the data frames in the local environment (the return value)
+#' @param localDatabase whether the staging database is local to the machine where R is running, or FALSE if on a remote server
 #' @import DBI
 #' @import readr
 #' @import tidyr
 #' @import stringr
+#' @import tibble
+#' @import purrr
 #' @examples
-#' loadDemoStaging(connection=DBI::dbConnect(RMySQL::MySQL(), host="localhost", dbname="ojbc_booking_staging_demo", username="root"))
+#' loadDemoStaging(connection=DBI::dbConnect(RMariaDB::MariaDB(), host="localhost", dbname="ojbc_booking_staging_demo", username="root"))
 #' @export
 loadDemoStaging <- function(connection=NULL,
                             censusTractShapefileDSN=NA, censusTractShapefileLayer=NA, countyFIPSCode=NA,
                             censusTractPopulationFile=NA, lookbackDayCount=365, averageDailyBookingVolume=100,
                             percentPretrial=.39, percentSentenced=.01, averagePretrialStay=1.5,
                             averageSentenceStay=60, recidivismRate=.5, recidivistEpisodes=5, percentAssessments=.5,
-                            baseDate=Sys.Date(), writeToDatabase=TRUE) {
+                            baseDate=Sys.Date(), writeToDatabase=TRUE, localDatabase=TRUE) {
 
   loadStartTime <- Sys.time()
 
@@ -66,76 +69,78 @@ loadDemoStaging <- function(connection=NULL,
                                          baseDate)
 
   if (writeToDatabase) {
-    writeTablesToDatabase(stagingConnection, txTableList)
+    writeTablesToDatabase(stagingConnection, txTableList, localDatabase)
   } else {
     writeLines("writeToDatabase set to FALSE, therefore new tables not written to database")
   }
 
-  c(codeTableList, txTableList)
+  ret <- c(codeTableList, txTableList)
+
+  map(ret, as_tibble)
 
 }
 
 wipeCurrentDatabase <- function(stagingConnection) {
 
-  dbSendStatement(stagingConnection, "delete from Treatment")
-  dbSendStatement(stagingConnection, "delete from PrescribedMedication")
-  dbSendStatement(stagingConnection, "delete from BehavioralHealthAssessmentCategory")
-  dbSendStatement(stagingConnection, "delete from BehavioralHealthEvaluation")
-  dbSendStatement(stagingConnection, "delete from BehavioralHealthAssessment")
-  dbSendStatement(stagingConnection, "delete from BookingCharge")
-  dbSendStatement(stagingConnection, "delete from BookingArrest")
-  dbSendStatement(stagingConnection, "delete from CustodyRelease")
-  dbSendStatement(stagingConnection, "delete from CustodyStatusChangeCharge")
-  dbSendStatement(stagingConnection, "delete from CustodyStatusChangeArrest")
-  dbSendStatement(stagingConnection, "delete from CustodyStatusChange")
-  dbSendStatement(stagingConnection, "delete from Booking")
-  dbSendStatement(stagingConnection, "delete from Person")
-  dbSendStatement(stagingConnection, "delete from Location")
+  dbExecute(stagingConnection, "delete from Treatment")
+  dbExecute(stagingConnection, "delete from PrescribedMedication")
+  dbExecute(stagingConnection, "delete from BehavioralHealthAssessmentCategory")
+  dbExecute(stagingConnection, "delete from BehavioralHealthEvaluation")
+  dbExecute(stagingConnection, "delete from BehavioralHealthAssessment")
+  dbExecute(stagingConnection, "delete from BookingCharge")
+  dbExecute(stagingConnection, "delete from BookingArrest")
+  dbExecute(stagingConnection, "delete from CustodyRelease")
+  dbExecute(stagingConnection, "delete from CustodyStatusChangeCharge")
+  dbExecute(stagingConnection, "delete from CustodyStatusChangeArrest")
+  dbExecute(stagingConnection, "delete from CustodyStatusChange")
+  dbExecute(stagingConnection, "delete from Booking")
+  dbExecute(stagingConnection, "delete from Person")
+  dbExecute(stagingConnection, "delete from Location")
 
-  dbSendStatement(stagingConnection, "delete from Agency")
-  dbSendStatement(stagingConnection, "delete from AssessmentCategoryType")
-  dbSendStatement(stagingConnection, "delete from SupervisionUnitType")
-  dbSendStatement(stagingConnection, "delete from BondStatusType")
-  dbSendStatement(stagingConnection, "delete from BondType")
-  dbSendStatement(stagingConnection, "delete from ChargeClassType")
-  dbSendStatement(stagingConnection, "delete from DomicileStatusType")
-  dbSendStatement(stagingConnection, "delete from Facility")
-  dbSendStatement(stagingConnection, "delete from JurisdictionType")
-  dbSendStatement(stagingConnection, "delete from LanguageType")
-  dbSendStatement(stagingConnection, "delete from MedicaidStatusType")
-  dbSendStatement(stagingConnection, "delete from MilitaryServiceStatusType")
-  dbSendStatement(stagingConnection, "delete from PersonEthnicityType")
-  dbSendStatement(stagingConnection, "delete from PersonRaceType")
-  dbSendStatement(stagingConnection, "delete from PersonSexType")
-  dbSendStatement(stagingConnection, "delete from ProgramEligibilityType")
-  dbSendStatement(stagingConnection, "delete from SexOffenderStatusType")
-  dbSendStatement(stagingConnection, "delete from TreatmentStatusType")
-  dbSendStatement(stagingConnection, "delete from WorkReleaseStatusType")
-  dbSendStatement(stagingConnection, "delete from TreatmentAdmissionReasonType")
+  dbExecute(stagingConnection, "delete from Agency")
+  dbExecute(stagingConnection, "delete from AssessmentCategoryType")
+  dbExecute(stagingConnection, "delete from SupervisionUnitType")
+  dbExecute(stagingConnection, "delete from BondStatusType")
+  dbExecute(stagingConnection, "delete from BondType")
+  dbExecute(stagingConnection, "delete from ChargeClassType")
+  dbExecute(stagingConnection, "delete from DomicileStatusType")
+  dbExecute(stagingConnection, "delete from Facility")
+  dbExecute(stagingConnection, "delete from JurisdictionType")
+  dbExecute(stagingConnection, "delete from LanguageType")
+  dbExecute(stagingConnection, "delete from MedicaidStatusType")
+  dbExecute(stagingConnection, "delete from MilitaryServiceStatusType")
+  dbExecute(stagingConnection, "delete from PersonEthnicityType")
+  dbExecute(stagingConnection, "delete from PersonRaceType")
+  dbExecute(stagingConnection, "delete from PersonSexType")
+  dbExecute(stagingConnection, "delete from ProgramEligibilityType")
+  dbExecute(stagingConnection, "delete from SexOffenderStatusType")
+  dbExecute(stagingConnection, "delete from TreatmentStatusType")
+  dbExecute(stagingConnection, "delete from WorkReleaseStatusType")
+  dbExecute(stagingConnection, "delete from TreatmentAdmissionReasonType")
 
 }
 
-#' @import RMySQL
-writeTableToDatabase <- function(conn, tableName, df) {
+#' @import RMariaDB
+writeTableToDatabase <- function(conn, tableName, df, localDatabase) {
   writeLines(paste0("Writing table ", tableName, " to database..."))
-  writeDataFrameToDatabase(conn, df, tableName, viaBulk=TRUE, append=FALSE)
+  writeDataFrameToDatabase(conn, df, tableName, viaBulk=TRUE, localBulk=localDatabase, append=FALSE)
   writeLines("...done")
 }
 
-writeTablesToDatabase <- function(conn, txTables) {
-  writeTableToDatabase(conn, "Person", txTables$Person)
-  writeTableToDatabase(conn, "BehavioralHealthAssessment", txTables$BehavioralHealthAssessment)
-  writeTableToDatabase(conn, "BehavioralHealthEvaluation", txTables$BehavioralHealthEvaluation)
-  writeTableToDatabase(conn, "BehavioralHealthAssessmentCategory", txTables$BehavioralHealthAssessmentCategory)
-  writeTableToDatabase(conn, "PrescribedMedication", txTables$PrescribedMedication)
-  writeTableToDatabase(conn, "Treatment", txTables$Treatment)
-  writeTableToDatabase(conn, "Booking", txTables$Booking)
-  writeTableToDatabase(conn, "BookingArrest", txTables$BookingArrest)
-  writeTableToDatabase(conn, "BookingCharge", txTables$BookingCharge)
-  writeTableToDatabase(conn, "CustodyRelease", txTables$CustodyRelease)
-  writeTableToDatabase(conn, "CustodyStatusChange", txTables$CustodyStatusChange)
-  writeTableToDatabase(conn, "CustodyStatusChangeArrest", txTables$CustodyStatusChangeArrest)
-  writeTableToDatabase(conn, "CustodyStatusChangeCharge", txTables$CustodyStatusChangeCharge)
+writeTablesToDatabase <- function(conn, txTables, localDatabase) {
+  writeTableToDatabase(conn, "Person", txTables$Person, localDatabase)
+  writeTableToDatabase(conn, "BehavioralHealthAssessment", txTables$BehavioralHealthAssessment, localDatabase)
+  writeTableToDatabase(conn, "BehavioralHealthEvaluation", txTables$BehavioralHealthEvaluation, localDatabase)
+  writeTableToDatabase(conn, "BehavioralHealthAssessmentCategory", txTables$BehavioralHealthAssessmentCategory, localDatabase)
+  writeTableToDatabase(conn, "PrescribedMedication", txTables$PrescribedMedication, localDatabase)
+  writeTableToDatabase(conn, "Treatment", txTables$Treatment, localDatabase)
+  writeTableToDatabase(conn, "Booking", txTables$Booking, localDatabase)
+  writeTableToDatabase(conn, "BookingArrest", txTables$BookingArrest, localDatabase)
+  writeTableToDatabase(conn, "BookingCharge", txTables$BookingCharge, localDatabase)
+  writeTableToDatabase(conn, "CustodyRelease", txTables$CustodyRelease, localDatabase)
+  writeTableToDatabase(conn, "CustodyStatusChange", txTables$CustodyStatusChange, localDatabase)
+  writeTableToDatabase(conn, "CustodyStatusChangeArrest", txTables$CustodyStatusChangeArrest, localDatabase)
+  writeTableToDatabase(conn, "CustodyStatusChangeCharge", txTables$CustodyStatusChangeCharge, localDatabase)
 }
 
 #' @importFrom lubridate hour<- minute<- second<- ddays

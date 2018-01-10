@@ -14,15 +14,15 @@
 
 defaultCodeTableSpreadsheetFile <- system.file("raw", "DimensionalCodeTables.xlsx", package=getPackageName())
 
-#' @importFrom RMySQL MySQL
+#' @importFrom RMariaDB MariaDB
 defaultStagingConnectionBuilder <- function() {
-  stagingConnection <- dbConnect(MySQL(), host="localhost", dbname="ojbc_booking_staging_demo", username="root")
+  stagingConnection <- dbConnect(MariaDB(), host="localhost", dbname="ojbc_booking_staging_demo", username="root")
   stagingConnection
 }
 
-#' @importFrom RMySQL MySQL
+#' @importFrom RMariaDB MariaDB
 defaultDimensionalConnectionBuilder <- function() {
-  adsConnection <- dbConnect(MySQL(), host="localhost", dbname="ojbc_booking_analytics_demo", username="root")
+  adsConnection <- dbConnect(MariaDB(), host="localhost", dbname="ojbc_booking_analytics_demo", username="root")
   adsConnection
 }
 
@@ -117,7 +117,7 @@ getQuery <- function(conn, query, printSQL=FALSE) {
   if (printSQL) {
     writeLines(paste0("dbGetQuery: ", query))
   }
-  # suppressWarnings is necessary to avoid annoying type conversion warnings from the RMySQL driver
+  # suppressWarnings is necessary to avoid annoying type conversion warnings from the RMariaDB driver
   suppressWarnings(dbGetQuery(conn, query))
 }
 
