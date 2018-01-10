@@ -82,41 +82,47 @@ loadDemoStaging <- function(connection=NULL,
 
 wipeCurrentDatabase <- function(stagingConnection) {
 
-  dbExecute(stagingConnection, "delete from Treatment")
-  dbExecute(stagingConnection, "delete from PrescribedMedication")
-  dbExecute(stagingConnection, "delete from BehavioralHealthAssessmentCategory")
-  dbExecute(stagingConnection, "delete from BehavioralHealthEvaluation")
-  dbExecute(stagingConnection, "delete from BehavioralHealthAssessment")
-  dbExecute(stagingConnection, "delete from BookingCharge")
-  dbExecute(stagingConnection, "delete from BookingArrest")
-  dbExecute(stagingConnection, "delete from CustodyRelease")
-  dbExecute(stagingConnection, "delete from CustodyStatusChangeCharge")
-  dbExecute(stagingConnection, "delete from CustodyStatusChangeArrest")
-  dbExecute(stagingConnection, "delete from CustodyStatusChange")
-  dbExecute(stagingConnection, "delete from Booking")
-  dbExecute(stagingConnection, "delete from Person")
-  dbExecute(stagingConnection, "delete from Location")
+  writeLines('Truncating current database...')
 
-  dbExecute(stagingConnection, "delete from Agency")
-  dbExecute(stagingConnection, "delete from AssessmentCategoryType")
-  dbExecute(stagingConnection, "delete from SupervisionUnitType")
-  dbExecute(stagingConnection, "delete from BondStatusType")
-  dbExecute(stagingConnection, "delete from BondType")
-  dbExecute(stagingConnection, "delete from ChargeClassType")
-  dbExecute(stagingConnection, "delete from DomicileStatusType")
-  dbExecute(stagingConnection, "delete from Facility")
-  dbExecute(stagingConnection, "delete from JurisdictionType")
-  dbExecute(stagingConnection, "delete from LanguageType")
-  dbExecute(stagingConnection, "delete from MedicaidStatusType")
-  dbExecute(stagingConnection, "delete from MilitaryServiceStatusType")
-  dbExecute(stagingConnection, "delete from PersonEthnicityType")
-  dbExecute(stagingConnection, "delete from PersonRaceType")
-  dbExecute(stagingConnection, "delete from PersonSexType")
-  dbExecute(stagingConnection, "delete from ProgramEligibilityType")
-  dbExecute(stagingConnection, "delete from SexOffenderStatusType")
-  dbExecute(stagingConnection, "delete from TreatmentStatusType")
-  dbExecute(stagingConnection, "delete from WorkReleaseStatusType")
-  dbExecute(stagingConnection, "delete from TreatmentAdmissionReasonType")
+  dbExecute(stagingConnection, 'set FOREIGN_KEY_CHECKS=0')
+
+  dbExecute(stagingConnection, "truncate Treatment")
+  dbExecute(stagingConnection, "truncate PrescribedMedication")
+  dbExecute(stagingConnection, "truncate BehavioralHealthAssessmentCategory")
+  dbExecute(stagingConnection, "truncate BehavioralHealthEvaluation")
+  dbExecute(stagingConnection, "truncate BehavioralHealthAssessment")
+  dbExecute(stagingConnection, "truncate BookingCharge")
+  dbExecute(stagingConnection, "truncate BookingArrest")
+  dbExecute(stagingConnection, "truncate CustodyRelease")
+  dbExecute(stagingConnection, "truncate CustodyStatusChangeCharge")
+  dbExecute(stagingConnection, "truncate CustodyStatusChangeArrest")
+  dbExecute(stagingConnection, "truncate CustodyStatusChange")
+  dbExecute(stagingConnection, "truncate Booking")
+  dbExecute(stagingConnection, "truncate Person")
+  dbExecute(stagingConnection, "truncate Location")
+
+  dbExecute(stagingConnection, "truncate Agency")
+  dbExecute(stagingConnection, "truncate AssessmentCategoryType")
+  dbExecute(stagingConnection, "truncate SupervisionUnitType")
+  dbExecute(stagingConnection, "truncate BondStatusType")
+  dbExecute(stagingConnection, "truncate BondType")
+  dbExecute(stagingConnection, "truncate ChargeClassType")
+  dbExecute(stagingConnection, "truncate DomicileStatusType")
+  dbExecute(stagingConnection, "truncate Facility")
+  dbExecute(stagingConnection, "truncate JurisdictionType")
+  dbExecute(stagingConnection, "truncate LanguageType")
+  dbExecute(stagingConnection, "truncate MedicaidStatusType")
+  dbExecute(stagingConnection, "truncate MilitaryServiceStatusType")
+  dbExecute(stagingConnection, "truncate PersonEthnicityType")
+  dbExecute(stagingConnection, "truncate PersonRaceType")
+  dbExecute(stagingConnection, "truncate PersonSexType")
+  dbExecute(stagingConnection, "truncate ProgramEligibilityType")
+  dbExecute(stagingConnection, "truncate SexOffenderStatusType")
+  dbExecute(stagingConnection, "truncate TreatmentStatusType")
+  dbExecute(stagingConnection, "truncate WorkReleaseStatusType")
+  dbExecute(stagingConnection, "truncate TreatmentAdmissionReasonType")
+
+  writeLines('Truncation complete')
 
 }
 
@@ -423,7 +429,7 @@ buildBookingChildTables <- function(bookingID, bookingNumber, releaseDateTime, c
 }
 
 #' @importFrom dplyr sample_frac mutate select left_join
-#' @importFrom lubridate ddays %--% days
+#' @importFrom lubridate ddays
 buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessments, codeTableList,
                                         startingBehavioralHealthAssessmentID=1,
                                         startingTreatmentID=1,
@@ -470,7 +476,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
 
   tmt <- data.frame(BehavioralHealthAssessmentID=bhaIDs) %>%
     left_join(tmt, by=c("BehavioralHealthAssessmentID"="BehavioralHealthAssessmentID")) %>%
-    mutate(EpisodeLength=(CareEpisodeStartDate %--% CareEpisodeEndDate) %/% days(1)) %>%
+    mutate(EpisodeLength=(CareEpisodeEndDate - CareEpisodeStartDate) / ddays(1)) %>%
     mutate(EpisodeLength=ifelse(is.na(EpisodeLength), -1, EpisodeLength))
 
   recs <- nrow(tmt)
@@ -576,7 +582,7 @@ generateRandomLabelFromDimensionalCodeTable <- function(codeTableName, n) {
   ret
 }
 
-#' @importFrom lubridate dyears %--% years
+#' @importFrom lubridate dyears as_date
 buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDate) {
 
   ret <- data.frame(PersonUniqueIdentifier)
@@ -585,8 +591,10 @@ buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDa
 
   birthdates <- baseDate - dyears(generateRandomArresteeAges(23, nPeople))
 
-  ret$PersonBirthDate <- as.Date(birthdates)
-  ret$PersonAgeAtBooking <- as.integer((birthdates %--% baseDate) %/% years(1) - 1)
+  birthdates <- as_date(birthdates)
+  ret$PersonBirthDate <- birthdates
+
+  ret$PersonAgeAtBooking <- as.integer((baseDate - birthdates) / dyears(1) - 1)
   # recode 1 in 50 birthdates as NA, to simulate missing birthdates
   ret[sample(nPeople, as.integer(nPeople/50)), 'PersonBirthDate'] <- NA
 

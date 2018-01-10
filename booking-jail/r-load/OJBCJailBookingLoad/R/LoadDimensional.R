@@ -164,6 +164,7 @@ translateCodeTableValue <- function(codeTableValueTranslator, stagingValue, code
   do.call(codeTableValueTranslator, args)
 }
 
+#' @importFrom lubridate ddays
 buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTime, currentLoadTime, currentStagingDate, loadHistoryID,
                                    unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator, codeTableList, codeTableValueTranslator) {
 
@@ -186,7 +187,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
         EpisodeEndDateID=noneCodeTableValue,
         FacilityID=translateCodeTableValue(codeTableValueTranslator, FacilityID, "Facility", unknownCodeTableValue, codeTableList),
         SupervisionUnitTypeID=translateCodeTableValue(codeTableValueTranslator, SupervisionUnitTypeID, "SupervisionUnitType", unknownCodeTableValue, codeTableList),
-        DaysAgo=as.integer((EpisodeStartDate %--% currentStagingDate) %/% days(1)),
+        DaysAgo=as.integer((currentStagingDate - EpisodeStartDate) / ddays(1)),
         LengthOfStay=DaysAgo,
         SixMonthRebooking='N',
         OneYearRebooking='N',
@@ -251,6 +252,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
 
 }
 
+#' @importFrom lubridate dyears
 buildPersonTable <- function(stagingConnection, lastLoadTime, currentStagingDate, unknownCodeTableValue, educationTextValueConverter,
                              occupationTextValueConverter, codeTableList, codeTableValueTranslator) {
 
@@ -284,7 +286,7 @@ buildPersonTable <- function(stagingConnection, lastLoadTime, currentStagingDate
               EducationLevelTypeID=unknownCodeTableValue,
               OccupationTypeID=unknownCodeTableValue,
               PersonAgeTypeID=ifelse(is.na(PersonBirthDate) | PersonBirthDate > currentStagingDate, ifelse(is.na(PersonAgeAtBooking), unknownCodeTableValue, PersonAgeAtBooking),
-                                     (PersonBirthDate %--% BookingDate) %/% years(1))
+                                     (BookingDate - PersonBirthDate) / dyears(1))
     ) %>%
     mutate(PersonAgeTypeID=as.integer(ifelse(is.na(PersonAgeTypeID), unknownCodeTableValue, PersonAgeTypeID)))
 
@@ -430,7 +432,7 @@ buildChargeTables <- function(stagingConnection, adsConnection, lastLoadTime, cu
 
 }
 
-#' @importFrom lubridate %--%
+#' @importFrom lubridate ddays dyears
 buildBHAssessmentTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator) {
 
   BHAssessment <- getQuery(stagingConnection, paste0("select BehavioralHealthAssessmentID, Person.PersonID, SeriousMentalIllnessIndicator, MedicaidStatusTypeID,",
@@ -456,8 +458,10 @@ buildBHAssessmentTable <- function(stagingConnection, lastLoadTime, unknownCodeT
               PersonID=PersonID,
               SevereMentalIllnessIndicator=SeriousMentalIllnessIndicator,
               MedicaidStatusTypeID=translateCodeTableValue(codeTableValueTranslator, MedicaidStatusTypeID, "MedicaidStatusType", unknownCodeTableValue, codeTableList),
-              InTreatmentAtBooking=recode(CareEpisodeEndDate, .default='Y', .missing='N'),
-              EndedDaysBeforeBooking=(CareEpisodeEndDate %--% BookingDate) %/% days(1)
+              InTreatmentAtBooking=case_when(
+                is.na(CareEpisodeEndDate) ~ 'N',
+                TRUE ~ 'Y'),
+              EndedDaysBeforeBooking=(BookingDate - CareEpisodeEndDate) / ddays(1)
     ) %>%
     mutate(EndedDaysBeforeBooking=as.integer(ifelse(is.na(EndedDaysBeforeBooking) | EndedDaysBeforeBooking < 0, unknownCodeTableValue, EndedDaysBeforeBooking)))
 
@@ -491,6 +495,7 @@ buildBHAssessmentCategoryTable <- function(stagingConnection, lastLoadTime, unkn
 
 }
 
+#' @importFrom lubridate ddays
 buildBHTreatmentTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, providerTextValueConverter, codeTableList, codeTableValueTranslator) {
 
   BHTreatment <- getQuery(stagingConnection, paste0("select TreatmentID, bha.BehavioralHealthAssessmentID, TreatmentStatusTypeID, TreatmentAdmissionReasonTypeID, ",
@@ -516,7 +521,7 @@ buildBHTreatmentTable <- function(stagingConnection, lastLoadTime, unknownCodeTa
               TreatmentAdmissionReasonTypeID=translateCodeTableValue(codeTableValueTranslator, TreatmentAdmissionReasonTypeID, "TreatmentAdmissionReasonType", unknownCodeTableValue, codeTableList),
               TreatmentProviderName=TreatmentProviderName,
               TreatmentProviderTypeID=unknownCodeTableValue,
-              DaysBeforeBooking=(TreatmentStartDate %--% BookingDate) %/% days(1)
+              DaysBeforeBooking=(BookingDate - TreatmentStartDate) / ddays(1)
     ) %>%
     mutate(DaysBeforeBooking=as.integer(ifelse(is.na(DaysBeforeBooking) | DaysBeforeBooking < 0, unknownCodeTableValue, DaysBeforeBooking)))
 
@@ -617,22 +622,23 @@ buildReleaseTable <- function(stagingConnection, lastLoadTime, currentStagingDat
 
 }
 
-buildAndLoadHistoricalPeriodTable <- function(adsConnection, lookbackPeriod, unknownCodeTableValue, noneCodeTableValue, completeLoad, writeToDatabase) {
+buildAndLoadHistoricalPeriodTable <- function(adsConnection, lookbackPeriod, unknownCodeTableValue,
+                                              noneCodeTableValue, completeLoad, writeToDatabase, localDatabase) {
 
-  df <- data.frame(HistoricalPeriodTypeID=0:lookbackPeriod,
+  df <- tibble(HistoricalPeriodTypeID=0:lookbackPeriod,
                    DaysAgo=0:lookbackPeriod) %>%
     mutate(HistoricalPeriodTypeDescription1=paste0(90*(1 + DaysAgo %/% 90), " days"),
            HistoricalPeriodTypeDescription1=ifelse(DaysAgo >= 360, "360+ days", HistoricalPeriodTypeDescription1),
            HistoricalPeriodTypeDescription2=ifelse(DaysAgo >= 360, "36 months", HistoricalPeriodTypeDescription1),
            HistoricalPeriodTypeDescription2=ifelse(DaysAgo >= 360*3, "36 months+", HistoricalPeriodTypeDescription2))
 
-  df <- df %>% bind_rows(data.frame(HistoricalPeriodTypeID=c(unknownCodeTableValue, noneCodeTableValue),
+  df <- df %>% bind_rows(tibble(HistoricalPeriodTypeID=c(unknownCodeTableValue, noneCodeTableValue),
                                     DaysAgo=as.integer(c(0,0)),
                                     HistoricalPeriodTypeDescription1=c("Unknown", "None"),
                                     HistoricalPeriodTypeDescription2=c("Unknown", "None")))
 
   if (completeLoad & writeToDatabase) {
-    writeTableToDatabase(adsConnection, "HistoricalPeriodType", df)
+    writeTableToDatabase(adsConnection, "HistoricalPeriodType", df, localDatabase)
   }
 
   ret <- list()
@@ -643,6 +649,7 @@ buildAndLoadHistoricalPeriodTable <- function(adsConnection, lookbackPeriod, unk
 
 #' @importFrom lubridate now as_date %--%
 #' @import dplyr
+#' @import purrr
 #' @export
 loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConnectionBuilder,
                                     dimensionalConnectionBuilder=defaultDimensionalConnectionBuilder,
@@ -662,9 +669,10 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
                                     materializedViewsSqlFileName="MaterializedViews.sql",
                                     historicalPeriodLookback=365*10,
                                     completeLoad=TRUE,
-                                    writeToDatabase=FALSE) {
+                                    writeToDatabase=FALSE, localDatabase=TRUE) {
 
-  writeLines(paste0("Running ADS load with completeLoad=", completeLoad, " and writeToDatabase=", writeToDatabase))
+  writeLines(paste0("Running ADS load with completeLoad=", completeLoad, " and writeToDatabase=", writeToDatabase,
+                    "with localDatabase=", localDatabase))
 
   ret <- list()
 
@@ -685,7 +693,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   codeTableList <- loadCodeTables(adsConnection, codeTableSpreadsheetFile, writeToDatabase & completeLoad)
   ret <- c(ret, codeTableList)
 
-  historicalPeriodType <- buildAndLoadHistoricalPeriodTable(adsConnection, historicalPeriodLookback, unknownCodeTableValue, noneCodeTableValue, completeLoad, writeToDatabase)
+  historicalPeriodType <- buildAndLoadHistoricalPeriodTable(adsConnection, historicalPeriodLookback, unknownCodeTableValue, noneCodeTableValue, completeLoad, writeToDatabase, localDatabase)
   ret <- c(ret, historicalPeriodType)
 
   currentStagingDate <- getQuery(adsConnection, paste0("select MostRecentStagingTimestamp from LoadHistory where LoadHistoryID=", loadHistoryID))
@@ -737,11 +745,11 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   ret$Release <- buildReleaseTable(stagingConnection, lastLoadTime, currentStagingDate, codeTableList, codeTableValueTranslator)
   writeLines(paste0("Loaded Release with ", nrow(ret$Release), " rows"))
 
-  ret$Date <- loadDateDimension(adsConnection, ret, unknownCodeTableValue, noneCodeTableValue, writeToDatabase)
+  ret$Date <- loadDateDimension(adsConnection, ret, unknownCodeTableValue, noneCodeTableValue, writeToDatabase, localDatabase=localDatabase)
 
-  persistTables(adsConnection, ret, unknownCodeTableValue, currentLoadTime, writeToDatabase=writeToDatabase)
+  persistTables(adsConnection, ret, unknownCodeTableValue, currentLoadTime, writeToDatabase=writeToDatabase, localDatabase=localDatabase)
 
-  determineRecidivism(adsConnection, writeToDatabase=writeToDatabase)
+  determineRecidivism(adsConnection, writeToDatabase=writeToDatabase, localDatabase=localDatabase)
 
   args <- list()
   args$adsConnection <- adsConnection
@@ -757,11 +765,11 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
 
   writeLines("ADS load complete")
 
-  ret
+  map(ret, as_tibble)
 
 }
 
-loadDateDimension <- function(adsConnection, dfs, unknownCodeTableValue, noneCodeTableValue, writeToDatabase) {
+loadDateDimension <- function(adsConnection, dfs, unknownCodeTableValue, noneCodeTableValue, writeToDatabase, localDatabase) {
 
   startDates <- getQuery(adsConnection, paste0("select max(EpisodeStartDate) as max1, min(EpisodeStartDate) as min1 from JailEpisode ",
                                                "where EpisodeStartDate is not null"))
@@ -792,14 +800,14 @@ loadDateDimension <- function(adsConnection, dfs, unknownCodeTableValue, noneCod
   DateDf <- buildDateDimensionTable(minDate, maxDate, as.Date(currentDates$CalendarDate), unknownCodeTableValue, noneCodeTableValue)
 
   if (writeToDatabase) {
-    writeDataFrameToDatabase(adsConnection, DateDf, "Date", viaBulk = TRUE)
+    writeDataFrameToDatabase(adsConnection, DateDf, "Date", viaBulk = TRUE, localBulk=localDatabase)
   }
 
   DateDf
 
 }
 
-determineRecidivism <- function(adsConnection, writeToDatabase) {
+determineRecidivism <- function(adsConnection, writeToDatabase, localDatabase) {
 
   writeLines("Determining recidivism")
 
@@ -867,29 +875,29 @@ determineRecidivism <- function(adsConnection, writeToDatabase) {
 
 }
 
-persistTables <- function(adsConnection, dfs, unknownCodeTableValue, currentLoadTime, writeToDatabase) {
+persistTables <- function(adsConnection, dfs, unknownCodeTableValue, currentLoadTime, writeToDatabase, localDatabase) {
 
-  checkForAndRemoveDuplicateBookings(adsConnection, dfs, writeToDatabase=writeToDatabase)
+  checkForAndRemoveDuplicateBookings(adsConnection, dfs, writeToDatabase=writeToDatabase, localDatabase)
 
   writeLines("Writing main transaction tables to database")
 
-  writeDataFrameToDatabase(adsConnection, dfs$Person, "Person", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$JailEpisode, "JailEpisode", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$Arrest, "JailEpisodeArrest", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$Charge, "JailEpisodeCharge", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthAssessment, "BehavioralHealthAssessment", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthAssessmentCategory, "BehavioralHealthAssessmentCategory", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthTreatment, "BehavioralHealthTreatment", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthEvaluation, "BehavioralHealthEvaluation", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$PrescribedMedication, "PrescribedMedication", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$Person, "Person", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$JailEpisode, "JailEpisode", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$Arrest, "JailEpisodeArrest", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$Charge, "JailEpisodeCharge", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthAssessment, "BehavioralHealthAssessment", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthAssessmentCategory, "BehavioralHealthAssessmentCategory", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthTreatment, "BehavioralHealthTreatment", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthEvaluation, "BehavioralHealthEvaluation", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$PrescribedMedication, "PrescribedMedication", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
 
   writeLines("Done writing main transaction tables to database")
 
   writeLines("Applying JailEpisodeEdits")
-  applyEdits(adsConnection, dfs, currentLoadTime, writeToDatabase=writeToDatabase)
+  applyEdits(adsConnection, dfs, currentLoadTime, writeToDatabase=writeToDatabase, localDatabase)
 
   writeLines("Processing releases")
-  persistReleases(adsConnection, dfs, unknownCodeTableValue, writeToDatabase=writeToDatabase)
+  persistReleases(adsConnection, dfs, unknownCodeTableValue, writeToDatabase=writeToDatabase, localDatabase)
 
 }
 
@@ -907,7 +915,7 @@ createMaterializedViews <- function(adsConnection, sqlFile) {
 
 }
 
-checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs, writeToDatabase) {
+checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs, writeToDatabase, localDatabase) {
 
   writeLines("Checking for Jail Episode records with prior recorded booking number...")
 
@@ -938,7 +946,7 @@ checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs, writeToDataba
       dupBookingIDs <- c(dupBookingIDs, bookingIDDf$JailEpisodeID)
     }
 
-    removeBookingsAndChildren(adsConnection, dupBookingIDs, writeToDatabase=writeToDatabase)
+    removeBookingsAndChildren(adsConnection, dupBookingIDs, writeToDatabase=writeToDatabase, localDatabase)
 
   } else {
     writeLines("...no duplicates found")
@@ -946,7 +954,7 @@ checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs, writeToDataba
 
 }
 
-applyEdits <- function(adsConnection, dfs, currentLoadTime, writeToDatabase) {
+applyEdits <- function(adsConnection, dfs, currentLoadTime, writeToDatabase, localDatabase) {
 
   if (nrow(dfs$JailEpisodeEdits)) {
 
@@ -957,9 +965,9 @@ applyEdits <- function(adsConnection, dfs, currentLoadTime, writeToDatabase) {
     removeBookingsAndChildren(adsConnection, dfs$JailEpisodeEdits$JailEpisodeID, writeToDatabase=writeToDatabase)
 
     writeLines("Adding edited Booking, Arrest, and Charge records")
-    writeDataFrameToDatabase(adsConnection, dfs$JailEpisodeEdits, "JailEpisode", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-    writeDataFrameToDatabase(adsConnection, dfs$ArrestEdits %>% select(-StagingPK), "JailEpisodeArrest", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-    writeDataFrameToDatabase(adsConnection, dfs$ChargeEdits %>% select(-StagingPK), "JailEpisodeCharge", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+    writeDataFrameToDatabase(adsConnection, dfs$JailEpisodeEdits, "JailEpisode", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+    writeDataFrameToDatabase(adsConnection, dfs$ArrestEdits %>% select(-StagingPK), "JailEpisodeArrest", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+    writeDataFrameToDatabase(adsConnection, dfs$ChargeEdits %>% select(-StagingPK), "JailEpisodeCharge", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
 
   } else {
     writeLines("No Jail Episode edits found in this load")
@@ -967,7 +975,7 @@ applyEdits <- function(adsConnection, dfs, currentLoadTime, writeToDatabase) {
 
 }
 
-removeBookingsAndChildren <- function(adsConnection, BookingIDs, groupSize=50, writeToDatabase) {
+removeBookingsAndChildren <- function(adsConnection, BookingIDs, groupSize=50, writeToDatabase, localDatabase) {
 
   # split the booking edits into chunks and delete them in groups
 
@@ -1026,8 +1034,8 @@ removeBookingsAndChildren <- function(adsConnection, BookingIDs, groupSize=50, w
 
 }
 
-#' @importFrom lubridate %--%
-persistReleases <- function(adsConnection, dfs, unknownCodeTableValue, writeToDatabase) {
+#' @importFrom lubridate ddays
+persistReleases <- function(adsConnection, dfs, unknownCodeTableValue, writeToDatabase, localDatabase) {
 
   bookingDf <- getQuery(adsConnection, "select JailEpisodeID, EpisodeStartDate from JailEpisode")
 
@@ -1035,7 +1043,7 @@ persistReleases <- function(adsConnection, dfs, unknownCodeTableValue, writeToDa
 
     bookingDf <- bookingDf %>%
       inner_join(dfs$Release, by=c("JailEpisodeID"="BookingID")) %>%
-      mutate(LengthOfStay=(EpisodeStartDate %--% ReleaseDate) %/% days(1), EpisodeEndDate=ReleaseDate) %>% select(-ReleaseDate)
+      mutate(LengthOfStay=(ReleaseDate - EpisodeStartDate) / ddays(1), EpisodeEndDate=ReleaseDate) %>% select(-ReleaseDate)
 
     if (nrow(bookingDf)) {
 
@@ -1069,6 +1077,7 @@ persistReleases <- function(adsConnection, dfs, unknownCodeTableValue, writeToDa
 }
 
 #' @importFrom lubridate year month day wday quarter
+#' @importFrom tibble tibble
 buildDateDimensionTable <- function(minDate, maxDate, datesToExclude, unknownCodeTableValue, noneCodeTableValue) {
   writeLines(paste0("Building date dimension, earliest date=", minDate, ", latestDate=", maxDate))
   DateDf <- data.frame(CalendarDate=seq(minDate, maxDate, by="days")) %>%
@@ -1084,7 +1093,7 @@ buildDateDimensionTable <- function(minDate, maxDate, datesToExclude, unknownCod
            DayOfWeekSort=wday(CalendarDate),
            DateMMDDYYYY=format(CalendarDate, "%m%d%Y")
     ) %>%
-    bind_rows(data.frame(CalendarDate=as.Date("1899-01-01"),
+    bind_rows(tibble(CalendarDate=as.Date("1899-01-01"),
                          DateID=unknownCodeTableValue,
                          Year=0,
                          YearLabel='Unk',
@@ -1095,9 +1104,8 @@ buildDateDimensionTable <- function(minDate, maxDate, datesToExclude, unknownCod
                          Day=0,
                          DayOfWeek='Unknown',
                          DayOfWeekSort=0,
-                         DateMMDDYYYY='Unknown',
-                         stringsAsFactors=FALSE)) %>%
-    bind_rows(data.frame(CalendarDate=as.Date("1899-01-02"),
+                         DateMMDDYYYY='Unknown')) %>%
+    bind_rows(tibble(CalendarDate=as.Date("1899-01-02"),
                          DateID=noneCodeTableValue,
                          Year=0,
                          YearLabel='None',
@@ -1108,8 +1116,7 @@ buildDateDimensionTable <- function(minDate, maxDate, datesToExclude, unknownCod
                          Day=0,
                          DayOfWeek='None',
                          DayOfWeekSort=0,
-                         DateMMDDYYYY='None',
-                         stringsAsFactors=FALSE))
+                         DateMMDDYYYY='None'))
   DateDf <- DateDf %>% filter(!(CalendarDate %in% datesToExclude))
   writeLines(paste0("Adding ", nrow(DateDf), " new dates to the Date dimension"))
   DateDf
@@ -1117,44 +1124,46 @@ buildDateDimensionTable <- function(minDate, maxDate, datesToExclude, unknownCod
 
 truncateTables <- function(adsConnection) {
 
-  executeQuery(adsConnection, "delete from JailEpisodeCharge")
-  executeQuery(adsConnection, "delete from JailEpisodeArrest")
-  executeQuery(adsConnection, "delete from JailEpisode")
-  executeQuery(adsConnection, "delete from BehavioralHealthAssessmentCategory")
-  executeQuery(adsConnection, "delete from BehavioralHealthTreatment")
-  executeQuery(adsConnection, "delete from BehavioralHealthEvaluation")
-  executeQuery(adsConnection, "delete from PrescribedMedication")
-  executeQuery(adsConnection, "delete from BehavioralHealthAssessment")
-  executeQuery(adsConnection, "delete from Person")
-  executeQuery(adsConnection, "delete from LoadHistory")
+  dbExecute(adsConnection, 'set FOREIGN_KEY_CHECKS=0')
 
-  executeQuery(adsConnection, "delete from PersonSexType")
-  executeQuery(adsConnection, "delete from PersonEthnicityType")
-  executeQuery(adsConnection, "delete from PersonRaceType")
-  executeQuery(adsConnection, "delete from PersonAgeType")
-  executeQuery(adsConnection, "delete from PersonAgeRangeType")
-  executeQuery(adsConnection, "delete from Facility")
-  executeQuery(adsConnection, "delete from Agency")
-  executeQuery(adsConnection, "delete from AssessmentCategoryType")
-  executeQuery(adsConnection, "delete from BondStatusType")
-  executeQuery(adsConnection, "delete from BondType")
-  executeQuery(adsConnection, "delete from ChargeClassType")
-  executeQuery(adsConnection, "delete from DomicileStatusType")
-  executeQuery(adsConnection, "delete from JurisdictionType")
-  executeQuery(adsConnection, "delete from LanguageType")
-  executeQuery(adsConnection, "delete from MedicaidStatusType")
-  executeQuery(adsConnection, "delete from MilitaryServiceStatusType")
-  executeQuery(adsConnection, "delete from ProgramEligibilityType")
-  executeQuery(adsConnection, "delete from SexOffenderStatusType")
-  executeQuery(adsConnection, "delete from SupervisionUnitType")
-  executeQuery(adsConnection, "delete from TreatmentAdmissionReasonType")
-  executeQuery(adsConnection, "delete from TreatmentStatusType")
-  executeQuery(adsConnection, "delete from WorkReleaseStatusType")
-  executeQuery(adsConnection, "delete from CaseStatusType")
-  executeQuery(adsConnection, "delete from ChargeDispositionType")
-  executeQuery(adsConnection, "delete from EducationLevelType")
-  executeQuery(adsConnection, "delete from OccupationType")
-  executeQuery(adsConnection, "delete from PopulationType")
-  executeQuery(adsConnection, "delete from Date")
+  executeQuery(adsConnection, "truncate JailEpisodeCharge")
+  executeQuery(adsConnection, "truncate JailEpisodeArrest")
+  executeQuery(adsConnection, "truncate JailEpisode")
+  executeQuery(adsConnection, "truncate BehavioralHealthAssessmentCategory")
+  executeQuery(adsConnection, "truncate BehavioralHealthTreatment")
+  executeQuery(adsConnection, "truncate BehavioralHealthEvaluation")
+  executeQuery(adsConnection, "truncate PrescribedMedication")
+  executeQuery(adsConnection, "truncate BehavioralHealthAssessment")
+  executeQuery(adsConnection, "truncate Person")
+  executeQuery(adsConnection, "truncate LoadHistory")
+
+  executeQuery(adsConnection, "truncate PersonSexType")
+  executeQuery(adsConnection, "truncate PersonEthnicityType")
+  executeQuery(adsConnection, "truncate PersonRaceType")
+  executeQuery(adsConnection, "truncate PersonAgeType")
+  executeQuery(adsConnection, "truncate PersonAgeRangeType")
+  executeQuery(adsConnection, "truncate Facility")
+  executeQuery(adsConnection, "truncate Agency")
+  executeQuery(adsConnection, "truncate AssessmentCategoryType")
+  executeQuery(adsConnection, "truncate BondStatusType")
+  executeQuery(adsConnection, "truncate BondType")
+  executeQuery(adsConnection, "truncate ChargeClassType")
+  executeQuery(adsConnection, "truncate DomicileStatusType")
+  executeQuery(adsConnection, "truncate JurisdictionType")
+  executeQuery(adsConnection, "truncate LanguageType")
+  executeQuery(adsConnection, "truncate MedicaidStatusType")
+  executeQuery(adsConnection, "truncate MilitaryServiceStatusType")
+  executeQuery(adsConnection, "truncate ProgramEligibilityType")
+  executeQuery(adsConnection, "truncate SexOffenderStatusType")
+  executeQuery(adsConnection, "truncate SupervisionUnitType")
+  executeQuery(adsConnection, "truncate TreatmentAdmissionReasonType")
+  executeQuery(adsConnection, "truncate TreatmentStatusType")
+  executeQuery(adsConnection, "truncate WorkReleaseStatusType")
+  executeQuery(adsConnection, "truncate CaseStatusType")
+  executeQuery(adsConnection, "truncate ChargeDispositionType")
+  executeQuery(adsConnection, "truncate EducationLevelType")
+  executeQuery(adsConnection, "truncate OccupationType")
+  executeQuery(adsConnection, "truncate PopulationType")
+  executeQuery(adsConnection, "truncate Date")
 
 }
