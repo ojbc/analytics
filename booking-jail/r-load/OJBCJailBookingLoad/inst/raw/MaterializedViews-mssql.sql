@@ -11,9 +11,9 @@ select
     isnull(ChargeClassTypeID, 99998) as ChargeClassTypeID,
     isnull(BondStatusTypeID, 99998) as BondStatusTypeID,
     isnull(BondTypeID, 99998) as BondTypeID,
-    isnull(ChargeTypeID, 99998)as  ChargeTypeID, 
-    isnull(ChargeDispositionTypeID, 99998) as ChargeDispositionTypeID, 
-    isnull(JurisdictionTypeID, 99998) as JurisdictionTypeID, 
+    isnull(ChargeTypeID, 99998)as  ChargeTypeID,
+    isnull(ChargeDispositionTypeID, 99998) as ChargeDispositionTypeID,
+    isnull(JurisdictionTypeID, 99998) as JurisdictionTypeID,
     IsActive,
     iif(IsActive='Y', 'Active', 'Inactive') as IsActiveDimension,
     BondAmount,
@@ -39,8 +39,8 @@ select
     isnull(BehavioralHealthEvaluationID, 99998) as BehavioralHealthEvaluationID,
     isnull(BehavioralHealthTreatmentID, 99998) as BehavioralHealthTreatmentID,
     isnull(MedicaidStatusTypeID, 99998) as MedicaidStatusTypeID,
-    isnull(InTreatmentAtBooking, 'N') as InTreatmentAtBooking,
-    isnull(BehavioralHealthAssessment.EndedDaysBeforeBooking, 99998) as AssessmentHistoricalPeriodTypeID,
+    isnull(InTreatmentAtEvent, 'N') as InTreatmentAtEvent,
+    isnull(BehavioralHealthAssessment.EndedDaysBeforeEvent, 99998) as AssessmentHistoricalPeriodTypeID,
     isnull(BehavioralHealthEvaluationTypeID, 99998) as BehavioralHealthEvaluationTypeID,
     isnull(MedicationTypeID, 99998) as MedicationTypeID,
     isnull(AssessmentCategoryTypeID, 99998) as AssessmentCategoryTypeID,
@@ -51,14 +51,14 @@ select
     isnull(SevereMentalIllnessIndicator, 99998) as SevereMentalIllnessIndicatorDimension,
     isnull(BehavioralHealthTreatment.DaysBeforeBooking, 99998) as TreatmentHistoricalPeriodTypeID,
     isnull(PrescribedMedicationID,99998) as PrescribedMedicationID,
-    iif(SixMonthRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID as SixMonthRebookingCount, 
-    iif(OneYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID as OneYearRebookingCount, 
-    iif(TwoYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID as TwoYearRebookingCount, 
+    iif(SixMonthRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID as SixMonthRebookingCount,
+    iif(OneYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID as OneYearRebookingCount,
+    iif(TwoYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID as TwoYearRebookingCount,
     iif(IsActive='Y', 1, 0) * JailEpisode.JailEpisodeID as IsActiveBookingCount,
-    iif(InTreatmentAtBooking='Y', 1, 0) * JailEpisode.JailEpisodeID as InTreatmentAtBookingCount,
+    iif(InTreatmentAtEvent='Y', 1, 0) * JailEpisode.JailEpisodeID as InTreatmentAtBookingCount,
     iif(SevereMentalIllnessIndicator=1, 1, 0) * JailEpisode.JailEpisodeID as SevereMentalIllnessBookingCount,
     iif(BehavioralHealthAssessment.BehavioralHealthAssessmentID is null, 0, 1) as BehavioralHealthInvolvedIndicatorTypeID
-into FullBookingView     
+into FullBookingView
 from
     JailEpisode inner join Person on JailEpisode.PersonID=Person.PersonID
     left join JailEpisodeArrest on JailEpisode.JailEpisodeID=JailEpisodeArrest.JailEpisodeID

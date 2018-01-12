@@ -35,6 +35,7 @@
 #' @param writeToDatabase whether to write to the database, or just create the data frames in the local environment (the return value)
 #' @param localDatabase whether the staging database is local to the machine where R is running, or FALSE if on a remote server
 #' @param averageDailyCrisisIncidents average number of crisis Incident records added per day
+#' @param seed seed for random number generation (to guarantee same data are generated in subsequent runs)
 #' @import DBI
 #' @import readr
 #' @import tidyr
@@ -50,7 +51,9 @@ loadDemoStaging <- function(connection=NULL,
                             percentPretrial=.39, percentSentenced=.01, averagePretrialStay=1.5,
                             averageSentenceStay=60, recidivismRate=.5, recidivistEpisodes=5, percentAssessments=.5,
                             baseDate=Sys.Date(), averageDailyCrisisIncidents=10, crisisRecidivismRate=.1,
-                            writeToDatabase=TRUE, localDatabase=TRUE) {
+                            writeToDatabase=TRUE, localDatabase=TRUE, seed=12345) {
+
+  set.seed(seed)
 
   loadStartTime <- Sys.time()
 
@@ -300,13 +303,34 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   IncidentPerson$PersonTimestamp <- NA
 
   Person <- Person %>% bind_rows(IncidentPerson)
-  ret$Person <- Person
 
+  IncidentTemp <- Incident %>%
+    select(-PersonUniqueIdentifier) %>%
+    inner_join(Person, by='PersonID') %>%
+    group_by(PersonUniqueIdentifier) %>%
+    filter(n()==1) %>%
+    ungroup() %>%
+    sample_frac(.05) %>%
+    select(PersonID)
+
+  PersonTemp <- Person %>%
+    semi_join(ret$Booking %>% sample_n(nrow(IncidentTemp)), by='PersonID') %>%
+    mutate(PersonID=IncidentTemp$PersonID) %>%
+    inner_join(Incident %>% select(PersonID, IncidentReportedDate), by='PersonID') %>%
+    mutate(PersonAgeAtEvent=(IncidentReportedDate - PersonBirthDate) / dyears(1)) %>%
+    select(-IncidentReportedDate)
+
+  Person <- Person %>% anti_join(PersonTemp, by='PersonID') %>%
+    bind_rows(PersonTemp)
+
+  writeLines(paste0('Updated Incident Persons with ', nrow(IncidentTemp), ' unique person IDs associated with bookings'))
   writeLines(paste0('Updated Person table for ', nrow(IncidentPerson), ' Crisis Incident subjects'))
   writeLines(paste0('Created Incident table with ', nrow(Incident), ' rows'))
 
   Incident <- select(Incident, -PersonUniqueIdentifier)
   ret$Incident <- Incident
+
+  ret$Person <- Person
 
   writeLines('Creating IncidentResponseUnit table')
 
@@ -701,7 +725,7 @@ buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDa
   birthdates <- as_date(birthdates)
   ret$PersonBirthDate <- birthdates
 
-  ret$PersonAgeAtBooking <- as.integer((baseDate - birthdates) / dyears(1) - 1)
+  ret$PersonAgeAtEvent <- as.integer((baseDate - birthdates) / dyears(1) - 1)
   # recode 1 in 50 birthdates as NA, to simulate missing birthdates
   ret[sample(nPeople, as.integer(nPeople/50)), 'PersonBirthDate'] <- NA
 
