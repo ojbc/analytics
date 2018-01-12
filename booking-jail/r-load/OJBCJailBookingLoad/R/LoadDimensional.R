@@ -27,6 +27,14 @@ defaultDimensionalConnectionBuilder <- function() {
 }
 
 #' @importFrom openxlsx read.xlsx
+defaultReportingAgencyTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['Agency']]
+  ret <- match(textValues, ct$AgencyDescription)
+  ret[is.na(ret)] <- unknownCodeTableValue
+  ret
+}
+
+#' @importFrom openxlsx read.xlsx
 defaultUnitTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
   ct <- codeTableList[['RespondingUnitType']]
   ret <- match(textValues, ct$RespondingUnitTypeDescription)
@@ -712,6 +720,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
                                     dispositionLocationTextValueConverter=defaultDispositionLocationTextValueConverter,
                                     pendingCriminalChargesTextValueConverter=defaultPendingCriminalChargesTextValueConverter,
                                     unitTextValueConverter=defaultUnitTextValueConverter,
+                                    reportingAgencyTextValueConverter=defaultReportingAgencyTextValueConverter,
                                     educationTextValueConverter=defaultEducationTextValueConverter,
                                     occupationTextValueConverter=defaultOccupationTextValueConverter,
                                     diagnosisTextValueConverter=defaultDiagnosisTextValueConverter,
@@ -762,7 +771,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   incidentTables <- buildIncidentTables(stagingConnection, adsConnection, currentStagingDate, unknownCodeTableValue,
                                         noneCodeTableValue, codeTableList, callNatureTextValueConverter,
                                         dispositionLocationTextValueConverter, pendingCriminalChargesTextValueConverter,
-                                        unitTextValueConverter)
+                                        unitTextValueConverter, reportingAgencyTextValueConverter)
   ret <- c(ret, incidentTables)
   writeLines(paste0("Loaded Incident table with ", nrow(ret$Incident), " rows, and UnitResponse table with ", nrow(ret$UnitResponse), " rows."))
 
@@ -839,7 +848,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
 buildIncidentTables <- function(stagingConnection, adsConnection, currentStagingDate, unknownCodeTableValue,
                                 noneCodeTableValue, codeTableList, callNatureTextValueConverter,
                                 dispositionLocationTextValueConverter, pendingCriminalChargesTextValueConverter,
-                                unitTextValueConverter) {
+                                unitTextValueConverter, reportingAgencyTextValueConverter) {
 
   stagingIncident <- getQuery(stagingConnection, 'select Incident.*, PersonUniqueIdentifier from Incident, Person where Incident.PersonID=Person.PersonID')
   stagingIncidentResponseUnit <- getQuery(stagingConnection, 'select * from IncidentResponseUnit')
@@ -887,7 +896,8 @@ buildIncidentTables <- function(stagingConnection, adsConnection, currentStaging
     mutate(
       CallNatureTypeID=callNatureTextValueConverter(codeTableList, CallNature, unknownCodeTableValue),
       DispositionLocationTypeID=dispositionLocationTextValueConverter(codeTableList, DispositionLocation, unknownCodeTableValue),
-      PendingCriminalChargesTypeID=pendingCriminalChargesTextValueConverter(codeTableList, PendingCriminalCharges, unknownCodeTableValue))
+      PendingCriminalChargesTypeID=pendingCriminalChargesTextValueConverter(codeTableList, PendingCriminalCharges, unknownCodeTableValue),
+      ReportingAgencyID=reportingAgencyTextValueConverter(codeTableList, ReportingAgency, unknownCodeTableValue))
 
   recid <- Incident %>%
     select(IncidentID, PersonUniqueIdentifier, IncidentReportedDate) %>%
@@ -927,7 +937,7 @@ buildIncidentTables <- function(stagingConnection, adsConnection, currentStaging
   Incident <- Incident %>%
     select(IncidentID, PersonID, IncidentReportedDate, IncidentReportedDateID, IncidentReportedHour, CallNatureTypeID,
            DispositionLocationTypeID, PendingCriminalChargesTypeID, IncidentNumber, OfficerCount, DurationInMinutes, CostInUnitMinutes,
-           DaysSinceLastIncident, DaysUntilNextIncident, DaysSinceLastBooking, DaysUntilNextBooking)
+           DaysSinceLastIncident, DaysUntilNextIncident, DaysSinceLastBooking, DaysUntilNextBooking, ReportingAgencyID)
 
   ret <- list()
   ret$Incident <- Incident

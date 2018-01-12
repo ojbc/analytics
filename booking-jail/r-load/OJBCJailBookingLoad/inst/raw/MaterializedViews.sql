@@ -1,3 +1,60 @@
+drop table if exists FullIncidentView;
+
+create table FullIncidentView as
+  select
+    IncidentID,
+    ReportingAgencyID,
+    IncidentReportedDateID,
+    IncidentReportedHour,
+    CallNatureTypeID,
+    DispositionLocationTypeID,
+    PendingCriminalChargesTypeID,
+    OfficerCount,
+    DurationInMinutes,
+    CostInUnitMinutes,
+    CostInUnitMinutes*45/60 as CostInDollars,
+    DaysSinceLastIncident,
+    DaysUntilNextIncident,
+    DaysSinceLastBooking,
+    DaysUntilNextBooking,
+    PersonAgeTypeID,
+    PersonSexTypeID,
+    PersonRaceTypeID,
+    PersonEthnicityTypeID,
+    LanguageTypeID,
+    MilitaryServiceStatusTypeID,
+    DomicileStatusTypeID,
+    WorkReleaseStatusTypeID,
+    EducationLevelTypeID,
+    ProgramEligibilityTypeID,
+    OccupationTypeID,
+    SexOffenderStatusTypeID,
+    ifnull(BehavioralHealthEvaluationID, 99998) as BehavioralHealthEvaluationID,
+    ifnull(BehavioralHealthTreatmentID, 99998) as BehavioralHealthTreatmentID,
+    ifnull(MedicaidStatusTypeID, 99998) as MedicaidStatusTypeID,
+    ifnull(InTreatmentAtEvent, 'N') as InTreatmentAtEvent,
+    ifnull(BehavioralHealthAssessment.EndedDaysBeforeEvent, 99998) as AssessmentHistoricalPeriodTypeID,
+    ifnull(BehavioralHealthEvaluationTypeID, 99998) as BehavioralHealthEvaluationTypeID,
+    ifnull(MedicationTypeID, 99998) as MedicationTypeID,
+    ifnull(AssessmentCategoryTypeID, 99998) as AssessmentCategoryTypeID,
+    ifnull(TreatmentStatusTypeID, 99998) as TreatmentStatusTypeID,
+    ifnull(TreatmentAdmissionReasonTypeID, 99998) as TreatmentAdmissionReasonTypeID,
+    ifnull(TreatmentProviderTypeID, 99998) as TreatmentProviderTypeID,
+    SevereMentalIllnessIndicator,
+    ifnull(SevereMentalIllnessIndicator, 99998) as SevereMentalIllnessIndicatorDimension,
+    ifnull(BehavioralHealthTreatment.DaysBeforeBooking, 99998) as TreatmentHistoricalPeriodTypeID,
+    ifnull(PrescribedMedicationID,99998) as PrescribedMedicationID,
+    if(InTreatmentAtEvent='Y', 1, 0) * Incident.IncidentID as InTreatmentAtEventCount,
+    if(SevereMentalIllnessIndicator=1, 1, 0) * Incident.IncidentID as SevereMentalIllnessEventCount,
+    if(BehavioralHealthAssessment.BehavioralHealthAssessmentID is null, 0, 1) as BehavioralHealthInvolvedIndicatorTypeID
+  from
+    Incident inner join Person on Incident.PersonID=Person.PersonID
+    left join BehavioralHealthAssessment on BehavioralHealthAssessment.PersonID=Person.PersonID
+    left join BehavioralHealthEvaluation  on BehavioralHealthAssessment.BehavioralHealthAssessmentID=BehavioralHealthEvaluation.BehavioralHealthAssessmentID
+    left join BehavioralHealthAssessmentCategory on BehavioralHealthAssessment.BehavioralHealthAssessmentID=BehavioralHealthAssessmentCategory.BehavioralHealthAssessmentID
+    left join PrescribedMedication on BehavioralHealthAssessment.BehavioralHealthAssessmentID=PrescribedMedication.BehavioralHealthAssessmentID
+    left join BehavioralHealthTreatment  on BehavioralHealthAssessment.BehavioralHealthAssessmentID=BehavioralHealthTreatment.BehavioralHealthAssessmentID;
+
 drop table if exists FullBookingView;
 
 create table FullBookingView as
@@ -57,7 +114,7 @@ select
     if(OneYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID as OneYearRebookingCount,
     if(TwoYearRebooking='Y', 1, 0) * JailEpisode.JailEpisodeID as TwoYearRebookingCount,
     if(IsActive='Y', 1, 0) * JailEpisode.JailEpisodeID as IsActiveBookingCount,
-    if(InTreatmentAtEvent='Y', 1, 0) * JailEpisode.JailEpisodeID as InTreatmentAtBookingCount,
+    if(InTreatmentAtEvent='Y', 1, 0) * JailEpisode.JailEpisodeID as InTreatmentAtEventCount,
     if(SevereMentalIllnessIndicator=1, 1, 0) * JailEpisode.JailEpisodeID as SevereMentalIllnessBookingCount,
     if(BehavioralHealthAssessment.BehavioralHealthAssessmentID is null, 0, 1) as BehavioralHealthInvolvedIndicatorTypeID
 from

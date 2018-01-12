@@ -244,6 +244,8 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   day <- rep(seq_along(dailyIncidents), dailyIncidents)
   lastPersonID <- max(Person$PersonID)
 
+  agencyNames <- codeTableList$Agency$AgencyDescription
+
   Incident <- tibble(IncidentReportedDate=baseDate - ddays(day)) %>%
     mutate(
       IncidentID=row_number(),
@@ -267,7 +269,8 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
       ),
       LocationID=NA_integer_,
       PersonID=lastPersonID + IncidentID,
-      PersonUniqueIdentifier=PersonID
+      PersonUniqueIdentifier=PersonID,
+      ReportingAgency=sample(agencyNames, size=n(), replace=TRUE)
     )
 
   IncidentPerson <- Incident %>%
