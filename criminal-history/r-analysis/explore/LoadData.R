@@ -76,8 +76,10 @@ summarizeSeverity <- function(severities) {
   ret
 }
 
-Charge <- Charge %>%
-  inner_join(Statutes %>% select(StatuteCode, ChargeSeverity), by='StatuteCode') %>%
+FullCharge <- Charge %>%
+  inner_join(Statutes %>% select(StatuteCode, ChargeSeverity), by='StatuteCode')
+
+Charge <- FullCharge %>%
   select(ArrestID, ChargeOrigin, ChargeSeverity) %>%
   group_by(ArrestID, ChargeOrigin) %>%
   summarize(ChargeSeverity=summarizeSeverity(ChargeSeverity)) %>%
