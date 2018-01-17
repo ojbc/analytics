@@ -40,7 +40,24 @@
 		<Table name="PendingCriminalChargesType"/>
 		<Table name="CallNatureType"/>
 		<Table name="DispositionLocationType"/>
-		<Table name="FullIncidentView"/>
+		<Table name="FullIncidentView">
+			<ColumnDefs>
+				<CalculatedColumnDef name='SixMonthIncidentReoccurrence' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysSinceLastIncident"/> &lt;= 180, 100, 0)
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='SixMonthSubsequentBooking' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysUntilNextBooking"/> &lt;= 180, 100, 0)
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+			</ColumnDefs>
+		</Table>
 		<Table name="FullBookingView"/>
 		<InlineTable alias="SevereMentalIllnessType">
 			<ColumnDefs>
@@ -818,6 +835,8 @@
 					<Measure name="Average Officer Time" column="CostInUnitMinutes" aggregator="avg" visible="true"/>
 					<Measure name="Average Cost" column="CostInDollars" aggregator="avg" visible="true" formatString="$0.00"/>
 					<Measure name="Average Days Since Prior Incident" column="DaysSinceLastIncident" aggregator="avg" visible="true"/>
+					<Measure name="Reoccurrence Rate" column="SixMonthIncidentReoccurrence" aggregator="avg" visible="true" formatString="0.00"/>
+					<Measure name="Subsequent Booking Rate" column="SixMonthSubsequentBooking" aggregator="avg" visible="true" formatString="0.00"/>
 				</Measures>
 				<DimensionLinks>
 					<ForeignKeyLink dimension="Age" foreignKeyColumn="PersonAgeTypeID"/>
@@ -911,7 +930,7 @@
 						<Measure name="TwoYearRebookingCount" column="TwoYearRebookingCount" aggregator="distinct-count"  visible="false"/>
 						<Measure name="SMICount" column="SevereMentalIllnessBookingCount" aggregator="distinct-count" visible="false"/>
 						<Measure name="InTreatmentAtEventCount" column="InTreatmentAtEventCount" aggregator="distinct-count" visible="false"/>
-	    		</Measures>
+    		</Measures>
 	    		<DimensionLinks>
 	    			<ForeignKeyLink dimension="Age" foreignKeyColumn="PersonAgeTypeID"/>
 	    			<ForeignKeyLink dimension="Date" foreignKeyColumn="EpisodeStartDateID"/>
