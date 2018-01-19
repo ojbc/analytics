@@ -16,13 +16,13 @@ defaultCodeTableSpreadsheetFile <- system.file("raw", "DimensionalCodeTables.xls
 
 #' @importFrom RMariaDB MariaDB
 defaultStagingConnectionBuilder <- function() {
-  stagingConnection <- dbConnect(MariaDB(), host="db", dbname="ojbc_booking_staging_demo", username="root")
+  stagingConnection <- dbConnect(MariaDB(), host="localhost", dbname="ojbc_booking_staging_demo", username="root")
   stagingConnection
 }
 
 #' @importFrom RMariaDB MariaDB
 defaultDimensionalConnectionBuilder <- function() {
-  adsConnection <- dbConnect(MariaDB(), host="db", dbname="ojbc_booking_dimensional_demo", username="root")
+  adsConnection <- dbConnect(MariaDB(), host="localhost", dbname="ojbc_booking_dimensional_demo", username="root")
   adsConnection
 }
 
@@ -934,10 +934,41 @@ buildIncidentTables <- function(stagingConnection, adsConnection, currentStaging
   Incident <- left_join(Incident, recidPast, by='IncidentID')
   Incident <- left_join(Incident, recidFuture, by='IncidentID')
 
+  summaryFunction <- function(df) {
+    map_df(seq(nrow(df)), function(rowNumber) {
+      sdf <- df %>% ungroup %>% filter(row_number() <= rowNumber) %>% tail(-1)
+      if (nrow(sdf) == 0) {
+        tibble(PriorInteractions6Months=0, PriorInteractions12Months=0, PriorInteractions18Months=0, PriorInteractions24Months=0)
+      } else {
+        tibble(
+          PriorInteractions6Months=sum(cumsum(rev(sdf$DaysSinceLastIncident)) <= 180),
+          PriorInteractions12Months=sum(cumsum(rev(sdf$DaysSinceLastIncident)) <= 360),
+          PriorInteractions18Months=sum(cumsum(rev(sdf$DaysSinceLastIncident)) <= 540),
+          PriorInteractions24Months=sum(cumsum(rev(sdf$DaysSinceLastIncident)) <= 720)
+        )
+      }
+    })
+  }
+
+  writeLines('Computing counts of prior interactions...')
+
+  Incident <- Incident %>% arrange(PersonUniqueIdentifier, IncidentReportedDate)
+
+  recid <- Incident %>%
+    ungroup() %>%
+    select(PersonUniqueIdentifier, DaysSinceLastIncident) %>%
+    group_by(PersonUniqueIdentifier) %>%
+    do(out=summaryFunction(.)) %>%
+    unnest(out) %>% select(starts_with('PriorInteractions'))
+
   Incident <- Incident %>%
+    bind_cols(recid) %>%
     select(IncidentID, PersonID, IncidentReportedDate, IncidentReportedDateID, IncidentReportedHour, CallNatureTypeID,
            DispositionLocationTypeID, PendingCriminalChargesTypeID, IncidentNumber, OfficerCount, DurationInMinutes, CostInUnitMinutes,
-           DaysSinceLastIncident, DaysUntilNextIncident, DaysSinceLastBooking, DaysUntilNextBooking, ReportingAgencyID)
+           DaysSinceLastIncident, DaysUntilNextIncident, DaysSinceLastBooking, DaysUntilNextBooking, ReportingAgencyID,
+           PriorInteractions6Months, PriorInteractions12Months, PriorInteractions18Months, PriorInteractions24Months)
+
+  writeLines('...counts of prior interactions complete')
 
   ret <- list()
   ret$Incident <- Incident
@@ -1328,6 +1359,8 @@ truncateTables <- function(adsConnection) {
 
   dbExecute(adsConnection, 'set FOREIGN_KEY_CHECKS=0')
 
+  executeQuery(adsConnection, "truncate UnitResponse")
+  executeQuery(adsConnection, "truncate Incident")
   executeQuery(adsConnection, "truncate JailEpisodeCharge")
   executeQuery(adsConnection, "truncate JailEpisodeArrest")
   executeQuery(adsConnection, "truncate JailEpisode")

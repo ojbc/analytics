@@ -56,6 +56,62 @@
 						</SQL>
 					</ExpressionView>
 				</CalculatedColumnDef>
+                <CalculatedColumnDef name='PriorInteractions6MonthsDim' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when PriorInteractions6Months = 0 then 0
+                            when PriorInteractions6Months = 1 then 1
+                            when PriorInteractions6Months = 2 then 2
+                            when PriorInteractions6Months = 3 then 3
+                            when PriorInteractions6Months = 4 then 4
+                            else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='PriorInteractions12MonthsDim' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when PriorInteractions12Months = 0 then 0
+                            when PriorInteractions12Months = 1 then 1
+                            when PriorInteractions12Months = 2 then 2
+                            when PriorInteractions12Months = 3 then 3
+                            when PriorInteractions12Months = 4 then 4
+                            else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='PriorInteractions18MonthsDim' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when PriorInteractions18Months = 0 then 0
+                            when PriorInteractions18Months = 1 then 1
+                            when PriorInteractions18Months = 2 then 2
+                            when PriorInteractions18Months = 3 then 3
+                            when PriorInteractions18Months = 4 then 4
+                            else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='PriorInteractions24MonthsDim' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when PriorInteractions24Months = 0 then 0
+                            when PriorInteractions24Months = 1 then 1
+                            when PriorInteractions24Months = 2 then 2
+                            when PriorInteractions24Months = 3 then 3
+                            when PriorInteractions24Months = 4 then 4
+                            else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
 			</ColumnDefs>
 		</Table>
 		<Table name="FullBookingView"/>
@@ -76,6 +132,34 @@
 				<Row>
 					<Value column="SevereMentalIllnessTypeID">1</Value>
 					<Value column="SevereMentalIllnessTypeDescription">Yes</Value>
+				</Row>
+			</Rows>
+		</InlineTable>
+        <InlineTable alias="PriorInteractionsCountType">
+			<ColumnDefs>
+				<ColumnDef name="PriorInteractionsCountTypeID" type="Integer"/>
+				<ColumnDef name="PriorInteractionsCountTypeDescription" type="String"/>
+			</ColumnDefs>
+			<Rows>
+				<Row>
+					<Value column="PriorInteractionsCountTypeID">1</Value>
+					<Value column="PriorInteractionsCountTypeDescription">1</Value>
+				</Row>
+				<Row>
+					<Value column="PriorInteractionsCountTypeID">2</Value>
+					<Value column="PriorInteractionsCountTypeDescription">2</Value>
+				</Row>
+                <Row>
+					<Value column="PriorInteractionsCountTypeID">3</Value>
+					<Value column="PriorInteractionsCountTypeDescription">3</Value>
+				</Row>
+                <Row>
+					<Value column="PriorInteractionsCountTypeID">4</Value>
+					<Value column="PriorInteractionsCountTypeDescription">4</Value>
+				</Row>
+                <Row>
+					<Value column="PriorInteractionsCountTypeID">5</Value>
+					<Value column="PriorInteractionsCountTypeDescription">5+</Value>
 				</Row>
 			</Rows>
 		</InlineTable>
@@ -703,7 +787,7 @@
 		</Hierarchies>
 	</Dimension>
 
-	<Dimension visible="true" name="Facility" table="Facility" key="FacilityID" caption="Facility">
+    <Dimension visible="true" name="Facility" table="Facility" key="FacilityID" caption="Facility">
 		<Attributes>
 			<Attribute name="FacilityID" keyColumn="FacilityID" hasHierarchy="false"/>
 			<Attribute name="FacilityDescription" keyColumn="FacilityDescription" hasHierarchy="false" caption="Facility"/>
@@ -711,6 +795,18 @@
 		<Hierarchies>
 			<Hierarchy name="Facility" visible="true" caption="Facility" allMemberName="All Facilities" allMemberCaption="All Facilities">
 				<Level attribute="FacilityDescription" caption="Facility"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
+    <Dimension visible="true" name="Prior Interactions" table="PriorInteractionsCountType" key="PriorInteractionsCountTypeID" caption="Prior Interactions">
+		<Attributes>
+			<Attribute name="PriorInteractionsCountTypeID" keyColumn="PriorInteractionsCountTypeID" hasHierarchy="false"/>
+			<Attribute name="PriorInteractionsCountTypeDescription" keyColumn="PriorInteractionsCountTypeDescription" hasHierarchy="false" caption="# of Interactions"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Prior Interactions" visible="true" caption="Prior Interactions" allMemberName="All Incidents" allMemberCaption="All Incidents">
+				<Level attribute="PriorInteractionsCountTypeDescription" caption="# of Interactions"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
@@ -825,7 +921,11 @@
 			<Dimension source="PendingCriminalCharges"/>
 			<Dimension source="CallNature"/>
 			<Dimension source="DispositionLocation"/>
-			<Dimension source="Hour"/>
+            <Dimension source="Hour"/>
+            <Dimension source="Prior Interactions" name="Prior Interactions Past 6 Months" caption="Prior Interactions Past 6 Months"/>
+            <Dimension source="Prior Interactions" name="Prior Interactions Past 12 Months" caption="Prior Interactions Past 12 Months"/>
+            <Dimension source="Prior Interactions" name="Prior Interactions Past 18 Months" caption="Prior Interactions Past 18 Months"/>
+            <Dimension source="Prior Interactions" name="Prior Interactions Past 24 Months" caption="Prior Interactions Past 24 Months"/>
 		</Dimensions>
 		<MeasureGroups>
   		<MeasureGroup table="FullIncidentView" name="Incident">
@@ -836,10 +936,18 @@
 					<Measure name="Average Cost" column="CostInDollars" aggregator="avg" visible="true" formatString="$0.00"/>
 					<Measure name="Average Days Since Prior Incident" column="DaysSinceLastIncident" aggregator="avg" visible="true"/>
 					<Measure name="Reoccurrence Rate" column="SixMonthIncidentReoccurrence" aggregator="avg" visible="true" formatString="0.00"/>
-					<Measure name="Subsequent Booking Rate" column="SixMonthSubsequentBooking" aggregator="avg" visible="true" formatString="0.00"/>
+                    <Measure name="Subsequent Booking Rate" column="SixMonthSubsequentBooking" aggregator="avg" visible="true" formatString="0.00"/>
+                    <Measure name="Average # Prior Interactions in Past 6 Months" column="PriorInteractions6Months" aggregator="avg" visible="true" formatString="0.00"/>
+                    <Measure name="Average # Prior Interactions in Past 12 Months" column="PriorInteractions12Months" aggregator="avg" visible="true" formatString="0.00"/>
+                    <Measure name="Average # Prior Interactions in Past 18 Months" column="PriorInteractions18Months" aggregator="avg" visible="true" formatString="0.00"/>
+                    <Measure name="Average # Prior Interactions in Past 24 Months" column="PriorInteractions24Months" aggregator="avg" visible="true" formatString="0.00"/>
 				</Measures>
 				<DimensionLinks>
-					<ForeignKeyLink dimension="Age" foreignKeyColumn="PersonAgeTypeID"/>
+                    <ForeignKeyLink dimension="Prior Interactions Past 6 Months" foreignKeyColumn="PriorInteractions6Months"/>
+                    <ForeignKeyLink dimension="Prior Interactions Past 12 Months" foreignKeyColumn="PriorInteractions12Months"/>
+                    <ForeignKeyLink dimension="Prior Interactions Past 18 Months" foreignKeyColumn="PriorInteractions18Months"/>
+                    <ForeignKeyLink dimension="Prior Interactions Past 24 Months" foreignKeyColumn="PriorInteractions24Months"/>
+                    <ForeignKeyLink dimension="Age" foreignKeyColumn="PersonAgeTypeID"/>
 					<ForeignKeyLink dimension="Date" foreignKeyColumn="IncidentReportedDateID"/>
 					<ForeignKeyLink dimension="ArrestAgency" foreignKeyColumn="ReportingAgencyID"/>
 					<ForeignKeyLink dimension="Race" foreignKeyColumn="PersonRaceTypeID"/>
