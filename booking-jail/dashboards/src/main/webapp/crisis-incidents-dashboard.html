@@ -1,0 +1,193 @@
+<html>
+
+  <head>
+
+    <title>OJBC Demostate Crisis Incidents Dashboard</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.8/vega.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-lite/2.0.4/vega-lite.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-embed/3.0.0-rc7/vega-embed.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-tooltip/0.3.3/vega-tooltip.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/vega-tooltip/0.3.3/vega-tooltip.min.css">
+
+    <link rel="stylesheet" type="text/css" href="css/dashboard.css">
+
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+    <script src="js/mondrian-rest-interface.js"></script>
+    <script src="js/dashboard-generic.js"></script>
+    <script src="js/crisis-incidents.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="modal fade" id="infoModal" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+
+      <div class="page-header clearfix">
+        <div class="pull-left">
+          <h2>OJBC Demostate Crisis Incidents Dashboard</h2>
+        </div>
+      </div>
+
+      <div class="row">
+          <div class="form-group col-xs-3">
+              <label for="measureSelect" class="dashboard-select-label">Metric:</label>
+              <select class="dashboard-select bootstrap-select" id="measureSelect">
+                  <option selected="true">Encounter Count</option>
+                  <option>Reoccurrence Rate</option>
+                  <option>Recidivism Rate</option>
+              </select>
+              <label for="timeSelect" class="dashboard-select-label">Time Period:</label>
+              <select class="dashboard-select bootstrap-select" id="timeSelect">
+                  <option>Past 30 Days</option>
+                  <option selected="true">Past 60 Days</option>
+                  <option>Past Six Months</option>
+                  <option>Past Year</option>
+              </select>
+          </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="panel panel-primary" id="panel1">
+            <div class="panel-heading">
+              <span id="info-icon-chart1" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-help-file="help/chart1.html"></span>
+              <h3 class="panel-title">In Behavioral Health Treatment at Incident</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart1"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-primary" id="panel2">
+            <div class="panel-heading">
+              <span id="info-icon-chart2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              <h3 class="panel-title">Diagnostic Category</h3>
+            </div>
+            <div class="panel-body">
+              <div class="vertical">
+                <div class="row">
+                  <div class="col-md-3 col-inner-left">
+                    <div id="smi_label" class="horizontal-stacked-bar-label">% SMI:</div>
+                  </div>
+                  <div class="col-md-8 col-inner-middle">
+                    <div id="chart2_1" class="horizontal-stacked-bar"></div>
+                  </div>
+                  <div class="col-md-1 col-inner-right">
+                    <div id="smi_value" class="horizontal-stacked-bar-value-label pull-right"></div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div id="chart2_2"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-primary" id="panel3">
+            <div class="panel-heading">
+              <span id="info-icon-chart3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              <h3 class="panel-title">Nature of Call</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="panel panel-primary" id="panel4">
+            <div class="panel-heading">
+              <span id="info-icon-chart4" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              <h3 class="panel-title">Disposition Location</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart4"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-primary" id="panel5">
+            <div class="panel-heading">
+              <span id="info-icon-chart5" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              <h3 class="panel-title">Timeline (By Week)</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart5"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-primary" id="panel6">
+            <div class="panel-heading">
+              <span id="info-icon-chart6" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              <h3 class="panel-title">Subsequent Jail Episodes</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart6"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script type="text/javascript">
+
+      $(window).resize(function() {
+        refreshData();
+      });
+
+      $(".dashboard-select").change(function() {
+        refreshData();
+      });
+
+      $(".glyphicon-info-sign").click(function() {
+        var iconSpan = $(this);
+        var helpFile = iconSpan.data("help-file");
+        var title = $(".panel-title", iconSpan.parent()).text();
+        $(".modal-title").text("About " + title);
+        if (helpFile) {
+          $(".modal-body").load(helpFile);
+        } else {
+          $(".modal-body").html("<p>Help content to be determined...</p>");
+        }
+        $("#infoModal").modal();
+      });
+
+      $(function() {
+        refreshData();
+      })
+
+    </script>
+
+  </body>
+
+</html>

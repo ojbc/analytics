@@ -1,0 +1,607 @@
+<html>
+
+  <head>
+
+    <title>OJBC Demostate Jail-Booking Dashboard</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.1.1/css/bootstrap-slider.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.8/vega.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-lite/2.0.4/vega-lite.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-embed/3.0.0-rc7/vega-embed.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.1.1/bootstrap-slider.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-tooltip/0.3.3/vega-tooltip.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/vega-tooltip/0.3.3/vega-tooltip.min.css">
+
+    <link rel="stylesheet" type="text/css" href="css/dashboard.css">
+
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+    <script src="js/dashboard-generic.js"></script>
+    <script src="js/jail-generic.js"></script>
+    <script src="js/jail-operations-static.js"></script>
+    <script src="js/jail-demographics-static.js"></script>
+    <script src="js/jail-operations-timeline.js"></script>
+    <script src="js/jail-demographics-timeline.js"></script>
+    <script src="js/mondrian-rest-interface.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="modal fade" id="infoModal" role="dialog">
+  	  <div class="modal-dialog">
+  			<div class="modal-content">
+  				<div class="modal-header">
+  					<button type="button" class="close" data-dismiss="modal">&times;</button>
+  					<h4 class="modal-title"></h4>
+  				</div>
+  				<div class="modal-body"></div>
+  				<div class="modal-footer">
+  					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  				</div>
+  			</div>
+  		</div>
+  	</div>
+
+    <div class="container-fluid">
+
+      <div class="page-header clearfix">
+        <div class="pull-left">
+          <h3>OJBC Demostate Jail-Booking Dashboard</h3>
+        </div>
+        <div class="pull-right">
+          <select id="dashboardSelect" class="selectpicker bootstrap-select" data-width="auto">
+            <option data-target="#jail-static" value="jail-static" selected="true">Operations Dashboard - Snapshot</option>
+  					<option data-target="#demographics-static" value="demographics-static">Demographics Dashboard - Snapshot</option>
+  					<option data-target="#jail-timeline" value="jail-timeline">Operations Dashboard - Timeline</option>
+  					<option data-target="#demographics-timeline" value="demographics-timeline">Demographics Dashboard - Timeline</option>
+  				</select>
+        </div>
+      </div>
+
+      <nav class="navbar navbar-default">
+        <div class="container-fluid navbar-form form-group">
+          <ul class="nav navbar-nav">
+            <li class="navli">
+              <label for="measureSelect" class="dashboard-select-label">Metric:</label>
+              <select class="dashboard-select bootstrap-select" id="measureSelect">
+                <option selected="true">Population Count</option>
+                <option>Length of Stay</option>
+                <option>Rebooking Rate</option>
+              </select>
+            </li>
+            <li class="navli">
+              <label for="jurisdictionSelect" class="dashboard-select-label">Jurisdiction:</label>
+              <select class="dashboard-select bootstrap-select" id="jurisdictionSelect">
+                <option selected="true">All Jurisdictions</option>
+                <option>Brookfield County Superior Court</option>
+                <option>Logan Municipal Court</option>
+                <option>Scriba Municipal Court</option>
+              </select>
+            </li>
+            <li class="navli">
+              <label for="agencySelect" class="dashboard-select-label">Agency:</label>
+              <select class="dashboard-select bootstrap-select" id="agencySelect">
+                <option selected="true">All Agencies</option>
+                <option>Brookfield County Sheriff</option>
+                <option>Logan City PD</option>
+                <option>Scriba City PD</option>
+                <option>Other</option>
+              </select>
+            </li>
+            <li class="navli">
+              <div class="btn-group-sm" role="group" id="pop-button-group">
+                <label class="control-label dashboard-button-label" for="pop-button-group">Population:</label>
+                <button type="button" class="btn btn-default dashboard-button active" id="target-pop-button">Target</button>
+                <button type="button" class="btn btn-default dashboard-button" id="general-pop-button">General</button>
+              </div>
+            </li>
+          </div>
+          <div class="container-fluid navbar-form form-group">
+            <ul class="nav navbar-nav">
+              <li class="navli">
+                <div class="timeline-slider">
+                  <label class="control-label slider-label" for="slider">Time Period (past n days):</label>
+                  <input id="slider" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5, 6]" data-slider-min="1" data-slider-max="6" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide"/>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+      <div class="tab-content">
+
+        <!-- Static operational pane -->
+
+        <div id="jail-static" class="tab-pane active">
+
+          <div class="row">
+            <div class="col-md-3">
+              <div class="panel panel-primary" id="panel-jail-static-r1c1">
+                <div class="panel-heading">
+                  <span id="info-icon-operations-static-r1c1" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-help-file="help/case-status-help.html"></span>
+                  <h3 class="panel-title">Case Status</h3>
+                </div>
+                <div class="panel-body">
+                  <div id="chart-jail-static-r1c1"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="panel panel-primary" id="panel-jail-static-r1c2">
+                <div class="panel-heading">
+                  <span id="info-icon-operations-static-r1c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  <h3 class="panel-title">Illnesses and Disorders</h3>
+                </div>
+                <div class="panel-body">
+                  <div class="vertical">
+
+                    <div class="row">
+                      <div class="col-md-3 col-inner-left">
+                        <div id="smi_label" class="horizontal-stacked-bar-label">% SMI:</div>
+                      </div>
+                      <div class="col-md-8 col-inner-middle">
+                        <div id="chart-jail-static-r1c2_1" class="horizontal-stacked-bar"></div>
+                      </div>
+                      <div class="col-md-1 col-inner-right">
+                        <div id="smi_value" class="horizontal-stacked-bar-value-label pull-right"></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div id="chart-jail-static-r1c2_2"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="panel panel-primary" id="panel-jail-static-r1c3">
+                <div class="panel-heading">
+                  <span id="info-icon-operations-static-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  <h3 class="panel-title">Charge Type</h3>
+                </div>
+                <div class="panel-body">
+                  <div id="chart-jail-static-r1c3"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="panel panel-primary" id="panel-jail-static-r1c4">
+                <div class="panel-heading">
+                  <span id="info-icon-operations-static-r1c4" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  <h3 class="panel-title">Bond Type</h3>
+                </div>
+                <div class="panel-body">
+                  <div id="chart-jail-static-r1c4"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <div class="panel panel-primary" id="panel-jail-static-r2c1">
+                <div class="panel-heading">
+                  <span id="info-icon-operations-static-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  <h3 class="panel-title">Work Release Status</h3>
+                </div>
+                <div class="panel-body">
+                  <div id="chart-jail-static-r2c1"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="panel panel-primary" id="panel-jail-static-r2c2">
+                <div class="panel-heading">
+                  <span id="info-icon-operations-static-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  <h3 class="panel-title">Jail Utilization</h3>
+                </div>
+                <div class="panel-body">
+                  <div class="vertical">
+                      <div class="row">
+                        <div class="col-md-1 col-inner-left">
+                          <div id="capacity_label" class="horizontal-stacked-bar-label">Capacity:</div>
+                        </div>
+                        <div class="col-md-10 col-inner-middle">
+                          <div id="chart-jail-static-r2c2_capacity" class="horizontal-stacked-bar"></div>
+                        </div>
+                        <div class="col-md-1 col-inner-right">
+                          <div id="capacity_value" class="horizontal-stacked-bar-value-label pull-right"></div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <h4>Hold-for Agency:</h4>
+                        </div>
+                        <div class="col-md-6">
+                          <h4>Jurisdiction:</h4>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div id="chart-jail-static-r2c2_left"></div>
+                        </div>
+                        <div class="col-md-6">
+                          <div id="chart-jail-static-r2c2_right"></div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="panel panel-primary" id="panel-jail-static-r2c3">
+                <div class="panel-heading">
+                  <span id="info-icon-operations-static-r2c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  <h3 class="panel-title">Charge Disposition</h3>
+                </div>
+                <div class="panel-body">
+                  <div id="chart-jail-static-r2c3"></div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+      </div>
+
+      <!-- Demographics static pane -->
+
+      <div id="demographics-static" class="tab-pane">
+
+        <div class="row">
+          <div class="col-md-4">
+            <div class="panel panel-primary" id="panel-demographics-static-r1c1">
+              <div class="panel-heading">
+                <span id="info-icon-demographics-static-r1c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Gender</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-demographics-static-r1c1"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="panel panel-primary" id="panel-demographics-static-r1c2">
+              <div class="panel-heading">
+                <span id="info-icon-demographics-static-r1c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Race</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-demographics-static-r1c2"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="panel panel-primary" id="panel-demographics-static-r1c3">
+              <div class="panel-heading">
+                <span id="info-icon-demographics-static-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Age</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-demographics-static-r1c3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <div class="panel panel-primary" id="panel-demographics-static-r2c1">
+              <div class="panel-heading">
+                <span id="info-icon-demographics-static-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Language</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-demographics-static-r2c1"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="panel panel-primary" id="panel-demographics-static-r2c2">
+              <div class="panel-heading">
+                <span id="info-icon-demographics-static-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Education Level</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-demographics-static-r2c2"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="panel panel-primary" id="panel-demographics-static-r2c3">
+              <div class="panel-heading">
+                <span id="info-icon-demographics-static-r2c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Military Service Status</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-demographics-static-r2c3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Operational Timeline pane -->
+
+      <div id="jail-timeline" class="tab-pane">
+
+        <div class="row">
+          <div class="col-md-3">
+            <div class="panel panel-primary" id="panel-jail-timeline-r1c1">
+              <div class="panel-heading">
+                <span id="info-icon-operations-timeline-r1c1" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-help-file="help/case-status-help.html"></span>
+                <h3 class="panel-title">Case Status</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-jail-timeline-r1c1"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="panel panel-primary" id="panel-jail-timeline-r1c2">
+              <div class="panel-heading">
+                <span id="info-icon-operations-timeline-r1c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Illnesses and Disorders</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-jail-timeline-r1c2"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="panel panel-primary" id="panel-jail-timeline-r1c3">
+              <div class="panel-heading">
+                <span id="info-icon-operations-timeline-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Charge Type</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-jail-timeline-r1c3"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="panel panel-primary" id="panel-jail-timeline-r1c4">
+              <div class="panel-heading">
+                <span id="info-icon-operations-timeline-r1c4" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Bond Type</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-jail-timeline-r1c4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <div class="panel panel-primary" id="panel-jail-timeline-r2c1">
+              <div class="panel-heading">
+                <span id="info-icon-operations-timeline-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Work Release Status</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-jail-timeline-r2c1"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="panel panel-primary" id="panel-jail-timeline-r2c2">
+              <div class="panel-heading">
+                <span id="info-icon-operations-timeline-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Hold-for Agency</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-jail-timeline-r2c2"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="panel panel-primary" id="panel-jail-timeline-r2c3">
+              <div class="panel-heading">
+                <span id="info-icon-operations-timeline-r2c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Jurisdiction</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-jail-timeline-r2c3"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="panel panel-primary" id="panel-jail-timeline-r2c4">
+              <div class="panel-heading">
+                <span id="info-icon-operations-timeline-r2c4" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <h3 class="panel-title">Charge Disposition</h3>
+              </div>
+              <div class="panel-body">
+                <div id="chart-jail-timeline-r2c4"></div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+    </div>
+
+    <!-- Demographics timeline pane -->
+
+    <div id="demographics-timeline" class="tab-pane">
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="panel panel-primary" id="panel-demographics-timeline-r1c1">
+            <div class="panel-heading">
+              <span id="info-icon-demographics-timeline-r1c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              <h3 class="panel-title">Gender</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart-demographics-timeline-r1c1"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-primary" id="panel-demographics-timeline-r1c2">
+            <div class="panel-heading">
+              <span id="info-icon-demographics-timeline-r1c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              <h3 class="panel-title">Race</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart-demographics-timeline-r1c2"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-primary" id="panel-demographics-timeline-r1c3">
+            <div class="panel-heading">
+              <span id="info-icon-demographics-timeline-r1c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              <h3 class="panel-title">Age</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart-demographics-timeline-r1c3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="panel panel-primary" id="panel-demographics-timeline-r2c1">
+            <div class="panel-heading">
+              <span id="info-icon-demographics-timeline-r2c1" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              <h3 class="panel-title">Language</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart-demographics-timeline-r2c1"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-primary" id="panel-demographics-timeline-r2c2">
+            <div class="panel-heading">
+              <span id="info-icon-demographics-timeline-r2c2" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              <h3 class="panel-title">Education Level</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart-demographics-timeline-r2c2"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-primary" id="panel-demographics-timeline-r2c3">
+            <div class="panel-heading">
+              <span id="info-icon-demographics-timeline-r2c3" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              <h3 class="panel-title">Military Service Status</h3>
+            </div>
+            <div class="panel-body">
+              <div id="chart-demographics-timeline-r2c3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script type="text/javascript">
+
+      var sliderStops = ['30','60','90','180','365','730'];
+      var activePopulationButtonId = "";
+
+      refreshData = function() {
+
+        selectedDashboard = $("#dashboardSelect").val();
+
+        measure = $("#measureSelect").val();
+        jurisdiction = $("#jurisdictionSelect").val();
+        agency = $("#agencySelect").val();
+        targetPopulationOnly = (activePopulationButtonId == "target-pop-button");
+
+        stop = $("#slider").val();
+		    daysAgo = Number.parseInt(sliderStops[stop-1]);
+
+        if (selectedDashboard === "jail-static") {
+          refreshJailOperationsStaticData(measure, jurisdiction, agency, targetPopulationOnly);
+        } else if (selectedDashboard === "jail-timeline") {
+          refreshJailOperationsTimelineData(measure, jurisdiction, agency, targetPopulationOnly, daysAgo);
+        } else if (selectedDashboard === "demographics-static") {
+          refreshJailDemographicsStaticData(measure, jurisdiction, agency, targetPopulationOnly);
+        } else if (selectedDashboard === "demographics-timeline") {
+          refreshJailDemographicsTimelineData(measure, jurisdiction, agency, targetPopulationOnly, daysAgo);
+        }
+
+      };
+
+      $(window).resize(function() {
+        refreshData();
+      });
+
+      $(".dashboard-select").change(function(e) {
+        refreshData();
+      });
+
+      $("#dashboardSelect").change(function(e) {
+
+        $(':selected', this).tab('show');
+
+        if (this.value.includes("timeline")) {
+    			$(".timeline-slider").show();
+    			v = $("#slider").val();
+    			$("#slider").slider('refresh');
+    			$("#slider").slider('setValue', Number.parseInt(v));
+    		}
+    		else {
+    			$(".timeline-slider").hide();
+    		}
+
+        refreshData();
+
+      });
+
+      $("#pop-button-group .btn").on("click", function(e) {
+        if (this.id != activePopulationButtonId) {
+  		    $("#pop-button-group .btn").button("toggle");
+        }
+        activePopulationButtonId = this.id;
+    		refreshData();
+    	});
+
+      $(".glyphicon-info-sign").click(function() {
+    		var iconSpan = $(this);
+    		var helpFile = iconSpan.data("help-file");
+    		var title = $(".panel-title", iconSpan.parent()).text();
+    		$(".modal-title").text("About " + title);
+    		if (helpFile) {
+    			$(".modal-body").load(helpFile);
+    		} else {
+    			$(".modal-body").html("<p>Help content to be determined...</p>");
+    		}
+    		$("#infoModal").modal();
+  	  });
+
+      $(function() {
+
+        activePopulationButtonId = $('#pop-button-group button.btn.active').attr('id');
+
+        $("#slider").slider({ticks_labels: sliderStops});
+
+        $('#slider').on('slideStop', function(e) {
+          refreshData();
+        });
+
+        refreshData();
+
+      });
+
+    </script>
+
+  </body>
+
+</html>
