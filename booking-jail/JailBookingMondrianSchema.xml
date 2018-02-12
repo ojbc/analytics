@@ -9,7 +9,52 @@
 		<Table name="ChargeClassType"/>
 		<Table name="ChargeDispositionType"/>
 		<Table name="ChargeType"/>
-		<Table name="Date"/>
+		<Table name="Date">
+			<ColumnDefs>
+				<CalculatedColumnDef name='WithinPast30Days' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysAgo"/> &lt;= 30, 'Y', 'N')
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='WithinPast60Days' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysAgo"/> &lt;= 60, 'Y', 'N')
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='WithinPast90Days' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysAgo"/> &lt;= 90, 'Y', 'N')
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='WithinPast180Days' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysAgo"/> &lt;= 180, 'Y', 'N')
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='WithinPast365Days' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysAgo"/> &lt;= 365, 'Y', 'N')
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='WithinPast730Days' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysAgo"/> &lt;= 730, 'Y', 'N')
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+			</ColumnDefs>
+		</Table>
 		<Table name="DomicileStatusType"/>
 		<Table name="EducationLevelType"/>
 		<Table name="Facility"/>
@@ -45,14 +90,14 @@
 				<CalculatedColumnDef name='SixMonthIncidentReoccurrence' type='Integer'>
 					<ExpressionView>
 						<SQL dialect='mysql'>
-							if(<Column name="DaysSinceLastIncident"/> &lt;= 180, 100, 0)
+							if(<Column name="DaysSinceLastIncident"/> &lt;= 180, 1, 0)
 						</SQL>
 					</ExpressionView>
 				</CalculatedColumnDef>
 				<CalculatedColumnDef name='SixMonthSubsequentBooking' type='Integer'>
 					<ExpressionView>
 						<SQL dialect='mysql'>
-							if(<Column name="DaysUntilNextBooking"/> &lt;= 180, 100, 0)
+							if(<Column name="DaysUntilNextBooking"/> &lt;= 180, 1, 0)
 						</SQL>
 					</ExpressionView>
 				</CalculatedColumnDef>
@@ -108,6 +153,16 @@
                             when PriorInteractions24Months = 3 then 3
                             when PriorInteractions24Months = 4 then 4
                             else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='InTreatmentAtEventDim' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when InTreatmentAtEvent = 'Y' then 'Yes'
+                            else 'No'
                             end
 						</SQL>
 					</ExpressionView>
@@ -428,7 +483,14 @@
                 </Name>
             </Attribute>
             <Attribute name="Date" keyColumn="CalendarDate" hasHierarchy="false" levelType="TimeDays"/>
+            <Attribute name="WeekStartingDate" keyColumn="WeekStartingDate" hasHierarchy="false" levelType="TimeDays"/>
             <Attribute name="Day of Week" keyColumn="DayOfWeek" hasHierarchy="false" levelType="TimeDays"/>
+            <Attribute name="WithinPast30Days" keyColumn="WithinPast30Days" hasHierarchy="false"/>
+						<Attribute name="WithinPast60Days" keyColumn="WithinPast60Days" hasHierarchy="false"/>
+						<Attribute name="WithinPast90Days" keyColumn="WithinPast90Days" hasHierarchy="false"/>
+            <Attribute name="WithinPast180Days" keyColumn="WithinPast180Days" hasHierarchy="false"/>
+						<Attribute name="WithinPast365Days" keyColumn="WithinPast365Days" hasHierarchy="false"/>
+						<Attribute name="WithinPast730Days" keyColumn="WithinPast730Days" hasHierarchy="false"/>
 		</Attributes>
 		 <Hierarchies>
             <Hierarchy name="DateYMD" caption="Year/Month/Day" allMemberName="All Years" allMemberCaption="All Years">
@@ -442,6 +504,27 @@
             </Hierarchy>
             <Hierarchy name="Day of Week" caption="Day of Week" allMemberName="All Days" allMemberCaption="All Days">
                 <Level attribute="Day of Week"/>
+            </Hierarchy>
+            <Hierarchy name="WeekStartingDate" caption="Week Starting" allMemberName="All Weeks" allMemberCaption="All Weeks">
+                <Level attribute="WeekStartingDate" caption="Week Starting"/>
+            </Hierarchy>
+            <Hierarchy name="WithinPast30Days" visible="false">
+                <Level attribute="WithinPast30Days"/>
+            </Hierarchy>
+						<Hierarchy name="WithinPast60Days" visible="false">
+                <Level attribute="WithinPast60Days"/>
+            </Hierarchy>
+						<Hierarchy name="WithinPast90Days" visible="false">
+                <Level attribute="WithinPast90Days"/>
+            </Hierarchy>
+            <Hierarchy name="WithinPast180Days" visible="false">
+                <Level attribute="WithinPast180Days"/>
+            </Hierarchy>
+						<Hierarchy name="WithinPast365Days" visible="false">
+                <Level attribute="WithinPast365Days"/>
+            </Hierarchy>
+						<Hierarchy name="WithinPast730Days" visible="false">
+                <Level attribute="WithinPast730Days"/>
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
@@ -926,6 +1009,16 @@
             <Dimension source="Prior Interactions" name="Prior Interactions Past 12 Months" caption="Prior Interactions Past 12 Months"/>
             <Dimension source="Prior Interactions" name="Prior Interactions Past 18 Months" caption="Prior Interactions Past 18 Months"/>
             <Dimension source="Prior Interactions" name="Prior Interactions Past 24 Months" caption="Prior Interactions Past 24 Months"/>
+            <Dimension visible="true" name="Engagement Status">
+				<Attributes>
+					<Attribute name="Engagement Status" keyColumn="InTreatmentAtEventDim" hasHierarchy="false" table="FullIncidentView"/>
+				</Attributes>
+				<Hierarchies>
+					<Hierarchy name="Engagement Status"  visible="true" hasAll="true" allMemberCaption="All Statuses">
+						<Level attribute="Engagement Status" caption="In Treatment at Event?"/>
+					</Hierarchy>
+				</Hierarchies>
+			</Dimension>
 		</Dimensions>
 		<MeasureGroups>
   		<MeasureGroup table="FullIncidentView" name="Incident">
@@ -935,8 +1028,8 @@
 					<Measure name="Average Officer Time" column="CostInUnitMinutes" aggregator="avg" visible="true"/>
 					<Measure name="Average Cost" column="CostInDollars" aggregator="avg" visible="true" formatString="$0.00"/>
 					<Measure name="Average Days Since Prior Incident" column="DaysSinceLastIncident" aggregator="avg" visible="true"/>
-					<Measure name="Reoccurrence Rate" column="SixMonthIncidentReoccurrence" aggregator="avg" visible="true" formatString="0.00"/>
-                    <Measure name="Subsequent Booking Rate" column="SixMonthSubsequentBooking" aggregator="avg" visible="true" formatString="0.00"/>
+					<Measure name="Reoccurrence Rate" column="SixMonthIncidentReoccurrence" aggregator="avg" visible="true" formatString="#0.0 %"/>
+                    <Measure name="Subsequent Booking Rate" column="SixMonthSubsequentBooking" aggregator="avg" visible="true" formatString="#0.0 %"/>
                     <Measure name="Average # Prior Interactions in Past 6 Months" column="PriorInteractions6Months" aggregator="avg" visible="true" formatString="0.00"/>
                     <Measure name="Average # Prior Interactions in Past 12 Months" column="PriorInteractions12Months" aggregator="avg" visible="true" formatString="0.00"/>
                     <Measure name="Average # Prior Interactions in Past 18 Months" column="PriorInteractions18Months" aggregator="avg" visible="true" formatString="0.00"/>
@@ -973,6 +1066,7 @@
 					<ForeignKeyLink dimension="CallNature" foreignKeyColumn="CallNatureTypeID"/>
 					<ForeignKeyLink dimension="DispositionLocation" foreignKeyColumn="DispositionLocationTypeID"/>
 					<ForeignKeyLink dimension="Hour" foreignKeyColumn="IncidentReportedHour"/>
+                    <FactLink dimension="Engagement Status"/>
 			</DimensionLinks>
 			</MeasureGroup>
 		</MeasureGroups>
@@ -993,7 +1087,8 @@
 			<Dimension source="Bond"/>
 			<Dimension source="Jurisdiction"/>
 			<Dimension source="CaseStatus"/>
-			<Dimension source="ArrestAgency"/>
+			<Dimension source="ArrestAgency" name="ArrestAgency" caption="Arresting Agency"/>
+			<Dimension source="ArrestAgency" name="HoldForAgency" caption="Hold-for Agency"/>
 			<Dimension source="SexOffenderStatus"/>
 			<Dimension source="WorkReleaseStatus"/>
 			<Dimension source="ProgramEligibility"/>
@@ -1052,7 +1147,8 @@
 	    			<ForeignKeyLink dimension="Bond" foreignKeyColumn="BondTypeID"/>
 	    			<ForeignKeyLink dimension="Jurisdiction" foreignKeyColumn="JurisdictionTypeID"/>
 	    			<ForeignKeyLink dimension="CaseStatus" foreignKeyColumn="CaseStatusTypeID"/>
-	    			<ForeignKeyLink dimension="ArrestAgency" foreignKeyColumn="ArrestAgencyID"/>
+						<ForeignKeyLink dimension="ArrestAgency" foreignKeyColumn="ArrestAgencyID"/>
+						<ForeignKeyLink dimension="HoldForAgency" foreignKeyColumn="ChargeAgencyID"/>
 	    			<ForeignKeyLink dimension="SexOffenderStatus" foreignKeyColumn="SexOffenderStatusTypeID"/>
 	    			<ForeignKeyLink dimension="WorkReleaseStatus" foreignKeyColumn="WorkReleaseStatusTypeID"/>
 	    			<ForeignKeyLink dimension="ProgramEligibility" foreignKeyColumn="ProgramEligibilityTypeID"/>
