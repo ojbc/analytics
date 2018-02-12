@@ -158,7 +158,7 @@ writeTablesToDatabase <- function(conn, txTables, localDatabase) {
   writeTableToDatabase(conn, "IncidentResponseUnit", txTables$IncidentResponseUnit, localDatabase)
 }
 
-#' @importFrom lubridate hour<- minute<- second<- ddays
+#' @importFrom lubridate hour<- minute<- second<- ddays now dseconds
 #' @import dplyr
 createTransactionTables <- function(codeTableList, lookbackDayCount, averageDailyBookingVolume,
                                     percentPretrial, percentSentenced, averagePretrialStay,
@@ -326,14 +326,26 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   Person <- Person %>% anti_join(PersonTemp, by='PersonID') %>%
     bind_rows(PersonTemp)
 
+  maxPersonID = max(Person$PersonID)
+  maxIncidentID = max(Incident$IncidentID)
+  
+  updatedIncidents <- Incident %>% sample_frac(.05) %>% mutate(IncidentID=maxIncidentID + row_number())
+  updatedIncidentPersons <- Person %>% semi_join(updatedIncidents, by='PersonID') %>% mutate(newPersonID=maxPersonID + row_number())
+  updatedIncidents <- updatedIncidents %>% inner_join(updatedIncidentPersons %>% select(PersonID, newPersonID), by='PersonID') %>% mutate(PersonID=newPersonID) %>% select(-newPersonID)
+  updatedIncidentPersons <- updatedIncidentPersons %>% rename(PersonID=newPersonID)
+  
+  baseTimestamp = lubridate::now()
+  updateTimestamp = baseTimestamp + dseconds(100)
+  Incident <- bind_rows(Incident %>% mutate(IncidentTimestamp=format(baseTimestamp, "%Y-%m-%d %H:%M:%S")),
+                        updatedIncidents %>% mutate(IncidentTimestamp=format(updateTimestamp, "%Y-%m-%d %H:%M:%S"))) %>% ungroup()
+  Person <- bind_rows(Person, updatedIncidentPersons) %>% ungroup()
+  
   writeLines(paste0('Updated Incident Persons with ', nrow(IncidentTemp), ' unique person IDs associated with bookings'))
   writeLines(paste0('Updated Person table for ', nrow(IncidentPerson), ' Crisis Incident subjects'))
   writeLines(paste0('Created Incident table with ', nrow(Incident), ' rows'))
-
+  writeLines(paste0('Incident table includes ', nrow(updatedIncidents), ' resubmissions of prior incidents'))
+  
   Incident <- select(Incident, -PersonUniqueIdentifier)
-  ret$Incident <- Incident
-
-  ret$Person <- Person
 
   writeLines('Creating IncidentResponseUnit table')
 
@@ -355,7 +367,9 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
     mutate(IncidentResponseUnitID=row_number())
 
   writeLines(paste0('Created IncidentResponseUnit table with ', nrow(IncidentResponseUnit), ' rows'))
-
+  
+  ret$Incident <- Incident
+  ret$Person <- Person
   ret$IncidentResponseUnit <- IncidentResponseUnit
 
   tdf <- bind_rows(
@@ -368,7 +382,7 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
 
   bookingChildTableList <- buildBookingChildTables(bookingID, ret$Booking$BookingNumber, ReleaseDateTime, codeTableList)
   ret <- c(ret, bookingChildTableList)
-
+  
   chargeDf <- bookingChildTableList$BookingCharge
   maxArrestID <- max(chargeDf$BookingArrestID)
   arrestDf <- bookingChildTableList$BookingArrest
