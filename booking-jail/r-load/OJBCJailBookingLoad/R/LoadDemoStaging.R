@@ -214,6 +214,8 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   second(ReleaseDateTime) <- sample(0:59, size=nn, replace = TRUE)
 
   df$BookingTimestamp <- NA
+  
+  df$BookingStatus <- sample(c('correct', 'InProcess', 'mistaken'), size=nn, replace = TRUE, prob = c(.92, .05, .03))
 
   ret$Booking <- df %>% select(-DaysAgo, -LengthOfStay, -ReleaseDay, -Disposition)
 
@@ -254,6 +256,7 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
         str_pad(sample(0:23, size=n(), replace = TRUE), 2, 'left', '0'), ':',
         str_pad(sample(0:59, size=n(), replace = TRUE), 2, 'left', '0'), ':',
         str_pad(sample(0:59, size=n(), replace = TRUE), 2, 'left', '0')),
+      IncidentTimeSpanText=NA_character_,
       OfficerCount=sample(1:5, size=n(), replace=TRUE, prob=c(.3, .3, .2, .15, .05)),
       DispositionLocation=sample(
         c('Eastside Hospital', 'Downtown Hospital ER', 'Northend Crisis Center', '#$FHSDUKJddf1'),
@@ -270,8 +273,23 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
       LocationID=NA_integer_,
       PersonID=lastPersonID + IncidentID,
       PersonUniqueIdentifier=PersonID,
-      ReportingAgency=sample(agencyNames, size=n(), replace=TRUE)
+      ReportingAgency=sample(agencyNames, size=n(), replace=TRUE),
+      SubstanceAbuseInvolvementIndicator=rbinom(size=1, n=n(), prob=.4),
+      CrisisInterventionTeamInvolvementIndicator=rbinom(size=1, n=n(), prob=.65),
+      OffenseSeverityText=NA_character_
     )
+  
+  timeSpanIncidents <- sample_frac(Incident, .2)
+  
+  Incident <- Incident %>% anti_join(timeSpanIncidents, by='IncidentID') %>% bind_rows(
+    timeSpanIncidents %>% mutate(
+      IncidentReportedTime=NA_character_,
+      IncidentTimeSpanText=sample(
+        c('6:30AM-1PM', '1PM-2AM', '2AM-6:30AM'),
+        size=n(), replace=TRUE, prob=c(.2, .5, .3)
+      )
+    )
+  )
 
   IncidentPerson <- Incident %>%
     select(IncidentID, IncidentReportedDate) %>%
@@ -480,6 +498,8 @@ buildChangeTables <- function(txTableList, codeTableList) {
 
   changedBookings$PersonID <- ChangedPerson$PersonID
   changedBookings$CustodyStatusChangeTimestamp <- NA
+  
+  changedBookings <- changedBookings %>% select(-BookingStatus)
 
   ret$CustodyStatusChange <- changedBookings
   writeLines(paste0("Created CustodyStatusChange table with ", nrow(changedBookings), " rows."))
