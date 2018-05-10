@@ -280,7 +280,6 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
     )
   
   timeSpanIncidents <- sample_frac(Incident, .2)
-  
   Incident <- Incident %>% anti_join(timeSpanIncidents, by='IncidentID') %>% bind_rows(
     timeSpanIncidents %>% mutate(
       IncidentReportedTime=NA_character_,
@@ -367,6 +366,9 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
 
   writeLines('Creating IncidentResponseUnit table')
 
+  noUnitIncidents <- sample_frac(Incident, .2)
+  Incident <- Incident %>% anti_join(noUnitIncidents, by='IncidentID') %>% mutate(TotalOfficerTimeSeconds=NA_integer_)
+  
   IncidentResponseUnit <- tibble(IncidentID=rep(Incident$IncidentID, sample(1:4, size=nrow(Incident), replace=TRUE))) %>%
     inner_join(Incident %>% select(IncidentID, dd=IncidentReportedDate, tt=IncidentReportedTime), by='IncidentID')
 
@@ -385,6 +387,12 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
     mutate(IncidentResponseUnitID=row_number())
 
   writeLines(paste0('Created IncidentResponseUnit table with ', nrow(IncidentResponseUnit), ' rows'))
+  
+  Incident <- Incident %>% bind_rows(
+    noUnitIncidents %>% mutate(
+      TotalOfficerTimeSeconds=60*sample(1:90, size=n(), replace=TRUE)
+    )
+  )
   
   ret$Incident <- Incident
   ret$Person <- Person

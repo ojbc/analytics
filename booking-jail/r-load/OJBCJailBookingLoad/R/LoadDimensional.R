@@ -12,6 +12,8 @@
 #
 # Copyright 2012-2016 Open Justice Broker Consortium
 
+# loadDimensionalDatabase(writeToDatabase = TRUE, localDatabase = FALSE, stagingConnectionBuilder=function() {DBI::dbConnect(RMariaDB::MariaDB(), host="mariadb", dbname="ojbc_booking_staging_demo", username="root")}, dimensionalConnectionBuilder=function() {DBI::dbConnect(RMariaDB::MariaDB(), host="mariadb", dbname="ojbc_booking_dimensional_demo", username="root")})
+
 defaultCodeTableSpreadsheetFile <- system.file("raw", "DimensionalCodeTables.xlsx", package=getPackageName())
 
 #' @importFrom RMariaDB MariaDB
@@ -24,6 +26,14 @@ defaultStagingConnectionBuilder <- function() {
 defaultDimensionalConnectionBuilder <- function() {
   adsConnection <- dbConnect(MariaDB(), host="localhost", dbname="ojbc_booking_dimensional_demo", username="root")
   adsConnection
+}
+
+#' @importFrom openxlsx read.xlsx
+defaultTimeSpanTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['TimeSpanType']]
+  ret <- match(textValues, ct$TimeSpanTypeDescription)
+  ret[is.na(ret)] <- unknownCodeTableValue
+  ret
 }
 
 #' @importFrom openxlsx read.xlsx
@@ -211,6 +221,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
   buildTable <- function(StagingBookingDf, StagingBookingChargeDispositionDf, chargeDispositionAggregator, tableName) {
 
     totalRows <- nrow(StagingBookingDf)
+    writeLines(paste0('Building jail episode table from ', tableName, ' with ', totalRows, ' input rows'))
     StagingBookingDf <- filter(StagingBookingDf, BookingDate <= currentStagingDate)
     writeLines(paste0("Removing ", (totalRows - nrow(StagingBookingDf)), " ", tableName, " rows due to future Booking Date"))
 
@@ -250,15 +261,17 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
   }
 
   ret <- list()
-
-  Booking <- getQuery(stagingConnection, paste0("select BookingNumber, BookingID, PersonID, BookingDate, BookingID as pk, ",
-                                                "FacilityID, SupervisionUnitTypeID, InmateJailResidentIndicator from Booking ",
-                                                " where BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+  
+  sql <- paste0("select BookingNumber, BookingID, PersonID, BookingDate, BookingID as pk, ",
+                "FacilityID, SupervisionUnitTypeID, InmateJailResidentIndicator from Booking ",
+                " where BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and BookingStatus='correct'")
+  
+  Booking <- getQuery(stagingConnection, sql)
 
   BookingChargeDisposition <- getQuery(stagingConnection, paste0("select Booking.BookingID, ChargeDisposition from ",
                                                                  "Booking left join BookingArrest on Booking.BookingID=BookingArrest.BookingID ",
                                                                  "left join BookingCharge on BookingArrest.BookingArrestID=BookingCharge.BookingArrestID ",
-                                                                 "where BookingDate <= '", currentStagingDate, "' and BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+                                                                 "where BookingDate <= '", currentStagingDate, "' and BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and BookingStatus='correct'"))
 
   ret$JailEpisode <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, 'JailEpisode') %>%
     select(-StagingPK)
@@ -266,7 +279,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
   Booking <- getQuery(stagingConnection, paste0("select Booking.BookingNumber, CustodyStatusChange.BookingID, CustodyStatusChange.PersonID, CustodyStatusChange.BookingDate, ",
                                                 "CustodyStatusChange.FacilityID, CustodyStatusChange.SupervisionUnitTypeID, CustodyStatusChangeID as pk, ",
                                                 "CustodyStatusChange.InmateJailResidentIndicator from Booking, CustodyStatusChange ",
-                                                "where Booking.BookingID=CustodyStatusChange.BookingID and ",
+                                                "where Booking.BookingID=CustodyStatusChange.BookingID and BookingStatus='correct' and ",
                                                 "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' order by CustodyStatusChangeTimestamp"))
 
   # note that it is possible to have multiple CSC records for a single booking.  if this is the case, we take the most recent one.
@@ -278,7 +291,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
                                                                  "Booking inner join CustodyStatusChange on Booking.BookingID=CustodyStatusChange.BookingID ",
                                                                  "left join CustodyStatusChangeArrest on CustodyStatusChange.CustodyStatusChangeID=CustodyStatusChangeArrest.CustodyStatusChangeID ",
                                                                  "left join CustodyStatusChangeCharge on CustodyStatusChangeArrest.CustodyStatusChangeArrestID=CustodyStatusChangeCharge.CustodyStatusChangeArrestID ",
-                                                                 "where CustodyStatusChange.BookingDate <= '", currentStagingDate, "' and CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' order by CustodyStatusChangeTimestamp"))
+                                                                 "where CustodyStatusChange.BookingDate <= '", currentStagingDate, "' and CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and BookingStatus='correct' order by CustodyStatusChangeTimestamp"))
 
   total <- nrow(BookingChargeDisposition)
   BookingChargeDisposition <- BookingChargeDisposition %>%
@@ -756,6 +769,7 @@ buildAndLoadHistoricalPeriodTable <- function(adsConnection, lookbackPeriod, unk
 loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConnectionBuilder,
                                     dimensionalConnectionBuilder=defaultDimensionalConnectionBuilder,
                                     chargeDispositionAggregator=defaultChargeDispositionAggregator,
+                                    timeSpanTextValueConverter=defaultTimeSpanTextValueConverter,
                                     callNatureTextValueConverter=defaultCallNatureTextValueConverter,
                                     dispositionLocationTextValueConverter=defaultDispositionLocationTextValueConverter,
                                     pendingCriminalChargesTextValueConverter=defaultPendingCriminalChargesTextValueConverter,
@@ -811,7 +825,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   incidentTables <- buildIncidentTables(stagingConnection, adsConnection, currentStagingDate, unknownCodeTableValue,
                                         noneCodeTableValue, codeTableList, callNatureTextValueConverter,
                                         dispositionLocationTextValueConverter, pendingCriminalChargesTextValueConverter,
-                                        unitTextValueConverter, reportingAgencyTextValueConverter)
+                                        unitTextValueConverter, reportingAgencyTextValueConverter, timeSpanTextValueConverter)
   ret <- c(ret, incidentTables)
   writeLines(paste0("Loaded Incident table with ", nrow(ret$Incident), " rows, and UnitResponse table with ", nrow(ret$UnitResponse), " rows."))
 
@@ -899,7 +913,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
 buildIncidentTables <- function(stagingConnection, adsConnection, currentStagingDate, unknownCodeTableValue,
                                 noneCodeTableValue, codeTableList, callNatureTextValueConverter,
                                 dispositionLocationTextValueConverter, pendingCriminalChargesTextValueConverter,
-                                unitTextValueConverter, reportingAgencyTextValueConverter) {
+                                unitTextValueConverter, reportingAgencyTextValueConverter, timeSpanTextValueConverter) {
 
   stagingIncident <- getQuery(stagingConnection, 'select Incident.*, PersonUniqueIdentifier from Incident, Person where Incident.PersonID=Person.PersonID')
   stagingIncidentResponseUnit <- getQuery(stagingConnection, 'select * from IncidentResponseUnit')
@@ -956,7 +970,11 @@ buildIncidentTables <- function(stagingConnection, adsConnection, currentStaging
       CallNatureTypeID=callNatureTextValueConverter(codeTableList, CallNature, unknownCodeTableValue),
       DispositionLocationTypeID=dispositionLocationTextValueConverter(codeTableList, DispositionLocation, unknownCodeTableValue),
       PendingCriminalChargesTypeID=pendingCriminalChargesTextValueConverter(codeTableList, PendingCriminalCharges, unknownCodeTableValue),
-      ReportingAgencyID=reportingAgencyTextValueConverter(codeTableList, ReportingAgency, unknownCodeTableValue))
+      TimeSpanTypeID=timeSpanTextValueConverter(codeTableList, IncidentTimeSpanText, unknownCodeTableValue),
+      ReportingAgencyID=reportingAgencyTextValueConverter(codeTableList, ReportingAgency, unknownCodeTableValue)) %>%
+    mutate(
+      DurationInMinutes=case_when(is.na(DurationInMinutes) ~ TotalOfficerTimeSeconds / 60.0, TRUE ~ DurationInMinutes)
+    )
 
   recid <- Incident %>%
     select(IncidentID, PersonUniqueIdentifier, IncidentReportedDate) %>%
@@ -1022,9 +1040,12 @@ buildIncidentTables <- function(stagingConnection, adsConnection, currentStaging
 
   Incident <- Incident %>%
     bind_cols(recid) %>%
+    mutate(SubstanceAbuseInvolvementIndicator=as.integer(SubstanceAbuseInvolvementIndicator),
+           CrisisInterventionTeamInvolvementIndicator=as.integer(CrisisInterventionTeamInvolvementIndicator)) %>%
     select(IncidentID, PersonID, IncidentReportedDate, IncidentReportedDateID, IncidentReportedHour, CallNatureTypeID,
            DispositionLocationTypeID, PendingCriminalChargesTypeID, IncidentNumber, OfficerCount, DurationInMinutes, CostInUnitMinutes,
-           DaysSinceLastIncident, DaysUntilNextIncident, DaysSinceLastBooking, DaysUntilNextBooking, ReportingAgencyID,
+           DaysSinceLastIncident, DaysUntilNextIncident, DaysSinceLastBooking, DaysUntilNextBooking, ReportingAgencyID, TimeSpanTypeID,
+           SubstanceAbuseInvolvementIndicator, CrisisInterventionTeamInvolvementIndicator,
            PriorInteractions6Months, PriorInteractions12Months, PriorInteractions18Months, PriorInteractions24Months)
 
   writeLines('...counts of prior interactions complete')
