@@ -9,7 +9,52 @@
 		<Table name="ChargeClassType"/>
 		<Table name="ChargeDispositionType"/>
 		<Table name="ChargeType"/>
-		<Table name="Date"/>
+		<Table name="Date">
+			<ColumnDefs>
+				<CalculatedColumnDef name='WithinPast30Days' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysAgo"/> &lt;= 30, 'Y', 'N')
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='WithinPast60Days' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysAgo"/> &lt;= 60, 'Y', 'N')
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='WithinPast90Days' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysAgo"/> &lt;= 90, 'Y', 'N')
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='WithinPast180Days' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysAgo"/> &lt;= 180, 'Y', 'N')
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='WithinPast365Days' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysAgo"/> &lt;= 365, 'Y', 'N')
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='WithinPast730Days' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysAgo"/> &lt;= 730, 'Y', 'N')
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+			</ColumnDefs>
+		</Table>
 		<Table name="DomicileStatusType"/>
 		<Table name="EducationLevelType"/>
 		<Table name="Facility"/>
@@ -37,6 +82,93 @@
 		<Table name="TreatmentStatusType"/>
 		<Table name="TreatmentProviderType"/>
 		<Table name="WorkReleaseStatusType"/>
+		<Table name="PendingCriminalChargesType"/>
+		<Table name="CallNatureType"/>
+		<Table name="DispositionLocationType"/>
+		<Table name="FullIncidentView">
+			<ColumnDefs>
+				<CalculatedColumnDef name='SixMonthIncidentReoccurrence' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysSinceLastIncident"/> &lt;= 180, 1, 0)
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='SixMonthSubsequentBooking' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysUntilNextBooking"/> &lt;= 180, 1, 0)
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='PriorInteractions6MonthsDim' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when PriorInteractions6Months = 0 then 0
+                            when PriorInteractions6Months = 1 then 1
+                            when PriorInteractions6Months = 2 then 2
+                            when PriorInteractions6Months = 3 then 3
+                            when PriorInteractions6Months = 4 then 4
+                            else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='PriorInteractions12MonthsDim' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when PriorInteractions12Months = 0 then 0
+                            when PriorInteractions12Months = 1 then 1
+                            when PriorInteractions12Months = 2 then 2
+                            when PriorInteractions12Months = 3 then 3
+                            when PriorInteractions12Months = 4 then 4
+                            else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='PriorInteractions18MonthsDim' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when PriorInteractions18Months = 0 then 0
+                            when PriorInteractions18Months = 1 then 1
+                            when PriorInteractions18Months = 2 then 2
+                            when PriorInteractions18Months = 3 then 3
+                            when PriorInteractions18Months = 4 then 4
+                            else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='PriorInteractions24MonthsDim' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when PriorInteractions24Months = 0 then 0
+                            when PriorInteractions24Months = 1 then 1
+                            when PriorInteractions24Months = 2 then 2
+                            when PriorInteractions24Months = 3 then 3
+                            when PriorInteractions24Months = 4 then 4
+                            else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='InTreatmentAtEventDim' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when InTreatmentAtEvent = 'Y' then 'Yes'
+                            else 'No'
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+			</ColumnDefs>
+		</Table>
 		<Table name="FullBookingView"/>
 		<InlineTable alias="SevereMentalIllnessType">
 			<ColumnDefs>
@@ -58,7 +190,264 @@
 				</Row>
 			</Rows>
 		</InlineTable>
-	</PhysicalSchema>	
+        <InlineTable alias="PriorInteractionsCountType">
+			<ColumnDefs>
+				<ColumnDef name="PriorInteractionsCountTypeID" type="Integer"/>
+				<ColumnDef name="PriorInteractionsCountTypeDescription" type="String"/>
+			</ColumnDefs>
+			<Rows>
+				<Row>
+					<Value column="PriorInteractionsCountTypeID">1</Value>
+					<Value column="PriorInteractionsCountTypeDescription">1</Value>
+				</Row>
+				<Row>
+					<Value column="PriorInteractionsCountTypeID">2</Value>
+					<Value column="PriorInteractionsCountTypeDescription">2</Value>
+				</Row>
+                <Row>
+					<Value column="PriorInteractionsCountTypeID">3</Value>
+					<Value column="PriorInteractionsCountTypeDescription">3</Value>
+				</Row>
+                <Row>
+					<Value column="PriorInteractionsCountTypeID">4</Value>
+					<Value column="PriorInteractionsCountTypeDescription">4</Value>
+				</Row>
+                <Row>
+					<Value column="PriorInteractionsCountTypeID">5</Value>
+					<Value column="PriorInteractionsCountTypeDescription">5+</Value>
+				</Row>
+			</Rows>
+		</InlineTable>
+		<InlineTable alias="HourType">
+     <ColumnDefs>
+       <ColumnDef name="HourTypeID" type="Integer"/>
+       <ColumnDef name="HourTypeDescription" type="String"/>
+       <ColumnDef name="HourTypeDetailCategory" type="String"/>
+             <ColumnDef name="HourTypeDetailCategorySort" type="Integer"/>
+             <ColumnDef name="HourTypeCategory" type="String"/>
+             <ColumnDef name="HourTypeCategorySort" type="Integer"/>
+     </ColumnDefs>
+     <Rows>
+       <Row>
+         <Value column="HourTypeID">0</Value>
+         <Value column="HourTypeDescription">0:00-1:00</Value>
+                 <Value column="HourTypeDetailCategory">Early Morning</Value>
+                 <Value column="HourTypeDetailCategorySort">1</Value>
+         <Value column="HourTypeCategory">AM</Value>
+                 <Value column="HourTypeCategorySort">1</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">1</Value>
+         <Value column="HourTypeDescription">1:00-2:00</Value>
+         <Value column="HourTypeDetailCategory">Early Morning</Value>
+                 <Value column="HourTypeDetailCategorySort">1</Value>
+         <Value column="HourTypeCategory">AM</Value>
+                 <Value column="HourTypeCategorySort">1</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">2</Value>
+         <Value column="HourTypeDescription">2:00-3:00</Value>
+         <Value column="HourTypeDetailCategory">Early Morning</Value>
+                 <Value column="HourTypeDetailCategorySort">1</Value>
+         <Value column="HourTypeCategory">AM</Value>
+                 <Value column="HourTypeCategorySort">1</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">3</Value>
+         <Value column="HourTypeDescription">3:00-4:00</Value>
+         <Value column="HourTypeDetailCategory">Early Morning</Value>
+                 <Value column="HourTypeDetailCategorySort">1</Value>
+         <Value column="HourTypeCategory">AM</Value>
+                 <Value column="HourTypeCategorySort">1</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">4</Value>
+         <Value column="HourTypeDescription">4:00-5:00</Value>
+         <Value column="HourTypeDetailCategory">Early Morning</Value>
+                 <Value column="HourTypeDetailCategorySort">1</Value>
+         <Value column="HourTypeCategory">AM</Value>
+                 <Value column="HourTypeCategorySort">1</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">5</Value>
+         <Value column="HourTypeDescription">5:00-6:00</Value>
+         <Value column="HourTypeDetailCategory">Early Morning</Value>
+                 <Value column="HourTypeDetailCategorySort">1</Value>
+         <Value column="HourTypeCategory">AM</Value>
+                 <Value column="HourTypeCategorySort">1</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">6</Value>
+         <Value column="HourTypeDescription">6:00-7:00</Value>
+         <Value column="HourTypeDetailCategory">Morning</Value>
+                 <Value column="HourTypeDetailCategorySort">2</Value>
+         <Value column="HourTypeCategory">AM</Value>
+                 <Value column="HourTypeCategorySort">1</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">7</Value>
+         <Value column="HourTypeDescription">7:00-8:00</Value>
+         <Value column="HourTypeDetailCategory">Morning</Value>
+                 <Value column="HourTypeDetailCategorySort">2</Value>
+         <Value column="HourTypeCategory">AM</Value>
+                 <Value column="HourTypeCategorySort">1</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">8</Value>
+         <Value column="HourTypeDescription">8:00-9:00</Value>
+         <Value column="HourTypeDetailCategory">Morning</Value>
+                 <Value column="HourTypeDetailCategorySort">2</Value>
+         <Value column="HourTypeCategory">AM</Value>
+                 <Value column="HourTypeCategorySort">1</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">9</Value>
+         <Value column="HourTypeDescription">9:00-10:00</Value>
+         <Value column="HourTypeDetailCategory">Morning</Value>
+                 <Value column="HourTypeDetailCategorySort">2</Value>
+         <Value column="HourTypeCategory">AM</Value>
+                 <Value column="HourTypeCategorySort">1</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">10</Value>
+         <Value column="HourTypeDescription">10:00-11:00</Value>
+         <Value column="HourTypeDetailCategory">Morning</Value>
+                 <Value column="HourTypeDetailCategorySort">2</Value>
+         <Value column="HourTypeCategory">AM</Value>
+                 <Value column="HourTypeCategorySort">1</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">11</Value>
+         <Value column="HourTypeDescription">11:00-12:00</Value>
+         <Value column="HourTypeDetailCategory">Morning</Value>
+                 <Value column="HourTypeDetailCategorySort">2</Value>
+         <Value column="HourTypeCategory">AM</Value>
+                 <Value column="HourTypeCategorySort">1</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">12</Value>
+         <Value column="HourTypeDescription">12:00-13:00</Value>
+         <Value column="HourTypeDetailCategory">Afternoon</Value>
+                 <Value column="HourTypeDetailCategorySort">3</Value>
+         <Value column="HourTypeCategory">PM</Value>
+                 <Value column="HourTypeCategorySort">2</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">13</Value>
+         <Value column="HourTypeDescription">13:00-14:00</Value>
+         <Value column="HourTypeDetailCategory">Afternoon</Value>
+                 <Value column="HourTypeDetailCategorySort">3</Value>
+         <Value column="HourTypeCategory">PM</Value>
+                 <Value column="HourTypeCategorySort">2</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">14</Value>
+         <Value column="HourTypeDescription">14:00-15:00</Value>
+         <Value column="HourTypeDetailCategory">Afternoon</Value>
+                 <Value column="HourTypeDetailCategorySort">3</Value>
+         <Value column="HourTypeCategory">PM</Value>
+                 <Value column="HourTypeCategorySort">2</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">15</Value>
+         <Value column="HourTypeDescription">15:00-16:00</Value>
+         <Value column="HourTypeDetailCategory">Afternoon</Value>
+                 <Value column="HourTypeDetailCategorySort">3</Value>
+         <Value column="HourTypeCategory">PM</Value>
+                 <Value column="HourTypeCategorySort">2</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">16</Value>
+         <Value column="HourTypeDescription">16:00-17:00</Value>
+         <Value column="HourTypeDetailCategory">Afternoon</Value>
+                 <Value column="HourTypeDetailCategorySort">3</Value>
+         <Value column="HourTypeCategory">PM</Value>
+                 <Value column="HourTypeCategorySort">2</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">17</Value>
+         <Value column="HourTypeDescription">17:00-18:00</Value>
+         <Value column="HourTypeDetailCategory">Afternoon</Value>
+                 <Value column="HourTypeDetailCategorySort">3</Value>
+         <Value column="HourTypeCategory">PM</Value>
+                 <Value column="HourTypeCategorySort">2</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">18</Value>
+         <Value column="HourTypeDescription">18:00-19:00</Value>
+         <Value column="HourTypeDetailCategory">Evening</Value>
+                 <Value column="HourTypeDetailCategorySort">4</Value>
+         <Value column="HourTypeCategory">PM</Value>
+                 <Value column="HourTypeCategorySort">2</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">19</Value>
+         <Value column="HourTypeDescription">19:00-20:00</Value>
+         <Value column="HourTypeDetailCategory">Evening</Value>
+                 <Value column="HourTypeDetailCategorySort">4</Value>
+         <Value column="HourTypeCategory">PM</Value>
+                 <Value column="HourTypeCategorySort">2</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">20</Value>
+         <Value column="HourTypeDescription">20:00-21:00</Value>
+         <Value column="HourTypeDetailCategory">Evening</Value>
+                 <Value column="HourTypeDetailCategorySort">4</Value>
+         <Value column="HourTypeCategory">PM</Value>
+                 <Value column="HourTypeCategorySort">2</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">21</Value>
+         <Value column="HourTypeDescription">21:00-22:00</Value>
+         <Value column="HourTypeDetailCategory">Evening</Value>
+                 <Value column="HourTypeDetailCategorySort">4</Value>
+         <Value column="HourTypeCategory">PM</Value>
+                 <Value column="HourTypeCategorySort">2</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">22</Value>
+         <Value column="HourTypeDescription">22:00-23:00</Value>
+         <Value column="HourTypeDetailCategory">Evening</Value>
+                 <Value column="HourTypeDetailCategorySort">4</Value>
+         <Value column="HourTypeCategory">PM</Value>
+                 <Value column="HourTypeCategorySort">2</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">23</Value>
+         <Value column="HourTypeDescription">23:00-24:00</Value>
+         <Value column="HourTypeDetailCategory">Evening</Value>
+                 <Value column="HourTypeDetailCategorySort">4</Value>
+         <Value column="HourTypeCategory">PM</Value>
+                 <Value column="HourTypeCategorySort">2</Value>
+       </Row>
+       <Row>
+         <Value column="HourTypeID">99</Value>
+         <Value column="HourTypeDescription">Unknown</Value>
+         <Value column="HourTypeDetailCategory">Unknown</Value>
+                 <Value column="HourTypeDetailCategorySort">100</Value>
+         <Value column="HourTypeCategory">Unknown</Value>
+                 <Value column="HourTypeCategorySort">100</Value>
+       </Row>
+     </Rows>
+   </InlineTable>
+	</PhysicalSchema>
+
+	<Dimension visible="true" name="Hour" key="HourTypeID" table="HourType">
+		<Attributes>
+			<Attribute name="HourTypeID" keyColumn="HourTypeID" hasHierarchy="false"/>
+			<Attribute name="HourTypeDescription" keyColumn="HourTypeDescription" hasHierarchy="false" orderByColumn="HourTypeID"/>
+			<Attribute name="HourTypeDetailCategory" keyColumn="HourTypeDetailCategory" hasHierarchy="false" orderByColumn="HourTypeDetailCategorySort"/>
+			<Attribute name="HourTypeCategory" keyColumn="HourTypeCategory" hasHierarchy="false" orderByColumn="HourTypeCategorySort"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Hour" caption="Hour of Day" allMemberName="All Hours">
+				<Level attribute="HourTypeCategory" caption="AM/PM"/>
+				<Level attribute="HourTypeDetailCategory" caption="Part of Day"/>
+				<Level attribute="HourTypeDescription" caption="Hour"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
 	<Dimension visible="true" name="Date" table="Date" key="DateID" type="TIME">
 		<Attributes>
 			 <Attribute name="DateID" keyColumn="DateID" hasHierarchy="false"/>
@@ -93,8 +482,15 @@
                     <Column name="Day"/>
                 </Name>
             </Attribute>
-            <Attribute name="Date" keyColumn="CalendarDate" hasHierarchy="false" levelType="TimeDays"/>            
-            <Attribute name="Day of Week" keyColumn="DayOfWeek" hasHierarchy="false" levelType="TimeDays"/>  
+            <Attribute name="Date" keyColumn="CalendarDate" hasHierarchy="false" levelType="TimeDays"/>
+            <Attribute name="WeekStartingDate" keyColumn="WeekStartingDate" hasHierarchy="false" levelType="TimeDays"/>
+            <Attribute name="Day of Week" keyColumn="DayOfWeek" hasHierarchy="false" levelType="TimeDays"/>
+            <Attribute name="WithinPast30Days" keyColumn="WithinPast30Days" hasHierarchy="false"/>
+						<Attribute name="WithinPast60Days" keyColumn="WithinPast60Days" hasHierarchy="false"/>
+						<Attribute name="WithinPast90Days" keyColumn="WithinPast90Days" hasHierarchy="false"/>
+            <Attribute name="WithinPast180Days" keyColumn="WithinPast180Days" hasHierarchy="false"/>
+						<Attribute name="WithinPast365Days" keyColumn="WithinPast365Days" hasHierarchy="false"/>
+						<Attribute name="WithinPast730Days" keyColumn="WithinPast730Days" hasHierarchy="false"/>
 		</Attributes>
 		 <Hierarchies>
             <Hierarchy name="DateYMD" caption="Year/Month/Day" allMemberName="All Years" allMemberCaption="All Years">
@@ -109,7 +505,64 @@
             <Hierarchy name="Day of Week" caption="Day of Week" allMemberName="All Days" allMemberCaption="All Days">
                 <Level attribute="Day of Week"/>
             </Hierarchy>
+            <Hierarchy name="WeekStartingDate" caption="Week Starting" allMemberName="All Weeks" allMemberCaption="All Weeks">
+                <Level attribute="WeekStartingDate" caption="Week Starting"/>
+            </Hierarchy>
+            <Hierarchy name="WithinPast30Days" visible="false">
+                <Level attribute="WithinPast30Days"/>
+            </Hierarchy>
+						<Hierarchy name="WithinPast60Days" visible="false">
+                <Level attribute="WithinPast60Days"/>
+            </Hierarchy>
+						<Hierarchy name="WithinPast90Days" visible="false">
+                <Level attribute="WithinPast90Days"/>
+            </Hierarchy>
+            <Hierarchy name="WithinPast180Days" visible="false">
+                <Level attribute="WithinPast180Days"/>
+            </Hierarchy>
+						<Hierarchy name="WithinPast365Days" visible="false">
+                <Level attribute="WithinPast365Days"/>
+            </Hierarchy>
+						<Hierarchy name="WithinPast730Days" visible="false">
+                <Level attribute="WithinPast730Days"/>
+            </Hierarchy>
         </Hierarchies>
+	</Dimension>
+
+	<Dimension visible="true" name="PendingCriminalCharges" table="PendingCriminalChargesType" key="PendingCriminalChargesTypeID" caption="Pending Criminal Charges">
+		<Attributes>
+			<Attribute name="PendingCriminalChargesTypeID" keyColumn="PendingCriminalChargesTypeID" hasHierarchy="false"/>
+			<Attribute name="PendingCriminalChargesTypeDescription" keyColumn="PendingCriminalChargesTypeDescription" hasHierarchy="false" caption="Pending Criminal Charges"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Pending Criminal Charges" visible="true" caption="Pending Criminal Charges" allMemberName="All Charges" allMemberCaption="All Charges">
+				<Level attribute="PendingCriminalChargesTypeDescription" caption="Pending Criminal Charges"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
+	<Dimension visible="true" name="DispositionLocation" table="DispositionLocationType" key="DispositionLocationTypeID" caption="Disposition Location">
+		<Attributes>
+			<Attribute name="DispositionLocationTypeID" keyColumn="DispositionLocationTypeID" hasHierarchy="false"/>
+			<Attribute name="DispositionLocationTypeDescription" keyColumn="DispositionLocationTypeDescription" hasHierarchy="false" caption="Disposition Location"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Disposition Location" visible="true" caption="Disposition Location" allMemberName="All Locations" allMemberCaption="All Locations">
+				<Level attribute="DispositionLocationTypeDescription" caption="Disposition Location"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
+	<Dimension visible="true" name="CallNature" table="CallNatureType" key="CallNatureTypeID" caption="Call Nature">
+		<Attributes>
+			<Attribute name="CallNatureTypeID" keyColumn="CallNatureTypeID" hasHierarchy="false"/>
+			<Attribute name="CallNatureTypeDescription" keyColumn="CallNatureTypeDescription" hasHierarchy="false" caption="Call Nature"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Call Nature" visible="true" caption="Call Nature" allMemberName="All Natures" allMemberCaption="All Natures">
+				<Level attribute="CallNatureTypeDescription" caption="Call Nature"/>
+			</Hierarchy>
+		</Hierarchies>
 	</Dimension>
 
 	<Dimension visible="true" name="Race" table="PersonRaceType" key="PersonRaceTypeID">
@@ -118,12 +571,12 @@
 			<Attribute name="PersonRaceTypeDescription" keyColumn="PersonRaceTypeDescription" hasHierarchy="false" caption="Person Race"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="Race" visible="true" caption="Race" allMemberName="All Races" allMemberCaption="All Races">	
+			<Hierarchy name="Race" visible="true" caption="Race" allMemberName="All Races" allMemberCaption="All Races">
 				<Level attribute="PersonRaceTypeDescription" caption="Person Race"/>
 			</Hierarchy>
 		</Hierarchies>
-	</Dimension>	
-		
+	</Dimension>
+
 	<Dimension name="Age" key="PersonAgeTypeID">
         <Attributes>
             <Attribute table="PersonAgeType" name="PersonAgeTypeID" keyColumn="PersonAgeTypeID" hasHierarchy="false" />
@@ -145,7 +598,7 @@
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
-	
+
 	<Dimension name="Age Range" table="PersonAgeRangTypee" key="PersonAgeRangeTypeID">
 		<Attributes>
 			<Attribute keyColumn="PersonAgeRangeTypeID" hasHierarchy="false" name="PersonAgeRangeTypeID"/>
@@ -157,31 +610,31 @@
             </Hierarchy>
         </Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="Sex" table="PersonSexType" key="PersonSexTypeID">
 		<Attributes>
 			<Attribute name="PersonSexTypeID" keyColumn="PersonSexTypeID" hasHierarchy="false"/>
 			<Attribute name="PersonSexTypeDescription" keyColumn="PersonSexTypeDescription" hasHierarchy="false" caption="Person Sex"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="Sex" visible="true" caption="Sex" allMemberName="All Sexes" allMemberCaption="All Sexes">	
+			<Hierarchy name="Sex" visible="true" caption="Sex" allMemberName="All Sexes" allMemberCaption="All Sexes">
 				<Level attribute="PersonSexTypeDescription" caption="Person Sex"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="Ethnicity" table="PersonEthnicityType" key="PersonEthnicityTypeID">
 		<Attributes>
 			<Attribute name="PersonEthnicityTypeID" keyColumn="PersonEthnicityTypeID" hasHierarchy="false"/>
 			<Attribute name="PersonEthnicityTypeDescription" keyColumn="PersonEthnicityTypeDescription" hasHierarchy="false" caption="Person Ethnicity"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="Ethnicity" visible="true" caption="Ethnicity" allMemberName="All Ethnicities" allMemberCaption="All Ethnicities">	
+			<Hierarchy name="Ethnicity" visible="true" caption="Ethnicity" allMemberName="All Ethnicities" allMemberCaption="All Ethnicities">
 				<Level attribute="PersonEthnicityTypeDescription" caption="Person Ethnicity"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="ChargeClass" table="ChargeClassType" key="ChargeClassTypeID" caption="Charge Class">
 		<Attributes>
 			<Attribute name="ChargeClassTypeID" keyColumn="ChargeClassTypeID" hasHierarchy="false"/>
@@ -189,13 +642,13 @@
 			<Attribute name="ChargeClassTypeCategory" keyColumn="ChargeClassTypeCategory" hasHierarchy="false" caption="Charge Class Category"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="ChargeClass" visible="true" caption="Charge Class" allMemberName="All Charge Classes" allMemberCaption="All Charge Classes">	
+			<Hierarchy name="ChargeClass" visible="true" caption="Charge Class" allMemberName="All Charge Classes" allMemberCaption="All Charge Classes">
 				<Level attribute="ChargeClassTypeCategory" caption="Charge Class Category"/>
 				<Level attribute="ChargeClassTypeDescription" caption="Charge Class"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="Charge" table="ChargeType" key="ChargeTypeID" caption="Charge Type">
 		<Attributes>
 			<Attribute name="ChargeTypeID" keyColumn="ChargeTypeID" hasHierarchy="false"/>
@@ -203,13 +656,13 @@
 			<Attribute name="ChargeTypeCategory" keyColumn="ChargeTypeCategory" hasHierarchy="false" caption="Charge Category"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="ChargeType" visible="true" caption="Charge Type" allMemberName="All Charge Types" allMemberCaption="All Charge Types">	
+			<Hierarchy name="ChargeType" visible="true" caption="Charge Type" allMemberName="All Charge Types" allMemberCaption="All Charge Types">
 				<Level attribute="ChargeTypeCategory" caption="Charge Category"/>
 				<Level attribute="ChargeTypeDescription" caption="Charge Type"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="BehavioralHealthEvaluationType" table="BehavioralHealthEvaluationType" key="BehavioralHealthEvaluationTypeID" caption="Diagnosis">
 		<Attributes>
 			<Attribute name="BehavioralHealthEvaluationTypeID" keyColumn="BehavioralHealthEvaluationTypeID" hasHierarchy="false"/>
@@ -217,236 +670,248 @@
 			<Attribute name="BehavioralHealthEvaluationTypeCategory" keyColumn="BehavioralHealthEvaluationTypeCategory" hasHierarchy="false" caption="Diagnosis Category"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="BehavioralHealthEvaluationType" visible="true" caption="Diagnosis" allMemberName="All Diagnoses" allMemberCaption="All Diagnoses">	
+			<Hierarchy name="BehavioralHealthEvaluationType" visible="true" caption="Diagnosis" allMemberName="All Diagnoses" allMemberCaption="All Diagnoses">
 				<Level attribute="BehavioralHealthEvaluationTypeCategory" caption="Diagnosis Category"/>
 				<Level attribute="BehavioralHealthEvaluationTypeDescription" caption="Diagnosis"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="ChargeDisposition" table="ChargeDispositionType" key="ChargeDispositionTypeID" caption="Charge Disposition">
 		<Attributes>
 			<Attribute name="ChargeDispositionTypeID" keyColumn="ChargeDispositionTypeID" hasHierarchy="false"/>
 			<Attribute name="ChargeDispositionTypeCategory" keyColumn="ChargeDispositionTypeCategory" hasHierarchy="false" caption="Charge Disposition"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="ChargeDispositionType" visible="true" caption="Charge Disposition" allMemberName="All Charge Dispositions" allMemberCaption="All Charge Dispositions">	
+			<Hierarchy name="ChargeDispositionType" visible="true" caption="Charge Disposition" allMemberName="All Charge Dispositions" allMemberCaption="All Charge Dispositions">
 				<Level attribute="ChargeDispositionTypeCategory" caption="Charge Disposition"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="BondStatus" table="BondStatusType" key="BondStatusTypeID" caption="Bond Status">
 		<Attributes>
 			<Attribute name="BondStatusTypeID" keyColumn="BondStatusTypeID" hasHierarchy="false"/>
 			<Attribute name="BondStatusTypeCategory" keyColumn="BondStatusTypeCategory" hasHierarchy="false" caption="Bond Status"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="BondStatusType" visible="true" caption="Bond Status" allMemberName="All Bond Statuses" allMemberCaption="All Bond Statuses">	
+			<Hierarchy name="BondStatusType" visible="true" caption="Bond Status" allMemberName="All Bond Statuses" allMemberCaption="All Bond Statuses">
 				<Level attribute="BondStatusTypeCategory" caption="Bond Status"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="Bond" table="BondType" key="BondTypeID" caption="Bond Type">
 		<Attributes>
 			<Attribute name="BondTypeID" keyColumn="BondTypeID" hasHierarchy="false"/>
 			<Attribute name="BondTypeCategory" keyColumn="BondTypeCategory" hasHierarchy="false" caption="Bond Type"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="BondType" visible="true" caption="Bond Type" allMemberName="All Bond Types" allMemberCaption="All Bond Types">	
+			<Hierarchy name="BondType" visible="true" caption="Bond Type" allMemberName="All Bond Types" allMemberCaption="All Bond Types">
 				<Level attribute="BondTypeCategory" caption="Bond Type"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="Jurisdiction" table="JurisdictionType" key="JurisdictionTypeID" caption="Charge Jurisdiction">
 		<Attributes>
 			<Attribute name="JurisdictionTypeID" keyColumn="JurisdictionTypeID" hasHierarchy="false"/>
 			<Attribute name="JurisdictionCategory" keyColumn="JurisdictionCategory" hasHierarchy="false" caption="Jurisdiction"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="JurisdictionType" visible="true" caption="Charge Jurisdiction" allMemberName="All Jurisdictions" allMemberCaption="All Jurisdictions">	
+			<Hierarchy name="JurisdictionType" visible="true" caption="Charge Jurisdiction" allMemberName="All Jurisdictions" allMemberCaption="All Jurisdictions">
 				<Level attribute="JurisdictionCategory" caption="Jurisdiction"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="CaseStatus" table="CaseStatusType" key="CaseStatusTypeID" caption="Case Status">
 		<Attributes>
 			<Attribute name="CaseStatusTypeID" keyColumn="CaseStatusTypeID" hasHierarchy="false"/>
 			<Attribute name="CaseStatusTypeCategory" keyColumn="CaseStatusTypeCategory" hasHierarchy="false" caption="Case Status"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="CaseStatusType" visible="true" caption="Case Status" allMemberName="All Case Statuses" allMemberCaption="All Case Statuses">	
+			<Hierarchy name="CaseStatusType" visible="true" caption="Case Status" allMemberName="All Case Statuses" allMemberCaption="All Case Statuses">
 				<Level attribute="CaseStatusTypeCategory" caption="Case Status"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="ArrestAgency" table="Agency" key="AgencyID" caption="Arrest Agency">
 		<Attributes>
 			<Attribute name="AgencyID" keyColumn="AgencyID" hasHierarchy="false"/>
-			<Attribute name="AgencyCategory" keyColumn="AgencyCategory" hasHierarchy="false" caption="Arrest Agency"/>
+			<Attribute name="AgencyCategory" keyColumn="AgencyCategory" hasHierarchy="false" caption="Agency"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="ArrestAgency" visible="true" caption="Arrest Agency" allMemberName="All Arrest Agencies" allMemberCaption="All Arrest Agencies">	
-				<Level attribute="AgencyCategory" caption="Arrest Agency"/>
+			<Hierarchy name="ArrestAgency" visible="true" caption="Arrest Agency" allMemberName="All Agencies" allMemberCaption="All Agencies">
+				<Level attribute="AgencyCategory" caption="Agency"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="SexOffenderStatus" table="SexOffenderStatusType" key="SexOffenderStatusTypeID" caption="Sex Offender Status">
 		<Attributes>
 			<Attribute name="SexOffenderStatusTypeID" keyColumn="SexOffenderStatusTypeID" hasHierarchy="false"/>
 			<Attribute name="SexOffenderStatusTypeDescription" keyColumn="SexOffenderStatusTypeDescription" hasHierarchy="false" caption="Sex Offender Status"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="SexOffenderStatus" visible="true" caption="Sex Offender Status" allMemberName="All Sex Offender Statuses" allMemberCaption="All Sex Offender Statuses">	
+			<Hierarchy name="SexOffenderStatus" visible="true" caption="Sex Offender Status" allMemberName="All Sex Offender Statuses" allMemberCaption="All Sex Offender Statuses">
 				<Level attribute="SexOffenderStatusTypeDescription" caption="Sex Offender Status"/>
 			</Hierarchy>
 		</Hierarchies>
-	</Dimension>	
-	
+	</Dimension>
+
 	<Dimension visible="true" name="WorkReleaseStatus" table="WorkReleaseStatusType" key="WorkReleaseStatusTypeID" caption="Work Release Status">
 		<Attributes>
 			<Attribute name="WorkReleaseStatusTypeID" keyColumn="WorkReleaseStatusTypeID" hasHierarchy="false"/>
 			<Attribute name="WorkReleaseStatusTypeDescription" keyColumn="WorkReleaseStatusTypeDescription" hasHierarchy="false" caption="Sex Offender Status"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="WorkReleaseStatus" visible="true" caption="Work Release Status" allMemberName="All Work Release Statuses" allMemberCaption="All Work Release Statuses">	
+			<Hierarchy name="WorkReleaseStatus" visible="true" caption="Work Release Status" allMemberName="All Work Release Statuses" allMemberCaption="All Work Release Statuses">
 				<Level attribute="WorkReleaseStatusTypeDescription" caption="Work Release Status"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="ProgramEligibility" table="ProgramEligibilityType" key="ProgramEligibilityTypeID" caption="Program Eligibility">
 		<Attributes>
 			<Attribute name="ProgramEligibilityTypeID" keyColumn="ProgramEligibilityTypeID" hasHierarchy="false"/>
 			<Attribute name="ProgramEligibilityTypeDescription" keyColumn="ProgramEligibilityTypeDescription" hasHierarchy="false" caption="Program Eligibility"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="ProgramEligibility" visible="true" caption="Program Eligibility" allMemberName="All Program Eligibilities" allMemberCaption="All Program Eligibilities">	
+			<Hierarchy name="ProgramEligibility" visible="true" caption="Program Eligibility" allMemberName="All Program Eligibilities" allMemberCaption="All Program Eligibilities">
 				<Level attribute="ProgramEligibilityTypeDescription" caption="Program Eligibility"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="MilitaryServiceStatus" table="MilitaryServiceStatusType" key="MilitaryServiceStatusTypeID" caption="Military Service Status">
 		<Attributes>
 			<Attribute name="MilitaryServiceStatusTypeID" keyColumn="MilitaryServiceStatusTypeID" hasHierarchy="false"/>
 			<Attribute name="MilitaryServiceStatusTypeDescription" keyColumn="MilitaryServiceStatusTypeDescription" hasHierarchy="false" caption="Military Service Status"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="MilitaryServiceStatus" visible="true" caption="Military Service Status" allMemberName="All Military Service Statuses" allMemberCaption="All Military Service Statuses">	
+			<Hierarchy name="MilitaryServiceStatus" visible="true" caption="Military Service Status" allMemberName="All Military Service Statuses" allMemberCaption="All Military Service Statuses">
 				<Level attribute="MilitaryServiceStatusTypeDescription" caption="Military Service Status"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
 
-	<Dimension visible="true" name="SeverMentalIllness" table="SevereMentalIllnessType" key="SevereMentalIllnessTypeID" caption="Severe Mental Illness">
+
+	<Dimension visible="true" name="SevereMentalIllness" table="SevereMentalIllnessType" key="SevereMentalIllnessTypeID" caption="Severe Mental Illness">
 		<Attributes>
 			<Attribute name="SevereMentalIllnessTypeID" keyColumn="SevereMentalIllnessTypeID" hasHierarchy="false"/>
 			<Attribute name="SevereMentalIllnessTypeDescription" keyColumn="SevereMentalIllnessTypeDescription" hasHierarchy="false" caption="Severe Mental Illness"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="SevereMentalIllness" visible="true" caption="Severe Mental Illness" allMemberName="All Severe Mental Illnesses" allMemberCaption="All Severe Mental Illnesses">	
+			<Hierarchy name="SevereMentalIllness" visible="true" caption="Severe Mental Illness" allMemberName="All Severe Mental Illnesses" allMemberCaption="All Severe Mental Illnesses">
 				<Level attribute="SevereMentalIllnessTypeDescription" caption="Severe Mental Illness"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="DomicileStatus" table="DomicileStatusType" key="DomicileStatusTypeID" caption="Domicile Status">
 		<Attributes>
 			<Attribute name="DomicileStatusTypeID" keyColumn="DomicileStatusTypeID" hasHierarchy="false"/>
 			<Attribute name="DomicileStatusTypeDescription" keyColumn="DomicileStatusTypeDescription" hasHierarchy="false" caption="Domicile Status"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="DomicileStatus" visible="true" caption="Domicile Status" allMemberName="All Domicile Statuses" allMemberCaption="All Domicile Statuses">	
+			<Hierarchy name="DomicileStatus" visible="true" caption="Domicile Status" allMemberName="All Domicile Statuses" allMemberCaption="All Domicile Statuses">
 				<Level attribute="DomicileStatusTypeDescription" caption="Domicile Status"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="Population" table="PopulationType" key="PopulationTypeID" caption="Population">
 		<Attributes>
 			<Attribute name="PopulationTypeID" keyColumn="PopulationTypeID" hasHierarchy="false"/>
 			<Attribute name="PopulationTypeDescription" keyColumn="PopulationTypeDescription" hasHierarchy="false" caption="Population"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="Population" visible="true" caption="Population" allMemberName="All Populations" allMemberCaption="All Populations">	
+			<Hierarchy name="Population" visible="true" caption="Population" allMemberName="All Populations" allMemberCaption="All Populations">
 				<Level attribute="PopulationTypeDescription" caption="Population"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="Language" table="LanguageType" key="LanguageTypeID" caption="Language">
 		<Attributes>
 			<Attribute name="LanguageTypeID" keyColumn="LanguageTypeID" hasHierarchy="false"/>
 			<Attribute name="LanguageTypeDescription" keyColumn="LanguageTypeDescription" hasHierarchy="false" caption="Language"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="Language" visible="true" caption="Language" allMemberName="All Languages" allMemberCaption="All Languages">	
+			<Hierarchy name="Language" visible="true" caption="Language" allMemberName="All Languages" allMemberCaption="All Languages">
 				<Level attribute="LanguageTypeDescription" caption="Language"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="EducationLevel" table="EducationLevelType" key="EducationLevelTypeID" caption="Education Level">
 		<Attributes>
 			<Attribute name="EducationLevelTypeID" keyColumn="EducationLevelTypeID" hasHierarchy="false"/>
 			<Attribute name="EducationLevelTypeDescription" keyColumn="EducationLevelTypeDescription" hasHierarchy="false" caption="Education Level"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="EducationLevel" visible="true" caption="Education Level" allMemberName="All Education Levels" allMemberCaption="All Education Levels">	
+			<Hierarchy name="EducationLevel" visible="true" caption="Education Level" allMemberName="All Education Levels" allMemberCaption="All Education Levels">
 				<Level attribute="EducationLevelTypeDescription" caption="Education Level"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="SupervisionUnit" table="SupervisionUnitType" key="SupervisionUnitTypeID" caption="Supervision Unit">
 		<Attributes>
 			<Attribute name="SupervisionUnitTypeID" keyColumn="SupervisionUnitTypeID" hasHierarchy="false"/>
 			<Attribute name="SupervisionUnitTypeDescription" keyColumn="SupervisionUnitTypeDescription" hasHierarchy="false" caption="Supervision Unit"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="SupervisionUnit" visible="true" caption="Supervision Unit" allMemberName="All Supervision Units" allMemberCaption="All Supervision Units">	
+			<Hierarchy name="SupervisionUnit" visible="true" caption="Supervision Unit" allMemberName="All Supervision Units" allMemberCaption="All Supervision Units">
 				<Level attribute="SupervisionUnitTypeDescription" caption="Supervision Unit"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
-	<Dimension visible="true" name="Facility" table="Facility" key="FacilityID" caption="Facility">
+
+    <Dimension visible="true" name="Facility" table="Facility" key="FacilityID" caption="Facility">
 		<Attributes>
 			<Attribute name="FacilityID" keyColumn="FacilityID" hasHierarchy="false"/>
 			<Attribute name="FacilityDescription" keyColumn="FacilityDescription" hasHierarchy="false" caption="Facility"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="Facility" visible="true" caption="Facility" allMemberName="All Facilities" allMemberCaption="All Facilities">	
+			<Hierarchy name="Facility" visible="true" caption="Facility" allMemberName="All Facilities" allMemberCaption="All Facilities">
 				<Level attribute="FacilityDescription" caption="Facility"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
+    <Dimension visible="true" name="Prior Interactions" table="PriorInteractionsCountType" key="PriorInteractionsCountTypeID" caption="Prior Interactions">
+		<Attributes>
+			<Attribute name="PriorInteractionsCountTypeID" keyColumn="PriorInteractionsCountTypeID" hasHierarchy="false"/>
+			<Attribute name="PriorInteractionsCountTypeDescription" keyColumn="PriorInteractionsCountTypeDescription" hasHierarchy="false" caption="# of Interactions"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Prior Interactions" visible="true" caption="Prior Interactions" allMemberName="All Incidents" allMemberCaption="All Incidents">
+				<Level attribute="PriorInteractionsCountTypeDescription" caption="# of Interactions"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
 	<Dimension visible="true" name="AssessmentCategory" table="AssessmentCategoryType" key="AssessmentCategoryTypeID" caption="Assessment Category">
 		<Attributes>
 			<Attribute name="AssessmentCategoryTypeID" keyColumn="AssessmentCategoryTypeID" hasHierarchy="false"/>
 			<Attribute name="AssessmentCategoryTypeDescription" keyColumn="AssessmentCategoryTypeDescription" hasHierarchy="false" caption="Assessment Category"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="AssessmentCategory" visible="true" caption="Assessment Category" allMemberName="All Assessment Categories" allMemberCaption="All Assessment Categories">	
+			<Hierarchy name="AssessmentCategory" visible="true" caption="Assessment Category" allMemberName="All Assessment Categories" allMemberCaption="All Assessment Categories">
 				<Level attribute="AssessmentCategoryTypeDescription" caption="Assessment Category"/>
 			</Hierarchy>
 		</Hierarchies>
-	</Dimension> 
+	</Dimension>
 	<Dimension visible="true" name="Medication" table="MedicationType" key="MedicationTypeID" caption="Prescribed Medication">
 		<Attributes>
 			<Attribute name="MedicationTypeID" keyColumn="MedicationTypeID" hasHierarchy="false"/>
 			<Attribute name="MedicationTypeDescription" keyColumn="MedicationTypeDescription" hasHierarchy="false" caption="Medication"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="Medication" visible="true" caption="Prescribed Medication" allMemberName="All Medications" allMemberCaption="All Medications">	
+			<Hierarchy name="Medication" visible="true" caption="Prescribed Medication" allMemberName="All Medications" allMemberCaption="All Medications">
 				<Level attribute="MedicationTypeDescription" caption="Medication"/>
 			</Hierarchy>
 		</Hierarchies>
@@ -457,45 +922,45 @@
 			<Attribute name="OccupationTypeDescription" keyColumn="OccupationTypeDescription" hasHierarchy="false" caption="Occupation"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="Occupation" visible="true" caption="Occupation" allMemberName="All Occupations" allMemberCaption="All Occupations">	
+			<Hierarchy name="Occupation" visible="true" caption="Occupation" allMemberName="All Occupations" allMemberCaption="All Occupations">
 				<Level attribute="OccupationTypeDescription" caption="Occupation"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="MedicaidStatus" table="MedicaidStatusType" key="MedicaidStatusTypeID" caption="Medicaid Status">
 		<Attributes>
 			<Attribute name="MedicaidStatusTypeID" keyColumn="MedicaidStatusTypeID" hasHierarchy="false"/>
 			<Attribute name="MedicaidStatusTypeDescription" keyColumn="MedicaidStatusTypeDescription" hasHierarchy="false" caption="Medicaid Status"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="MedicaidStatus" visible="true" caption="Medicaid Status" allMemberName="All Medicaid Statuses" allMemberCaption="All Medicaid Statuses">	
+			<Hierarchy name="MedicaidStatus" visible="true" caption="Medicaid Status" allMemberName="All Medicaid Statuses" allMemberCaption="All Medicaid Statuses">
 				<Level attribute="MedicaidStatusTypeDescription" caption="Medicaid Status"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
-	
-	
+
+
+
 	<Dimension visible="true" name="TreatmentProvider" table="TreatmentProviderType" key="TreatmentProviderTypeID" caption="Treatment Provider">
 		<Attributes>
 			<Attribute name="TreatmentProviderTypeID" keyColumn="TreatmentProviderTypeID" hasHierarchy="false"/>
 			<Attribute name="TreatmentProviderTypeDescription" keyColumn="TreatmentProviderTypeDescription" hasHierarchy="false" caption="Treatment Provider"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="TreatmentProvider" visible="true" caption="Treatment Provider" allMemberName="All Treatment Providers" allMemberCaption="All Treatment Providers">	
+			<Hierarchy name="TreatmentProvider" visible="true" caption="Treatment Provider" allMemberName="All Treatment Providers" allMemberCaption="All Treatment Providers">
 				<Level attribute="TreatmentProviderTypeDescription" caption="Treatment Provider"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
 	<Dimension visible="true" name="TreatmentStatus" table="TreatmentStatusType" key="TreatmentStatusTypeID" caption="Treatment Status">
 		<Attributes>
 			<Attribute name="TreatmentStatusTypeID" keyColumn="TreatmentStatusTypeID" hasHierarchy="false"/>
 			<Attribute name="TreatmentStatusTypeDescription" keyColumn="TreatmentStatusTypeDescription" hasHierarchy="false" caption="Treatment Status"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="TreatmentStatus" visible="true" caption="Treatment Status" allMemberName="All Treatment Statuses" allMemberCaption="All Treatment Statuses">	
+			<Hierarchy name="TreatmentStatus" visible="true" caption="Treatment Status" allMemberName="All Treatment Statuses" allMemberCaption="All Treatment Statuses">
 				<Level attribute="TreatmentStatusTypeDescription" caption="Treatment Status"/>
 			</Hierarchy>
 		</Hierarchies>
@@ -506,12 +971,107 @@
 			<Attribute name="TreatmentAdmissionReasonTypeDescription" keyColumn="TreatmentAdmissionReasonTypeDescription" hasHierarchy="false" caption="Treatment Admission Reason"/>
 		</Attributes>
 		<Hierarchies>
-			<Hierarchy name="TreatmentAdmissionReason" visible="true" caption="Treatment Admission Reason" allMemberName="All Treatment Admission Reasons" allMemberCaption="All Treatment Admission Reasons">	
+			<Hierarchy name="TreatmentAdmissionReason" visible="true" caption="Treatment Admission Reason" allMemberName="All Treatment Admission Reasons" allMemberCaption="All Treatment Admission Reasons">
 				<Level attribute="TreatmentAdmissionReasonTypeDescription" caption="Treatment Admission Reason"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
-	
+
+	<Cube name="Crisis Incidents" visible="true">
+		<Dimensions>
+			<Dimension source="Age"/>
+			<Dimension source="Date" caption="Reported Date"/>
+			<Dimension source="ArrestAgency" caption="Reporting Agency"/>
+			<Dimension source="Race"/>
+			<Dimension source="Sex"/>
+			<Dimension source="Ethnicity"/>
+			<Dimension source="SexOffenderStatus"/>
+			<Dimension source="WorkReleaseStatus"/>
+			<Dimension source="ProgramEligibility"/>
+			<Dimension source="MilitaryServiceStatus"/>
+			<Dimension source="SevereMentalIllness"/>
+			<Dimension source="DomicileStatus"/>
+			<Dimension source="Language"/>
+			<Dimension source="EducationLevel"/>
+			<Dimension source="AssessmentCategory"/>
+			<Dimension source="Medication"/>
+			<Dimension source="Occupation"/>
+			<Dimension source="MedicaidStatus"/>
+			<Dimension source="BehavioralHealthEvaluationType"/>
+			<Dimension source="TreatmentProvider"/>
+			<Dimension source="TreatmentStatus"/>
+			<Dimension source="TreatmentAdmissionReason"/>
+			<Dimension source="PendingCriminalCharges"/>
+			<Dimension source="CallNature"/>
+			<Dimension source="DispositionLocation"/>
+            <Dimension source="Hour"/>
+            <Dimension source="Prior Interactions" name="Prior Interactions Past 6 Months" caption="Prior Interactions Past 6 Months"/>
+            <Dimension source="Prior Interactions" name="Prior Interactions Past 12 Months" caption="Prior Interactions Past 12 Months"/>
+            <Dimension source="Prior Interactions" name="Prior Interactions Past 18 Months" caption="Prior Interactions Past 18 Months"/>
+            <Dimension source="Prior Interactions" name="Prior Interactions Past 24 Months" caption="Prior Interactions Past 24 Months"/>
+            <Dimension visible="true" name="Engagement Status">
+				<Attributes>
+					<Attribute name="Engagement Status" keyColumn="InTreatmentAtEventDim" hasHierarchy="false" table="FullIncidentView"/>
+				</Attributes>
+				<Hierarchies>
+					<Hierarchy name="Engagement Status"  visible="true" hasAll="true" allMemberCaption="All Statuses">
+						<Level attribute="Engagement Status" caption="In Treatment at Event?"/>
+					</Hierarchy>
+				</Hierarchies>
+			</Dimension>
+		</Dimensions>
+		<MeasureGroups>
+  		<MeasureGroup table="FullIncidentView" name="Incident">
+    		<Measures>
+					<Measure name="Incident Count" column="IncidentID" aggregator="distinct-count" visible="true"/>
+					<Measure name="Average # Officers" column="OfficerCount" aggregator="avg" visible="true"/>
+					<Measure name="Average Officer Time" column="CostInUnitMinutes" aggregator="avg" visible="true"/>
+					<Measure name="Average Cost" column="CostInDollars" aggregator="avg" visible="true" formatString="$0.00"/>
+					<Measure name="Average Days Since Prior Incident" column="DaysSinceLastIncident" aggregator="avg" visible="true"/>
+					<Measure name="Reoccurrence Rate" column="SixMonthIncidentReoccurrence" aggregator="avg" visible="true" formatString="#0.0 %"/>
+                    <Measure name="Subsequent Booking Rate" column="SixMonthSubsequentBooking" aggregator="avg" visible="true" formatString="#0.0 %"/>
+                    <Measure name="Average # Prior Interactions in Past 6 Months" column="PriorInteractions6Months" aggregator="avg" visible="true" formatString="0.00"/>
+                    <Measure name="Average # Prior Interactions in Past 12 Months" column="PriorInteractions12Months" aggregator="avg" visible="true" formatString="0.00"/>
+                    <Measure name="Average # Prior Interactions in Past 18 Months" column="PriorInteractions18Months" aggregator="avg" visible="true" formatString="0.00"/>
+                    <Measure name="Average # Prior Interactions in Past 24 Months" column="PriorInteractions24Months" aggregator="avg" visible="true" formatString="0.00"/>
+				</Measures>
+				<DimensionLinks>
+                    <ForeignKeyLink dimension="Prior Interactions Past 6 Months" foreignKeyColumn="PriorInteractions6Months"/>
+                    <ForeignKeyLink dimension="Prior Interactions Past 12 Months" foreignKeyColumn="PriorInteractions12Months"/>
+                    <ForeignKeyLink dimension="Prior Interactions Past 18 Months" foreignKeyColumn="PriorInteractions18Months"/>
+                    <ForeignKeyLink dimension="Prior Interactions Past 24 Months" foreignKeyColumn="PriorInteractions24Months"/>
+                    <ForeignKeyLink dimension="Age" foreignKeyColumn="PersonAgeTypeID"/>
+					<ForeignKeyLink dimension="Date" foreignKeyColumn="IncidentReportedDateID"/>
+					<ForeignKeyLink dimension="ArrestAgency" foreignKeyColumn="ReportingAgencyID"/>
+					<ForeignKeyLink dimension="Race" foreignKeyColumn="PersonRaceTypeID"/>
+					<ForeignKeyLink dimension="Sex" foreignKeyColumn="PersonSexTypeID"/>
+					<ForeignKeyLink dimension="Ethnicity" foreignKeyColumn="PersonEthnicityTypeID"/>
+					<ForeignKeyLink dimension="SexOffenderStatus" foreignKeyColumn="SexOffenderStatusTypeID"/>
+					<ForeignKeyLink dimension="WorkReleaseStatus" foreignKeyColumn="WorkReleaseStatusTypeID"/>
+					<ForeignKeyLink dimension="ProgramEligibility" foreignKeyColumn="ProgramEligibilityTypeID"/>
+					<ForeignKeyLink dimension="MilitaryServiceStatus" foreignKeyColumn="MilitaryServiceStatusTypeID"/>
+					<ForeignKeyLink dimension="SevereMentalIllness" foreignKeyColumn="SevereMentalIllnessIndicatorDimension"/>
+					<ForeignKeyLink dimension="DomicileStatus" foreignKeyColumn="DomicileStatusTypeID"/>
+					<ForeignKeyLink dimension="Language" foreignKeyColumn="LanguageTypeID"/>
+					<ForeignKeyLink dimension="EducationLevel" foreignKeyColumn="EducationLevelTypeID"/>
+					<ForeignKeyLink dimension="AssessmentCategory" foreignKeyColumn="AssessmentCategoryTypeID"/>
+					<ForeignKeyLink dimension="Medication" foreignKeyColumn="MedicationTypeID"/>
+					<ForeignKeyLink dimension="Occupation" foreignKeyColumn="OccupationTypeID"/>
+					<ForeignKeyLink dimension="MedicaidStatus" foreignKeyColumn="MedicaidStatusTypeID"/>
+					<ForeignKeyLink dimension="BehavioralHealthEvaluationType" foreignKeyColumn="BehavioralHealthEvaluationTypeID"/>
+					<ForeignKeyLink dimension="TreatmentProvider" foreignKeyColumn="TreatmentProviderTypeID"/>
+					<ForeignKeyLink dimension="TreatmentStatus" foreignKeyColumn="TreatmentStatusTypeID"/>
+					<ForeignKeyLink dimension="TreatmentAdmissionReason" foreignKeyColumn="TreatmentAdmissionReasonTypeID"/>
+					<ForeignKeyLink dimension="PendingCriminalCharges" foreignKeyColumn="PendingCriminalChargesTypeID"/>
+					<ForeignKeyLink dimension="CallNature" foreignKeyColumn="CallNatureTypeID"/>
+					<ForeignKeyLink dimension="DispositionLocation" foreignKeyColumn="DispositionLocationTypeID"/>
+					<ForeignKeyLink dimension="Hour" foreignKeyColumn="IncidentReportedHour"/>
+                    <FactLink dimension="Engagement Status"/>
+			</DimensionLinks>
+			</MeasureGroup>
+		</MeasureGroups>
+	</Cube>
+
 	<Cube name="Jail-Booking-Analytics" visible="true">
 		<Dimensions>
 			<Dimension source="Age"/>
@@ -527,12 +1087,13 @@
 			<Dimension source="Bond"/>
 			<Dimension source="Jurisdiction"/>
 			<Dimension source="CaseStatus"/>
-			<Dimension source="ArrestAgency"/>
+			<Dimension source="ArrestAgency" name="ArrestAgency" caption="Arresting Agency"/>
+			<Dimension source="ArrestAgency" name="HoldForAgency" caption="Hold-for Agency"/>
 			<Dimension source="SexOffenderStatus"/>
 			<Dimension source="WorkReleaseStatus"/>
 			<Dimension source="ProgramEligibility"/>
 			<Dimension source="MilitaryServiceStatus"/>
-			<Dimension source="SeverMentalIllness"/>
+			<Dimension source="SevereMentalIllness"/>
 			<Dimension source="DomicileStatus"/>
 			<Dimension source="Language"/>
 			<Dimension source="EducationLevel"/>
@@ -565,14 +1126,14 @@
 	    			<Measure name="Booking Count" column="JailEpisodeID" aggregator="distinct-count" visible="true" caption="Jail Episode Count"/>
 	    			<Measure name="Arrest Count" column="JailEpisodeArrestID" aggregator="distinct-count" visible="true" caption="Arrest Count"/>
 	    			<Measure name="Average Length Of Stay" column="LengthOfStay" aggregator="avg" visible="true"/>
-	    			<Measure name="SixMonthRebookingCount" column="SixMonthRebookingCount" aggregator="distinct-count"  visible="false"/>
-					<Measure name="OneYearRebookingCount" column="OneYearRebookingCount" aggregator="distinct-count"  visible="false"/>
-					<Measure name="TwoYearRebookingCount" column="TwoYearRebookingCount" aggregator="distinct-count"  visible="false"/>
-					<Measure name="Charge Count" column="JailEpisodeChargeID" aggregator="count" visible="true"/>
-			 		<Measure name="Average Bond Amount" column="BondAmount" aggregator="avg" formatString="$0.00" visible="true"/>
-					<Measure name="SMICount" column="SevereMentalIllnessBookingCount" aggregator="distinct-count" visible="false"/>
-					<Measure name="InTreatmentAtBookingCount" column="InTreatmentAtBookingCount" aggregator="distinct-count" visible="false"/>
-	    		</Measures>
+						<Measure name="Charge Count" column="JailEpisodeChargeID" aggregator="count" visible="true"/>
+				 		<Measure name="Average Bond Amount" column="BondAmount" aggregator="avg" formatString="$0.00" visible="true"/>
+						<Measure name="SixMonthRebookingCount" column="SixMonthRebookingCount" aggregator="distinct-count"  visible="false"/>
+						<Measure name="OneYearRebookingCount" column="OneYearRebookingCount" aggregator="distinct-count"  visible="false"/>
+						<Measure name="TwoYearRebookingCount" column="TwoYearRebookingCount" aggregator="distinct-count"  visible="false"/>
+						<Measure name="SMICount" column="SevereMentalIllnessBookingCount" aggregator="distinct-count" visible="false"/>
+						<Measure name="InTreatmentAtEventCount" column="InTreatmentAtEventCount" aggregator="distinct-count" visible="false"/>
+    		</Measures>
 	    		<DimensionLinks>
 	    			<ForeignKeyLink dimension="Age" foreignKeyColumn="PersonAgeTypeID"/>
 	    			<ForeignKeyLink dimension="Date" foreignKeyColumn="EpisodeStartDateID"/>
@@ -586,12 +1147,13 @@
 	    			<ForeignKeyLink dimension="Bond" foreignKeyColumn="BondTypeID"/>
 	    			<ForeignKeyLink dimension="Jurisdiction" foreignKeyColumn="JurisdictionTypeID"/>
 	    			<ForeignKeyLink dimension="CaseStatus" foreignKeyColumn="CaseStatusTypeID"/>
-	    			<ForeignKeyLink dimension="ArrestAgency" foreignKeyColumn="ArrestAgencyID"/>
+						<ForeignKeyLink dimension="ArrestAgency" foreignKeyColumn="ArrestAgencyID"/>
+						<ForeignKeyLink dimension="HoldForAgency" foreignKeyColumn="ChargeAgencyID"/>
 	    			<ForeignKeyLink dimension="SexOffenderStatus" foreignKeyColumn="SexOffenderStatusTypeID"/>
 	    			<ForeignKeyLink dimension="WorkReleaseStatus" foreignKeyColumn="WorkReleaseStatusTypeID"/>
 	    			<ForeignKeyLink dimension="ProgramEligibility" foreignKeyColumn="ProgramEligibilityTypeID"/>
 	    			<ForeignKeyLink dimension="MilitaryServiceStatus" foreignKeyColumn="MilitaryServiceStatusTypeID"/>
-	    			<ForeignKeyLink dimension="SeverMentalIllness" foreignKeyColumn="SevereMentalIllnessIndicatorDimension"/>
+	    			<ForeignKeyLink dimension="SevereMentalIllness" foreignKeyColumn="SevereMentalIllnessIndicatorDimension"/>
 	    			<ForeignKeyLink dimension="DomicileStatus" foreignKeyColumn="DomicileStatusTypeID"/>
 	    			<ForeignKeyLink dimension="Language" foreignKeyColumn="LanguageTypeID"/>
 	    			<ForeignKeyLink dimension="EducationLevel" foreignKeyColumn="EducationLevelTypeID"/>
@@ -625,7 +1187,7 @@
 				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
 			</CalculatedMember>
 			<CalculatedMember name="InTreatmentAtBookingRate" caption="In Treatment at Booking Rate" dimension="Measures">
-				<Formula><![CDATA[IIf([Measures].[Booking Count] > 0,  ([Measures].[InTreatmentAtBookingCount] -1)/ [Measures].[Booking Count], 0)]]></Formula>
+				<Formula><![CDATA[IIf([Measures].[Booking Count] > 0,  ([Measures].[InTreatmentAtEventCount] -1)/ [Measures].[Booking Count], 0)]]></Formula>
 				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
 			</CalculatedMember>
 			<CalculatedMember name="SMI Rate" caption="SMI Rate" dimension="Measures">
@@ -633,5 +1195,5 @@
 				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
 			</CalculatedMember>
     	</CalculatedMembers>
-	  </Cube>		
+	  </Cube>
 </Schema>

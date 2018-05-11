@@ -15,10 +15,11 @@
 # Common functions for package
 
 #' @import stringr
-#' @import RMySQL
+#' @import RMariaDB
 #' @importFrom readr write_delim
 #' @export
-writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk = FALSE, writeToDatabase=TRUE, forceConnectionType=NULL) {
+writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk = FALSE, localBulk = TRUE,
+                                     writeToDatabase=TRUE, forceConnectionType=NULL) {
 
   # replacing dbWriteTable with our own, because found it to be buggy and inconsistent across platforms...
   #dbWriteTable(conn, tableName, x, row.names=FALSE, append=append)
@@ -61,7 +62,7 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
     } else {
       f <- tempfile(tmpdir = "/tmp", pattern = tableName)
     }
-    if ('MySQLConnection'==cc) {
+    if ('MariaDBConnection'==cc) {
       if (nrow(x) > 0) {
         if (!append) {
           executeSQL(paste0("delete from ", tableName))
@@ -79,7 +80,13 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
           fieldList <-  paste0("(", paste0(cne, collapse=','), ")")
         }
 
-        sql <- paste0("load data infile '", f, "' into table ", tableName, " fields terminated by \"|\" ", fieldList, " ", setString)
+        localQualifier <- ''
+        if (!localBulk) {
+          localQualifier <- ' local '
+        }
+
+        sql <- paste0("load data ", localQualifier, " infile '", f, "' into table ", tableName,
+                      " fields terminated by \"|\" ", fieldList, " ", setString)
         executeSQL(sql)
         if (writeToDatabase) {
           file.remove(f)
