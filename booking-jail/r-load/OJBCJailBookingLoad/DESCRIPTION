@@ -2,7 +2,7 @@ Package: OJBCJailBookingLoad
 Type: Package
 Title: Supports Loading of OJBC Jail-Booking Analytics Database
 Version: 0.1
-Date: 2016-08-06
+Date: 2018-05-13
 Authors@R: person("Open Justice Broker Consortium", email = "info@ojbc.org",
   role = c("aut", "cre"))
 Description: This package contains functions useful for loading the analytical data store for booking/jail analytics.
@@ -18,6 +18,7 @@ Imports: lazyeval,
 	assertthat, 
 	DBI, 
 	RMariaDB,
+	purrr,
     readr,
     tidyr,
     stringr,
