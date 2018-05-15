@@ -279,7 +279,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
   Booking <- getQuery(stagingConnection, paste0("select Booking.BookingNumber, CustodyStatusChange.BookingID, CustodyStatusChange.PersonID, CustodyStatusChange.BookingDate, ",
                                                 "CustodyStatusChange.FacilityID, CustodyStatusChange.SupervisionUnitTypeID, CustodyStatusChangeID as pk, ",
                                                 "CustodyStatusChange.InmateJailResidentIndicator from Booking, CustodyStatusChange ",
-                                                "where Booking.BookingID=CustodyStatusChange.BookingID and BookingStatus='correct' and ",
+                                                "where Booking.BookingID=CustodyStatusChange.BookingID and CustodyStatusChange.BookingStatus='correct' and ",
                                                 "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' order by CustodyStatusChangeTimestamp"))
 
   # note that it is possible to have multiple CSC records for a single booking.  if this is the case, we take the most recent one.
@@ -291,7 +291,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
                                                                  "Booking inner join CustodyStatusChange on Booking.BookingID=CustodyStatusChange.BookingID ",
                                                                  "left join CustodyStatusChangeArrest on CustodyStatusChange.CustodyStatusChangeID=CustodyStatusChangeArrest.CustodyStatusChangeID ",
                                                                  "left join CustodyStatusChangeCharge on CustodyStatusChangeArrest.CustodyStatusChangeArrestID=CustodyStatusChangeCharge.CustodyStatusChangeArrestID ",
-                                                                 "where CustodyStatusChange.BookingDate <= '", currentStagingDate, "' and CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and BookingStatus='correct' order by CustodyStatusChangeTimestamp"))
+                                                                 "where CustodyStatusChange.BookingDate <= '", currentStagingDate, "' and CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and CustodyStatusChange.BookingStatus='correct' order by CustodyStatusChangeTimestamp"))
 
   total <- nrow(BookingChargeDisposition)
   BookingChargeDisposition <- BookingChargeDisposition %>%
@@ -568,14 +568,14 @@ buildBHAssessmentTableList <- function(stagingConnection, stagingIncidentConnect
 
 }
 
-buildBHAssessmentCategoryTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator) {
+buildBHAssessmentCategoryTable <- function(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator) {
 
   BHAssessmentCategoryBooking <- getQuery(stagingConnection, paste0("select BehavioralHealthAssessmentCategoryID, bha.BehavioralHealthAssessmentID, AssessmentCategoryTypeID from ",
                                                                     "BehavioralHealthAssessment bha, BehavioralHealthAssessmentCategory bhac, Person p, Booking b where ",
                                                                     "bhac.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
                                                                     "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
-  BHAssessmentCategoryIncident <- getQuery(stagingConnection, paste0("select BehavioralHealthAssessmentCategoryID, bha.BehavioralHealthAssessmentID, AssessmentCategoryTypeID from ",
+  BHAssessmentCategoryIncident <- getQuery(stagingIncidentConnection, paste0("select BehavioralHealthAssessmentCategoryID, bha.BehavioralHealthAssessmentID, AssessmentCategoryTypeID from ",
                                                                     "BehavioralHealthAssessment bha, BehavioralHealthAssessmentCategory bhac, Person p, Incident b where ",
                                                                     "bhac.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID"))
 
@@ -701,14 +701,14 @@ buildBHEvaluationTable <- function(stagingConnection, stagingIncidentConnection,
 
 }
 
-buildMedicationTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, medicationTextValueConverter, codeTableList, codeTableValueTranslator) {
+buildMedicationTable <- function(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, medicationTextValueConverter, codeTableList, codeTableValueTranslator) {
 
   PrescribedMedicationBooking <- getQuery(stagingConnection, paste0("select PrescribedMedicationID, pm.BehavioralHealthAssessmentID, MedicationDescription from ",
                                                              "BehavioralHealthAssessment bha, PrescribedMedication pm, Person p, Booking b where ",
                                                              "pm.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
                                                              "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
-  PrescribedMedicationIncident <- getQuery(stagingConnection, paste0("select PrescribedMedicationID, pm.BehavioralHealthAssessmentID, MedicationDescription from ",
+  PrescribedMedicationIncident <- getQuery(stagingIncidentConnection, paste0("select PrescribedMedicationID, pm.BehavioralHealthAssessmentID, MedicationDescription from ",
                                                              "BehavioralHealthAssessment bha, PrescribedMedication pm, Person p, Incident b where ",
                                                              "pm.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID"))
 
@@ -894,9 +894,9 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   ret$BehavioralHealthEvaluation <- buildBHEvaluationTable(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, diagnosisTextValueConverter,
                                                            codeTableList, codeTableValueTranslator, bhaTableList$maxBehavioralHealthAssessmentID)
   writeLines(paste0("Loaded BehavioralHealthEvaluation with ", nrow(ret$BehavioralHealthEvaluation), " rows"))
-  ret$PrescribedMedication <- buildMedicationTable(stagingConnection, lastLoadTime, unknownCodeTableValue, medicationTextValueConverter, codeTableList, codeTableValueTranslator)
+  ret$PrescribedMedication <- buildMedicationTable(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, medicationTextValueConverter, codeTableList, codeTableValueTranslator)
   writeLines(paste0("Loaded PrescribedMedication with ", nrow(ret$PrescribedMedication), " rows"))
-  ret$BehavioralHealthAssessmentCategory <- buildBHAssessmentCategoryTable(stagingConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator)
+  ret$BehavioralHealthAssessmentCategory <- buildBHAssessmentCategoryTable(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator)
   writeLines(paste0("Loaded BehavioralHealthAssessmentCategory with ", nrow(ret$BehavioralHealthAssessmentCategory), " rows"))
   
   writeLines("Loading Release table")
@@ -964,15 +964,6 @@ buildIncidentTables <- function(stagingConnection, stagingIncidentConnection, ad
                           TRUE ~ ymd_hms(paste0(format(IncidentReportedDate, '%Y-%m-%d'), ' ', IncidentReportedTime))))
   )
 
-  stagingIncidentResponseUnit <- suppressWarnings(
-    stagingIncidentResponseUnit <- stagingIncidentResponseUnit %>%
-      mutate(dda=case_when(is.na(UnitArrivalDate) | is.na(UnitArrivalTime) ~ as_datetime(NA),
-                           TRUE ~ ymd_hms(paste0(format(UnitArrivalDate, '%Y-%m-%d'), ' ', UnitArrivalTime))),
-             ddc=case_when(is.na(UnitClearDate) | is.na(UnitClearTime) ~ as_datetime(NA),
-                           TRUE ~ ymd_hms(paste0(format(UnitClearDate, '%Y-%m-%d'), ' ', UnitClearTime))))
-
-  )
-
   Incident <- stagingIncident %>%
     mutate(
       IncidentReportedDate=as_date(IncidentReportedDate),
@@ -987,31 +978,54 @@ buildIncidentTables <- function(stagingConnection, stagingIncidentConnection, ad
   
   writeLines(paste0('Removed ', (nrow(stagingIncident) - nrow(Incident)), ' staging incidents replaced by later incidents with same IncidentNumber'))
 
-  IncidentResponseCostSum <- stagingIncidentResponseUnit %>%
-    semi_join(Incident, by='IncidentID') %>%
-    group_by(IncidentID, UnitIdentifier) %>%
-    mutate(CostInUnitMinutes=(ddc - dda)/dminutes(1)) %>%
-    group_by(IncidentID) %>%
-    summarize(CostInUnitMinutes=sum(CostInUnitMinutes, na.rm=TRUE))
-
-  IncidentResponseTimeSum <- stagingIncidentResponseUnit %>%
-    semi_join(Incident, by='IncidentID') %>%
-    group_by(IncidentID) %>%
-    summarize(startTime=min(dda, na.rm=TRUE), endTime=max(ddc, na.rm=TRUE)) %>%
-    mutate(DurationInMinutes=(endTime - startTime) / dminutes(1))
-
+  if (nrow(stagingIncidentResponseUnit)) {
+    
+    stagingIncidentResponseUnit <- suppressWarnings(
+      stagingIncidentResponseUnit <- stagingIncidentResponseUnit %>%
+        mutate(dda=case_when(is.na(UnitArrivalDate) | is.na(UnitArrivalTime) ~ as_datetime(NA),
+                             TRUE ~ ymd_hms(paste0(format(UnitArrivalDate, '%Y-%m-%d'), ' ', UnitArrivalTime))),
+               ddc=case_when(is.na(UnitClearDate) | is.na(UnitClearTime) ~ as_datetime(NA),
+                             TRUE ~ ymd_hms(paste0(format(UnitClearDate, '%Y-%m-%d'), ' ', UnitClearTime))))
+      
+    )
+    
+    IncidentResponseCostSum <- stagingIncidentResponseUnit %>%
+      semi_join(Incident, by='IncidentID') %>%
+      group_by(IncidentID, UnitIdentifier) %>%
+      mutate(CostInUnitMinutes=(ddc - dda)/dminutes(1)) %>%
+      group_by(IncidentID) %>%
+      summarize(CostInUnitMinutes=sum(CostInUnitMinutes, na.rm=TRUE))
+    
+    IncidentResponseTimeSum <- stagingIncidentResponseUnit %>%
+      semi_join(Incident, by='IncidentID') %>%
+      group_by(IncidentID) %>%
+      summarize(startTime=min(dda, na.rm=TRUE), endTime=max(ddc, na.rm=TRUE)) %>%
+      mutate(DurationInMinutes=(endTime - startTime) / dminutes(1))
+    
+    Incident <- Incident %>%
+      select(-DurationInMinutes) %>%
+      left_join(IncidentResponseCostSum, by='IncidentID') %>%
+      left_join(IncidentResponseTimeSum, by='IncidentID')
+    
+  } else {
+    
+    writeLines('No rows in staging IncidentResponseUnit table, deriving cost from TotalOfficerTimeSeconds')
+    
+    Incident <- Incident %>%
+      mutate(
+        DurationInMinutes=NA_real_,
+        CostInUnitMinutes=case_when(OfficerCount == 0 | is.na(TotalOfficerTimeSeconds) ~ NA_real_, TRUE ~ TotalOfficerTimeSeconds / (OfficerCount*60.0))
+      )
+    
+  }
+  
   Incident <- Incident %>%
-    left_join(IncidentResponseCostSum, by='IncidentID') %>%
-    left_join(IncidentResponseTimeSum, by='IncidentID') %>%
     mutate(
       CallNatureTypeID=callNatureTextValueConverter(codeTableList, CallNature, unknownCodeTableValue),
       DispositionLocationTypeID=dispositionLocationTextValueConverter(codeTableList, DispositionLocation, unknownCodeTableValue),
       PendingCriminalChargesTypeID=pendingCriminalChargesTextValueConverter(codeTableList, PendingCriminalCharges, unknownCodeTableValue),
       TimeSpanTypeID=timeSpanTextValueConverter(codeTableList, IncidentTimeSpanText, unknownCodeTableValue),
-      ReportingAgencyID=reportingAgencyTextValueConverter(codeTableList, ReportingAgency, unknownCodeTableValue)) %>%
-    mutate(
-      DurationInMinutes=case_when(is.na(DurationInMinutes) ~ TotalOfficerTimeSeconds / 60.0, TRUE ~ DurationInMinutes)
-    )
+      ReportingAgencyID=reportingAgencyTextValueConverter(codeTableList, ReportingAgency, unknownCodeTableValue))
 
   recid <- Incident %>%
     select(IncidentID, PersonUniqueIdentifier, IncidentReportedDate) %>%
@@ -1090,30 +1104,34 @@ buildIncidentTables <- function(stagingConnection, stagingIncidentConnection, ad
 
   ret <- list()
   ret$Incident <- Incident
-
-  UnitResponse <- stagingIncidentResponseUnit %>%
-    mutate(
-      RespondingUnitTypeID=unitTextValueConverter(codeTableList, UnitIdentifier, unknownCodeTableValue),
-      ArrivalDate=as_date(dda),
-      ArrivalDateID=format(ArrivalDate, "%Y%m%d"),
-      ArrivalHour=hour(dda),
-      ClearedDate=as_date(ddc),
-      ClearedDateID=format(ClearedDate, "%Y%m%d"),
-      ClearedHour=hour(ddc),
-      ResponseDurationInMinutes=(ddc - dda) / dminutes(1)
-    ) %>%
-    select(UnitResponseID=IncidentResponseUnitID,
-           IncidentID,
-           RespondingUnitTypeID,
-           ArrivalDateID,
-           ArrivalDate,
-           ArrivalHour,
-           ClearedDateID,
-           ClearedDate,
-           ClearedHour,
-           ResponseDurationInMinutes)
-
-  ret$UnitResponse <- UnitResponse
+  
+  if (nrow(stagingIncidentResponseUnit)) {
+    
+    UnitResponse <- stagingIncidentResponseUnit %>%
+      mutate(
+        RespondingUnitTypeID=unitTextValueConverter(codeTableList, UnitIdentifier, unknownCodeTableValue),
+        ArrivalDate=as_date(dda),
+        ArrivalDateID=format(ArrivalDate, "%Y%m%d"),
+        ArrivalHour=hour(dda),
+        ClearedDate=as_date(ddc),
+        ClearedDateID=format(ClearedDate, "%Y%m%d"),
+        ClearedHour=hour(ddc),
+        ResponseDurationInMinutes=(ddc - dda) / dminutes(1)
+      ) %>%
+      select(UnitResponseID=IncidentResponseUnitID,
+             IncidentID,
+             RespondingUnitTypeID,
+             ArrivalDateID,
+             ArrivalDate,
+             ArrivalHour,
+             ClearedDateID,
+             ClearedDate,
+             ClearedHour,
+             ResponseDurationInMinutes)
+    
+    ret$UnitResponse <- UnitResponse
+    
+  }
 
   ret
 

@@ -43,7 +43,7 @@
 #' @import tibble
 #' @import purrr
 #' @examples
-#' loadDemoStaging(connection=DBI::dbConnect(RMariaDB::MariaDB(), host="localhost", dbname="ojbc_booking_staging_demo", username="root"))
+#' stagingDfs <- loadDemoStaging(connection=DBI::dbConnect(RMariaDB::MariaDB(), host="mariadb", dbname="ojbc_booking_staging_demo", username="root"), localDatabase = FALSE)
 #' @export
 loadDemoStaging <- function(connection=NULL,
                             censusTractShapefileDSN=NA, censusTractShapefileLayer=NA, countyFIPSCode=NA,
@@ -507,7 +507,7 @@ buildChangeTables <- function(txTableList, codeTableList) {
   changedBookings$PersonID <- ChangedPerson$PersonID
   changedBookings$CustodyStatusChangeTimestamp <- NA
   
-  changedBookings <- changedBookings %>% select(-BookingStatus)
+  changedBookings <- changedBookings
 
   ret$CustodyStatusChange <- changedBookings
   writeLines(paste0("Created CustodyStatusChange table with ", nrow(changedBookings), " rows."))
