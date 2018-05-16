@@ -61,12 +61,15 @@ create table FullIncidentView as
     left join PrescribedMedication on BehavioralHealthAssessment.BehavioralHealthAssessmentID=PrescribedMedication.BehavioralHealthAssessmentID
     left join BehavioralHealthTreatment  on BehavioralHealthAssessment.BehavioralHealthAssessmentID=BehavioralHealthTreatment.BehavioralHealthAssessmentID;
 
+create index fiv_pui on FullIncidentView (StagingPersonUniqueIdentifier);
+
 drop table if exists FullIncidentSubsequentBookingView;
 
 create table FullIncidentSubsequentBookingView as
 select
   FullIncidentView.*,
   JailEpisode.LengthOfStay,
+  ifnull(JailEpisode.BookingClassificationTypeID, 99998) as BookingClassificationTypeID,
   ifnull(JailEpisode.CaseStatusTypeID, 99998) as CaseStatusTypeID,
   ifnull(JailEpisodeArrest.AgencyID, 99998) as ArrestAgencyID,
   ifnull(JailEpisodeCharge.ChargeTypeID, 99998) as ChargeTypeID,
@@ -100,6 +103,7 @@ select
     ifnull(ChargeTypeID, 99998)as  ChargeTypeID,
     ifnull(ChargeDispositionTypeID, 99998) as ChargeDispositionTypeID,
     ifnull(JurisdictionTypeID, 99998) as JurisdictionTypeID,
+    ifnull(JailEpisode.BookingClassificationTypeID, 99998) as BookingClassificationTypeID,
     IsActive,
     if(IsActive='Y', 'Active', 'Inactive') as IsActiveDimension,
     BondAmount,

@@ -141,6 +141,12 @@ defaultPopulationTypeConverter <- function(adsConnection, unknownCodeTableValue,
   }
 }
 
+# by default, set booking classification to unknown. put this in to support the Adams County "muni charge" feature. Jurisdictions
+# can implement this to classify bookings (Jail Episodes) in whatever way they wish.
+defaultBookingClassificationAggregator <- function(codeTableList, BookingChargeDispositionDataFrame, unknownCodeTableValue) {
+  unknownCodeTableValue
+}
+
 #' @importFrom DBI dbGetQuery
 #' @importFrom lubridate ymd_hms
 getLastLoadingTime <- function(adsConnection) {
@@ -216,9 +222,10 @@ translateCodeTableValue <- function(codeTableValueTranslator, stagingValue, code
 
 #' @importFrom lubridate ddays
 buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTime, currentLoadTime, currentStagingDate, loadHistoryID,
-                                   unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator, codeTableList, codeTableValueTranslator) {
+                                   unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator, bookingClassificationAggregator,
+                                   codeTableList, codeTableValueTranslator) {
 
-  buildTable <- function(StagingBookingDf, StagingBookingChargeDispositionDf, chargeDispositionAggregator, tableName) {
+  buildTable <- function(StagingBookingDf, StagingBookingChargeDispositionDf, chargeDispositionAggregator, bookingClassificationAggregator, tableName) {
 
     totalRows <- nrow(StagingBookingDf)
     writeLines(paste0('Building jail episode table from ', tableName, ' with ', totalRows, ' input rows'))
@@ -248,12 +255,17 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
         StagingPK=pk)
 
     if (nrow(StagingBookingChargeDispositionDf)) {
+      
       writeLines(paste0("Aggregating ", nrow(StagingBookingChargeDispositionDf), " charge disposition records under ", tableName))
       args <- list()
       args$codeTableList <- codeTableList
       args$BookingChargeDispositionDataFrame <- StagingBookingChargeDispositionDf
       args$unknownCodeTableValue <- unknownCodeTableValue
       JailEpisode$CaseStatusTypeID <- as.integer(do.call(chargeDispositionAggregator, args))
+      
+      writeLines('Computing Jail Episode (Booking) Classification')
+      JailEpisode$BookingClassificationTypeID <- as.integer(do.call(bookingClassificationAggregator, args))
+      
     }
 
     JailEpisode
@@ -273,7 +285,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
                                                                  "left join BookingCharge on BookingArrest.BookingArrestID=BookingCharge.BookingArrestID ",
                                                                  "where BookingDate <= '", currentStagingDate, "' and BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and BookingStatus='correct'"))
 
-  ret$JailEpisode <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, 'JailEpisode') %>%
+  ret$JailEpisode <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, bookingClassificationAggregator, 'JailEpisode') %>%
     select(-StagingPK)
 
   Booking <- getQuery(stagingConnection, paste0("select Booking.BookingNumber, CustodyStatusChange.BookingID, CustodyStatusChange.PersonID, CustodyStatusChange.BookingDate, ",
@@ -299,7 +311,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
     select(-CustodyStatusChangeID)
   writeLines(paste0("Removed ", total-nrow(BookingChargeDisposition), " custody status change charge dispo records that are replaced by a more recent custody status change"))
 
-  ret$JailEpisodeEdits <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, 'CustodyStatusChange')
+  ret$JailEpisodeEdits <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, bookingClassificationAggregator, 'CustodyStatusChange')
 
   ret
 
@@ -823,6 +835,7 @@ buildAndLoadHistoricalPeriodTable <- function(adsConnection, lookbackPeriod, unk
 loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConnectionBuilder,
                                     stagingIncidentConnectionBuilder=stagingConnectionBuilder,
                                     dimensionalConnectionBuilder=defaultDimensionalConnectionBuilder,
+                                    bookingClassificationAggregator=defaultBookingClassificationAggregator,
                                     chargeDispositionAggregator=defaultChargeDispositionAggregator,
                                     timeSpanTextValueConverter=defaultTimeSpanTextValueConverter,
                                     callNatureTextValueConverter=defaultCallNatureTextValueConverter,
@@ -879,7 +892,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
 
   writeLines("Loading JailEpisode tables")
   jailEpisodeTables <- buildJailEpisodeTables(stagingConnection, adsConnection, lastLoadTime, currentLoadTime, currentStagingDate, loadHistoryID,
-                                              unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator,
+                                              unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator, bookingClassificationAggregator,
                                               codeTableList, codeTableValueTranslator)
   ret <- c(ret, jailEpisodeTables)
   writeLines(paste0("Loaded JailEpisode with ", nrow(ret$JailEpisode), " rows and JailEpisodeEdits with ", nrow(ret$JailEpisodeEdits), " rows"))
@@ -957,9 +970,13 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   args$unknownCodeTableValue <- unknownCodeTableValue
   args$writeToDatabase <- writeToDatabase
   do.call(populationTypeConverter, args)
+  
+  writeLines('Creating materialized views...')
 
   materializedViewsSqlFile=system.file("raw", materializedViewsSqlFileName, package=getPackageName())
   createMaterializedViews(adsConnection, materializedViewsSqlFile)
+  
+  writeLines('...materialized views created')
 
   dbDisconnect(stagingConnection)
   dbDisconnect(adsConnection)
@@ -1027,7 +1044,6 @@ buildIncidentTables <- function(stagingConnection, stagingIncidentConnection, ad
       mutate(DurationInMinutes=(endTime - startTime) / dminutes(1))
     
     Incident <- Incident %>%
-      select(-DurationInMinutes) %>%
       left_join(IncidentResponseCostSum, by='IncidentID') %>%
       left_join(IncidentResponseTimeSum, by='IncidentID')
     
