@@ -22,6 +22,8 @@ public class RLoadingResultsFileProcessor {
 	
 	public void processResultsFileAndAddAttachment(Exchange ex) throws Exception
 	{
+		Message in = ex.getIn();
+		
 		if (StringUtils.isBlank(loadingOutputDirectory) || StringUtils.isBlank(loadingWorkingDirectory))
 		{
 			throw new IllegalStateException("Working directory or loading output directory path not set.  Unable to process loading results file");		
@@ -37,7 +39,7 @@ public class RLoadingResultsFileProcessor {
 
 		if (!buildDashboardResultsFile.exists())
 		{
-			throw new Exception("Loading output file does not exist!");
+			log.info("Build Dashboard output file does not exist!");
 		}	
 
 		File loadingOutputDirectoryPath = new File(loadingOutputDirectory);
@@ -64,22 +66,27 @@ public class RLoadingResultsFileProcessor {
 			throw new Exception("Unable to rename file");
 		}
 		
-		//Create the Build Dashboard output attachment
-		String buildDashboardScriptOutputFileName = dateTimeStamp + "BuildDashboardDataRout.txt";
-		String buildDashboardScriptOutputFileNameWithPath = loadingOutputDirectory + File.separator + buildDashboardScriptOutputFileName;
-		
-		File buildDashboardScriptOutputRenamedWithDateStamp = new File(buildDashboardScriptOutputFileNameWithPath);
-		
-		if(buildDashboardResultsFile.renameTo(buildDashboardScriptOutputRenamedWithDateStamp)){
-			log.debug("Rename succesful to: " + buildDashboardScriptOutputFileNameWithPath);
-		}else{
-			log.error("Rename failed using filename: " + buildDashboardScriptOutputFileNameWithPath);
-			throw new Exception("Unable to rename file");
-		}
-		
-		Message in = ex.getIn();
-		in.addAttachment(buildDashboardScriptOutputFileName, new DataHandler(new FileDataSource(buildDashboardScriptOutputRenamedWithDateStamp)));
 		in.addAttachment(loadingScriptOuputFileName, new DataHandler(new FileDataSource(loadingScriptOutputFileRenamedWithDateStamp)));
+		
+		if (buildDashboardResultsFile.exists())
+		{
+
+			//Create the Build Dashboard output attachment
+			String buildDashboardScriptOutputFileName = dateTimeStamp + "BuildDashboardDataRout.txt";
+			String buildDashboardScriptOutputFileNameWithPath = loadingOutputDirectory + File.separator + buildDashboardScriptOutputFileName;
+			
+			File buildDashboardScriptOutputRenamedWithDateStamp = new File(buildDashboardScriptOutputFileNameWithPath);
+			
+			if(buildDashboardResultsFile.renameTo(buildDashboardScriptOutputRenamedWithDateStamp)){
+				log.debug("Rename succesful to: " + buildDashboardScriptOutputFileNameWithPath);
+			}else{
+				log.error("Rename failed using filename: " + buildDashboardScriptOutputFileNameWithPath);
+				throw new Exception("Unable to rename file");
+			}
+			
+			in.addAttachment(buildDashboardScriptOutputFileName, new DataHandler(new FileDataSource(buildDashboardScriptOutputRenamedWithDateStamp)));
+		}	
+		
 	}
 
 	public String getLoadingOutputDirectory() {

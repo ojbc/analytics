@@ -52,46 +52,51 @@
 			<removeHeaders pattern="CamelExecCommandExecutables"/>
 			
 			<camel:to uri="exec:R"/>	
-
-			<camel:setHeader headerName="CamelExecCommandWorkingDir">
-				<camel:simple>${properties:analytics.buildDashboardDataWorkingDirectory}</camel:simple>
-			</camel:setHeader>
-
-			<camel:setHeader headerName="CamelExecCommandArgs">
-				<camel:simple>CMD BATCH --no-save --no-restore ${properties:analytics.buildDashboardDataFullPath}</camel:simple>
-			</camel:setHeader>
-		
-			<camel:to uri="exec:R"/>	
 			
-		    <camel:setHeader headerName="CamelExecCommandWorkingDir">
-				<camel:simple>${properties:analytics.buildDashboardWorkingDirectory}</camel:simple>
-			</camel:setHeader>
+			<camel:filter>
+				<camel:simple>{{analytics.buildDashboard}} == 'true'</camel:simple>
 
-			<camel:setHeader headerName="CamelExecCommandArgs">
-				<camel:simple>CMD BATCH --no-save --no-restore ${properties:analytics.buildDashboardWorkingDirectory}reloadNamespace.R</camel:simple>
-			</camel:setHeader>
-		
-			<camel:to uri="exec:R"/>	
-		
-			<camel:setHeader headerName="CamelExecCommandWorkingDir">
-				<camel:simple>${properties:analytics.buildDashboardWorkingDirectory}</camel:simple>
-			</camel:setHeader>
-
-			<camel:setHeader headerName="CamelExecCommandArgs">
-				<camel:simple>CMD build --no-save --no-restore ${properties:analytics.buildDashboardFullPath}</camel:simple>
-			</camel:setHeader>
-		
-			<camel:to uri="exec:R"/>	
-		
-		    <camel:setHeader headerName="CamelExecCommandWorkingDir">
-				<camel:simple>${properties:analytics.buildDashboardWorkingDirectory}</camel:simple>
-			</camel:setHeader>
+				<camel:setHeader headerName="CamelExecCommandWorkingDir">
+					<camel:simple>${properties:analytics.buildDashboardDataWorkingDirectory}</camel:simple>
+				</camel:setHeader>
+	
+				<camel:setHeader headerName="CamelExecCommandArgs">
+					<camel:simple>CMD BATCH --no-save --no-restore ${properties:analytics.buildDashboardDataFullPath}</camel:simple>
+				</camel:setHeader>
 			
-			<camel:setHeader headerName="CamelExecCommandArgs">
-				<camel:simple>CMD INSTALL --no-save --no-restore ${properties:analytics.buildDashboardTarfile}</camel:simple>
-			</camel:setHeader>
-		
-			<camel:to uri="exec:R"/>	
+				<camel:to uri="exec:R"/>	
+				
+			    <camel:setHeader headerName="CamelExecCommandWorkingDir">
+					<camel:simple>${properties:analytics.buildDashboardWorkingDirectory}</camel:simple>
+				</camel:setHeader>
+	
+				<camel:setHeader headerName="CamelExecCommandArgs">
+					<camel:simple>CMD BATCH --no-save --no-restore ${properties:analytics.buildDashboardWorkingDirectory}reloadNamespace.R</camel:simple>
+				</camel:setHeader>
+			
+				<camel:to uri="exec:R"/>	
+			
+				<camel:setHeader headerName="CamelExecCommandWorkingDir">
+					<camel:simple>${properties:analytics.buildDashboardWorkingDirectory}</camel:simple>
+				</camel:setHeader>
+	
+				<camel:setHeader headerName="CamelExecCommandArgs">
+					<camel:simple>CMD build --no-save --no-restore ${properties:analytics.buildDashboardFullPath}</camel:simple>
+				</camel:setHeader>
+			
+				<camel:to uri="exec:R"/>	
+			
+			    <camel:setHeader headerName="CamelExecCommandWorkingDir">
+					<camel:simple>${properties:analytics.buildDashboardWorkingDirectory}</camel:simple>
+				</camel:setHeader>
+				
+				<camel:setHeader headerName="CamelExecCommandArgs">
+					<camel:simple>CMD INSTALL --no-save --no-restore ${properties:analytics.buildDashboardTarfile}</camel:simple>
+				</camel:setHeader>
+			
+				<camel:to uri="exec:R"/>	
+			
+			</camel:filter>
 		
 			<camel:wireTap uri="direct:refreshSaikuCache"/>
 			

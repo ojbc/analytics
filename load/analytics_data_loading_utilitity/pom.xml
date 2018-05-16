@@ -7,7 +7,7 @@
   <groupId>org.ojbc.bundles.utilities</groupId>
   <artifactId>analytics_data_loading_utilitity</artifactId>
   <packaging>bundle</packaging>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
   <name>OJB :: analytics_data_loading_utilitity :: utilities</name>
   <url>http://www.ojbc.org</url>
