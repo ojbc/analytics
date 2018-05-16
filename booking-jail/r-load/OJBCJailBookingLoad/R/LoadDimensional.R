@@ -543,7 +543,7 @@ buildBHAssessmentTableList <- function(stagingConnection, stagingIncidentConnect
     writeLines(paste0('Adjusting Incident BehavioralHealthAssessmentID by adding the max booking BehavioralHealthAssessmentID of ', maxBehavioralHealthAssessmentID))
   }
   
-  BHAssessmentIncident <- mutate(BHAssessmentIncident, PersonID=PersonID + maxBehavioralHealthAssessmentID)
+  BHAssessmentIncident <- mutate(BHAssessmentIncident, BehavioralHealthAssessmentID=BehavioralHealthAssessmentID + maxBehavioralHealthAssessmentID)
 
   if (nrow(BHAssessmentIncident)) {
     BHAssessment <- bind_rows(BHAssessment, BHAssessmentIncident)
@@ -627,12 +627,26 @@ buildBHTreatmentTable <- function(stagingConnection, stagingIncidentConnection, 
 
   BHTreatment <- BHTreatmentBooking
 
-  if (nrow(BHTreatmentIncident)) {
-    BHTreatment <- bind_rows(BHTreatment, BHTreatmentIncident)
-  }
-
   if (nrow(BHTreatmentCSC)) {
     BHTreatment <- bind_rows(BHTreatment, BHTreatmentCSC)
+  }
+  
+  maxTreatmentID <- 0
+  if (nrow(BHTreatment)) {
+    maxTreatmentID <- max(BHTreatment$TreatmentID)
+  }
+  
+  if (length(base::intersect(BHTreatmentIncident$TreatmentID, BHTreatment$TreatmentID))==0) {
+    maxTreatmentID <- 0
+    writeLines('No adjustment to BHE IDs will be done, since IDs in the Booking and Incident tables are fully distinct (prob because the two staging dbs are the same db)')
+  } else {
+    writeLines(paste0('Adjusting Incident TreatmentID by adding the max booking TreatmentID of ', maxTreatmentID))
+  }
+  
+  BHTreatmentIncident <- mutate(BHTreatmentIncident, TreatmentID=TreatmentID + maxTreatmentID)
+  
+  if (nrow(BHTreatmentIncident)) {
+    BHTreatment <- bind_rows(BHTreatment, BHTreatmentIncident)
   }
 
   BHTreatment <- BHTreatment %>%
@@ -676,13 +690,23 @@ buildBHEvaluationTable <- function(stagingConnection, stagingIncidentConnection,
                                                         "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
   BHEvaluation <- BHEvaluationBooking
-
-  if (nrow(BHEvaluationIncident)) {
-    BHEvaluation <- bind_rows(BHEvaluation, BHEvaluationIncident)
-  }
-
+  
   if (nrow(BHEvaluationCSC)) {
     BHEvaluation <- bind_rows(BHEvaluation, BHEvaluationCSC)
+  }
+  
+  maxBehavioralHealthEvaluationID <- max(BHEvaluation$BehavioralHealthEvaluationID)
+  if (length(base::intersect(BHEvaluationIncident$BehavioralHealthEvaluationID, BHEvaluation$BehavioralHealthEvaluationID))==0) {
+    maxBehavioralHealthEvaluationID <- 0
+    writeLines('No adjustment to BHE IDs will be done, since IDs in the Booking and Incident tables are fully distinct (prob because the two staging dbs are the same db)')
+  } else {
+    writeLines(paste0('Adjusting Incident BehavioralHealthEvaluationID by adding the max booking BehavioralHealthEvaluationID of ', maxBehavioralHealthEvaluationID))
+  }
+  
+  BHEvaluationIncident <- mutate(BHEvaluationIncident, BehavioralHealthEvaluationID=BehavioralHealthEvaluationID + maxBehavioralHealthEvaluationID)
+  
+  if (nrow(BHEvaluationIncident)) {
+    BHEvaluation <- bind_rows(BHEvaluation, BHEvaluationIncident)
   }
 
   BHEvaluation <- BHEvaluation %>%
