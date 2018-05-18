@@ -2,6 +2,14 @@ create database ojbc_booking_dimensional;
 use ojbc_booking_dimensional;
 
 
+CREATE TABLE BookingClassificationType (
+                BookingClassificationTypeID INT NOT NULL,
+                BookingClassificationTypeDescription VARCHAR(40) NOT NULL,
+                BookingClassificationTypeCategory VARCHAR(40) NOT NULL,
+                PRIMARY KEY (BookingClassificationTypeID)
+);
+
+
 CREATE TABLE TimeSpanType (
                 TimeSpanTypeID INT NOT NULL,
                 TimeSpanTypeDescription VARCHAR(20) NOT NULL,
@@ -445,6 +453,7 @@ CREATE TABLE JailEpisode (
                 TwoYearRebooking CHAR(1) NOT NULL,
                 DaysSinceLastIncident INT,
                 DaysUntilNextIncident INT,
+                BookingClassificationTypeID INT NOT NULL,
                 LoadHistoryID INT NOT NULL,
                 PRIMARY KEY (JailEpisodeID)
 );
@@ -474,6 +483,12 @@ CREATE TABLE JailEpisodeCharge (
                 PRIMARY KEY (JailEpisodeChargeID)
 );
 
+
+ALTER TABLE JailEpisode ADD CONSTRAINT bookingclassificationtype_jailepisode_fk
+FOREIGN KEY (BookingClassificationTypeID)
+REFERENCES BookingClassificationType (BookingClassificationTypeID)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
 
 ALTER TABLE Incident ADD CONSTRAINT timespantype_incident_fk
 FOREIGN KEY (TimeSpanTypeID)
