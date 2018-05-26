@@ -141,10 +141,10 @@ defaultPopulationTypeConverter <- function(adsConnection, unknownCodeTableValue,
   }
 }
 
-# by default, set booking classification to unknown. put this in to support the Adams County "muni charge" feature. Jurisdictions
+# by default, leave the booking classification on the JailEpisodes at the default (unknown) value.  we put this in to support the Adams County "muni charge" feature. Jurisdictions
 # can implement this to classify bookings (Jail Episodes) in whatever way they wish.
-defaultBookingClassificationAggregator <- function(codeTableList, BookingChargeDispositionDataFrame, unknownCodeTableValue) {
-  unknownCodeTableValue
+defaultBookingClassificationAggregator <- function(adsConnection, codeTableList, unknownCodeTableValue) {
+  invisible()
 }
 
 #' @importFrom DBI dbGetQuery
@@ -222,10 +222,10 @@ translateCodeTableValue <- function(codeTableValueTranslator, stagingValue, code
 
 #' @importFrom lubridate ddays
 buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTime, currentLoadTime, currentStagingDate, loadHistoryID,
-                                   unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator, bookingClassificationAggregator,
+                                   unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator,
                                    codeTableList, codeTableValueTranslator) {
 
-  buildTable <- function(StagingBookingDf, StagingBookingChargeDispositionDf, chargeDispositionAggregator, bookingClassificationAggregator, tableName) {
+  buildTable <- function(StagingBookingDf, StagingBookingChargeDispositionDf, chargeDispositionAggregator, tableName) {
 
     totalRows <- nrow(StagingBookingDf)
     writeLines(paste0('Building jail episode table from ', tableName, ' with ', totalRows, ' input rows'))
@@ -251,6 +251,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
         TwoYearRebooking='N',
         DaysSinceLastEpisode=NA,
         DaysUntilNextEpisode=NA,
+        BookingClassificationTypeID=unknownCodeTableValue,
         LoadHistoryID=loadHistoryID,
         StagingPK=pk)
 
@@ -262,9 +263,6 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
       args$BookingChargeDispositionDataFrame <- StagingBookingChargeDispositionDf
       args$unknownCodeTableValue <- unknownCodeTableValue
       JailEpisode$CaseStatusTypeID <- as.integer(do.call(chargeDispositionAggregator, args))
-      
-      writeLines('Computing Jail Episode (Booking) Classification')
-      JailEpisode$BookingClassificationTypeID <- as.integer(do.call(bookingClassificationAggregator, args))
       
     }
 
@@ -280,12 +278,12 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
   
   Booking <- getQuery(stagingConnection, sql)
 
-  BookingChargeDisposition <- getQuery(stagingConnection, paste0("select Booking.BookingID, ChargeDisposition from ",
+  BookingChargeDisposition <- getQuery(stagingConnection, paste0("select Booking.BookingID, ChargeDisposition, BondStatusTypeID, ChargeClassTypeID, BookingCharge.AgencyID from ",
                                                                  "Booking left join BookingArrest on Booking.BookingID=BookingArrest.BookingID ",
                                                                  "left join BookingCharge on BookingArrest.BookingArrestID=BookingCharge.BookingArrestID ",
                                                                  "where BookingDate <= '", currentStagingDate, "' and BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and BookingStatus='correct'"))
 
-  ret$JailEpisode <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, bookingClassificationAggregator, 'JailEpisode') %>%
+  ret$JailEpisode <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, 'JailEpisode') %>%
     select(-StagingPK)
 
   Booking <- getQuery(stagingConnection, paste0("select Booking.BookingNumber, CustodyStatusChange.BookingID, CustodyStatusChange.PersonID, CustodyStatusChange.BookingDate, ",
@@ -299,7 +297,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
   Booking <- Booking %>% group_by(BookingID) %>% filter(row_number()==n()) %>% ungroup()
   writeLines(paste0("Removed ", total-nrow(Booking), " custody status change records that are replaced by a more recent custody status change"))
 
-  BookingChargeDisposition <- getQuery(stagingConnection, paste0("select CustodyStatusChange.BookingID, ChargeDisposition, CustodyStatusChange.CustodyStatusChangeID from ",
+  BookingChargeDisposition <- getQuery(stagingConnection, paste0("select CustodyStatusChange.BookingID, ChargeDisposition, BondStatusTypeID, ChargeClassTypeID, CustodyStatusChangeCharge.AgencyID, CustodyStatusChange.CustodyStatusChangeID from ",
                                                                  "Booking inner join CustodyStatusChange on Booking.BookingID=CustodyStatusChange.BookingID ",
                                                                  "left join CustodyStatusChangeArrest on CustodyStatusChange.CustodyStatusChangeID=CustodyStatusChangeArrest.CustodyStatusChangeID ",
                                                                  "left join CustodyStatusChangeCharge on CustodyStatusChangeArrest.CustodyStatusChangeArrestID=CustodyStatusChangeCharge.CustodyStatusChangeArrestID ",
@@ -311,7 +309,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
     select(-CustodyStatusChangeID)
   writeLines(paste0("Removed ", total-nrow(BookingChargeDisposition), " custody status change charge dispo records that are replaced by a more recent custody status change"))
 
-  ret$JailEpisodeEdits <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, bookingClassificationAggregator, 'CustodyStatusChange')
+  ret$JailEpisodeEdits <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, 'CustodyStatusChange')
 
   ret
 
@@ -892,7 +890,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
 
   writeLines("Loading JailEpisode tables")
   jailEpisodeTables <- buildJailEpisodeTables(stagingConnection, adsConnection, lastLoadTime, currentLoadTime, currentStagingDate, loadHistoryID,
-                                              unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator, bookingClassificationAggregator,
+                                              unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator,
                                               codeTableList, codeTableValueTranslator)
   ret <- c(ret, jailEpisodeTables)
   writeLines(paste0("Loaded JailEpisode with ", nrow(ret$JailEpisode), " rows and JailEpisodeEdits with ", nrow(ret$JailEpisodeEdits), " rows"))
@@ -970,6 +968,10 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   args$unknownCodeTableValue <- unknownCodeTableValue
   args$writeToDatabase <- writeToDatabase
   do.call(populationTypeConverter, args)
+  
+  writeLines("Updating JailEpisode table's Booking Classification...")
+  bookingClassificationAggregator(adsConnection, codeTableList, unknownCodeTableValue)
+  writeLines("...Booking Classification updates done")
   
   writeLines('Creating materialized views...')
 
@@ -1213,72 +1215,65 @@ loadDateDimension <- function(adsConnection, dfs, unknownCodeTableValue, noneCod
 
 }
 
+#' @importFrom DBI dbExecute dbWriteTable
+#' @importFrom lubridate ddays
 determineRecidivism <- function(adsConnection, writeToDatabase, localDatabase) {
-
+  
   writeLines("Determining recidivism")
-
+  
   # note: change StagingPersonUniqueIdentifier to "StagingPersonUniqueIdentifier2 as StagingPersonUniqueIdentifier" to use that as the basis for recidivism
   # todo: make this a method parameter
   df <- getQuery(adsConnection, paste0("select JailEpisodeID, StagingPersonUniqueIdentifier, EpisodeStartDate from JailEpisode, Person ",
                                        "where JailEpisode.PersonID=Person.PersonID order by StagingPersonUniqueIdentifier, EpisodeStartDate"))
-
+  
   df <- df %>%
     mutate(EpisodeStartDate=as.Date(EpisodeStartDate)) %>%
     group_by(StagingPersonUniqueIdentifier) %>%
     mutate(first=row_number()==1, last=row_number()==n(), recidivist=!(first & last), DaysToNextEpisode=NA, DaysSinceLastEpisode=NA)
-
+  
   recidivistIndices <- which(df$recidivist)
-
+  
   writeLines(paste0("Found ", length(recidivistIndices), " recidivist booking records out of ", nrow(df), " total booking records"))
-
+  
   if (writeToDatabase) {
-
+    
     executeQuery(adsConnection, "update JailEpisode set DaysSinceLastEpisode=NULL, DaysUntilNextEpisode=NULL, SixMonthRebooking='N', OneYearRebooking='N', TwoYearRebooking='N'")
-
-    for (i in recidivistIndices) {
-
-      bookingDate <- df[[i, 'EpisodeStartDate']]
-      first <- df[[i, 'first']]
-      last <- df[[i, 'last']]
-      priorBookingDate <- as.Date(NA)
-      nextBookingDate <- as.Date(NA)
-
-      if (!first) {
-        priorBookingDate <- df[[i-1, "EpisodeStartDate"]]
-      }
-
-      if (!last) {
-        nextBookingDate <- df[[i+1, "EpisodeStartDate"]]
-      }
-
-      # lubridate took considerably longer
-      DaysUntilNextEpisode <- as.numeric(nextBookingDate - bookingDate) # (bookingDate %--% nextBookingDate) %/% days(1)
-      DaysSinceLastEpisode <- as.numeric(bookingDate - priorBookingDate) # (priorBookingDate %--% bookingDate) %/% days(1)
-      SixMonthRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 180, 'Y', 'N')
-      OneYearRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 365, 'Y', 'N')
-      TwoYearRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 730, 'Y', 'N')
-
-      JailEpisodeID <- df[[i, 'JailEpisodeID']]
-
-      sql <- paste0("update JailEpisode set ",
-                    "DaysSinceLastEpisode=", ifelse(is.na(DaysSinceLastEpisode), 'NULL', as.character(DaysSinceLastEpisode)), ",",
-                    "DaysUntilNextEpisode=", ifelse(is.na(DaysUntilNextEpisode), 'NULL', as.character(DaysUntilNextEpisode)), ",",
-                    "SixMonthRebooking='", SixMonthRebooking, "', ",
-                    "OneYearRebooking='", OneYearRebooking, "', ",
-                    "TwoYearRebooking='", TwoYearRebooking, "' where JailEpisodeID=", JailEpisodeID)
-
-      executeQuery(adsConnection, sql)
-
-    }
-
+    
+    df <- getQuery(adsConnection, paste0("select JailEpisodeID, StagingPersonUniqueIdentifier, EpisodeStartDate from JailEpisode, Person ",
+                                         "where JailEpisode.PersonID=Person.PersonID order by StagingPersonUniqueIdentifier, EpisodeStartDate")) %>%
+      as_tibble() %>%
+      arrange(StagingPersonUniqueIdentifier, EpisodeStartDate) %>%
+      group_by(StagingPersonUniqueIdentifier) %>% mutate(idx=row_number()) %>% ungroup()
+    
+    priorDf <- df %>%
+      mutate(idx=idx+1) %>%
+      select(StagingPersonUniqueIdentifier, PriorBookingDate=EpisodeStartDate, idx)
+    
+    nextDf <- df %>%
+      mutate(idx=idx-1) %>%
+      select(StagingPersonUniqueIdentifier, NextBookingDate=EpisodeStartDate, idx)
+    
+    df <- df %>% left_join(priorDf, by=c('StagingPersonUniqueIdentifier', 'idx')) %>% left_join(nextDf, by=c('StagingPersonUniqueIdentifier', 'idx')) %>%
+      mutate(DaysUntilNextEpisode=(NextBookingDate - EpisodeStartDate)/ddays(1),
+             DaysSinceLastEpisode=(EpisodeStartDate - PriorBookingDate)/ddays(1),
+             SixMonthRebooking=ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 180, 'Y', 'N'),
+             OneYearRebooking=ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 365, 'Y', 'N'),
+             TwoYearRebooking=ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 730, 'Y', 'N')
+             )
+    
+    dbWriteTable(adsConnection, 'rTemp', df, overwrite=TRUE, temporary=TRUE)
+    dbExecute(adsConnection, 'create index irTemp on rTemp (JailEpisodeID)')
+    dbExecute(adsConnection, paste0('update JailEpisode j inner join rTemp jj on j.JailEpisodeID=jj.JailEpisodeID set j.DaysSinceLastEpisode=jj.DaysSinceLastEpisode, ',
+                     'j.DaysUntilNextEpisode=jj.DaysUntilNextEpisode, j.SixMonthRebooking=jj.SixMonthRebooking, j.OneYearRebooking=jj.OneYearRebooking, j.TwoYearRebooking=jj.TwoYearRebooking'))
+    
   } else {
     writeLines("No actual recividivism updates persisted, because writeToDatabase=FALSE")
   }
-
+  
   writeLines("Recidivism determination complete")
-
+  
   invisible()
-
+  
 }
 
 persistTables <- function(adsConnection, dfs, unknownCodeTableValue, currentLoadTime, writeToDatabase, localDatabase) {
@@ -1445,44 +1440,46 @@ removeBookingsAndChildren <- function(adsConnection, BookingIDs, groupSize=50, w
 
 #' @importFrom lubridate ddays
 persistReleases <- function(adsConnection, dfs, unknownCodeTableValue, writeToDatabase, localDatabase) {
-
+  
   bookingDf <- getQuery(adsConnection, "select JailEpisodeID, EpisodeStartDate from JailEpisode")
-
+  
   if (nrow(bookingDf)) {
-
+    
     bookingDf <- bookingDf %>%
       inner_join(dfs$Release, by=c("JailEpisodeID"="BookingID")) %>%
       mutate(LengthOfStay=(ReleaseDate - EpisodeStartDate) / ddays(1), EpisodeEndDate=ReleaseDate) %>% select(-ReleaseDate)
-
+    
     if (nrow(bookingDf)) {
-
-      for (r in seq(nrow(bookingDf))) {
-        bookingID <- bookingDf[r, 'JailEpisodeID']
-        lengthOfStay <- bookingDf[r, 'LengthOfStay']
-        episodeEndDate <- bookingDf[r, 'EpisodeEndDate']
-        episodeEndDateS <- ifelse(is.na(episodeEndDate), 'NULL', format(episodeEndDate, "%Y-%m-%d"))
-        episodeEndDateID <- ifelse(is.na(episodeEndDate), unknownCodeTableValue, format(episodeEndDate, "%Y%m%d"))
-        sql <- paste0("update JailEpisode set IsActive='N', LengthOfStay=", lengthOfStay, ", EpisodeEndDate='", episodeEndDateS, "'",
-                      ", EpisodeEndDateID=", episodeEndDateID,
-                      " where JailEpisodeID=", bookingID)
-        if (writeToDatabase) {
-          executeQuery(adsConnection, sql)
-        }
+      
+      writeLines(paste0("Updated ", nrow(bookingDf), " JailEpisode records with release information"))
+      
+      if (!writeToDatabase) {
+        writeLines("No JailEpisode records actually updated, because writeToDatabase=FALSE")
+      } else {
+        
+        bookingDf <- bookingDf %>%
+          mutate(
+            EpisodeEndDateID=ifelse(is.na(EpisodeEndDate), unknownCodeTableValue, format(EpisodeEndDate, "%Y%m%d")),
+            EpisodeEndDate=format(EpisodeEndDate, "%Y-%m-%d"),
+            IsActive='N'
+          ) %>% select(JailEpisodeID, EpisodeEndDate, EpisodeEndDateID, IsActive, LengthOfStay)
+        
+        dbWriteTable(adsConnection, 'bTemp', bookingDf, overwrite=TRUE, temporary=TRUE)
+        dbExecute(adsConnection, 'create index ibTemp on bTemp (JailEpisodeID)')
+        dbExecute(adsConnection, 'update JailEpisode j inner join bTemp jj on j.JailEpisodeID=jj.JailEpisodeID set j.EpisodeEndDate=jj.EpisodeEndDate, j.EpisodeEndDateID=jj.EpisodeEndDateID, j.IsActive=jj.IsActive, j.LengthOfStay=jj.LengthOfStay')
+        
       }
-
+      
+    } else {
+      writeLines("No releases found")
     }
-
-    writeLines(paste0("Updated ", nrow(bookingDf), " JailEpisode records with release information"))
-    if (!writeToDatabase) {
-      writeLines("No JailEpisode records actually updated, because writeToDatabase=FALSE")
-    }
-
+    
   } else {
     writeLines("No releases found")
   }
-
+  
   invisible()
-
+  
 }
 
 #' @importFrom lubridate year month day wday quarter as_date

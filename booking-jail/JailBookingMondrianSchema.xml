@@ -85,6 +85,7 @@
 		<Table name="PendingCriminalChargesType"/>
 		<Table name="CallNatureType"/>
 		<Table name="DispositionLocationType"/>
+		<Table name="BookingClassificationType"/>
 		<Table name="FullIncidentView">
 			<ColumnDefs>
 				<CalculatedColumnDef name='SixMonthIncidentReoccurrence' type='Integer'>
@@ -170,6 +171,90 @@
 			</ColumnDefs>
 		</Table>
 		<Table name="FullBookingView"/>
+		<Table name="FullIncidentSubsequentBookingView">
+			<ColumnDefs>
+				<CalculatedColumnDef name='SixMonthIncidentReoccurrence' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysSinceLastIncident"/> &lt;= 180, 1, 0)
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='SixMonthSubsequentBooking' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysUntilNextBooking"/> &lt;= 180, 1, 0)
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='PriorInteractions6MonthsDim' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when PriorInteractions6Months = 0 then 0
+                            when PriorInteractions6Months = 1 then 1
+                            when PriorInteractions6Months = 2 then 2
+                            when PriorInteractions6Months = 3 then 3
+                            when PriorInteractions6Months = 4 then 4
+                            else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='PriorInteractions12MonthsDim' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when PriorInteractions12Months = 0 then 0
+                            when PriorInteractions12Months = 1 then 1
+                            when PriorInteractions12Months = 2 then 2
+                            when PriorInteractions12Months = 3 then 3
+                            when PriorInteractions12Months = 4 then 4
+                            else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='PriorInteractions18MonthsDim' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when PriorInteractions18Months = 0 then 0
+                            when PriorInteractions18Months = 1 then 1
+                            when PriorInteractions18Months = 2 then 2
+                            when PriorInteractions18Months = 3 then 3
+                            when PriorInteractions18Months = 4 then 4
+                            else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='PriorInteractions24MonthsDim' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when PriorInteractions24Months = 0 then 0
+                            when PriorInteractions24Months = 1 then 1
+                            when PriorInteractions24Months = 2 then 2
+                            when PriorInteractions24Months = 3 then 3
+                            when PriorInteractions24Months = 4 then 4
+                            else 5
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+                <CalculatedColumnDef name='InTreatmentAtEventDim' type='String'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							case
+                            when InTreatmentAtEvent = 'Y' then 'Yes'
+                            else 'No'
+                            end
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+			</ColumnDefs>
+		</Table>
 		<InlineTable alias="SevereMentalIllnessType">
 			<ColumnDefs>
 				<ColumnDef name="SevereMentalIllnessTypeID" type="Integer"/>
@@ -190,7 +275,7 @@
 				</Row>
 			</Rows>
 		</InlineTable>
-        <InlineTable alias="PriorInteractionsCountType">
+    <InlineTable alias="PriorInteractionsCountType">
 			<ColumnDefs>
 				<ColumnDef name="PriorInteractionsCountTypeID" type="Integer"/>
 				<ColumnDef name="PriorInteractionsCountTypeDescription" type="String"/>
@@ -663,6 +748,20 @@
 		</Hierarchies>
 	</Dimension>
 
+	<Dimension visible="true" name="BookingClassification" table="BookingClassificationType" key="BookingClassificationTypeID" caption="Booking Classification">
+		<Attributes>
+			<Attribute name="BookingClassificationTypeID" keyColumn="BookingClassificationTypeID" hasHierarchy="false"/>
+			<Attribute name="BookingClassificationTypeDescription" keyColumn="BookingClassificationTypeDescription" hasHierarchy="false" caption="Booking Classification Type"/>
+			<Attribute name="BookingClassificationTypeCategory" keyColumn="BookingClassificationTypeCategory" hasHierarchy="false" caption="Booking Classification Category"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="BookingClassificationType" visible="true" caption="Booking Classification" allMemberName="All Classifications" allMemberCaption="All Classifications">
+				<Level attribute="BookingClassificationTypeCategory" caption="Booking Classification Category"/>
+				<Level attribute="BookingClassificationTypeDescription" caption="Booking Classification Type"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
 	<Dimension visible="true" name="BehavioralHealthEvaluationType" table="BehavioralHealthEvaluationType" key="BehavioralHealthEvaluationTypeID" caption="Diagnosis">
 		<Attributes>
 			<Attribute name="BehavioralHealthEvaluationTypeID" keyColumn="BehavioralHealthEvaluationTypeID" hasHierarchy="false"/>
@@ -977,7 +1076,7 @@
 		</Hierarchies>
 	</Dimension>
 
-	<Cube name="Crisis Incidents" visible="true">
+	<Cube name="Crisis Encounters" visible="true">
 		<Dimensions>
 			<Dimension source="Age"/>
 			<Dimension source="Date" caption="Reported Date"/>
@@ -1021,13 +1120,13 @@
 			</Dimension>
 		</Dimensions>
 		<MeasureGroups>
-  		<MeasureGroup table="FullIncidentView" name="Incident">
+  		<MeasureGroup table="FullIncidentView" name="Encounters">
     		<Measures>
-					<Measure name="Incident Count" column="IncidentID" aggregator="distinct-count" visible="true"/>
+					<Measure name="Encounter Count" column="IncidentID" aggregator="distinct-count" visible="true"/>
 					<Measure name="Average # Officers" column="OfficerCount" aggregator="avg" visible="true"/>
 					<Measure name="Average Officer Time" column="CostInUnitMinutes" aggregator="avg" visible="true"/>
 					<Measure name="Average Cost" column="CostInDollars" aggregator="avg" visible="true" formatString="$0.00"/>
-					<Measure name="Average Days Since Prior Incident" column="DaysSinceLastIncident" aggregator="avg" visible="true"/>
+					<Measure name="Average Days Since Prior Encounter" column="DaysSinceLastIncident" aggregator="avg" visible="true"/>
 					<Measure name="Reoccurrence Rate" column="SixMonthIncidentReoccurrence" aggregator="avg" visible="true" formatString="#0.0 %"/>
                     <Measure name="Subsequent Booking Rate" column="SixMonthSubsequentBooking" aggregator="avg" visible="true" formatString="#0.0 %"/>
                     <Measure name="Average # Prior Interactions in Past 6 Months" column="PriorInteractions6Months" aggregator="avg" visible="true" formatString="0.00"/>
@@ -1072,6 +1171,34 @@
 		</MeasureGroups>
 	</Cube>
 
+	<Cube name="Crisis Encounters w Subsequent Booking" visible="true">
+		<Dimensions>
+			<Dimension source="Date" caption="Reported Date"/>
+			<Dimension source="BookingClassification"/>
+		</Dimensions>
+		<MeasureGroups>
+  		<MeasureGroup table="FullIncidentSubsequentBookingView" name="Encounters">
+    		<Measures>
+					<Measure name="Encounter Count" column="IncidentID" aggregator="distinct-count" visible="true"/>
+					<Measure name="Average # Officers" column="OfficerCount" aggregator="avg" visible="true"/>
+					<Measure name="Average Officer Time" column="CostInUnitMinutes" aggregator="avg" visible="true"/>
+					<Measure name="Average Cost" column="CostInDollars" aggregator="avg" visible="true" formatString="$0.00"/>
+					<Measure name="Average Days Since Prior Encounter" column="DaysSinceLastIncident" aggregator="avg" visible="true"/>
+					<Measure name="Reoccurrence Rate" column="SixMonthIncidentReoccurrence" aggregator="avg" visible="true" formatString="#0.0 %"/>
+          <Measure name="Subsequent Booking Rate" column="SixMonthSubsequentBooking" aggregator="avg" visible="true" formatString="#0.0 %"/>
+          <Measure name="Average # Prior Interactions in Past 6 Months" column="PriorInteractions6Months" aggregator="avg" visible="true" formatString="0.00"/>
+          <Measure name="Average # Prior Interactions in Past 12 Months" column="PriorInteractions12Months" aggregator="avg" visible="true" formatString="0.00"/>
+          <Measure name="Average # Prior Interactions in Past 18 Months" column="PriorInteractions18Months" aggregator="avg" visible="true" formatString="0.00"/>
+          <Measure name="Average # Prior Interactions in Past 24 Months" column="PriorInteractions24Months" aggregator="avg" visible="true" formatString="0.00"/>
+				</Measures>
+				<DimensionLinks>
+					<ForeignKeyLink dimension="Date" foreignKeyColumn="IncidentReportedDateID"/>
+					<ForeignKeyLink dimension="BookingClassification" foreignKeyColumn="BookingClassificationTypeID"/>
+			</DimensionLinks>
+			</MeasureGroup>
+		</MeasureGroups>
+	</Cube>
+
 	<Cube name="Jail-Booking-Analytics" visible="true">
 		<Dimensions>
 			<Dimension source="Age"/>
@@ -1081,6 +1208,7 @@
 			<Dimension source="Ethnicity"/>
 			<!-- TODO: update ER Diagram to remove charge class category -->
 			<Dimension source="ChargeClass"/>
+			<Dimension source="BookingClassification"/>
 			<Dimension source="Charge"/>
 			<Dimension source="ChargeDisposition"/>
 			<Dimension source="BondStatus"/>
@@ -1140,7 +1268,8 @@
 	    			<ForeignKeyLink dimension="Race" foreignKeyColumn="PersonRaceTypeID"/>
 	    			<ForeignKeyLink dimension="Sex" foreignKeyColumn="PersonSexTypeID"/>
 	    			<ForeignKeyLink dimension="Ethnicity" foreignKeyColumn="PersonEthnicityTypeID"/>
-	    			<ForeignKeyLink dimension="ChargeClass" foreignKeyColumn="ChargeClassTypeID"/>
+						<ForeignKeyLink dimension="ChargeClass" foreignKeyColumn="ChargeClassTypeID"/>
+						<ForeignKeyLink dimension="BookingClassification" foreignKeyColumn="BookingClassificationTypeID"/>
 	    			<ForeignKeyLink dimension="Charge" foreignKeyColumn="ChargeTypeID"/>
 	    			<ForeignKeyLink dimension="ChargeDisposition" foreignKeyColumn="ChargeDispositionTypeID"/>
 	    			<ForeignKeyLink dimension="BondStatus" foreignKeyColumn="BondStatusTypeID"/>
