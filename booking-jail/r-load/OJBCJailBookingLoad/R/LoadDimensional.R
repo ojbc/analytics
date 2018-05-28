@@ -1056,7 +1056,7 @@ buildIncidentTables <- function(stagingConnection, stagingIncidentConnection, ad
     Incident <- Incident %>%
       mutate(
         DurationInMinutes=NA_real_,
-        CostInUnitMinutes=case_when(OfficerCount == 0 | is.na(TotalOfficerTimeSeconds) ~ NA_real_, TRUE ~ TotalOfficerTimeSeconds / (OfficerCount*60.0))
+        CostInUnitMinutes=case_when(OfficerCount == 0 | is.na(TotalOfficerTimeSeconds) ~ NA_real_, TRUE ~ TotalOfficerTimeSeconds / 60.0)
       )
     
   }

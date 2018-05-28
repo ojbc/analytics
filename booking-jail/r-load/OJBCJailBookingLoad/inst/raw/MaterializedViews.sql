@@ -14,7 +14,7 @@ create table FullIncidentView as
     OfficerCount,
     DurationInMinutes,
     CostInUnitMinutes,
-    CostInUnitMinutes*OfficerCount*45/60 as CostInDollars,
+    CostInUnitMinutes*45/60 as CostInDollars,
     DaysSinceLastIncident,
     DaysUntilNextIncident,
     DaysSinceLastBooking,
