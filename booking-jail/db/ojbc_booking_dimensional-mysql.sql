@@ -4,7 +4,7 @@ use ojbc_booking_dimensional;
 
 CREATE TABLE BookingClassificationType (
                 BookingClassificationTypeID INT NOT NULL,
-                BookingClassificationTypeDescription VARCHAR(40) NOT NULL,
+                BookingClassificationTypeDescription VARCHAR(60) NOT NULL,
                 BookingClassificationTypeCategory VARCHAR(40) NOT NULL,
                 PRIMARY KEY (BookingClassificationTypeID)
 );
