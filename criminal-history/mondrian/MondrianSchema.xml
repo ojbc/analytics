@@ -292,9 +292,20 @@
 			<Dimension source="DaysDuration" name="DaysToDisposition" caption="Days to Disposition"/>
 			<Dimension source="DaysDuration" name="DaysSincePriorArrest" caption="Days Since Prior Arrest"/>
 
-			<Dimension visible="true" name="Disposition Status" caption="Disposition Status">
+			<Dimension visible="true" name="ArrestDispositionStatus" caption="Arrest Disposition Status">
 				<Attributes>
 					<Attribute name="Disposition Status" keyColumn="HasDisposition" hasHierarchy="false" table="Arrest" orderByColumn="HasDispositionSort"/>
+				</Attributes>
+				<Hierarchies>
+					<Hierarchy name="Disposition Status"  visible="true" hasAll="true"  caption="Disposition Status" allMemberCaption="All Disposition Statuses">
+						<Level attribute="Disposition Status"/>
+					</Hierarchy>
+				</Hierarchies>
+			</Dimension>
+
+			<Dimension visible="true" name="ChargeDispositionStatus" caption="Charge Disposition Status">
+				<Attributes>
+					<Attribute name="Disposition Status" keyColumn="HasDisposition" hasHierarchy="false" table="Charge" orderByColumn="HasDispositionSort"/>
 				</Attributes>
 				<Hierarchies>
 					<Hierarchy name="Disposition Status"  visible="true" hasAll="true"  caption="Disposition Status" allMemberCaption="All Disposition Statuses">
@@ -323,10 +334,11 @@
     			<ForeignKeyLink dimension="DaysSincePriorArrest" foreignKeyColumn="DaysSincePriorArrestDurationTypeID"/>
     			<ForeignKeyLink dimension="Arresting Agency" foreignKeyColumn="ArrestingAgencyTypeID"/>
     			<ForeignKeyLink dimension="Disposition Type" foreignKeyColumn="DispositionTypeID"/>
-    			<FactLink dimension="Disposition Status"/>
+    			<FactLink dimension="ArrestDispositionStatus"/>
 					<NoLink dimension="Charge Origin"/>
 					<NoLink dimension="Charge Severity"/>
 					<NoLink dimension="Court"/>
+					<NoLink dimension="ChargeDispositionStatus"/>
     		</DimensionLinks>
     	</MeasureGroup>
 			<MeasureGroup table="Charge" name="Charges">
@@ -349,7 +361,8 @@
     			<ForeignKeyLink dimension="DaysSincePriorArrest" foreignKeyColumn="DaysSincePriorArrestDurationTypeID"/>
     			<ForeignKeyLink dimension="Arresting Agency" foreignKeyColumn="ArrestingAgencyTypeID"/>
     			<ForeignKeyLink dimension="Disposition Type" foreignKeyColumn="DispositionTypeID"/>
-    			<FactLink dimension="Disposition Status"/>
+    			<FactLink dimension="ChargeDispositionStatus"/>
+					<NoLink dimension="ArrestDispositionStatus"/>
     		</DimensionLinks>
     	</MeasureGroup>
     </MeasureGroups>
