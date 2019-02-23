@@ -44,6 +44,25 @@
 			</ColumnDefs>
 		</Table>
 
+		<Table name="Charge">
+			<ColumnDefs>
+				<CalculatedColumnDef name='DispositionIndicator' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="HasDisposition"/> = 'No', 0, 1)
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+				<CalculatedColumnDef name='PriorArrestIndicator' type='Integer'>
+					<ExpressionView>
+						<SQL dialect='mysql'>
+							if(<Column name="DaysSincePriorArrest"/> IS NULL, 0, 1)
+						</SQL>
+					</ExpressionView>
+				</CalculatedColumnDef>
+			</ColumnDefs>
+		</Table>
+
 	</PhysicalSchema>
 
 	<Dimension visible="true" name="Date" table="DateType" key="DateTypeID" type="TIME">
@@ -287,9 +306,29 @@
 		</Dimensions>
 
 		<MeasureGroups>
-  		<MeasureGroup table="Arrest" name="Arrests">
+			<MeasureGroup table="Arrest" name="Arrests">
     		<Measures>
-    			<Measure name="Arrests" column="ArrestID" aggregator="distinct-count" visible="true" caption="Arrests"/>
+    			<Measure name="Arrests" column="ArrestID" aggregator="count" visible="true" caption="Arrests"/>
+    			<Measure name="Disposition Rate" column="DispositionIndicator" aggregator="avg" visible="true" caption="Disposition Rate" formatString="0.00"/>
+    			<Measure name="Rearrest Rate" column="PriorArrestIndicator" aggregator="avg" visible="true" caption="Rearrest Rate" formatString="0.00"/>
+    			<Measure name="Avg Days to Disposition" column="DaysToDispose" aggregator="avg" visible="true" caption="Avg Days to Disposition" formatString="#,##0.00"/>
+    		</Measures>
+    		<DimensionLinks>
+    			<ForeignKeyLink dimension="ArrestDate" foreignKeyColumn="ArrestDateTypeID"/>
+    			<ForeignKeyLink dimension="DispositionDate" foreignKeyColumn="DispositionDateTypeID"/>
+    			<ForeignKeyLink dimension="Age at Arrest" foreignKeyColumn="ArresteeAgeYearsTypeID"/>
+    			<ForeignKeyLink dimension="Arrestee Sex" foreignKeyColumn="ArresteeSexTypeID"/>
+    			<ForeignKeyLink dimension="Arrestee Race" foreignKeyColumn="ArresteeRaceTypeID"/>
+    			<ForeignKeyLink dimension="DaysToDisposition" foreignKeyColumn="DaysToDisposeDurationTypeID"/>
+    			<ForeignKeyLink dimension="DaysSincePriorArrest" foreignKeyColumn="DaysSincePriorArrestDurationTypeID"/>
+    			<ForeignKeyLink dimension="Arresting Agency" foreignKeyColumn="ArrestingAgencyTypeID"/>
+    			<ForeignKeyLink dimension="Disposition Type" foreignKeyColumn="DispositionTypeID"/>
+    			<FactLink dimension="Disposition Status"/>
+    		</DimensionLinks>
+    	</MeasureGroup>
+			<MeasureGroup table="Charge" name="Charges">
+    		<Measures>
+    			<Measure name="Charges" column="ArrestID" aggregator="count" visible="true" caption="Arrests"/>
     			<Measure name="Disposition Rate" column="DispositionIndicator" aggregator="avg" visible="true" caption="Disposition Rate" formatString="0.00"/>
     			<Measure name="Rearrest Rate" column="PriorArrestIndicator" aggregator="avg" visible="true" caption="Rearrest Rate" formatString="0.00"/>
     			<Measure name="Avg Days to Disposition" column="DaysToDispose" aggregator="avg" visible="true" caption="Avg Days to Disposition" formatString="#,##0.00"/>
