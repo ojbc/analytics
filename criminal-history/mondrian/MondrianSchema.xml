@@ -309,9 +309,9 @@
 			<MeasureGroup table="Arrest" name="Arrests">
     		<Measures>
     			<Measure name="Arrests" column="ArrestID" aggregator="count" visible="true" caption="Arrests"/>
-    			<Measure name="Disposition Rate" column="DispositionIndicator" aggregator="avg" visible="true" caption="Disposition Rate" formatString="0.00"/>
-    			<Measure name="Rearrest Rate" column="PriorArrestIndicator" aggregator="avg" visible="true" caption="Rearrest Rate" formatString="0.00"/>
-    			<Measure name="Avg Days to Disposition" column="DaysToDispose" aggregator="avg" visible="true" caption="Avg Days to Disposition" formatString="#,##0.00"/>
+    			<Measure name="ArrestDispositionRate" column="DispositionIndicator" aggregator="avg" visible="true" caption="Disposition Rate - Arrest" formatString="0.00"/>
+    			<Measure name="ArrestRearrestRate" column="PriorArrestIndicator" aggregator="avg" visible="true" caption="Rearrest Rate - Arrest" formatString="0.00"/>
+    			<Measure name="ArrestAvgDaysToDisposition" column="DaysToDispose" aggregator="avg" visible="true" caption="Avg Days to Disposition - Arrest" formatString="#,##0.00"/>
     		</Measures>
     		<DimensionLinks>
     			<ForeignKeyLink dimension="ArrestDate" foreignKeyColumn="ArrestDateTypeID"/>
@@ -324,14 +324,17 @@
     			<ForeignKeyLink dimension="Arresting Agency" foreignKeyColumn="ArrestingAgencyTypeID"/>
     			<ForeignKeyLink dimension="Disposition Type" foreignKeyColumn="DispositionTypeID"/>
     			<FactLink dimension="Disposition Status"/>
+					<NoLink dimension="Charge Origin"/>
+					<NoLink dimension="Charge Severity"/>
+					<NoLink dimension="Court"/>
     		</DimensionLinks>
     	</MeasureGroup>
 			<MeasureGroup table="Charge" name="Charges">
     		<Measures>
-    			<Measure name="Charges" column="ArrestID" aggregator="count" visible="true" caption="Arrests"/>
-    			<Measure name="Disposition Rate" column="DispositionIndicator" aggregator="avg" visible="true" caption="Disposition Rate" formatString="0.00"/>
-    			<Measure name="Rearrest Rate" column="PriorArrestIndicator" aggregator="avg" visible="true" caption="Rearrest Rate" formatString="0.00"/>
-    			<Measure name="Avg Days to Disposition" column="DaysToDispose" aggregator="avg" visible="true" caption="Avg Days to Disposition" formatString="#,##0.00"/>
+    			<Measure name="Charges" column="ArrestID" aggregator="count" visible="true" caption="Charges"/>
+    			<Measure name="ChargeDispositionRate" column="DispositionIndicator" aggregator="avg" visible="true" caption="Disposition Rate - Charge" formatString="0.00"/>
+    			<Measure name="ChargeRearrestRate" column="PriorArrestIndicator" aggregator="avg" visible="true" caption="Rearrest Rate - Charge" formatString="0.00"/>
+    			<Measure name="ChargeAvgDaysToDisposition" column="DaysToDispose" aggregator="avg" visible="true" caption="Avg Days to Disposition - Charge" formatString="#,##0.00"/>
     		</Measures>
     		<DimensionLinks>
     			<ForeignKeyLink dimension="ArrestDate" foreignKeyColumn="ArrestDateTypeID"/>
