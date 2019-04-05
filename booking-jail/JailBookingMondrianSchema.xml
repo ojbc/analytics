@@ -1185,7 +1185,8 @@
 					<Measure name="Average Cost" column="CostInDollars" aggregator="avg" visible="true" formatString="$0.00"/>
 					<Measure name="Average Days Since Prior Encounter" column="DaysSinceLastIncident" aggregator="avg" visible="true"/>
 					<Measure name="Reoccurrence Rate" column="SixMonthIncidentReoccurrence" aggregator="avg" visible="true" formatString="#0.0 %"/>
-          <Measure name="Subsequent Booking Rate" column="SixMonthSubsequentBooking" aggregator="avg" visible="true" formatString="#0.0 %"/>
+					<Measure name="Subsequent Booking Rate" column="SixMonthSubsequentBooking" aggregator="avg" visible="true" formatString="#0.0 %"/>
+					<Measure name="Subsequent Booking Count" column="SixMonthSubsequentBooking" aggregator="sum" visible="true"/>
           <Measure name="Average # Prior Interactions in Past 6 Months" column="PriorInteractions6Months" aggregator="avg" visible="true" formatString="0.00"/>
           <Measure name="Average # Prior Interactions in Past 12 Months" column="PriorInteractions12Months" aggregator="avg" visible="true" formatString="0.00"/>
           <Measure name="Average # Prior Interactions in Past 18 Months" column="PriorInteractions18Months" aggregator="avg" visible="true" formatString="0.00"/>
