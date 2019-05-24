@@ -840,10 +840,12 @@
 		<Attributes>
 			<Attribute name="AgencyID" keyColumn="AgencyID" hasHierarchy="false"/>
 			<Attribute name="AgencyCategory" keyColumn="AgencyCategory" hasHierarchy="false" caption="Agency"/>
+			<Attribute name="AgencyDescription" keyColumn="AgencyDescription" hasHierarchy="false" caption="Agency"/>
 		</Attributes>
 		<Hierarchies>
 			<Hierarchy name="ArrestAgency" visible="true" caption="Arrest Agency" allMemberName="All Agencies" allMemberCaption="All Agencies">
 				<Level attribute="AgencyCategory" caption="Agency"/>
+				<Level caption="Agency" attribute="AgencyDescription"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
