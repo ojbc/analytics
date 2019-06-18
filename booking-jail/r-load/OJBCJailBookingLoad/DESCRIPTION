@@ -8,7 +8,7 @@ Authors@R: person("Open Justice Broker Consortium", email = "info@ojbc.org",
 Description: This package contains functions useful for loading the analytical data store for booking/jail analytics.
 License: Reciprocal Public License, Version 1.5
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Imports: lazyeval,
 	evd, 
 	stringi,
