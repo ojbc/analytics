@@ -25,7 +25,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jodatime-version>2.6</jodatime-version>
     <mock-javamail-version>1.9</mock-javamail-version>
-    <junit-version>4.11</junit-version>
+    <junit-version>4.13.1</junit-version>
   </properties>
 
   <dependencies>
