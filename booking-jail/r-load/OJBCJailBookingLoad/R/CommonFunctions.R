@@ -15,10 +15,11 @@
 # Common functions for package
 
 #' @import stringr
-#' @import RMySQL
+#' @import RMariaDB
 #' @importFrom readr write_delim
 #' @export
-writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk = FALSE, writeToDatabase=TRUE, forceConnectionType=NULL) {
+writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk = FALSE, localBulk = TRUE,
+                                     writeToDatabase=TRUE, forceConnectionType=NULL) {
 
   # replacing dbWriteTable with our own, because found it to be buggy and inconsistent across platforms...
   #dbWriteTable(conn, tableName, x, row.names=FALSE, append=append)
@@ -49,90 +50,101 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
     }
     ret
   }
-
-  if (viaBulk) {
-    cc <- class(conn)
-    if (!is.null(forceConnectionType)) {
-      cc <- forceConnectionType
-    }
-    f <- NULL
-    if (Sys.info()['sysname'] == 'Windows') {
-      f <- gsub(x=tempfile(tmpdir='C:/dev', pattern=tableName), pattern='\\\\', replacement='/')
-    } else {
-      f <- tempfile(tmpdir = "/tmp", pattern = tableName)
-    }
-    if ('MySQLConnection'==cc) {
-      if (nrow(x) > 0) {
-        if (!append) {
-          executeSQL(paste0("delete from ", tableName))
-        }
-
-        write_delim(x=x, path=f, na="\\N", delim="|", col_names=FALSE)
-        cn <- colnames(x)
-        dateCols <- as.vector(sapply(x, function(col) {inherits(col, "Date")}))
-        cne <- cn
-        cne[dateCols] <- paste0('@', cne[dateCols])
-        setString <- ""
-        fieldList <-  paste0("(", paste0(cne, collapse=','), ")")
-        if (any(dateCols)) {
-          setString <- paste0("set ", paste0(cn[dateCols], "=str_to_date(", cne[dateCols], ", '%Y-%m-%d')", collapse=","))
+  
+  if (!is.null(x)) {
+    
+    if (viaBulk) {
+      cc <- class(conn)
+      if (!is.null(forceConnectionType)) {
+        cc <- forceConnectionType
+      }
+      f <- NULL
+      if (Sys.info()['sysname'] == 'Windows') {
+        f <- gsub(x=tempfile(tmpdir='C:/dev', pattern=tableName), pattern='\\\\', replacement='/')
+      } else {
+        f <- tempfile(tmpdir = "/tmp", pattern = tableName)
+      }
+      if ('MariaDBConnection'==cc) {
+        if (nrow(x) > 0) {
+          if (!append) {
+            executeSQL(paste0("delete from ", tableName))
+          }
+          
+          write_delim(x=x, path=f, na="\\N", delim="|", col_names=FALSE)
+          cn <- colnames(x)
+          dateCols <- as.vector(sapply(x, function(col) {inherits(col, "Date")}))
+          cne <- cn
+          cne[dateCols] <- paste0('@', cne[dateCols])
+          setString <- ""
           fieldList <-  paste0("(", paste0(cne, collapse=','), ")")
+          if (any(dateCols)) {
+            setString <- paste0("set ", paste0(cn[dateCols], "=str_to_date(", cne[dateCols], ", '%Y-%m-%d')", collapse=","))
+            fieldList <-  paste0("(", paste0(cne, collapse=','), ")")
+          }
+          
+          localQualifier <- ''
+          if (!localBulk) {
+            localQualifier <- ' local '
+          }
+          
+          sql <- paste0("load data ", localQualifier, " infile '", f, "' into table ", tableName,
+                        " fields terminated by \"|\" ", fieldList, " ", setString)
+          executeSQL(sql)
+          if (writeToDatabase) {
+            file.remove(f)
+          }
         }
-
-        sql <- paste0("load data infile '", f, "' into table ", tableName, " fields terminated by \"|\" ", fieldList, " ", setString)
-        executeSQL(sql)
-        if (writeToDatabase) {
-          file.remove(f)
+      } else if ('SQLServerConnection'==cc) {
+        if (nrow(x) > 0) {
+          if (!append) {
+            executeSQL(paste0("delete from ", tableName))
+          }
+          
+          x <- select_(x, .dots=dbListFields(conn, tableName))
+          
+          if (any(sapply(x, is.logical))) {
+            x <- mutate_if(x, is.logical, "as.integer")
+          }
+          
+          # To avoid the scientific notation. Ideally, we should use the options(scipen=999)
+          # but in readr version 1.0.0, it does not for write_delim -HW.
+          
+          x <- mutate_if(x, function(col) is.numeric(col), function(v) ifelse(is.na(v), NA, trimws(format(v, scientific=FALSE))))
+          
+          write_delim(x=x, path=f, na="", delim="|", col_names=FALSE)
+          
+          sql <- paste0("BULK INSERT ", tableName, " FROM '" , f, "' WITH ( KEEPIDENTITY, FIELDTERMINATOR ='|', ROWTERMINATOR ='\n' ) ")
+          executeSQL(sql)
+          if (writeToDatabase) {
+            file.remove(f)
+          }
         }
+      }else {
+        stop(paste0("Bulk loading on unsupported database: ", cc))
       }
-    } else if ('SQLServerConnection'==cc) {
+    }
+    else {
+      
+      x <- as.data.frame(x)
       if (nrow(x) > 0) {
         if (!append) {
           executeSQL(paste0("delete from ", tableName))
         }
-
-        x <- select_(x, .dots=dbListFields(conn, tableName))
-
-        if (any(sapply(x, is.logical))) {
-          x <- mutate_if(x, is.logical, "as.integer")
+        colNames <- colnames(x)
+        colCount <- length(colNames)
+        for (r in 1:nrow(x)) {
+          sql <- paste0("insert into ", tableName, " (", paste0(colNames, collapse=","), ") values (")
+          for (c in 1:colCount) {
+            sql <- paste0(sql, formatValue(x[r,c]), ifelse(c == colCount, ")", ","))
+          }
+          executeSQL(sql)
         }
-
-        # To avoid the scientific notation. Ideally, we should use the options(scipen=999)
-        # but in readr version 1.0.0, it does not for write_delim -HW.
-
-        x <- mutate_if(x, function(col) is.numeric(col), function(v) ifelse(is.na(v), NA, trimws(format(v, scientific=FALSE))))
-
-        write_delim(x=x, path=f, na="", delim="|", col_names=FALSE)
-
-        sql <- paste0("BULK INSERT ", tableName, " FROM '" , f, "' WITH ( KEEPIDENTITY, FIELDTERMINATOR ='|', ROWTERMINATOR ='\n' ) ")
-        executeSQL(sql)
-        if (writeToDatabase) {
-          file.remove(f)
-        }
-      }
-    }else {
-      stop(paste0("Bulk loading on unsupported database: ", cc))
-    }
-  }
-  else {
-
-    x <- as.data.frame(x)
-    if (nrow(x) > 0) {
-      if (!append) {
-        executeSQL(paste0("delete from ", tableName))
-      }
-      colNames <- colnames(x)
-      colCount <- length(colNames)
-      for (r in 1:nrow(x)) {
-        sql <- paste0("insert into ", tableName, " (", paste0(colNames, collapse=","), ") values (")
-        for (c in 1:colCount) {
-          sql <- paste0(sql, formatValue(x[r,c]), ifelse(c == colCount, ")", ","))
-        }
-        executeSQL(sql)
       }
     }
   }
+  
   invisible()
+  
 }
 
 #' @import stringr

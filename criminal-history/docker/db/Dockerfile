@@ -1,4 +1,4 @@
-# 
+#
 # Unless explicitly acquired and licensed from Licensor under another license, the contents of
 # this file are subject to the Reciprocal Public License ("RPL") Version 1.5, or subsequent
 # versions as allowed by the RPL, and You may not copy or use this file in either source code
@@ -13,7 +13,7 @@
 # http://opensource.org/licenses/RPL-1.5
 #
 # Copyright 2012-2016 Open Justice Broker Consortium
-# 
+#
 
 # Docker image that installs mariadb (mysql) and loads the CCH data into the db
 # user is saiku
@@ -25,6 +25,8 @@ RUN apk add --update bash mariadb mariadb-client
 WORKDIR /usr
 
 RUN bin/mysql_install_db --user=root
+
+RUN sed -i s/skip-networking/#skip-networking/g /etc/my.cnf.d/mariadb-server.cnf
 
 COPY files/server-config.sh /tmp
 COPY files/ojbc_analytics_cch_maine.sql.gz /tmp

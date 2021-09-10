@@ -33,19 +33,27 @@
 #' @param percentAssessments Percentage of booked individuals that have Behavioral Health Assessments
 #' @param baseDate the "current date" for the database...the date from which the lookback period begins
 #' @param writeToDatabase whether to write to the database, or just create the data frames in the local environment (the return value)
+#' @param localDatabase whether the staging database is local to the machine where R is running, or FALSE if on a remote server
+#' @param averageDailyCrisisIncidents average number of crisis Incident records added per day
+#' @param seed seed for random number generation (to guarantee same data are generated in subsequent runs)
 #' @import DBI
 #' @import readr
 #' @import tidyr
 #' @import stringr
+#' @import tibble
+#' @import purrr
 #' @examples
-#' loadDemoStaging(connection=DBI::dbConnect(RMySQL::MySQL(), host="localhost", dbname="ojbc_booking_staging_demo", username="root"))
+#' stagingDfs <- loadDemoStaging(connection=DBI::dbConnect(RMariaDB::MariaDB(), host="mariadb", dbname="ojbc_booking_staging_demo", username="root"), localDatabase = FALSE)
 #' @export
 loadDemoStaging <- function(connection=NULL,
                             censusTractShapefileDSN=NA, censusTractShapefileLayer=NA, countyFIPSCode=NA,
                             censusTractPopulationFile=NA, lookbackDayCount=365, averageDailyBookingVolume=100,
                             percentPretrial=.39, percentSentenced=.01, averagePretrialStay=1.5,
                             averageSentenceStay=60, recidivismRate=.5, recidivistEpisodes=5, percentAssessments=.5,
-                            baseDate=Sys.Date(), writeToDatabase=TRUE) {
+                            baseDate=Sys.Date(), averageDailyCrisisIncidents=10, crisisRecidivismRate=.1,
+                            writeToDatabase=TRUE, localDatabase=TRUE, seed=12345) {
+
+  set.seed(seed)
 
   loadStartTime <- Sys.time()
 
@@ -63,91 +71,103 @@ loadDemoStaging <- function(connection=NULL,
   txTableList <- createTransactionTables(codeTableList, lookbackDayCount, averageDailyBookingVolume,
                                          percentPretrial, percentSentenced, averagePretrialStay,
                                          averageSentenceStay, recidivismRate, recidivistEpisodes, percentAssessments,
-                                         baseDate)
+                                         averageDailyCrisisIncidents, crisisRecidivismRate, baseDate)
 
   if (writeToDatabase) {
-    writeTablesToDatabase(stagingConnection, txTableList)
+    writeTablesToDatabase(stagingConnection, txTableList, localDatabase)
   } else {
     writeLines("writeToDatabase set to FALSE, therefore new tables not written to database")
   }
 
-  c(codeTableList, txTableList)
+  ret <- c(codeTableList, txTableList)
+
+  map(ret, as_tibble)
 
 }
 
 wipeCurrentDatabase <- function(stagingConnection) {
 
-  dbSendStatement(stagingConnection, "delete from Treatment")
-  dbSendStatement(stagingConnection, "delete from PrescribedMedication")
-  dbSendStatement(stagingConnection, "delete from BehavioralHealthAssessmentCategory")
-  dbSendStatement(stagingConnection, "delete from BehavioralHealthEvaluation")
-  dbSendStatement(stagingConnection, "delete from BehavioralHealthAssessment")
-  dbSendStatement(stagingConnection, "delete from BookingCharge")
-  dbSendStatement(stagingConnection, "delete from BookingArrest")
-  dbSendStatement(stagingConnection, "delete from CustodyRelease")
-  dbSendStatement(stagingConnection, "delete from CustodyStatusChangeCharge")
-  dbSendStatement(stagingConnection, "delete from CustodyStatusChangeArrest")
-  dbSendStatement(stagingConnection, "delete from CustodyStatusChange")
-  dbSendStatement(stagingConnection, "delete from Booking")
-  dbSendStatement(stagingConnection, "delete from Person")
-  dbSendStatement(stagingConnection, "delete from Location")
+  writeLines('Truncating current database...')
 
-  dbSendStatement(stagingConnection, "delete from Agency")
-  dbSendStatement(stagingConnection, "delete from AssessmentCategoryType")
-  dbSendStatement(stagingConnection, "delete from SupervisionUnitType")
-  dbSendStatement(stagingConnection, "delete from BondStatusType")
-  dbSendStatement(stagingConnection, "delete from BondType")
-  dbSendStatement(stagingConnection, "delete from ChargeClassType")
-  dbSendStatement(stagingConnection, "delete from DomicileStatusType")
-  dbSendStatement(stagingConnection, "delete from Facility")
-  dbSendStatement(stagingConnection, "delete from JurisdictionType")
-  dbSendStatement(stagingConnection, "delete from LanguageType")
-  dbSendStatement(stagingConnection, "delete from MedicaidStatusType")
-  dbSendStatement(stagingConnection, "delete from MilitaryServiceStatusType")
-  dbSendStatement(stagingConnection, "delete from PersonEthnicityType")
-  dbSendStatement(stagingConnection, "delete from PersonRaceType")
-  dbSendStatement(stagingConnection, "delete from PersonSexType")
-  dbSendStatement(stagingConnection, "delete from ProgramEligibilityType")
-  dbSendStatement(stagingConnection, "delete from SexOffenderStatusType")
-  dbSendStatement(stagingConnection, "delete from TreatmentStatusType")
-  dbSendStatement(stagingConnection, "delete from WorkReleaseStatusType")
-  dbSendStatement(stagingConnection, "delete from TreatmentAdmissionReasonType")
+  dbExecute(stagingConnection, 'set FOREIGN_KEY_CHECKS=0')
+
+  dbExecute(stagingConnection, "truncate Incident")
+  dbExecute(stagingConnection, "truncate IncidentResponseUnit")
+  dbExecute(stagingConnection, "truncate Treatment")
+  dbExecute(stagingConnection, "truncate PrescribedMedication")
+  dbExecute(stagingConnection, "truncate BehavioralHealthAssessmentCategory")
+  dbExecute(stagingConnection, "truncate BehavioralHealthEvaluation")
+  dbExecute(stagingConnection, "truncate BehavioralHealthAssessment")
+  dbExecute(stagingConnection, "truncate BookingCharge")
+  dbExecute(stagingConnection, "truncate BookingArrest")
+  dbExecute(stagingConnection, "truncate CustodyRelease")
+  dbExecute(stagingConnection, "truncate CustodyStatusChangeCharge")
+  dbExecute(stagingConnection, "truncate CustodyStatusChangeArrest")
+  dbExecute(stagingConnection, "truncate CustodyStatusChange")
+  dbExecute(stagingConnection, "truncate Booking")
+  dbExecute(stagingConnection, "truncate Person")
+  dbExecute(stagingConnection, "truncate Location")
+
+  dbExecute(stagingConnection, "truncate Agency")
+  dbExecute(stagingConnection, "truncate AssessmentCategoryType")
+  dbExecute(stagingConnection, "truncate SupervisionUnitType")
+  dbExecute(stagingConnection, "truncate BondStatusType")
+  dbExecute(stagingConnection, "truncate BondType")
+  dbExecute(stagingConnection, "truncate ChargeClassType")
+  dbExecute(stagingConnection, "truncate DomicileStatusType")
+  dbExecute(stagingConnection, "truncate Facility")
+  dbExecute(stagingConnection, "truncate JurisdictionType")
+  dbExecute(stagingConnection, "truncate LanguageType")
+  dbExecute(stagingConnection, "truncate MedicaidStatusType")
+  dbExecute(stagingConnection, "truncate MilitaryServiceStatusType")
+  dbExecute(stagingConnection, "truncate PersonEthnicityType")
+  dbExecute(stagingConnection, "truncate PersonRaceType")
+  dbExecute(stagingConnection, "truncate PersonSexType")
+  dbExecute(stagingConnection, "truncate ProgramEligibilityType")
+  dbExecute(stagingConnection, "truncate SexOffenderStatusType")
+  dbExecute(stagingConnection, "truncate TreatmentStatusType")
+  dbExecute(stagingConnection, "truncate WorkReleaseStatusType")
+  dbExecute(stagingConnection, "truncate TreatmentAdmissionReasonType")
+
+  writeLines('Truncation complete')
 
 }
 
-#' @import RMySQL
-writeTableToDatabase <- function(conn, tableName, df) {
+#' @import RMariaDB
+writeTableToDatabase <- function(conn, tableName, df, localDatabase) {
   writeLines(paste0("Writing table ", tableName, " to database..."))
-  writeDataFrameToDatabase(conn, df, tableName, viaBulk=TRUE, append=FALSE)
+  writeDataFrameToDatabase(conn, df, tableName, viaBulk=TRUE, localBulk=localDatabase, append=FALSE)
   writeLines("...done")
 }
 
-writeTablesToDatabase <- function(conn, txTables) {
-  writeTableToDatabase(conn, "Person", txTables$Person)
-  writeTableToDatabase(conn, "BehavioralHealthAssessment", txTables$BehavioralHealthAssessment)
-  writeTableToDatabase(conn, "BehavioralHealthEvaluation", txTables$BehavioralHealthEvaluation)
-  writeTableToDatabase(conn, "BehavioralHealthAssessmentCategory", txTables$BehavioralHealthAssessmentCategory)
-  writeTableToDatabase(conn, "PrescribedMedication", txTables$PrescribedMedication)
-  writeTableToDatabase(conn, "Treatment", txTables$Treatment)
-  writeTableToDatabase(conn, "Booking", txTables$Booking)
-  writeTableToDatabase(conn, "BookingArrest", txTables$BookingArrest)
-  writeTableToDatabase(conn, "BookingCharge", txTables$BookingCharge)
-  writeTableToDatabase(conn, "CustodyRelease", txTables$CustodyRelease)
-  writeTableToDatabase(conn, "CustodyStatusChange", txTables$CustodyStatusChange)
-  writeTableToDatabase(conn, "CustodyStatusChangeArrest", txTables$CustodyStatusChangeArrest)
-  writeTableToDatabase(conn, "CustodyStatusChangeCharge", txTables$CustodyStatusChangeCharge)
+writeTablesToDatabase <- function(conn, txTables, localDatabase) {
+  writeTableToDatabase(conn, "Person", txTables$Person, localDatabase)
+  writeTableToDatabase(conn, "BehavioralHealthAssessment", txTables$BehavioralHealthAssessment, localDatabase)
+  writeTableToDatabase(conn, "BehavioralHealthEvaluation", txTables$BehavioralHealthEvaluation, localDatabase)
+  writeTableToDatabase(conn, "BehavioralHealthAssessmentCategory", txTables$BehavioralHealthAssessmentCategory, localDatabase)
+  writeTableToDatabase(conn, "PrescribedMedication", txTables$PrescribedMedication, localDatabase)
+  writeTableToDatabase(conn, "Treatment", txTables$Treatment, localDatabase)
+  writeTableToDatabase(conn, "Booking", txTables$Booking, localDatabase)
+  writeTableToDatabase(conn, "BookingArrest", txTables$BookingArrest, localDatabase)
+  writeTableToDatabase(conn, "BookingCharge", txTables$BookingCharge, localDatabase)
+  writeTableToDatabase(conn, "CustodyRelease", txTables$CustodyRelease, localDatabase)
+  writeTableToDatabase(conn, "CustodyStatusChange", txTables$CustodyStatusChange, localDatabase)
+  writeTableToDatabase(conn, "CustodyStatusChangeArrest", txTables$CustodyStatusChangeArrest, localDatabase)
+  writeTableToDatabase(conn, "CustodyStatusChangeCharge", txTables$CustodyStatusChangeCharge, localDatabase)
+  writeTableToDatabase(conn, "Incident", txTables$Incident, localDatabase)
+  writeTableToDatabase(conn, "IncidentResponseUnit", txTables$IncidentResponseUnit, localDatabase)
 }
 
-#' @importFrom lubridate hour<- minute<- second<- ddays
+#' @importFrom lubridate hour<- minute<- second<- ddays now dseconds
 #' @import dplyr
 createTransactionTables <- function(codeTableList, lookbackDayCount, averageDailyBookingVolume,
                                     percentPretrial, percentSentenced, averagePretrialStay,
                                     averageSentenceStay, recidivismRate, recidivistEpisodes, percentAssessments,
-                                    baseDate) {
-
-  writeLines("Creating Booking Table...")
+                                    averageDailyCrisisIncidents, crisisRecidivismRate, baseDate) {
 
   ret <- list()
+
+  writeLines("Creating Booking Table...")
 
   dailyBookings <- sample((.9*averageDailyBookingVolume):(1.1*averageDailyBookingVolume), size=lookbackDayCount, replace=TRUE)
 
@@ -194,6 +214,8 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   second(ReleaseDateTime) <- sample(0:59, size=nn, replace = TRUE)
 
   df$BookingTimestamp <- NA
+  
+  df$BookingStatus <- sample(c('correct', 'InProcess', 'mistaken'), size=nn, replace = TRUE, prob = c(.92, .05, .03))
 
   ret$Booking <- df %>% select(-DaysAgo, -LengthOfStay, -ReleaseDay, -Disposition)
 
@@ -216,14 +238,177 @@ createTransactionTables <- function(codeTableList, lookbackDayCount, averageDail
   bookingID <- seq(nrow(ret$Booking))
   ret$Booking$BookingID <- bookingID
 
-  writeLines("Created Person table")
+  writeLines(paste0("Created Person table for Bookings with ", nrow(Person), " records"))
 
-  bhTableList <- buildBehavioralHealthTables(Person$PersonID, df$BookingDate, percentAssessments, codeTableList)
+  writeLines("Creating Incident Table...")
+
+  dailyIncidents <- sample((.5*averageDailyCrisisIncidents):(1.3*averageDailyCrisisIncidents), size=lookbackDayCount, replace=TRUE)
+  day <- rep(seq_along(dailyIncidents), dailyIncidents)
+  lastPersonID <- max(Person$PersonID)
+
+  agencyNames <- codeTableList$Agency$AgencyDescription
+
+  Incident <- tibble(IncidentReportedDate=baseDate - ddays(day)) %>%
+    mutate(
+      IncidentID=row_number(),
+      IncidentNumber=paste0("I", formatC(IncidentID, width=12, flag="0", format="d")),
+      IncidentReportedTime=paste0(
+        str_pad(sample(0:23, size=n(), replace = TRUE), 2, 'left', '0'), ':',
+        str_pad(sample(0:59, size=n(), replace = TRUE), 2, 'left', '0'), ':',
+        str_pad(sample(0:59, size=n(), replace = TRUE), 2, 'left', '0')),
+      IncidentTimeSpanText=NA_character_,
+      OfficerCount=sample(1:5, size=n(), replace=TRUE, prob=c(.3, .3, .2, .15, .05)),
+      DispositionLocation=sample(
+        c('Eastside Hospital', 'Downtown Hospital ER', 'Northend Crisis Center', '#$FHSDUKJddf1'),
+        size=n(), replace=TRUE, prob=c(.3, .3, .3, .1)
+      ),
+      CallNature=sample(
+        c('Wellness Check', 'Domestic Violence', 'Threats', 'Medical', 'sdfd939sfg##$'),
+        size=n(), replace=TRUE, prob=c(.2, .3, .2, .15, .05)
+      ),
+      PendingCriminalCharges=sample(
+        c('Crisis Hold', 'Juvenile', 'Other'),
+        size=n(), replace=TRUE, prob=c(.7, .2, .1)
+      ),
+      LocationID=NA_integer_,
+      PersonID=lastPersonID + IncidentID,
+      PersonUniqueIdentifier=PersonID,
+      ReportingAgency=sample(agencyNames, size=n(), replace=TRUE),
+      SubstanceAbuseInvolvementIndicator=rbinom(size=1, n=n(), prob=.4),
+      CrisisInterventionTeamInvolvementIndicator=rbinom(size=1, n=n(), prob=.65),
+      OffenseSeverityText=NA_character_
+    )
+  
+  timeSpanIncidents <- sample_frac(Incident, .2)
+  Incident <- Incident %>% anti_join(timeSpanIncidents, by='IncidentID') %>% bind_rows(
+    timeSpanIncidents %>% mutate(
+      IncidentReportedTime=NA_character_,
+      IncidentTimeSpanText=sample(
+        c('6:30AM-1PM', '1PM-2AM', '2AM-6:30AM'),
+        size=n(), replace=TRUE, prob=c(.2, .5, .3)
+      )
+    )
+  )
+
+  IncidentPerson <- Incident %>%
+    select(IncidentID, IncidentReportedDate) %>%
+    sample_frac(crisisRecidivismRate) %>%
+    mutate(IncidentReportedDate=IncidentReportedDate - ddays(sample(7:lookbackDayCount, size=n()))) %>%
+    inner_join(
+      Incident %>% select(IncidentReportedDate, PriorPersonUniqueIdentifier=PersonID),
+      by='IncidentReportedDate'
+    ) %>%
+    group_by(IncidentID) %>%
+    sample_n(1) %>%
+    select(IncidentID, PriorPersonUniqueIdentifier)
+
+  if (nrow(IncidentPerson) > 0) {
+    Incident <- Incident %>% left_join(IncidentPerson, by='IncidentID') %>%
+      mutate(PersonUniqueIdentifier=case_when(!is.na(PriorPersonUniqueIdentifier) ~ PriorPersonUniqueIdentifier,
+                                              TRUE ~ PersonUniqueIdentifier)) %>%
+      select(-PriorPersonUniqueIdentifier)
+    writeLines(paste0('Added ', nrow(IncidentPerson), ' crisis recidivist records'))
+  } else {
+    writeLines('Note: no crisis recidivists generated...sample set too small')
+  }
+
+  IncidentPerson <- Incident %>%
+    select(PersonID, PersonUniqueIdentifier)
+
+  actualPersonDf <- buildActualPersonTable(codeTableList, unique(IncidentPerson$PersonUniqueIdentifier), baseDate)
+
+  IncidentPerson <- IncidentPerson %>% inner_join(actualPersonDf, by=c("PersonUniqueIdentifier"="PersonUniqueIdentifier")) %>%
+    mutate(PersonUniqueIdentifier=paste0("P", formatC(PersonUniqueIdentifier, width=16, flag="0"))) %>%
+    mutate(PersonUniqueIdentifier2=PersonUniqueIdentifier)
+  IncidentPerson$PersonTimestamp <- NA
+
+  Person <- Person %>% bind_rows(IncidentPerson)
+
+  IncidentTemp <- Incident %>%
+    select(-PersonUniqueIdentifier) %>%
+    inner_join(Person, by='PersonID') %>%
+    group_by(PersonUniqueIdentifier) %>%
+    filter(n()==1) %>%
+    ungroup() %>%
+    sample_frac(.05) %>%
+    select(PersonID)
+
+  PersonTemp <- Person %>%
+    semi_join(ret$Booking %>% sample_n(nrow(IncidentTemp)), by='PersonID') %>%
+    mutate(PersonID=IncidentTemp$PersonID) %>%
+    inner_join(Incident %>% select(PersonID, IncidentReportedDate), by='PersonID') %>%
+    mutate(PersonAgeAtEvent=(IncidentReportedDate - PersonBirthDate) / dyears(1)) %>%
+    select(-IncidentReportedDate)
+
+  Person <- Person %>% anti_join(PersonTemp, by='PersonID') %>%
+    bind_rows(PersonTemp)
+
+  maxPersonID = max(Person$PersonID)
+  maxIncidentID = max(Incident$IncidentID)
+  
+  updatedIncidents <- Incident %>% sample_frac(.05) %>% mutate(IncidentID=maxIncidentID + row_number())
+  updatedIncidentPersons <- Person %>% semi_join(updatedIncidents, by='PersonID') %>% mutate(newPersonID=maxPersonID + row_number())
+  updatedIncidents <- updatedIncidents %>% inner_join(updatedIncidentPersons %>% select(PersonID, newPersonID), by='PersonID') %>% mutate(PersonID=newPersonID) %>% select(-newPersonID)
+  updatedIncidentPersons <- updatedIncidentPersons %>% rename(PersonID=newPersonID)
+  
+  baseTimestamp = lubridate::now()
+  updateTimestamp = baseTimestamp + dseconds(100)
+  Incident <- bind_rows(Incident %>% mutate(IncidentTimestamp=format(baseTimestamp, "%Y-%m-%d %H:%M:%S")),
+                        updatedIncidents %>% mutate(IncidentTimestamp=format(updateTimestamp, "%Y-%m-%d %H:%M:%S"))) %>% ungroup()
+  Person <- bind_rows(Person, updatedIncidentPersons) %>% ungroup()
+  
+  writeLines(paste0('Updated Incident Persons with ', nrow(IncidentTemp), ' unique person IDs associated with bookings'))
+  writeLines(paste0('Updated Person table for ', nrow(IncidentPerson), ' Crisis Incident subjects'))
+  writeLines(paste0('Created Incident table with ', nrow(Incident), ' rows'))
+  writeLines(paste0('Incident table includes ', nrow(updatedIncidents), ' resubmissions of prior incidents'))
+  
+  Incident <- select(Incident, -PersonUniqueIdentifier)
+
+  writeLines('Creating IncidentResponseUnit table')
+
+  noUnitIncidents <- sample_frac(Incident, .2)
+  Incident <- Incident %>% anti_join(noUnitIncidents, by='IncidentID') %>% mutate(TotalOfficerTimeSeconds=NA_integer_)
+  
+  IncidentResponseUnit <- tibble(IncidentID=rep(Incident$IncidentID, sample(1:4, size=nrow(Incident), replace=TRUE))) %>%
+    inner_join(Incident %>% select(IncidentID, dd=IncidentReportedDate, tt=IncidentReportedTime), by='IncidentID')
+
+  IncidentResponseUnit <- suppressWarnings(
+    IncidentResponseUnit <- IncidentResponseUnit %>%
+      mutate(dd=case_when(is.na(dd) | is.na(tt) ~ as_datetime(NA), TRUE ~ ymd_hms(paste0(format(dd, '%Y-%m-%d'), ' ', tt)))) %>%
+      select(-tt)
+  )
+
+  IncidentResponseUnit <- IncidentResponseUnit %>%
+    mutate(dda=dd - dminutes(sample(seq(0, 60), size=n(), replace=TRUE)), ddc=dda + dminutes(sample(seq(5, 60*2), size=n(), replace=TRUE))) %>%
+    mutate(UnitArrivalDate=as_date(dda), UnitArrivalTime=format(dda, '%H:%M:%S'),
+           UnitClearDate=as_date(ddc), UnitClearTime=format(ddc, '%H:%M:%S')) %>%
+    select(-dda, -ddc, -dd) %>%
+    mutate(UnitIdentifier=paste0('Unit ', sample(1:8, size=n(), replace=TRUE))) %>%
+    mutate(IncidentResponseUnitID=row_number())
+
+  writeLines(paste0('Created IncidentResponseUnit table with ', nrow(IncidentResponseUnit), ' rows'))
+  
+  Incident <- Incident %>% bind_rows(
+    noUnitIncidents %>% mutate(
+      TotalOfficerTimeSeconds=60*sample(1:90, size=n(), replace=TRUE)
+    )
+  )
+  
+  ret$Incident <- Incident
+  ret$Person <- Person
+  ret$IncidentResponseUnit <- IncidentResponseUnit
+
+  tdf <- bind_rows(
+    df %>% select(PersonID, EventDate=BookingDate),
+    Incident %>% select(PersonID, EventDate=IncidentReportedDate)
+  )
+
+  bhTableList <- buildBehavioralHealthTables(tdf$PersonID, tdf$EventDate, percentAssessments, codeTableList)
   ret <- c(ret, bhTableList)
 
   bookingChildTableList <- buildBookingChildTables(bookingID, ret$Booking$BookingNumber, ReleaseDateTime, codeTableList)
   ret <- c(ret, bookingChildTableList)
-
+  
   chargeDf <- bookingChildTableList$BookingCharge
   maxArrestID <- max(chargeDf$BookingArrestID)
   arrestDf <- bookingChildTableList$BookingArrest
@@ -321,6 +506,8 @@ buildChangeTables <- function(txTableList, codeTableList) {
 
   changedBookings$PersonID <- ChangedPerson$PersonID
   changedBookings$CustodyStatusChangeTimestamp <- NA
+  
+  changedBookings <- changedBookings
 
   ret$CustodyStatusChange <- changedBookings
   writeLines(paste0("Created CustodyStatusChange table with ", nrow(changedBookings), " rows."))
@@ -418,8 +605,8 @@ buildBookingChildTables <- function(bookingID, bookingNumber, releaseDateTime, c
 }
 
 #' @importFrom dplyr sample_frac mutate select left_join
-#' @importFrom lubridate ddays %--% days
-buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessments, codeTableList,
+#' @importFrom lubridate ddays
+buildBehavioralHealthTables <- function(PersonID, EventDate, percentAssessments, codeTableList,
                                         startingBehavioralHealthAssessmentID=1,
                                         startingTreatmentID=1,
                                         startingBehavioralHealthEvaluationID=1,
@@ -431,17 +618,17 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
   ret <- list()
 
   # 50% of inmates have BH issues
-  bha <- data.frame(PersonID, BookingDate) %>%
+  bha <- data.frame(PersonID, EventDate) %>%
     sample_frac(percentAssessments)
 
   recs <- nrow(bha)
 
-  bha$CareEpisodeStartDate <- as.Date(bha$BookingDate - ddays(rchisq(n=recs, df=90)))
+  bha$CareEpisodeStartDate <- as.Date(bha$EventDate - ddays(rchisq(n=recs, df=90)))
   bha$CareEpisodeEndDate <- as.Date(bha$CareEpisodeStartDate + ddays(rchisq(n=recs, df=45)))
 
   bha <- bha %>%
-    mutate(CareEpisodeEndDate=replace(CareEpisodeEndDate, CareEpisodeEndDate > BookingDate, NA)) %>%
-    select(-BookingDate)
+    mutate(CareEpisodeEndDate=replace(CareEpisodeEndDate, CareEpisodeEndDate > EventDate, NA)) %>%
+    select(-EventDate)
 
   bha[sample(recs, recs*.1), 'CareEpisodeEndDate'] <- NA
 
@@ -465,7 +652,7 @@ buildBehavioralHealthTables <- function(PersonID, BookingDate, percentAssessment
 
   tmt <- data.frame(BehavioralHealthAssessmentID=bhaIDs) %>%
     left_join(tmt, by=c("BehavioralHealthAssessmentID"="BehavioralHealthAssessmentID")) %>%
-    mutate(EpisodeLength=(CareEpisodeStartDate %--% CareEpisodeEndDate) %/% days(1)) %>%
+    mutate(EpisodeLength=(CareEpisodeEndDate - CareEpisodeStartDate) / ddays(1)) %>%
     mutate(EpisodeLength=ifelse(is.na(EpisodeLength), -1, EpisodeLength))
 
   recs <- nrow(tmt)
@@ -571,7 +758,7 @@ generateRandomLabelFromDimensionalCodeTable <- function(codeTableName, n) {
   ret
 }
 
-#' @importFrom lubridate dyears %--% years
+#' @importFrom lubridate dyears as_date
 buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDate) {
 
   ret <- data.frame(PersonUniqueIdentifier)
@@ -580,8 +767,10 @@ buildActualPersonTable <- function(codeTableList, PersonUniqueIdentifier, baseDa
 
   birthdates <- baseDate - dyears(generateRandomArresteeAges(23, nPeople))
 
-  ret$PersonBirthDate <- as.Date(birthdates)
-  ret$PersonAgeAtBooking <- as.integer((birthdates %--% baseDate) %/% years(1) - 1)
+  birthdates <- as_date(birthdates)
+  ret$PersonBirthDate <- birthdates
+
+  ret$PersonAgeAtEvent <- as.integer((baseDate - birthdates) / dyears(1) - 1)
   # recode 1 in 50 birthdates as NA, to simulate missing birthdates
   ret[sample(nPeople, as.integer(nPeople/50)), 'PersonBirthDate'] <- NA
 

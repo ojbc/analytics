@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<architect-project version="1.0" appversion="1.0.8">
+ <project-name>OJBCommunityCorrectionsStagingModel</project-name>
+ <print-settings numCopies="1" zoom="1.0" pageNumbersPrinted="true" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
+ <project-data-sources>
+  <data-source id="DS0">
+   <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="PlayPen Database" />
+   <property key="JDBC URL" value="jdbc:mysql://localhost:3306/rapback" />
+   <property key="UID" value="root" />
+   <property key="PWD" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.database" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.port" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.hostname" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.repos.login" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.repos.password" value="" />
+  </data-source>
+ </project-data-sources>
+ <source-databases>
+ </source-databases>
+ <target-database id="ppdb" dbcs-ref="DS0">
+  <table id="TAB1" populated="true" UUID="f956ad6e-f917-41e8-8bf8-0e870dd64a43" name="Arrest" objectType="TABLE" physicalName="Arrest" >
+   <remarks></remarks>
+   <folder id="FOLTAB11" populated="true" name="Columns" physicalName="Columns" type="1">
+    <column id="COL2" populated="true" UUID="b8ae88e3-64fe-491b-b3ff-06753c531422" autoIncrement="true" autoIncrementSequenceName="Arrest_ArrestID_seq" defaultValue="" name="ArrestID" nullable="0" physicalName="ArrestID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+     <remarks></remarks>
+    </column>
+    <column id="COL3" populated="true" UUID="9cbc322d-b395-48ab-b23b-8b476e2a755d" autoIncrement="false" autoIncrementSequenceName="Arrest_ArrestIdentification_seq" defaultValue="" name="ArrestIdentification" nullable="0" physicalName="ArrestIdentification" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL4" populated="true" UUID="a6840d38-8149-4a78-ad29-d92ecb6436d2" autoIncrement="false" defaultValue="" name="PersonUniqueIdentifier" nullable="0" physicalName="PersonUniqueIdentifier" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL5" populated="true" UUID="991ad775-2c35-415b-b6db-209974f0e68d" autoIncrement="false" autoIncrementSequenceName="ArrestAgencyID_ArrestAgencyORI_seq" defaultValue="" name="ArrestAgencyORI" nullable="0" physicalName="ArrestAgencyORI" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL6" populated="true" UUID="205c1369-e252-4d63-8a37-1670fd596491" autoIncrement="false" autoIncrementSequenceName="Arrest_AttorneyGeneralCaseIndicator_seq" defaultValue="" name="AttorneyGeneralCaseIndicator" nullable="1" physicalName="AttorneyGeneralCaseIndicator" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+     <remarks></remarks>
+    </column>
+    <column id="COL7" populated="true" UUID="79efd6a8-5ec1-40c1-8e75-552208a05c04" autoIncrement="false" autoIncrementSequenceName="Arrest_RecordCategoryText_seq" defaultValue="" name="RecordCategoryText" nullable="1" physicalName="RecordCategoryText" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL8" populated="true" UUID="3fd7331c-8c96-407f-bf02-9a81aac0e34d" autoIncrement="false" autoIncrementSequenceName="Arrest_ArrestDate_seq" defaultValue="" name="ArrestDate" nullable="1" physicalName="ArrestDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+     <remarks></remarks>
+    </column>
+    <column id="COL9" populated="true" UUID="bb1ce900-652d-483c-8fca-0aa27e6321ea" autoIncrement="false" autoIncrementSequenceName="Arrest_BookingDate_seq" defaultValue="" name="BookingDate" nullable="1" physicalName="BookingDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+     <remarks></remarks>
+    </column>
+    <column id="COL10" populated="true" UUID="e27d6408-3453-4744-944c-2ed7b5318328" autoIncrement="false" autoIncrementSequenceName="Arrest_BookingTime_seq" defaultValue="" name="BookingTime" nullable="1" physicalName="BookingTime" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="92" userDefinedTypeUUID="10d6960f-169d-47c2-860a-37341342b1d5" >
+     <remarks></remarks>
+    </column>
+    <column id="COL11" populated="true" UUID="8e30b4b5-a487-48ef-8ad3-c373732080b8" autoIncrement="false" autoIncrementSequenceName="Arrest_ArrestLocationDescription_seq" defaultValue="" name="ArrestLocationDescription" nullable="1" physicalName="ArrestLocationDescription" precision="200" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL12" populated="true" UUID="3d57d6b8-287d-4ee8-90f7-0e3883706f7d" autoIncrement="false" autoIncrementSequenceName="Arrest_ArrestLocationLocaleDistrict_seq" defaultValue="" name="ArrestLocationLocaleDistrict" nullable="1" physicalName="ArrestLocationLocaleDistrict" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL13" populated="true" UUID="6288cc2b-470d-434f-ab67-962ccdbd5c6f" autoIncrement="false" autoIncrementSequenceName="Arrest_ArrestLocationLocalePoliceBeat_seq" defaultValue="" name="ArrestLocationLocalePoliceBeat" nullable="1" physicalName="ArrestLocationLocalePoliceBeat" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL14" populated="true" UUID="2e1e2b5b-72fc-40f7-a6b6-43241ec93590" autoIncrement="false" autoIncrementSequenceName="Arrest_ArrestLocationLatitude_seq" defaultValue="" name="ArrestLocationLatitude" nullable="1" physicalName="ArrestLocationLatitude" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="8" userDefinedTypeUUID="4fc90970-b2e5-41dd-911c-cc605d87e7a8" >
+     <remarks></remarks>
+    </column>
+    <column id="COL15" populated="true" UUID="d76368c3-e64b-4ee2-b5bc-d293057239a5" autoIncrement="false" autoIncrementSequenceName="Arrest_ArrestLocationLongitude_seq" defaultValue="" name="ArrestLocationLongitude" nullable="1" physicalName="ArrestLocationLongitude" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="8" userDefinedTypeUUID="4fc90970-b2e5-41dd-911c-cc605d87e7a8" >
+     <remarks></remarks>
+    </column>
+    <column id="COL16" populated="true" UUID="d397e6f7-ba43-4eab-9f75-8065b432a2a2" autoIncrement="false" autoIncrementSequenceName="Arrest_ArrestOfficialBadgeId_seq" defaultValue="" name="ArrestOfficialBadgeId" nullable="1" physicalName="ArrestOfficialBadgeId" precision="50" referenceCount="1" scale="0" source-column-ref="COL13" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL17" populated="true" UUID="59188cf7-ed1b-495a-97be-751e3fb2a844" autoIncrement="false" defaultValue="" name="ArrestProbableCause" nullable="1" physicalName="ArrestProbableCause" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL18" populated="true" UUID="ed47221d-2f42-44c6-aa6c-d0919bc9c91b" autoIncrement="false" defaultValue="" name="ArrestSummonsIndicator" nullable="0" physicalName="ArrestSummonsIndicator" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+     <remarks></remarks>
+    </column>
+    <column id="COL19" populated="true" UUID="eaf3781d-f4cc-48dc-8080-3bf72d40466f" autoIncrement="false" defaultValue="" name="BookingReleaseDate" nullable="1" physicalName="BookingReleaseDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+     <remarks></remarks>
+    </column>
+    <column id="COL20" populated="true" UUID="62e9847e-34f7-4de8-8145-83fe49d1cbee" autoIncrement="false" defaultValue="" name="BookingReleaseTime" nullable="1" physicalName="BookingReleaseTime" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="92" userDefinedTypeUUID="10d6960f-169d-47c2-860a-37341342b1d5" >
+     <remarks></remarks>
+    </column>
+    <column id="COL21" populated="true" UUID="0dd404c7-abbf-40c1-8607-1117d8a2bb44" autoIncrement="false" defaultValue="" name="BookingSubjectCustodyTransferDate" nullable="1" physicalName="BookingSubjectCustodyTransferDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+     <remarks></remarks>
+    </column>
+    <column id="COL22" populated="true" UUID="af7ecf0c-c42c-4d73-9357-b18c66854604" autoIncrement="false" defaultValue="" name="BookingSubjectCustodyTransferTime" nullable="1" physicalName="BookingSubjectCustodyTransferTime" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="92" userDefinedTypeUUID="10d6960f-169d-47c2-860a-37341342b1d5" >
+     <remarks></remarks>
+    </column>
+    <column id="COL23" populated="true" UUID="509cff94-8a46-422c-afde-c2a60a3875c3" autoIncrement="false" autoIncrementSequenceName="Arrestee_PersonBirthDate_seq" defaultValue="" name="PersonBirthDate" nullable="1" physicalName="PersonBirthDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+     <remarks></remarks>
+    </column>
+    <column id="COL24" populated="true" UUID="f42508d5-d902-496c-a3b1-967d30ea88c1" autoIncrement="false" defaultValue="" name="PersonMaritalStatusText" nullable="1" physicalName="PersonMaritalStatusText" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL25" populated="true" UUID="fb038496-1013-480a-9c6e-1f10bc506551" autoIncrement="false" defaultValue="" name="PersonRaceText" nullable="1" physicalName="PersonRaceText" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL26" populated="true" UUID="65f1d14f-3f9b-42aa-bf5c-ac7bd4bfc6d3" autoIncrement="false" defaultValue="" name="PersonSexText" nullable="1" physicalName="PersonSexText" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL27" populated="true" UUID="96bddc09-b7e9-40e6-be41-382723ee7538" autoIncrement="false" defaultValue="" name="PersonUSCitizenIndicator" nullable="0" physicalName="PersonUSCitizenIndicator" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+     <remarks></remarks>
+    </column>
+    <column id="COL28" populated="true" UUID="e0269337-a0b1-44c6-b725-d1f4678e4f63" autoIncrement="false" autoIncrementSequenceName="Arrest_ArrestTimestamp_seq" defaultValue="now() " name="ArrestTimestamp" nullable="0" physicalName="ArrestTimestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+     <remarks></remarks>
+    </column>
+    </folder>
+    <folder id="FOLTAB13" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
+    </folder>
+    <folder id="FOLTAB12" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
+    </folder>
+    <folder id="FOLTAB14" populated="true" name="Indices" physicalName="Indices" type="4">
+    <index id="IDX29" populated="true" UUID="5b4cf9e3-7cda-440d-a308-0ee6ea1d8ec1" clustered="false" name="Arrest_ID" physicalName="arrest_id" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC30" populated="true" UUID="6c25354b-3430-4ef7-bc76-5dfdbf06e175" ascendingOrDescending="UNSPECIFIED" column-ref="COL2" name="ArrestID" physicalName="ArrestID" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB31" populated="true" UUID="2df4f4b7-7448-4568-bdbf-32e671ab0f35" name="ArrestCharge" objectType="TABLE" physicalName="ArrestCharge" >
+   <remarks></remarks>
+   <folder id="FOLTAB311" populated="true" name="Columns" physicalName="Columns" type="1">
+    <column id="COL32" populated="true" UUID="a1107c69-bb9a-438f-a711-aabcac355e18" autoIncrement="true" autoIncrementSequenceName="ArrestCharge_ArrestChargeID_seq" defaultValue="" name="ArrestChargeID" nullable="0" physicalName="ArrestChargeID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+     <remarks></remarks>
+    </column>
+    <column id="COL33" populated="true" UUID="13fb17e6-fc81-4427-85a5-2a6f487cab04" autoIncrement="false" autoIncrementSequenceName="Arrest_ArrestID_seq_1" defaultValue="" name="ArrestID" nullable="0" physicalName="ArrestID" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+     <remarks></remarks>
+    </column>
+    <column id="COL34" populated="true" UUID="44b48dfe-510f-46ce-a7d8-e6cb03d8b33d" autoIncrement="false" autoIncrementSequenceName="ArrestCharge_ArrestChargeSeverityText_seq" defaultValue="" name="ArrestChargeSeverityText" nullable="1" physicalName="ArrestChargeSeverityText" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL35" populated="true" UUID="f4f67dc3-ac57-4888-97b4-cb40fd2d003b" autoIncrement="false" autoIncrementSequenceName="ArrestCharge_ArrestChargeStatute_seq" defaultValue="" name="ArrestChargeStatute" nullable="1" physicalName="ArrestChargeStatute" precision="200" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL36" populated="true" UUID="88a64d8a-d209-4482-b691-304e2149d12d" autoIncrement="false" autoIncrementSequenceName="ArrestCharge_ArrestChargeStatuteDescriptionText_seq" defaultValue="" name="ArrestChargeStatuteDescriptionText" nullable="1" physicalName="ArrestChargeStatuteDescriptionText" precision="200" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL37" populated="true" UUID="1707cfcd-8915-4642-8d55-71b61b93b715" autoIncrement="false" autoIncrementSequenceName="ArrestCharge_ArrestChargeTimestamp_seq" defaultValue="now()" name="ArrestChargeTimestamp" nullable="0" physicalName="ArrestChargeTimestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+     <remarks></remarks>
+    </column>
+    </folder>
+    <folder id="FOLTAB313" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
+    </folder>
+    <folder id="FOLTAB312" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
+    </folder>
+    <folder id="FOLTAB314" populated="true" name="Indices" physicalName="Indices" type="4">
+    <index id="IDX38" populated="true" UUID="423f69ae-b8de-4b02-84b4-8cd6f49e82b4" clustered="false" name="ArrestChargeID" physicalName="arrestchargeid" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC39" populated="true" UUID="2a714d46-4b55-4bb3-922c-746a47eaeaa1" ascendingOrDescending="UNSPECIFIED" column-ref="COL32" name="ArrestChargeID" physicalName="ArrestChargeID" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB40" populated="true" UUID="8e9a7f15-4bc0-4e58-88fb-393c1b2bd931" name="ProbationSupervision" objectType="TABLE" physicalName="ProbationSupervision" >
+   <remarks></remarks>
+   <folder id="FOLTAB401" populated="true" name="Columns" physicalName="Columns" type="1">
+    <column id="COL41" populated="true" UUID="255316ef-104d-414f-949b-a9c9b6546f41" autoIncrement="true" autoIncrementSequenceName="ProbationSupervision_ProbationSupervisionID_seq" defaultValue="" name="ProbationSupervisionID" nullable="0" physicalName="ProbationSupervisionID" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+     <remarks></remarks>
+    </column>
+    <column id="COL42" populated="true" UUID="58ffa25b-92e1-4324-b999-9fc9ec4bf015" autoIncrement="false" autoIncrementSequenceName="ProbationSupervision_ProbationCaseIdentification_seq" defaultValue="" name="ProbationCaseIdentification" nullable="0" physicalName="ProbationCaseIdentification" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL43" populated="true" UUID="d87aeb95-a135-4d8c-9f23-23c31218f7d0" autoIncrement="false" defaultValue="" name="PersonUniqueIdentifier" nullable="0" physicalName="PersonUniqueIdentifier" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL44" populated="true" UUID="38994874-09c0-4290-b5a2-6130cdf37fba" autoIncrement="false" autoIncrementSequenceName="ProbationSupervision_ProbationSupervisionStatusDate_seq" defaultValue="" name="ProbationSupervisionStatusDate" nullable="0" physicalName="ProbationSupervisionStatusDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+     <remarks></remarks>
+    </column>
+    <column id="COL45" populated="true" UUID="3c728760-dd1f-49b6-8404-f72a31a62da4" autoIncrement="false" autoIncrementSequenceName="ProbationSupervision_SupervisionPersonStatus_seq" defaultValue="" name="SupervisionPersonStatus" nullable="1" physicalName="SupervisionPersonStatus" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL46" populated="true" UUID="728a15f9-2707-4ca7-a137-c7ecff27ed7d" autoIncrement="false" defaultValue="" name="SupervisionStartDate" nullable="1" physicalName="SupervisionStartDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+     <remarks></remarks>
+    </column>
+    <column id="COL47" populated="true" UUID="e7b1fe60-9eae-465c-8c7e-96d4ab815f7e" autoIncrement="false" autoIncrementSequenceName="ProbationSupervision_SupervisionEndDate_seq" defaultValue="" name="SupervisionEndDate" nullable="1" physicalName="SupervisionEndDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+     <remarks></remarks>
+    </column>
+    <column id="COL48" populated="true" UUID="1ed4bb2d-df89-4431-a4f7-12fc079b9789" autoIncrement="false" defaultValue="" name="SupervisionLevelText" nullable="1" physicalName="SupervisionLevelText" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL49" populated="true" UUID="2b8a2732-05c8-496d-a091-813ada3145d6" autoIncrement="false" defaultValue="" name="ProbationOfficerBadgeID" nullable="1" physicalName="ProbationOfficerBadgeID" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL50" populated="true" UUID="705ecf6e-60ad-485c-94d9-47560324ffeb" autoIncrement="false" defaultValue="" name="ProbationOfficerSupervisorBadgeID" nullable="1" physicalName="ProbationOfficerSupervisorBadgeID" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL51" populated="true" UUID="24b40c9c-ea58-429d-99d3-a1d35a624266" autoIncrement="false" defaultValue="" name="ProbationAgencyORI" nullable="1" physicalName="ProbationAgencyORI" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL52" populated="true" UUID="028ea50d-22ec-446e-9d8e-d12255d3350b" autoIncrement="false" defaultValue="" name="PersonBirthDate" nullable="1" physicalName="PersonBirthDate" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+     <remarks></remarks>
+    </column>
+    <column id="COL53" populated="true" UUID="67672d89-ab33-4a2c-b40c-dc24a5e72539" autoIncrement="false" defaultValue="" name="PersonRaceText" nullable="1" physicalName="PersonRaceText" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL54" populated="true" UUID="553b043b-e185-48e9-bb39-eb661ad18847" autoIncrement="false" defaultValue="" name="PersonSexText" nullable="1" physicalName="PersonSexText" precision="50" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL55" populated="true" UUID="6e64a59a-b14e-4ce5-8ddb-1bc5358e5bd5" autoIncrement="false" autoIncrementSequenceName="ProbationSupervision_ProbationCaseTimestamp_seq" defaultValue="now() " name="ProbationCaseTimestamp" nullable="0" physicalName="ProbationCaseTimestamp" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
+     <remarks></remarks>
+    </column>
+    </folder>
+    <folder id="FOLTAB403" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3">
+    </folder>
+    <folder id="FOLTAB402" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
+    </folder>
+    <folder id="FOLTAB404" populated="true" name="Indices" physicalName="Indices" type="4">
+    <index id="IDX56" populated="true" UUID="eb92c440-f376-4737-ab52-1a9b9be31995" clustered="false" name="ProbationSupervisionID" physicalName="probationsupervisionid" primaryKeyIndex="true" unique="false" >
+     <index-column id="IDC57" populated="true" UUID="c2395410-837e-4cc5-94a6-1c140253a446" ascendingOrDescending="UNSPECIFIED" column-ref="COL41" name="ProbationSupervisionID" physicalName="ProbationSupervisionID" />
+    </index>
+   </folder>
+  </table>
+  <relationships>
+   <relationship id="REL58" populated="true" UUID="cc9cbeae-73e3-4750-9d61-178bb6c1cca9" deferrability="7" deleteRule="3" fk-table-ref="TAB31" fkCardinality="7" identifying="false" name="Arrest_ArrestCharge_fk" physicalName="arrest_arrestcharge_fk" pk-table-ref="TAB1" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP59" populated="true" UUID="94bbedcb-16c3-48b1-9487-43a444beca19" fk-column-ref="COL33" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL2" />
+   </relationship>
+  </relationships>
+ </target-database>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false"> </ddl-generator>
+ <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
+ <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
+ <play-pen zoom="0.8408964152537145" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+  <table-pane table-ref="TAB1" x="517" y="20" bgColor="0xdfedce" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB31" x="41" y="36" bgColor="0xdfedce" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB40" x="61" y="249" bgColor="0xdfedce" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-link relationship-ref="REL58" pkConnection="0.24190064794816415" fkConnection="0.759493670886076" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
+ </play-pen>
+ <critic-manager>
+  <critic-grouping platformType="Generic" enabled="true">
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.PrimaryKeyCritic" severity="ERROR"/>
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.RelationshipMappingTypeCritic" severity="ERROR"/>
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.EmptyRelationshipCritic" severity="ERROR"/>
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.AlphaNumericNameCritic" severity="ERROR"/>
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.AlphaNumericSequenceNameCritic" severity="ERROR"/>
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.SetDefaultOnColumnWithNoDefaultCritic" severity="ERROR"/>
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.SetNullOnNonNullableColumnCritic" severity="ERROR"/>
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.DuplicateNameCritic" severity="ERROR"/>
+  </critic-grouping>
+  <critic-grouping platformType="DB2" enabled="true">
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.DB2UnsupportedFeaturesCritic" severity="ERROR"/>
+  </critic-grouping>
+  <critic-grouping platformType="H2" enabled="true">
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.H2UnsupportedFeaturesCritic" severity="ERROR"/>
+  </critic-grouping>
+  <critic-grouping platformType="HSQLDB" enabled="true">
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.HSQLDBUnsupportedFeaturesCritic" severity="ERROR"/>
+  </critic-grouping>
+  <critic-grouping platformType="MySQL" enabled="true">
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.MySQLCommentCritic" severity="ERROR"/>
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.MySQLReservedWordsCritic" severity="ERROR"/>
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.MySQLUnsupportedFeaturesCritic" severity="ERROR"/>
+  </critic-grouping>
+  <critic-grouping platformType="Oracle" enabled="true">
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.OraclePhysicalNameCritic" severity="ERROR"/>
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.OracleReservedWordsCritic" severity="ERROR"/>
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.OracleUnsupportedFeaturesCritic" severity="ERROR"/>
+  </critic-grouping>
+  <critic-grouping platformType="PostgreSQL" enabled="true">
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.PostgreSQLReservedWordsCritic" severity="ERROR"/>
+  </critic-grouping>
+  <critic-grouping platformType="SQL Server" enabled="true">
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.SQLServerUnsupportedFeaturesCritic" severity="ERROR"/>
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.SQLServerReservedWordsCritic" severity="ERROR"/>
+  </critic-grouping>
+  <critic-grouping platformType="SQL Server 2000" enabled="true">
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.SQLServer2000UnsupportedFeaturesCritic" severity="ERROR"/>
+  </critic-grouping>
+  <critic-grouping platformType="SQL Server 2005" enabled="true">
+   <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.SQLServer2005UnsupportedFeaturesCritic" severity="ERROR"/>
+  </critic-grouping>
+ </critic-manager>
+ <profiles topNCount="10">
+  </profiles>
+  <olap>
+  </olap>
+  <olap-gui>
+  </olap-gui>
+</architect-project>

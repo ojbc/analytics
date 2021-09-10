@@ -1,8 +1,10 @@
+**/.DS_Store
 /.project
 .Rproj.user
-.architect~
-.RData
-*.Rout
+**/*.architect~
+**/.RData
+**/*.Rout
+**/.Rhistory
 r-packages/OJBDashboardDemo_0.1.tar.gz
 r-packages/OJBDemoDashboard/man
 r-packages/OJBDashboardDemo.Rcheck
@@ -25,3 +27,6 @@ MondrianSchema.xml
 criminal-history/dashboard/target
 dashboard.war
 static-demo-data-secure.js
+CommunityCorrectionsMondrianSchema.xml
+ojbc_cc_dimensional_demo.sql.gz
+booking-jail/dashboards/target

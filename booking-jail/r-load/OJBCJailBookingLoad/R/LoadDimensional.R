@@ -12,75 +12,125 @@
 #
 # Copyright 2012-2016 Open Justice Broker Consortium
 
+# loadDimensionalDatabase(writeToDatabase = TRUE, localDatabase = FALSE, stagingConnectionBuilder=function() {DBI::dbConnect(RMariaDB::MariaDB(), host="mariadb", dbname="ojbc_booking_staging_demo", username="root")}, dimensionalConnectionBuilder=function() {DBI::dbConnect(RMariaDB::MariaDB(), host="mariadb", dbname="ojbc_booking_dimensional_demo", username="root")})
+
 defaultCodeTableSpreadsheetFile <- system.file("raw", "DimensionalCodeTables.xlsx", package=getPackageName())
 
-#' @importFrom RMySQL MySQL
+#' @importFrom RMariaDB MariaDB
 defaultStagingConnectionBuilder <- function() {
-  stagingConnection <- dbConnect(MySQL(), host="localhost", dbname="ojbc_booking_staging_demo", username="root")
+  stagingConnection <- dbConnect(MariaDB(), host="localhost", dbname="ojbc_booking_staging_demo", username="root")
   stagingConnection
 }
 
-#' @importFrom RMySQL MySQL
+#' @importFrom RMariaDB MariaDB
 defaultDimensionalConnectionBuilder <- function() {
-  adsConnection <- dbConnect(MySQL(), host="localhost", dbname="ojbc_booking_analytics_demo", username="root")
+  adsConnection <- dbConnect(MariaDB(), host="localhost", dbname="ojbc_booking_dimensional_demo", username="root")
   adsConnection
 }
 
 #' @importFrom openxlsx read.xlsx
-defaultEducationTextValueConverter <- function(textValues, unknownCodeTableValue) {
-  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='EducationLevelType')
+defaultTimeSpanTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['TimeSpanType']]
+  ret <- match(textValues, ct$TimeSpanTypeDescription)
+  ret[is.na(ret)] <- unknownCodeTableValue
+  ret
+}
+
+#' @importFrom openxlsx read.xlsx
+defaultReportingAgencyTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['Agency']]
+  ret <- match(textValues, ct$AgencyDescription)
+  ret[is.na(ret)] <- unknownCodeTableValue
+  ret
+}
+
+#' @importFrom openxlsx read.xlsx
+defaultUnitTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['RespondingUnitType']]
+  ret <- match(textValues, ct$RespondingUnitTypeDescription)
+  ret[is.na(ret)] <- unknownCodeTableValue
+  ret
+}
+
+#' @importFrom openxlsx read.xlsx
+defaultPendingCriminalChargesTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['PendingCriminalChargesType']]
+  ret <- match(textValues, ct$PendingCriminalChargesTypeDescription)
+  ret[is.na(ret)] <- unknownCodeTableValue
+  ret
+}
+
+#' @importFrom openxlsx read.xlsx
+defaultDispositionLocationTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['DispositionLocationType']]
+  ret <- match(textValues, ct$DispositionLocationTypeDescription)
+  ret[is.na(ret)] <- unknownCodeTableValue
+  ret
+}
+
+#' @importFrom openxlsx read.xlsx
+defaultCallNatureTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['CallNatureType']]
+  ret <- match(textValues, ct$CallNatureTypeDescription)
+  ret[is.na(ret)] <- unknownCodeTableValue
+  ret
+}
+
+#' @importFrom openxlsx read.xlsx
+defaultEducationTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['EducationLevelType']]
   ret <- match(textValues, ct$EducationLevelTypeDescription)
   ret[is.na(ret)] <- unknownCodeTableValue
   ret
 }
 
-defaultOccupationTextValueConverter <- function(textValues, unknownCodeTableValue) {
-  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='OccupationType')
+defaultOccupationTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['OccupationType']]
   ret <- match(textValues, ct$OccupationTypeDescription)
   ret[is.na(ret)] <- unknownCodeTableValue
   ret
 }
 
-defaultDiagnosisTextValueConverter <- function(textValues, unknownCodeTableValue) {
-  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='BehavioralHealthEvaluationType')
+defaultDiagnosisTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['BehavioralHealthEvaluationType']]
   ret <- match(textValues, ct$BehavioralHealthEvaluationTypeDescription)
   ret[is.na(ret)] <- unknownCodeTableValue
   ret
 }
 
-defaultMedicationTextValueConverter <- function(textValues, unknownCodeTableValue) {
-  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='MedicationType')
+defaultMedicationTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['MedicationType']]
   ret <- match(textValues, ct$MedicationTypeDescription)
   ret[is.na(ret)] <- unknownCodeTableValue
   ret
 }
 
-defaultDispositionTextConverter <- function(textValues, unknownCodeTableValue) {
-  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='ChargeDispositionType')
+defaultDispositionTextConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['ChargeDispositionType']]
   ret <- match(textValues, ct$ChargeDispositionTypeDescription)
   ret[is.na(ret)] <- unknownCodeTableValue
   ret
 }
 
-defaultChargeCodeTextConverter <- function(textValues, unknownCodeTableValue) {
-  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='ChargeType')
+defaultChargeCodeTextConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['ChargeType']]
   ret <- match(textValues, ct$ChargeTypeDescription)
   ret[is.na(ret)] <- unknownCodeTableValue
   ret
 }
 
-defaultProviderTextValueConverter <- function(textValues, unknownCodeTableValue) {
-  ct <- read.xlsx(defaultCodeTableSpreadsheetFile, sheet='TreatmentProviderType')
+defaultProviderTextValueConverter <- function(codeTableList, textValues, unknownCodeTableValue) {
+  ct <- codeTableList[['TreatmentProviderType']]
   ret <- match(textValues, ct$TreatmentProviderTypeDescription)
   ret[is.na(ret)] <- unknownCodeTableValue
   ret
 }
 
-defaultChargeDispositionAggregator <- function(BookingChargeDispositionDataFrame, unknownCodeTableValue) {
+defaultChargeDispositionAggregator <- function(codeTableList, BookingChargeDispositionDataFrame, unknownCodeTableValue) {
   df <- BookingChargeDispositionDataFrame %>%
     group_by(BookingID) %>%
     summarize(dispo=min(ChargeDisposition)) %>%
-    mutate(dispo=defaultDispositionTextConverter(dispo, unknownCodeTableValue))
+    mutate(dispo=defaultDispositionTextConverter(codeTableList, dispo, unknownCodeTableValue))
   df$dispo
 }
 
@@ -89,6 +139,12 @@ defaultPopulationTypeConverter <- function(adsConnection, unknownCodeTableValue,
     executeQuery(adsConnection, "update Person set PopulationTypeID=2")
     executeQuery(adsConnection, "update Person set PopulationTypeID=1  where PersonID in (select distinct PersonID from BehavioralHealthAssessment)")
   }
+}
+
+# by default, leave the booking classification on the JailEpisodes at the default (unknown) value.  we put this in to support the Adams County "muni charge" feature. Jurisdictions
+# can implement this to classify bookings (Jail Episodes) in whatever way they wish.
+defaultBookingClassificationAggregator <- function(adsConnection, codeTableList, unknownCodeTableValue) {
+  invisible()
 }
 
 #' @importFrom DBI dbGetQuery
@@ -117,7 +173,7 @@ getQuery <- function(conn, query, printSQL=FALSE) {
   if (printSQL) {
     writeLines(paste0("dbGetQuery: ", query))
   }
-  # suppressWarnings is necessary to avoid annoying type conversion warnings from the RMySQL driver
+  # suppressWarnings is necessary to avoid annoying type conversion warnings from the RMariaDB driver
   suppressWarnings(dbGetQuery(conn, query))
 }
 
@@ -164,12 +220,15 @@ translateCodeTableValue <- function(codeTableValueTranslator, stagingValue, code
   do.call(codeTableValueTranslator, args)
 }
 
+#' @importFrom lubridate ddays
 buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTime, currentLoadTime, currentStagingDate, loadHistoryID,
-                                   unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator, codeTableList, codeTableValueTranslator) {
+                                   unknownCodeTableValue, noneCodeTableValue, chargeDispositionAggregator,
+                                   codeTableList, codeTableValueTranslator) {
 
   buildTable <- function(StagingBookingDf, StagingBookingChargeDispositionDf, chargeDispositionAggregator, tableName) {
 
     totalRows <- nrow(StagingBookingDf)
+    writeLines(paste0('Building jail episode table from ', tableName, ' with ', totalRows, ' input rows'))
     StagingBookingDf <- filter(StagingBookingDf, BookingDate <= currentStagingDate)
     writeLines(paste0("Removing ", (totalRows - nrow(StagingBookingDf)), " ", tableName, " rows due to future Booking Date"))
 
@@ -186,22 +245,25 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
         EpisodeEndDateID=noneCodeTableValue,
         FacilityID=translateCodeTableValue(codeTableValueTranslator, FacilityID, "Facility", unknownCodeTableValue, codeTableList),
         SupervisionUnitTypeID=translateCodeTableValue(codeTableValueTranslator, SupervisionUnitTypeID, "SupervisionUnitType", unknownCodeTableValue, codeTableList),
-        DaysAgo=as.integer((EpisodeStartDate %--% currentStagingDate) %/% days(1)),
-        LengthOfStay=DaysAgo,
+        LengthOfStay=as.integer((currentStagingDate - EpisodeStartDate) / ddays(1)),
         SixMonthRebooking='N',
         OneYearRebooking='N',
         TwoYearRebooking='N',
         DaysSinceLastEpisode=NA,
         DaysUntilNextEpisode=NA,
+        BookingClassificationTypeID=unknownCodeTableValue,
         LoadHistoryID=loadHistoryID,
         StagingPK=pk)
 
     if (nrow(StagingBookingChargeDispositionDf)) {
+      
       writeLines(paste0("Aggregating ", nrow(StagingBookingChargeDispositionDf), " charge disposition records under ", tableName))
       args <- list()
+      args$codeTableList <- codeTableList
       args$BookingChargeDispositionDataFrame <- StagingBookingChargeDispositionDf
       args$unknownCodeTableValue <- unknownCodeTableValue
       JailEpisode$CaseStatusTypeID <- as.integer(do.call(chargeDispositionAggregator, args))
+      
     }
 
     JailEpisode
@@ -209,15 +271,17 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
   }
 
   ret <- list()
+  
+  sql <- paste0("select BookingNumber, BookingID, PersonID, BookingDate, BookingID as pk, ",
+                "FacilityID, SupervisionUnitTypeID, InmateJailResidentIndicator from Booking ",
+                " where BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and BookingStatus='correct'")
+  
+  Booking <- getQuery(stagingConnection, sql)
 
-  Booking <- getQuery(stagingConnection, paste0("select BookingNumber, BookingID, PersonID, BookingDate, BookingID as pk, ",
-                                                "FacilityID, SupervisionUnitTypeID, InmateJailResidentIndicator from Booking ",
-                                                " where BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
-
-  BookingChargeDisposition <- getQuery(stagingConnection, paste0("select Booking.BookingID, ChargeDisposition from ",
+  BookingChargeDisposition <- getQuery(stagingConnection, paste0("select Booking.BookingID, ChargeDisposition, BondStatusTypeID, ChargeClassTypeID, BookingCharge.AgencyID from ",
                                                                  "Booking left join BookingArrest on Booking.BookingID=BookingArrest.BookingID ",
                                                                  "left join BookingCharge on BookingArrest.BookingArrestID=BookingCharge.BookingArrestID ",
-                                                                 "where BookingDate <= '", currentStagingDate, "' and BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+                                                                 "where BookingDate <= '", currentStagingDate, "' and BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and BookingStatus='correct'"))
 
   ret$JailEpisode <- buildTable(Booking, BookingChargeDisposition, chargeDispositionAggregator, 'JailEpisode') %>%
     select(-StagingPK)
@@ -225,7 +289,7 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
   Booking <- getQuery(stagingConnection, paste0("select Booking.BookingNumber, CustodyStatusChange.BookingID, CustodyStatusChange.PersonID, CustodyStatusChange.BookingDate, ",
                                                 "CustodyStatusChange.FacilityID, CustodyStatusChange.SupervisionUnitTypeID, CustodyStatusChangeID as pk, ",
                                                 "CustodyStatusChange.InmateJailResidentIndicator from Booking, CustodyStatusChange ",
-                                                "where Booking.BookingID=CustodyStatusChange.BookingID and ",
+                                                "where Booking.BookingID=CustodyStatusChange.BookingID and CustodyStatusChange.BookingStatus='correct' and ",
                                                 "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' order by CustodyStatusChangeTimestamp"))
 
   # note that it is possible to have multiple CSC records for a single booking.  if this is the case, we take the most recent one.
@@ -233,11 +297,11 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
   Booking <- Booking %>% group_by(BookingID) %>% filter(row_number()==n()) %>% ungroup()
   writeLines(paste0("Removed ", total-nrow(Booking), " custody status change records that are replaced by a more recent custody status change"))
 
-  BookingChargeDisposition <- getQuery(stagingConnection, paste0("select CustodyStatusChange.BookingID, ChargeDisposition, CustodyStatusChange.CustodyStatusChangeID from ",
+  BookingChargeDisposition <- getQuery(stagingConnection, paste0("select CustodyStatusChange.BookingID, ChargeDisposition, BondStatusTypeID, ChargeClassTypeID, CustodyStatusChangeCharge.AgencyID, CustodyStatusChange.CustodyStatusChangeID from ",
                                                                  "Booking inner join CustodyStatusChange on Booking.BookingID=CustodyStatusChange.BookingID ",
                                                                  "left join CustodyStatusChangeArrest on CustodyStatusChange.CustodyStatusChangeID=CustodyStatusChangeArrest.CustodyStatusChangeID ",
                                                                  "left join CustodyStatusChangeCharge on CustodyStatusChangeArrest.CustodyStatusChangeArrestID=CustodyStatusChangeCharge.CustodyStatusChangeArrestID ",
-                                                                 "where CustodyStatusChange.BookingDate <= '", currentStagingDate, "' and CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' order by CustodyStatusChangeTimestamp"))
+                                                                 "where CustodyStatusChange.BookingDate <= '", currentStagingDate, "' and CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and CustodyStatusChange.BookingStatus='correct' order by CustodyStatusChangeTimestamp"))
 
   total <- nrow(BookingChargeDisposition)
   BookingChargeDisposition <- BookingChargeDisposition %>%
@@ -251,21 +315,37 @@ buildJailEpisodeTables <- function(stagingConnection, adsConnection, lastLoadTim
 
 }
 
-buildPersonTable <- function(stagingConnection, lastLoadTime, currentStagingDate, unknownCodeTableValue, educationTextValueConverter,
+#' @importFrom lubridate dyears
+buildPersonTableList <- function(stagingBookingConnection, stagingIncidentConnection, lastLoadTime, currentStagingDate, unknownCodeTableValue, educationTextValueConverter,
                              occupationTextValueConverter, codeTableList, codeTableValueTranslator) {
 
-  selectStatement <- paste0("select Person.PersonID as PersonID, PersonUniqueIdentifier, PersonUniqueIdentifier2, PersonAgeAtBooking, PersonBirthDate, ",
+  selectStatement <- paste0("select Person.PersonID as PersonID, PersonUniqueIdentifier, PersonUniqueIdentifier2, PersonAgeAtEvent, PersonBirthDate, ",
                             "EducationLevel, Occupation, LanguageTypeID, PersonSexTypeID, PersonRaceTypeID, ",
                             "PersonEthnicityTypeID, MilitaryServiceStatusTypeID, DomicileStatusTypeID, ",
-                            "ProgramEligibilityTypeID, WorkReleaseStatusTypeID, SexOffenderStatusTypeID, BookingDate")
+                            "ProgramEligibilityTypeID, WorkReleaseStatusTypeID, SexOffenderStatusTypeID")
 
-  Person <- getQuery(stagingConnection, paste0(selectStatement, " from Person, Booking ",
-                                               "where BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and Person.PersonID=Booking.PersonID"))
-
-  PersonE <- getQuery(stagingConnection, paste0(selectStatement, " from Person, CustodyStatusChange ",
-                                                "where CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "' and Person.PersonID=CustodyStatusChange.PersonID"))
-
-  Person <- Person %>% bind_rows(PersonE) %>%
+  Person <- getQuery(stagingBookingConnection, paste0(selectStatement, ", BookingDate as EventDate from Person, Booking ",
+                                                      "where Person.PersonID=Booking.PersonID"))
+  
+  PersonE <- getQuery(stagingBookingConnection, paste0(selectStatement, ", BookingDate as EventDate from Person, CustodyStatusChange ",
+                                                       "where Person.PersonID=CustodyStatusChange.PersonID"))
+  
+  bookingPersonIDs <- unique(c(Person$PersonID, PersonE$PersonID))
+  
+  PersonI <- getQuery(stagingIncidentConnection, paste0(selectStatement, ", IncidentReportedDate as EventDate from Person, Incident ",
+                                                        "where Person.PersonID=Incident.PersonID"))
+  
+  maxBookingPersonID <- max(bookingPersonIDs)
+  if (length(base::intersect(PersonI$PersonID, bookingPersonIDs))==0) {
+    maxBookingPersonID <- 0
+    writeLines('No adjustment to person IDs will be done, since PersonIDs in the Booking and Incident tables are fully distinct (prob because the two staging dbs are the same db)')
+  } else {
+    writeLines(paste0('Adjusting Incident PersonID by adding the max booking PersonID of ', maxBookingPersonID))
+  }
+  
+  PersonI <- mutate(PersonI, PersonID=PersonID + maxBookingPersonID)
+  
+  Person <- Person %>% bind_rows(PersonE, PersonI) %>%
     transmute(PersonID=PersonID,
               StagingPersonUniqueIdentifier=PersonUniqueIdentifier,
               StagingPersonUniqueIdentifier2=PersonUniqueIdentifier2,
@@ -283,8 +363,8 @@ buildPersonTable <- function(stagingConnection, lastLoadTime, currentStagingDate
               PopulationTypeID=unknownCodeTableValue,
               EducationLevelTypeID=unknownCodeTableValue,
               OccupationTypeID=unknownCodeTableValue,
-              PersonAgeTypeID=ifelse(is.na(PersonBirthDate) | PersonBirthDate > currentStagingDate, ifelse(is.na(PersonAgeAtBooking), unknownCodeTableValue, PersonAgeAtBooking),
-                                     (PersonBirthDate %--% BookingDate) %/% years(1))
+              PersonAgeTypeID=ifelse(is.na(EventDate) | PersonBirthDate > currentStagingDate, ifelse(is.na(PersonAgeAtEvent), unknownCodeTableValue, PersonAgeAtEvent),
+                                     (EventDate - PersonBirthDate) / dyears(1))
     ) %>%
     mutate(PersonAgeTypeID=as.integer(ifelse(is.na(PersonAgeTypeID), unknownCodeTableValue, PersonAgeTypeID)))
 
@@ -296,6 +376,7 @@ buildPersonTable <- function(stagingConnection, lastLoadTime, currentStagingDate
 
   if (nrow(Person)) {
     args <- list()
+    args$codeTableList <- codeTableList
     args$textValues <- Person$EducationLevel
     args$unknownCodeTableValue <- unknownCodeTableValue
     Person$EducationLevelTypeID <- as.integer(do.call(educationTextValueConverter, args))
@@ -304,7 +385,10 @@ buildPersonTable <- function(stagingConnection, lastLoadTime, currentStagingDate
     Person$OccupationTypeID <- as.integer(do.call(occupationTextValueConverter, args))
   }
 
-  Person %>% select(-EducationLevel, -Occupation)
+  ret <- list()
+  ret$Person <- Person %>% select(-EducationLevel, -Occupation)
+  ret$maxBookingPersonID <- maxBookingPersonID
+  ret
 
 }
 
@@ -396,11 +480,13 @@ buildChargeTables <- function(stagingConnection, adsConnection, lastLoadTime, cu
     if (nrow(Charge)) {
 
       args <- list()
+      args$codeTableList <- codeTableList
       args$textValues <- Charge$ChargeCode
       args$unknownCodeTableValue <- unknownCodeTableValue
       Charge$ChargeTypeID <- as.integer(do.call(chargeCodeTypeTextConverter, args))
 
       args <- list()
+      args$codeTableList <- codeTableList
       args$textValues <- Charge$ChargeDisposition
       args$unknownCodeTableValue <- unknownCodeTableValue
       Charge$ChargeDispositionTypeID <- as.integer(do.call(dispositionTextConverter, args))
@@ -430,15 +516,21 @@ buildChargeTables <- function(stagingConnection, adsConnection, lastLoadTime, cu
 
 }
 
-#' @importFrom lubridate %--%
-buildBHAssessmentTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator) {
+#' @importFrom lubridate ddays dyears
+buildBHAssessmentTableList <- function(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator, maxBookingPersonID) {
 
-  BHAssessment <- getQuery(stagingConnection, paste0("select BehavioralHealthAssessmentID, Person.PersonID, SeriousMentalIllnessIndicator, MedicaidStatusTypeID,",
-                                                     " CareEpisodeStartDate, CareEpisodeEndDate, BookingDate from ",
-                                                     "BehavioralHealthAssessment, Person, Booking where ",
-                                                     "BehavioralHealthAssessment.PersonID=Person.PersonID and ",
-                                                     "Booking.PersonID=Person.PersonID and ",
-                                                     "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+  BHAssessmentBooking <- getQuery(stagingConnection, paste0("select BehavioralHealthAssessmentID, Person.PersonID, SeriousMentalIllnessIndicator, MedicaidStatusTypeID,",
+                                                            " CareEpisodeStartDate, CareEpisodeEndDate, BookingDate from ",
+                                                            "BehavioralHealthAssessment, Person, Booking where ",
+                                                            "BehavioralHealthAssessment.PersonID=Person.PersonID and ",
+                                                            "Booking.PersonID=Person.PersonID and ",
+                                                            "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  BHAssessmentIncident <- getQuery(stagingIncidentConnection, paste0("select BehavioralHealthAssessmentID, Person.PersonID, SeriousMentalIllnessIndicator, MedicaidStatusTypeID,",
+                                                             " CareEpisodeStartDate, CareEpisodeEndDate, IncidentReportedDate as EventDate from ",
+                                                             "BehavioralHealthAssessment, Person, Incident where ",
+                                                             "BehavioralHealthAssessment.PersonID=Person.PersonID and Incident.PersonID=Person.PersonID")) %>%
+    mutate(PersonID=PersonID+maxBookingPersonID)
 
   BHAssessmentCSC <- getQuery(stagingConnection, paste0("select BehavioralHealthAssessmentID, Person.PersonID, SeriousMentalIllnessIndicator, MedicaidStatusTypeID,",
                                                         " CareEpisodeStartDate, CareEpisodeEndDate, BookingDate from ",
@@ -447,8 +539,24 @@ buildBHAssessmentTable <- function(stagingConnection, lastLoadTime, unknownCodeT
                                                         "CustodyStatusChange.PersonID=Person.PersonID and ",
                                                         "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
+  BHAssessment <- BHAssessmentBooking
+
   if (nrow(BHAssessmentCSC)) {
     BHAssessment <- bind_rows(BHAssessment, BHAssessmentCSC)
+  }
+  
+  maxBehavioralHealthAssessmentID <- max(BHAssessment$BehavioralHealthAssessmentID)
+  if (length(base::intersect(BHAssessmentIncident$BehavioralHealthAssessmentID, BHAssessment$BehavioralHealthAssessmentID))==0) {
+    maxBehavioralHealthAssessmentID <- 0
+    writeLines('No adjustment to BHA IDs will be done, since IDs in the Booking and Incident tables are fully distinct (prob because the two staging dbs are the same db)')
+  } else {
+    writeLines(paste0('Adjusting Incident BehavioralHealthAssessmentID by adding the max booking BehavioralHealthAssessmentID of ', maxBehavioralHealthAssessmentID))
+  }
+  
+  BHAssessmentIncident <- mutate(BHAssessmentIncident, BehavioralHealthAssessmentID=BehavioralHealthAssessmentID + maxBehavioralHealthAssessmentID)
+
+  if (nrow(BHAssessmentIncident)) {
+    BHAssessment <- bind_rows(BHAssessment, BHAssessmentIncident)
   }
 
   BHAssessment <- BHAssessment %>%
@@ -456,26 +564,41 @@ buildBHAssessmentTable <- function(stagingConnection, lastLoadTime, unknownCodeT
               PersonID=PersonID,
               SevereMentalIllnessIndicator=SeriousMentalIllnessIndicator,
               MedicaidStatusTypeID=translateCodeTableValue(codeTableValueTranslator, MedicaidStatusTypeID, "MedicaidStatusType", unknownCodeTableValue, codeTableList),
-              InTreatmentAtBooking=recode(CareEpisodeEndDate, .default='Y', .missing='N'),
-              EndedDaysBeforeBooking=(CareEpisodeEndDate %--% BookingDate) %/% days(1)
+              InTreatmentAtEvent=case_when(
+                is.na(CareEpisodeEndDate) ~ 'N',
+                TRUE ~ 'Y'),
+              EndedDaysBeforeEvent=(EventDate - CareEpisodeEndDate) / ddays(1)
     ) %>%
-    mutate(EndedDaysBeforeBooking=as.integer(ifelse(is.na(EndedDaysBeforeBooking) | EndedDaysBeforeBooking < 0, unknownCodeTableValue, EndedDaysBeforeBooking)))
+    mutate(EndedDaysBeforeEvent=as.integer(ifelse(is.na(EndedDaysBeforeEvent) | EndedDaysBeforeEvent < 0, unknownCodeTableValue, EndedDaysBeforeEvent)))
 
-  BHAssessment
+  ret <- list()
+  ret$BehavioralHealthAssessment <- BHAssessment
+  ret$maxBehavioralHealthAssessmentID <- maxBehavioralHealthAssessmentID
+  ret
 
 }
 
-buildBHAssessmentCategoryTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator) {
+buildBHAssessmentCategoryTable <- function(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator) {
 
-  BHAssessmentCategory <- getQuery(stagingConnection, paste0("select BehavioralHealthAssessmentCategoryID, bha.BehavioralHealthAssessmentID, AssessmentCategoryTypeID from ",
-                                                             "BehavioralHealthAssessment bha, BehavioralHealthAssessmentCategory bhac, Person p, Booking b where ",
-                                                             "bhac.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
-                                                             "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+  BHAssessmentCategoryBooking <- getQuery(stagingConnection, paste0("select BehavioralHealthAssessmentCategoryID, bha.BehavioralHealthAssessmentID, AssessmentCategoryTypeID from ",
+                                                                    "BehavioralHealthAssessment bha, BehavioralHealthAssessmentCategory bhac, Person p, Booking b where ",
+                                                                    "bhac.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
+                                                                    "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  BHAssessmentCategoryIncident <- getQuery(stagingIncidentConnection, paste0("select BehavioralHealthAssessmentCategoryID, bha.BehavioralHealthAssessmentID, AssessmentCategoryTypeID from ",
+                                                                    "BehavioralHealthAssessment bha, BehavioralHealthAssessmentCategory bhac, Person p, Incident b where ",
+                                                                    "bhac.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID"))
 
   BHAssessmentCategoryCSC <- getQuery(stagingConnection, paste0("select BehavioralHealthAssessmentCategoryID, bha.BehavioralHealthAssessmentID, AssessmentCategoryTypeID from ",
                                                                 "BehavioralHealthAssessment bha, BehavioralHealthAssessmentCategory bhac, Person p, CustodyStatusChange b where ",
                                                                 "bhac.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
                                                                 "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  BHAssessmentCategory <- BHAssessmentCategoryBooking
+
+  if (nrow(BHAssessmentCategoryIncident)) {
+    BHAssessmentCategory <- bind_rows(BHAssessmentCategory, BHAssessmentCategoryIncident)
+  }
 
   if (nrow(BHAssessmentCategoryCSC)) {
     BHAssessmentCategory <- bind_rows(BHAssessmentCategory, BHAssessmentCategoryCSC)
@@ -491,22 +614,49 @@ buildBHAssessmentCategoryTable <- function(stagingConnection, lastLoadTime, unkn
 
 }
 
-buildBHTreatmentTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, providerTextValueConverter, codeTableList, codeTableValueTranslator) {
+#' @importFrom lubridate ddays
+buildBHTreatmentTable <- function(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, providerTextValueConverter, codeTableList, codeTableValueTranslator, maxBehavioralHealthAssessmentID) {
 
-  BHTreatment <- getQuery(stagingConnection, paste0("select TreatmentID, bha.BehavioralHealthAssessmentID, TreatmentStatusTypeID, TreatmentAdmissionReasonTypeID, ",
-                                                    "TreatmentProviderName, TreatmentStartDate, BookingDate from ",
-                                                    "BehavioralHealthAssessment bha, Treatment bht, Person p, Booking b where ",
-                                                    "bht.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
-                                                    "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+  BHTreatmentBooking <- getQuery(stagingConnection, paste0("select TreatmentID, bha.BehavioralHealthAssessmentID, TreatmentStatusTypeID, TreatmentAdmissionReasonTypeID, ",
+                                                           "TreatmentProviderName, TreatmentStartDate, BookingDate as EventDate from ",
+                                                           "BehavioralHealthAssessment bha, Treatment bht, Person p, Booking b where ",
+                                                           "bht.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
+                                                           "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  BHTreatmentIncident <- getQuery(stagingIncidentConnection, paste0("select TreatmentID, bha.BehavioralHealthAssessmentID, TreatmentStatusTypeID, TreatmentAdmissionReasonTypeID, ",
+                                                           "TreatmentProviderName, TreatmentStartDate, IncidentReportedDate as EventDate from ",
+                                                           "BehavioralHealthAssessment bha, Treatment bht, Person p, Incident b where ",
+                                                           "bht.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID")) %>%
+    mutate(BehavioralHealthAssessmentID=BehavioralHealthAssessmentID+maxBehavioralHealthAssessmentID)
 
   BHTreatmentCSC <- getQuery(stagingConnection, paste0("select TreatmentID, bha.BehavioralHealthAssessmentID, TreatmentStatusTypeID, TreatmentAdmissionReasonTypeID, ",
-                                                       "TreatmentProviderName, TreatmentStartDate, BookingDate from ",
+                                                       "TreatmentProviderName, TreatmentStartDate, BookingDate as EventDate from ",
                                                        "BehavioralHealthAssessment bha, Treatment bht, Person p, CustodyStatusChange b where ",
                                                        "bht.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
                                                        "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
+  BHTreatment <- BHTreatmentBooking
+
   if (nrow(BHTreatmentCSC)) {
     BHTreatment <- bind_rows(BHTreatment, BHTreatmentCSC)
+  }
+  
+  maxTreatmentID <- 0
+  if (nrow(BHTreatment)) {
+    maxTreatmentID <- max(BHTreatment$TreatmentID)
+  }
+  
+  if (length(base::intersect(BHTreatmentIncident$TreatmentID, BHTreatment$TreatmentID))==0) {
+    maxTreatmentID <- 0
+    writeLines('No adjustment to BHE IDs will be done, since IDs in the Booking and Incident tables are fully distinct (prob because the two staging dbs are the same db)')
+  } else {
+    writeLines(paste0('Adjusting Incident TreatmentID by adding the max booking TreatmentID of ', maxTreatmentID))
+  }
+  
+  BHTreatmentIncident <- mutate(BHTreatmentIncident, TreatmentID=TreatmentID + maxTreatmentID)
+  
+  if (nrow(BHTreatmentIncident)) {
+    BHTreatment <- bind_rows(BHTreatment, BHTreatmentIncident)
   }
 
   BHTreatment <- BHTreatment %>%
@@ -516,12 +666,13 @@ buildBHTreatmentTable <- function(stagingConnection, lastLoadTime, unknownCodeTa
               TreatmentAdmissionReasonTypeID=translateCodeTableValue(codeTableValueTranslator, TreatmentAdmissionReasonTypeID, "TreatmentAdmissionReasonType", unknownCodeTableValue, codeTableList),
               TreatmentProviderName=TreatmentProviderName,
               TreatmentProviderTypeID=unknownCodeTableValue,
-              DaysBeforeBooking=(TreatmentStartDate %--% BookingDate) %/% days(1)
+              DaysBeforeEvent=(EventDate - TreatmentStartDate) / ddays(1)
     ) %>%
-    mutate(DaysBeforeBooking=as.integer(ifelse(is.na(DaysBeforeBooking) | DaysBeforeBooking < 0, unknownCodeTableValue, DaysBeforeBooking)))
+    mutate(DaysBeforeEvent=as.integer(ifelse(is.na(DaysBeforeEvent) | DaysBeforeEvent < 0, unknownCodeTableValue, DaysBeforeEvent)))
 
   if (nrow(BHTreatment)) {
     args <- list()
+    args$codeTableList <- codeTableList
     args$textValues <- BHTreatment$TreatmentProviderName
     args$unknownCodeTableValue <- unknownCodeTableValue
     BHTreatment$TreatmentProviderTypeID <- as.integer(do.call(providerTextValueConverter, args))
@@ -531,20 +682,41 @@ buildBHTreatmentTable <- function(stagingConnection, lastLoadTime, unknownCodeTa
 
 }
 
-buildBHEvaluationTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, diagnosisTextValueConverter, codeTableList, codeTableValueTranslator) {
+buildBHEvaluationTable <- function(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, diagnosisTextValueConverter, codeTableList, codeTableValueTranslator, maxBehavioralHealthAssessmentID) {
 
-  BHEvaluation <- getQuery(stagingConnection, paste0("select BehavioralHealthEvaluationID, bhe.BehavioralHealthAssessmentID, BehavioralHealthDiagnosisDescription from ",
+  BHEvaluationBooking <- getQuery(stagingConnection, paste0("select BehavioralHealthEvaluationID, bhe.BehavioralHealthAssessmentID, BehavioralHealthDiagnosisDescription from ",
                                                      "BehavioralHealthAssessment bha, BehavioralHealthEvaluation bhe, Person p, Booking b where ",
                                                      "bhe.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
                                                      "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  BHEvaluationIncident <- getQuery(stagingIncidentConnection, paste0("select BehavioralHealthEvaluationID, bhe.BehavioralHealthAssessmentID, BehavioralHealthDiagnosisDescription from ",
+                                                     "BehavioralHealthAssessment bha, BehavioralHealthEvaluation bhe, Person p, Incident b where ",
+                                                     "bhe.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID")) %>%
+    mutate(BehavioralHealthAssessmentID=BehavioralHealthAssessmentID+maxBehavioralHealthAssessmentID)
 
   BHEvaluationCSC <- getQuery(stagingConnection, paste0("select BehavioralHealthEvaluationID, bhe.BehavioralHealthAssessmentID, BehavioralHealthDiagnosisDescription from ",
                                                         "BehavioralHealthAssessment bha, BehavioralHealthEvaluation bhe, Person p, CustodyStatusChange b where ",
                                                         "bhe.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
                                                         "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
 
+  BHEvaluation <- BHEvaluationBooking
+  
   if (nrow(BHEvaluationCSC)) {
     BHEvaluation <- bind_rows(BHEvaluation, BHEvaluationCSC)
+  }
+  
+  maxBehavioralHealthEvaluationID <- max(BHEvaluation$BehavioralHealthEvaluationID)
+  if (length(base::intersect(BHEvaluationIncident$BehavioralHealthEvaluationID, BHEvaluation$BehavioralHealthEvaluationID))==0) {
+    maxBehavioralHealthEvaluationID <- 0
+    writeLines('No adjustment to BHE IDs will be done, since IDs in the Booking and Incident tables are fully distinct (prob because the two staging dbs are the same db)')
+  } else {
+    writeLines(paste0('Adjusting Incident BehavioralHealthEvaluationID by adding the max booking BehavioralHealthEvaluationID of ', maxBehavioralHealthEvaluationID))
+  }
+  
+  BHEvaluationIncident <- mutate(BHEvaluationIncident, BehavioralHealthEvaluationID=BehavioralHealthEvaluationID + maxBehavioralHealthEvaluationID)
+  
+  if (nrow(BHEvaluationIncident)) {
+    BHEvaluation <- bind_rows(BHEvaluation, BHEvaluationIncident)
   }
 
   BHEvaluation <- BHEvaluation %>%
@@ -553,6 +725,7 @@ buildBHEvaluationTable <- function(stagingConnection, lastLoadTime, unknownCodeT
 
   if (nrow(BHEvaluation)) {
     args <- list()
+    args$codeTableList <- codeTableList
     args$textValues <- BHEvaluation$BehavioralHealthDiagnosisDescription
     args$unknownCodeTableValue <- unknownCodeTableValue
     BHEvaluation$BehavioralHealthEvaluationTypeID <- as.integer(do.call(diagnosisTextValueConverter, args))
@@ -562,17 +735,27 @@ buildBHEvaluationTable <- function(stagingConnection, lastLoadTime, unknownCodeT
 
 }
 
-buildMedicationTable <- function(stagingConnection, lastLoadTime, unknownCodeTableValue, medicationTextValueConverter, codeTableList, codeTableValueTranslator) {
+buildMedicationTable <- function(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, medicationTextValueConverter, codeTableList, codeTableValueTranslator) {
 
-  PrescribedMedication <- getQuery(stagingConnection, paste0("select PrescribedMedicationID, pm.BehavioralHealthAssessmentID, MedicationDescription from ",
+  PrescribedMedicationBooking <- getQuery(stagingConnection, paste0("select PrescribedMedicationID, pm.BehavioralHealthAssessmentID, MedicationDescription from ",
                                                              "BehavioralHealthAssessment bha, PrescribedMedication pm, Person p, Booking b where ",
                                                              "pm.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
                                                              "BookingTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  PrescribedMedicationIncident <- getQuery(stagingIncidentConnection, paste0("select PrescribedMedicationID, pm.BehavioralHealthAssessmentID, MedicationDescription from ",
+                                                             "BehavioralHealthAssessment bha, PrescribedMedication pm, Person p, Incident b where ",
+                                                             "pm.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID"))
 
   PrescribedMedicationCSC <- getQuery(stagingConnection, paste0("select PrescribedMedicationID, pm.BehavioralHealthAssessmentID, MedicationDescription from ",
                                                                 "BehavioralHealthAssessment bha, PrescribedMedication pm, Person p, CustodyStatusChange b where ",
                                                                 "pm.BehavioralHealthAssessmentID=bha.BehavioralHealthAssessmentID and bha.PersonID=p.PersonID and b.PersonID=p.PersonID and ",
                                                                 "CustodyStatusChangeTimestamp > '", formatDateTimeForSQL(lastLoadTime), "'"))
+
+  PrescribedMedication <- PrescribedMedicationBooking
+
+  if (nrow(PrescribedMedicationIncident)) {
+    PrescribedMedication <- bind_rows(PrescribedMedication, PrescribedMedicationIncident)
+  }
 
   if (nrow(PrescribedMedicationCSC)) {
     PrescribedMedication <- bind_rows(PrescribedMedication, PrescribedMedicationCSC)
@@ -584,6 +767,7 @@ buildMedicationTable <- function(stagingConnection, lastLoadTime, unknownCodeTab
 
   if (nrow(PrescribedMedication)) {
     args <- list()
+    args$codeTableList <- codeTableList
     args$textValues <- PrescribedMedication$MedicationDescription
     args$unknownCodeTableValue <- unknownCodeTableValue
     PrescribedMedication$MedicationTypeID <- as.integer(do.call(medicationTextValueConverter, args))
@@ -617,22 +801,23 @@ buildReleaseTable <- function(stagingConnection, lastLoadTime, currentStagingDat
 
 }
 
-buildAndLoadHistoricalPeriodTable <- function(adsConnection, lookbackPeriod, unknownCodeTableValue, noneCodeTableValue, completeLoad, writeToDatabase) {
+buildAndLoadHistoricalPeriodTable <- function(adsConnection, lookbackPeriod, unknownCodeTableValue,
+                                              noneCodeTableValue, completeLoad, writeToDatabase, localDatabase) {
 
-  df <- data.frame(HistoricalPeriodTypeID=0:lookbackPeriod,
+  df <- tibble(HistoricalPeriodTypeID=0:lookbackPeriod,
                    DaysAgo=0:lookbackPeriod) %>%
     mutate(HistoricalPeriodTypeDescription1=paste0(90*(1 + DaysAgo %/% 90), " days"),
            HistoricalPeriodTypeDescription1=ifelse(DaysAgo >= 360, "360+ days", HistoricalPeriodTypeDescription1),
            HistoricalPeriodTypeDescription2=ifelse(DaysAgo >= 360, "36 months", HistoricalPeriodTypeDescription1),
            HistoricalPeriodTypeDescription2=ifelse(DaysAgo >= 360*3, "36 months+", HistoricalPeriodTypeDescription2))
 
-  df <- df %>% bind_rows(data.frame(HistoricalPeriodTypeID=c(unknownCodeTableValue, noneCodeTableValue),
+  df <- df %>% bind_rows(tibble(HistoricalPeriodTypeID=c(unknownCodeTableValue, noneCodeTableValue),
                                     DaysAgo=as.integer(c(0,0)),
                                     HistoricalPeriodTypeDescription1=c("Unknown", "None"),
                                     HistoricalPeriodTypeDescription2=c("Unknown", "None")))
 
   if (completeLoad & writeToDatabase) {
-    writeTableToDatabase(adsConnection, "HistoricalPeriodType", df)
+    writeTableToDatabase(adsConnection, "HistoricalPeriodType", df, localDatabase)
   }
 
   ret <- list()
@@ -643,10 +828,19 @@ buildAndLoadHistoricalPeriodTable <- function(adsConnection, lookbackPeriod, unk
 
 #' @importFrom lubridate now as_date %--%
 #' @import dplyr
+#' @import purrr
 #' @export
 loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConnectionBuilder,
+                                    stagingIncidentConnectionBuilder=stagingConnectionBuilder,
                                     dimensionalConnectionBuilder=defaultDimensionalConnectionBuilder,
+                                    bookingClassificationAggregator=defaultBookingClassificationAggregator,
                                     chargeDispositionAggregator=defaultChargeDispositionAggregator,
+                                    timeSpanTextValueConverter=defaultTimeSpanTextValueConverter,
+                                    callNatureTextValueConverter=defaultCallNatureTextValueConverter,
+                                    dispositionLocationTextValueConverter=defaultDispositionLocationTextValueConverter,
+                                    pendingCriminalChargesTextValueConverter=defaultPendingCriminalChargesTextValueConverter,
+                                    unitTextValueConverter=defaultUnitTextValueConverter,
+                                    reportingAgencyTextValueConverter=defaultReportingAgencyTextValueConverter,
                                     educationTextValueConverter=defaultEducationTextValueConverter,
                                     occupationTextValueConverter=defaultOccupationTextValueConverter,
                                     diagnosisTextValueConverter=defaultDiagnosisTextValueConverter,
@@ -662,14 +856,16 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
                                     materializedViewsSqlFileName="MaterializedViews.sql",
                                     historicalPeriodLookback=365*10,
                                     completeLoad=TRUE,
-                                    writeToDatabase=FALSE) {
+                                    writeToDatabase=FALSE, localDatabase=TRUE) {
 
-  writeLines(paste0("Running ADS load with completeLoad=", completeLoad, " and writeToDatabase=", writeToDatabase))
+  writeLines(paste0("Running ADS load with completeLoad=", completeLoad, " and writeToDatabase=", writeToDatabase,
+                    " with localDatabase=", localDatabase))
 
   ret <- list()
 
-  stagingConnection = do.call(stagingConnectionBuilder, list())
-  adsConnection = do.call(dimensionalConnectionBuilder, list())
+  stagingConnection <- do.call(stagingConnectionBuilder, list())
+  stagingIncidentConnection <- do.call(stagingIncidentConnectionBuilder, list())
+  adsConnection <- do.call(dimensionalConnectionBuilder, list())
 
   if (writeToDatabase & completeLoad) {
     writeLines("Truncating all current tables")
@@ -685,7 +881,7 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   codeTableList <- loadCodeTables(adsConnection, codeTableSpreadsheetFile, writeToDatabase & completeLoad)
   ret <- c(ret, codeTableList)
 
-  historicalPeriodType <- buildAndLoadHistoricalPeriodTable(adsConnection, historicalPeriodLookback, unknownCodeTableValue, noneCodeTableValue, completeLoad, writeToDatabase)
+  historicalPeriodType <- buildAndLoadHistoricalPeriodTable(adsConnection, historicalPeriodLookback, unknownCodeTableValue, noneCodeTableValue, completeLoad, writeToDatabase, localDatabase)
   ret <- c(ret, historicalPeriodType)
 
   currentStagingDate <- getQuery(adsConnection, paste0("select MostRecentStagingTimestamp from LoadHistory where LoadHistoryID=", loadHistoryID))
@@ -700,8 +896,9 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   writeLines(paste0("Loaded JailEpisode with ", nrow(ret$JailEpisode), " rows and JailEpisodeEdits with ", nrow(ret$JailEpisodeEdits), " rows"))
 
   writeLines("Loading Person table")
-  ret$Person <- buildPersonTable(stagingConnection, lastLoadTime, currentStagingDate, unknownCodeTableValue, educationTextValueConverter,
-                                 occupationTextValueConverter, codeTableList, codeTableValueTranslator)
+  personTableList <- buildPersonTableList(stagingConnection, stagingIncidentConnection, lastLoadTime, currentStagingDate, unknownCodeTableValue, educationTextValueConverter,
+                                      occupationTextValueConverter, codeTableList, codeTableValueTranslator)
+  ret$Person <- personTableList$Person
   writeLines(paste0("Loaded Person table with ", nrow(ret$Person), " rows"))
 
   jailEpisodeEditPKs <- unique(ret$JailEpisodeEdits$StagingPK)
@@ -722,174 +919,389 @@ loadDimensionalDatabase <- function(stagingConnectionBuilder=defaultStagingConne
   ret$Arrest <- ret$Arrest %>% select(-StagingPK, -StagingParentFK)
 
   writeLines("Loading Behavioral Health tables")
-  ret$BehavioralHealthAssessment <- buildBHAssessmentTable(stagingConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator)
+  bhaTableList <- buildBHAssessmentTableList(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue,
+                                             codeTableList, codeTableValueTranslator,personTableList$maxBookingPersonID)
+  ret$BehavioralHealthAssessment <- bhaTableList$BehavioralHealthAssessment
   writeLines(paste0("Loaded BehavioralHealthAssessment with ", nrow(ret$BehavioralHealthAssessment), " rows"))
-  ret$BehavioralHealthAssessmentCategory <- buildBHAssessmentCategoryTable(stagingConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator)
-  writeLines(paste0("Loaded BehavioralHealthAssessmentCategory with ", nrow(ret$BehavioralHealthAssessmentCategory), " rows"))
-  ret$BehavioralHealthTreatment <- buildBHTreatmentTable(stagingConnection, lastLoadTime, unknownCodeTableValue, providerTextValueConverter, codeTableList, codeTableValueTranslator)
+  ret$BehavioralHealthTreatment <- buildBHTreatmentTable(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, providerTextValueConverter,
+                                                         codeTableList, codeTableValueTranslator, bhaTableList$maxBehavioralHealthAssessmentID)
   writeLines(paste0("Loaded BehavioralHealthTreatment with ", nrow(ret$BehavioralHealthTreatment), " rows"))
-  ret$BehavioralHealthEvaluation <- buildBHEvaluationTable(stagingConnection, lastLoadTime, unknownCodeTableValue, diagnosisTextValueConverter, codeTableList, codeTableValueTranslator)
+  ret$BehavioralHealthEvaluation <- buildBHEvaluationTable(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, diagnosisTextValueConverter,
+                                                           codeTableList, codeTableValueTranslator, bhaTableList$maxBehavioralHealthAssessmentID)
   writeLines(paste0("Loaded BehavioralHealthEvaluation with ", nrow(ret$BehavioralHealthEvaluation), " rows"))
-  ret$PrescribedMedication <- buildMedicationTable(stagingConnection, lastLoadTime, unknownCodeTableValue, medicationTextValueConverter, codeTableList, codeTableValueTranslator)
+  ret$PrescribedMedication <- buildMedicationTable(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, medicationTextValueConverter, codeTableList, codeTableValueTranslator)
   writeLines(paste0("Loaded PrescribedMedication with ", nrow(ret$PrescribedMedication), " rows"))
-
+  ret$BehavioralHealthAssessmentCategory <- buildBHAssessmentCategoryTable(stagingConnection, stagingIncidentConnection, lastLoadTime, unknownCodeTableValue, codeTableList, codeTableValueTranslator)
+  writeLines(paste0("Loaded BehavioralHealthAssessmentCategory with ", nrow(ret$BehavioralHealthAssessmentCategory), " rows"))
+  
   writeLines("Loading Release table")
   ret$Release <- buildReleaseTable(stagingConnection, lastLoadTime, currentStagingDate, codeTableList, codeTableValueTranslator)
   writeLines(paste0("Loaded Release with ", nrow(ret$Release), " rows"))
 
-  ret$Date <- loadDateDimension(adsConnection, ret, unknownCodeTableValue, noneCodeTableValue, writeToDatabase)
+  writeLines("Loading Crisis Incident tables")
+  incidentTables <- buildIncidentTables(stagingConnection, stagingIncidentConnection, adsConnection, currentStagingDate, unknownCodeTableValue,
+                                        noneCodeTableValue, codeTableList, callNatureTextValueConverter,
+                                        dispositionLocationTextValueConverter, pendingCriminalChargesTextValueConverter,
+                                        unitTextValueConverter, reportingAgencyTextValueConverter, timeSpanTextValueConverter, personTableList$maxBookingPersonID)
+  ret <- c(ret, incidentTables)
+  writeLines(paste0("Loaded Incident table with ", nrow(ret$Incident), " rows, and UnitResponse table with ", nrow(ret$UnitResponse), " rows."))
+  
+  ret$Date <- loadDateDimension(adsConnection, ret, unknownCodeTableValue, noneCodeTableValue, writeToDatabase, localDatabase=localDatabase)
+  
+  keeperPersonIDs = unique(c(ret$JailEpisode$PersonID, ret$JailEpisodeEdits$PersonID, ret$Incident$PersonID))
+  keeperPerson <- tibble(PersonID=keeperPersonIDs)
+  pr <- nrow(ret$Person)
+  ret$Person <- ret$Person %>% semi_join(keeperPerson, by='PersonID')
+  writeLines(paste0('Removed ', (pr - nrow(ret$Person)), ' person rows orphaned by deleted JailEpisode or Incident records'))
+  ret$BehavioralHealthAssessment <- ret$BehavioralHealthAssessment %>% semi_join(keeperPerson, by='PersonID')
+  ret$BehavioralHealthAssessmentCategory <- ret$BehavioralHealthAssessmentCategory %>% semi_join(ret$BehavioralHealthAssessment, by='BehavioralHealthAssessmentID')
+  ret$BehavioralHealthTreatment <- ret$BehavioralHealthTreatment %>% semi_join(ret$BehavioralHealthAssessment, by='BehavioralHealthAssessmentID')
+  ret$BehavioralHealthEvaluation <- ret$BehavioralHealthEvaluation %>% semi_join(ret$BehavioralHealthAssessment, by='BehavioralHealthAssessmentID')
+  ret$PrescribedMedication <- ret$PrescribedMedication %>% semi_join(ret$BehavioralHealthAssessment, by='BehavioralHealthAssessmentID')
+  
+  persistTables(adsConnection, ret, unknownCodeTableValue, currentLoadTime, writeToDatabase=writeToDatabase, localDatabase=localDatabase)
 
-  persistTables(adsConnection, ret, unknownCodeTableValue, currentLoadTime, writeToDatabase=writeToDatabase)
-
-  determineRecidivism(adsConnection, writeToDatabase=writeToDatabase)
+  determineRecidivism(adsConnection, writeToDatabase=writeToDatabase, localDatabase=localDatabase)
 
   args <- list()
   args$adsConnection <- adsConnection
   args$unknownCodeTableValue <- unknownCodeTableValue
   args$writeToDatabase <- writeToDatabase
   do.call(populationTypeConverter, args)
+  
+  writeLines("Updating JailEpisode table's Booking Classification...")
+  bookingClassificationAggregator(adsConnection, codeTableList, unknownCodeTableValue)
+  writeLines("...Booking Classification updates done")
+  
+  writeLines('Creating materialized views...')
 
   materializedViewsSqlFile=system.file("raw", materializedViewsSqlFileName, package=getPackageName())
   createMaterializedViews(adsConnection, materializedViewsSqlFile)
+  
+  writeLines('...materialized views created')
 
   dbDisconnect(stagingConnection)
   dbDisconnect(adsConnection)
 
   writeLines("ADS load complete")
 
+  map(ret, as_tibble)
+
+}
+
+#' @importFrom lubridate as_date ymd_hms as_datetime dminutes
+buildIncidentTables <- function(stagingConnection, stagingIncidentConnection, adsConnection, currentStagingDate, unknownCodeTableValue,
+                                noneCodeTableValue, codeTableList, callNatureTextValueConverter,
+                                dispositionLocationTextValueConverter, pendingCriminalChargesTextValueConverter,
+                                unitTextValueConverter, reportingAgencyTextValueConverter, timeSpanTextValueConverter, maxBookingPersonID) {
+  
+  stagingIncident <- getQuery(stagingIncidentConnection, 'select Incident.*, PersonUniqueIdentifier from Incident, Person where Incident.PersonID=Person.PersonID')
+  stagingIncidentResponseUnit <- getQuery(stagingIncidentConnection, 'select * from IncidentResponseUnit')
+
+  # todo: consider optimizing by calling this method after doing Jail Episodes, and derive this from the Jail Episode table
+  stagingBooking <- getQuery(stagingConnection, 'select BookingDate, PersonUniqueIdentifier from Booking, Person where Booking.PersonID=Person.PersonID')
+
+  stagingIncident <- suppressWarnings(
+    stagingIncident <- stagingIncident %>%
+      mutate(dd=case_when(is.na(IncidentReportedDate) | is.na(IncidentReportedTime) ~ as_datetime(NA),
+                          TRUE ~ ymd_hms(paste0(format(IncidentReportedDate, '%Y-%m-%d'), ' ', IncidentReportedTime))))
+  )
+
+  Incident <- stagingIncident %>%
+    mutate(
+      IncidentReportedDate=as_date(IncidentReportedDate),
+      IncidentReportedDateID=format(IncidentReportedDate, "%Y%m%d"),
+      IncidentReportedHour=hour(dd)
+    ) %>%
+    select(-dd) %>%
+    arrange(IncidentNumber, desc(IncidentTimestamp)) %>%
+    group_by(IncidentNumber) %>%
+    filter(row_number()==1) %>%
+    ungroup()
+  
+  writeLines(paste0('Removed ', (nrow(stagingIncident) - nrow(Incident)), ' staging incidents replaced by later incidents with same IncidentNumber'))
+
+  if (nrow(stagingIncidentResponseUnit)) {
+    
+    stagingIncidentResponseUnit <- suppressWarnings(
+      stagingIncidentResponseUnit <- stagingIncidentResponseUnit %>%
+        mutate(dda=case_when(is.na(UnitArrivalDate) | is.na(UnitArrivalTime) ~ as_datetime(NA),
+                             TRUE ~ ymd_hms(paste0(format(UnitArrivalDate, '%Y-%m-%d'), ' ', UnitArrivalTime))),
+               ddc=case_when(is.na(UnitClearDate) | is.na(UnitClearTime) ~ as_datetime(NA),
+                             TRUE ~ ymd_hms(paste0(format(UnitClearDate, '%Y-%m-%d'), ' ', UnitClearTime))))
+      
+    )
+    
+    IncidentResponseCostSum <- stagingIncidentResponseUnit %>%
+      semi_join(Incident, by='IncidentID') %>%
+      group_by(IncidentID, UnitIdentifier) %>%
+      mutate(CostInUnitMinutes=(ddc - dda)/dminutes(1)) %>%
+      group_by(IncidentID) %>%
+      summarize(CostInUnitMinutes=sum(CostInUnitMinutes, na.rm=TRUE))
+    
+    IncidentResponseTimeSum <- stagingIncidentResponseUnit %>%
+      semi_join(Incident, by='IncidentID') %>%
+      group_by(IncidentID) %>%
+      summarize(startTime=min(dda, na.rm=TRUE), endTime=max(ddc, na.rm=TRUE)) %>%
+      mutate(DurationInMinutes=(endTime - startTime) / dminutes(1))
+    
+    Incident <- Incident %>%
+      left_join(IncidentResponseCostSum, by='IncidentID') %>%
+      left_join(IncidentResponseTimeSum, by='IncidentID')
+    
+  } else {
+    
+    writeLines('No rows in staging IncidentResponseUnit table, deriving cost from TotalOfficerTimeSeconds')
+    
+    Incident <- Incident %>%
+      mutate(
+        DurationInMinutes=NA_real_,
+        CostInUnitMinutes=case_when(OfficerCount == 0 | is.na(TotalOfficerTimeSeconds) ~ NA_real_, TRUE ~ TotalOfficerTimeSeconds / 60.0)
+      )
+    
+  }
+  
+  Incident <- Incident %>%
+    mutate(
+      CallNatureTypeID=callNatureTextValueConverter(codeTableList, CallNature, unknownCodeTableValue),
+      DispositionLocationTypeID=dispositionLocationTextValueConverter(codeTableList, DispositionLocation, unknownCodeTableValue),
+      PendingCriminalChargesTypeID=pendingCriminalChargesTextValueConverter(codeTableList, PendingCriminalCharges, unknownCodeTableValue),
+      TimeSpanTypeID=timeSpanTextValueConverter(codeTableList, IncidentTimeSpanText, unknownCodeTableValue),
+      ReportingAgencyID=reportingAgencyTextValueConverter(codeTableList, ReportingAgency, unknownCodeTableValue))
+
+  recid <- Incident %>%
+    select(IncidentID, PersonUniqueIdentifier, IncidentReportedDate) %>%
+    arrange(PersonUniqueIdentifier, IncidentReportedDate) %>%
+    group_by(PersonUniqueIdentifier) %>%
+    mutate(IncidentSeq=row_number(), NextIncidentSeq=IncidentSeq+1, PriorIncidentSeq=IncidentSeq-1) %>%
+    ungroup()
+
+  recid <- recid %>%
+    left_join(recid %>% select(PersonUniqueIdentifier, PriorIncidentSeq=IncidentSeq, PriorIncidentReportedDate=IncidentReportedDate),
+              by=c('PersonUniqueIdentifier', 'PriorIncidentSeq')) %>%
+    select(-PriorIncidentSeq) %>%
+    left_join(recid %>% select(PersonUniqueIdentifier, NextIncidentSeq=IncidentSeq, NextIncidentReportedDate=IncidentReportedDate),
+              by=c('PersonUniqueIdentifier', 'NextIncidentSeq')) %>%
+    select(IncidentID, PriorIncidentReportedDate, NextIncidentReportedDate)
+
+  Incident <- left_join(Incident, recid, by='IncidentID') %>%
+    mutate(DaysSinceLastIncident=(IncidentReportedDate - PriorIncidentReportedDate) / ddays(1),
+           DaysUntilNextIncident=(NextIncidentReportedDate - IncidentReportedDate) / ddays(1))
+
+  recid <- stagingBooking %>%
+    semi_join(Incident %>% select(PersonUniqueIdentifier) %>% distinct(), by='PersonUniqueIdentifier') %>%
+    full_join(Incident %>%
+                semi_join(stagingBooking %>% select(PersonUniqueIdentifier) %>% distinct(), by='PersonUniqueIdentifier') %>%
+                select(IncidentID, PersonUniqueIdentifier, IncidentReportedDate), by='PersonUniqueIdentifier') %>%
+    mutate(DaysSinceLastBooking=(IncidentReportedDate - BookingDate) / ddays(1),
+           DaysUntilNextBooking=(BookingDate - IncidentReportedDate) / ddays(1))
+
+  recidPast <- recid %>% filter(DaysSinceLastBooking >= 0) %>% group_by(IncidentID) %>%
+    summarize(DaysSinceLastBooking=min(DaysSinceLastBooking))
+  recidFuture <- recid %>% filter(DaysUntilNextBooking >= 0) %>% group_by(IncidentID) %>%
+    summarize(DaysUntilNextBooking=min(DaysUntilNextBooking))
+
+  Incident <- left_join(Incident, recidPast, by='IncidentID')
+  Incident <- left_join(Incident, recidFuture, by='IncidentID')
+
+  summaryFunction <- function(df) {
+    map_df(seq(nrow(df)), function(rowNumber) {
+      sdf <- df %>% ungroup %>% filter(row_number() <= rowNumber) %>% tail(-1)
+      if (nrow(sdf) == 0) {
+        tibble(PriorInteractions6Months=0, PriorInteractions12Months=0, PriorInteractions18Months=0, PriorInteractions24Months=0)
+      } else {
+        tibble(
+          PriorInteractions6Months=sum(cumsum(rev(sdf$DaysSinceLastIncident)) <= 180),
+          PriorInteractions12Months=sum(cumsum(rev(sdf$DaysSinceLastIncident)) <= 360),
+          PriorInteractions18Months=sum(cumsum(rev(sdf$DaysSinceLastIncident)) <= 540),
+          PriorInteractions24Months=sum(cumsum(rev(sdf$DaysSinceLastIncident)) <= 720)
+        )
+      }
+    })
+  }
+
+  writeLines('Computing counts of prior interactions...')
+
+  Incident <- Incident %>% arrange(PersonUniqueIdentifier, IncidentReportedDate)
+
+  recid <- Incident %>%
+    ungroup() %>%
+    select(PersonUniqueIdentifier, DaysSinceLastIncident) %>%
+    group_by(PersonUniqueIdentifier) %>%
+    do(out=summaryFunction(.)) %>%
+    unnest(out) %>% select(starts_with('PriorInteractions'))
+
+  Incident <- Incident %>%
+    bind_cols(recid) %>%
+    mutate(SubstanceAbuseInvolvementIndicator=as.integer(SubstanceAbuseInvolvementIndicator),
+           CrisisInterventionTeamInvolvementIndicator=as.integer(CrisisInterventionTeamInvolvementIndicator)) %>%
+    select(IncidentID, PersonID, IncidentReportedDate, IncidentReportedDateID, IncidentReportedHour, CallNatureTypeID,
+           DispositionLocationTypeID, PendingCriminalChargesTypeID, IncidentNumber, OfficerCount, DurationInMinutes, CostInUnitMinutes,
+           DaysSinceLastIncident, DaysUntilNextIncident, DaysSinceLastBooking, DaysUntilNextBooking, ReportingAgencyID, TimeSpanTypeID,
+           SubstanceAbuseInvolvementIndicator, CrisisInterventionTeamInvolvementIndicator,
+           PriorInteractions6Months, PriorInteractions12Months, PriorInteractions18Months, PriorInteractions24Months) %>%
+    mutate(PersonID=PersonID+maxBookingPersonID)
+
+  writeLines('...counts of prior interactions complete')
+
+  ret <- list()
+  ret$Incident <- Incident
+  
+  if (nrow(stagingIncidentResponseUnit)) {
+    
+    UnitResponse <- stagingIncidentResponseUnit %>%
+      mutate(
+        RespondingUnitTypeID=unitTextValueConverter(codeTableList, UnitIdentifier, unknownCodeTableValue),
+        ArrivalDate=as_date(dda),
+        ArrivalDateID=format(ArrivalDate, "%Y%m%d"),
+        ArrivalHour=hour(dda),
+        ClearedDate=as_date(ddc),
+        ClearedDateID=format(ClearedDate, "%Y%m%d"),
+        ClearedHour=hour(ddc),
+        ResponseDurationInMinutes=(ddc - dda) / dminutes(1)
+      ) %>%
+      select(UnitResponseID=IncidentResponseUnitID,
+             IncidentID,
+             RespondingUnitTypeID,
+             ArrivalDateID,
+             ArrivalDate,
+             ArrivalHour,
+             ClearedDateID,
+             ClearedDate,
+             ClearedHour,
+             ResponseDurationInMinutes)
+    
+    ret$UnitResponse <- UnitResponse
+    
+  }
+
   ret
 
 }
 
-loadDateDimension <- function(adsConnection, dfs, unknownCodeTableValue, noneCodeTableValue, writeToDatabase) {
+#' @importFrom purrr map_df
+loadDateDimension <- function(adsConnection, dfs, unknownCodeTableValue, noneCodeTableValue, writeToDatabase, localDatabase) {
 
-  startDates <- getQuery(adsConnection, paste0("select max(EpisodeStartDate) as max1, min(EpisodeStartDate) as min1 from JailEpisode ",
-                                               "where EpisodeStartDate is not null"))
-  endDates <- getQuery(adsConnection, paste0("select max(EpisodeEndDate) as max2, min(EpisodeEndDate) as min2 from JailEpisode ",
-                                             "where EpisodeEndDate is not null"))
-  currentDates <- getQuery(adsConnection, "select CalendarDate from Date")
+  queries <- c(
+    'select distinct EpisodeStartDate as d from JailEpisode',
+    'select distinct EpisodeEndDate as d from JailEpisode',
+    'select distinct IncidentReportedDate as d from Incident',
+    'select distinct ArrivalDate as d from UnitResponse',
+    'select distinct ClearedDate as d from UnitResponse'
+  )
 
-  d <- cbind(startDates, endDates)
+  newDates <- map_df(queries, function(query) {
+    getQuery(adsConnection, query)
+  }) %>% distinct() %>% filter(!is.na(d)) %>% .[['d']]
 
-  dvmin <- as.integer(as.Date(c(startDates[1, 'min1'], endDates[1, 'min2'])))
-  dvmax <- as.integer(as.Date(c(startDates[1, 'max1'], endDates[1, 'max2'])))
+  newDates <- c(newDates, dfs$JailEpisode$EpisodeStartDate, dfs$JailEpisode$EpisodeEndDate,
+                dfs$Incident$IncidentReportedDate,
+                dfs$UnitResponse$ArrivalDate, dfs$UnitResponse$ClearedDate) %>% unique()
 
-  if (nrow(dfs$JailEpisode)) {
-    dvmin <- as.integer(c(dvmin, dfs$JailEpisode$EpisodeStartDate))
-    dvmax <- as.integer(c(dvmax, dfs$JailEpisode$EpisodeStartDate))
-  }
+  newDates <- newDates[!is.na(newDates)]
 
-  if (nrow(dfs$Release)) {
-    dvmin <- as.integer(c(dvmin, dfs$Release$ReleaseDate))
-    dvmax <- as.integer(c(dvmax, dfs$Release$ReleaseDate))
-  }
+  minDate <- as_date(min(newDates, na.rm=TRUE))
+  maxDate <- as_date(max(newDates, na.rm=TRUE))
 
-  dvmin <- unique(dvmin[!is.na(dvmin)])
-  minDate <- min(dvmin) %>% as_date
-  dvmax <- unique(dvmax[!is.na(dvmax)])
-  maxDate <- max(dvmax) %>% as_date()
+  currentDates <- getQuery(adsConnection, 'select distinct CalendarDate from Date')
 
-  DateDf <- buildDateDimensionTable(minDate, maxDate, as.Date(currentDates$CalendarDate), unknownCodeTableValue, noneCodeTableValue)
+  DateDf <- buildDateDimensionTable(minDate, maxDate, as_date(currentDates$CalendarDate), unknownCodeTableValue, noneCodeTableValue)
 
   if (writeToDatabase) {
-    writeDataFrameToDatabase(adsConnection, DateDf, "Date", viaBulk = TRUE)
+    writeDataFrameToDatabase(adsConnection, DateDf, "Date", viaBulk = TRUE, localBulk=localDatabase)
   }
 
   DateDf
 
 }
 
-determineRecidivism <- function(adsConnection, writeToDatabase) {
-
+#' @importFrom DBI dbExecute dbWriteTable
+#' @importFrom lubridate ddays
+determineRecidivism <- function(adsConnection, writeToDatabase, localDatabase) {
+  
   writeLines("Determining recidivism")
-
+  
   # note: change StagingPersonUniqueIdentifier to "StagingPersonUniqueIdentifier2 as StagingPersonUniqueIdentifier" to use that as the basis for recidivism
   # todo: make this a method parameter
   df <- getQuery(adsConnection, paste0("select JailEpisodeID, StagingPersonUniqueIdentifier, EpisodeStartDate from JailEpisode, Person ",
                                        "where JailEpisode.PersonID=Person.PersonID order by StagingPersonUniqueIdentifier, EpisodeStartDate"))
-
+  
   df <- df %>%
     mutate(EpisodeStartDate=as.Date(EpisodeStartDate)) %>%
     group_by(StagingPersonUniqueIdentifier) %>%
     mutate(first=row_number()==1, last=row_number()==n(), recidivist=!(first & last), DaysToNextEpisode=NA, DaysSinceLastEpisode=NA)
-
+  
   recidivistIndices <- which(df$recidivist)
-
+  
   writeLines(paste0("Found ", length(recidivistIndices), " recidivist booking records out of ", nrow(df), " total booking records"))
-
+  
   if (writeToDatabase) {
-
+    
     executeQuery(adsConnection, "update JailEpisode set DaysSinceLastEpisode=NULL, DaysUntilNextEpisode=NULL, SixMonthRebooking='N', OneYearRebooking='N', TwoYearRebooking='N'")
-
-    for (i in recidivistIndices) {
-
-      bookingDate <- df[[i, 'EpisodeStartDate']]
-      first <- df[[i, 'first']]
-      last <- df[[i, 'last']]
-      priorBookingDate <- as.Date(NA)
-      nextBookingDate <- as.Date(NA)
-
-      if (!first) {
-        priorBookingDate <- df[[i-1, "EpisodeStartDate"]]
-      }
-
-      if (!last) {
-        nextBookingDate <- df[[i+1, "EpisodeStartDate"]]
-      }
-
-      # lubridate took considerably longer
-      DaysUntilNextEpisode <- as.numeric(nextBookingDate - bookingDate) # (bookingDate %--% nextBookingDate) %/% days(1)
-      DaysSinceLastEpisode <- as.numeric(bookingDate - priorBookingDate) # (priorBookingDate %--% bookingDate) %/% days(1)
-      SixMonthRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 180, 'Y', 'N')
-      OneYearRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 365, 'Y', 'N')
-      TwoYearRebooking <- ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 730, 'Y', 'N')
-
-      JailEpisodeID <- df[[i, 'JailEpisodeID']]
-
-      sql <- paste0("update JailEpisode set ",
-                    "DaysSinceLastEpisode=", ifelse(is.na(DaysSinceLastEpisode), 'NULL', as.character(DaysSinceLastEpisode)), ",",
-                    "DaysUntilNextEpisode=", ifelse(is.na(DaysUntilNextEpisode), 'NULL', as.character(DaysUntilNextEpisode)), ",",
-                    "SixMonthRebooking='", SixMonthRebooking, "', ",
-                    "OneYearRebooking='", OneYearRebooking, "', ",
-                    "TwoYearRebooking='", TwoYearRebooking, "' where JailEpisodeID=", JailEpisodeID)
-
-      executeQuery(adsConnection, sql)
-
-    }
-
+    
+    df <- getQuery(adsConnection, paste0("select JailEpisodeID, StagingPersonUniqueIdentifier, EpisodeStartDate from JailEpisode, Person ",
+                                         "where JailEpisode.PersonID=Person.PersonID order by StagingPersonUniqueIdentifier, EpisodeStartDate")) %>%
+      as_tibble() %>%
+      arrange(StagingPersonUniqueIdentifier, EpisodeStartDate) %>%
+      group_by(StagingPersonUniqueIdentifier) %>% mutate(idx=row_number()) %>% ungroup()
+    
+    priorDf <- df %>%
+      mutate(idx=idx+1) %>%
+      select(StagingPersonUniqueIdentifier, PriorBookingDate=EpisodeStartDate, idx)
+    
+    nextDf <- df %>%
+      mutate(idx=idx-1) %>%
+      select(StagingPersonUniqueIdentifier, NextBookingDate=EpisodeStartDate, idx)
+    
+    df <- df %>% left_join(priorDf, by=c('StagingPersonUniqueIdentifier', 'idx')) %>% left_join(nextDf, by=c('StagingPersonUniqueIdentifier', 'idx')) %>%
+      mutate(DaysUntilNextEpisode=(NextBookingDate - EpisodeStartDate)/ddays(1),
+             DaysSinceLastEpisode=(EpisodeStartDate - PriorBookingDate)/ddays(1),
+             SixMonthRebooking=ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 180, 'Y', 'N'),
+             OneYearRebooking=ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 365, 'Y', 'N'),
+             TwoYearRebooking=ifelse(!is.na(DaysSinceLastEpisode) & DaysSinceLastEpisode <= 730, 'Y', 'N')
+             )
+    
+    dbWriteTable(adsConnection, 'rTemp', df, overwrite=TRUE, temporary=TRUE)
+    dbExecute(adsConnection, 'create index irTemp on rTemp (JailEpisodeID)')
+    dbExecute(adsConnection, paste0('update JailEpisode j inner join rTemp jj on j.JailEpisodeID=jj.JailEpisodeID set j.DaysSinceLastEpisode=jj.DaysSinceLastEpisode, ',
+                     'j.DaysUntilNextEpisode=jj.DaysUntilNextEpisode, j.SixMonthRebooking=jj.SixMonthRebooking, j.OneYearRebooking=jj.OneYearRebooking, j.TwoYearRebooking=jj.TwoYearRebooking'))
+    
   } else {
     writeLines("No actual recividivism updates persisted, because writeToDatabase=FALSE")
   }
-
+  
   writeLines("Recidivism determination complete")
-
+  
   invisible()
-
+  
 }
 
-persistTables <- function(adsConnection, dfs, unknownCodeTableValue, currentLoadTime, writeToDatabase) {
+persistTables <- function(adsConnection, dfs, unknownCodeTableValue, currentLoadTime, writeToDatabase, localDatabase) {
 
-  checkForAndRemoveDuplicateBookings(adsConnection, dfs, writeToDatabase=writeToDatabase)
+  checkForAndRemoveDuplicateBookings(adsConnection, dfs, writeToDatabase=writeToDatabase, localDatabase)
 
   writeLines("Writing main transaction tables to database")
 
-  writeDataFrameToDatabase(adsConnection, dfs$Person, "Person", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$JailEpisode, "JailEpisode", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$Arrest, "JailEpisodeArrest", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$Charge, "JailEpisodeCharge", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthAssessment, "BehavioralHealthAssessment", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthAssessmentCategory, "BehavioralHealthAssessmentCategory", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthTreatment, "BehavioralHealthTreatment", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthEvaluation, "BehavioralHealthEvaluation", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-  writeDataFrameToDatabase(adsConnection, dfs$PrescribedMedication, "PrescribedMedication", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$Person, "Person", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$JailEpisode, "JailEpisode", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$Arrest, "JailEpisodeArrest", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$Charge, "JailEpisodeCharge", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthAssessment, "BehavioralHealthAssessment", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthAssessmentCategory, "BehavioralHealthAssessmentCategory", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthTreatment, "BehavioralHealthTreatment", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$BehavioralHealthEvaluation, "BehavioralHealthEvaluation", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$PrescribedMedication, "PrescribedMedication", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+
+  writeDataFrameToDatabase(adsConnection, dfs$Incident, "Incident", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+  writeDataFrameToDatabase(adsConnection, dfs$UnitResponse, "UnitResponse", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
 
   writeLines("Done writing main transaction tables to database")
 
   writeLines("Applying JailEpisodeEdits")
-  applyEdits(adsConnection, dfs, currentLoadTime, writeToDatabase=writeToDatabase)
+  applyEdits(adsConnection, dfs, currentLoadTime, writeToDatabase=writeToDatabase, localDatabase)
 
   writeLines("Processing releases")
-  persistReleases(adsConnection, dfs, unknownCodeTableValue, writeToDatabase=writeToDatabase)
+  persistReleases(adsConnection, dfs, unknownCodeTableValue, writeToDatabase=writeToDatabase, localDatabase)
 
 }
 
@@ -907,7 +1319,7 @@ createMaterializedViews <- function(adsConnection, sqlFile) {
 
 }
 
-checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs, writeToDatabase) {
+checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs, writeToDatabase, localDatabase) {
 
   writeLines("Checking for Jail Episode records with prior recorded booking number...")
 
@@ -938,7 +1350,7 @@ checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs, writeToDataba
       dupBookingIDs <- c(dupBookingIDs, bookingIDDf$JailEpisodeID)
     }
 
-    removeBookingsAndChildren(adsConnection, dupBookingIDs, writeToDatabase=writeToDatabase)
+    removeBookingsAndChildren(adsConnection, dupBookingIDs, writeToDatabase=writeToDatabase, localDatabase)
 
   } else {
     writeLines("...no duplicates found")
@@ -946,7 +1358,7 @@ checkForAndRemoveDuplicateBookings <- function(adsConnection, dfs, writeToDataba
 
 }
 
-applyEdits <- function(adsConnection, dfs, currentLoadTime, writeToDatabase) {
+applyEdits <- function(adsConnection, dfs, currentLoadTime, writeToDatabase, localDatabase) {
 
   if (nrow(dfs$JailEpisodeEdits)) {
 
@@ -957,9 +1369,9 @@ applyEdits <- function(adsConnection, dfs, currentLoadTime, writeToDatabase) {
     removeBookingsAndChildren(adsConnection, dfs$JailEpisodeEdits$JailEpisodeID, writeToDatabase=writeToDatabase)
 
     writeLines("Adding edited Booking, Arrest, and Charge records")
-    writeDataFrameToDatabase(adsConnection, dfs$JailEpisodeEdits, "JailEpisode", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-    writeDataFrameToDatabase(adsConnection, dfs$ArrestEdits %>% select(-StagingPK), "JailEpisodeArrest", viaBulk = TRUE, writeToDatabase=writeToDatabase)
-    writeDataFrameToDatabase(adsConnection, dfs$ChargeEdits %>% select(-StagingPK), "JailEpisodeCharge", viaBulk = TRUE, writeToDatabase=writeToDatabase)
+    writeDataFrameToDatabase(adsConnection, dfs$JailEpisodeEdits, "JailEpisode", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+    writeDataFrameToDatabase(adsConnection, dfs$ArrestEdits %>% select(-StagingPK), "JailEpisodeArrest", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
+    writeDataFrameToDatabase(adsConnection, dfs$ChargeEdits %>% select(-StagingPK), "JailEpisodeCharge", viaBulk = TRUE, writeToDatabase=writeToDatabase, localBulk=localDatabase)
 
   } else {
     writeLines("No Jail Episode edits found in this load")
@@ -967,7 +1379,7 @@ applyEdits <- function(adsConnection, dfs, currentLoadTime, writeToDatabase) {
 
 }
 
-removeBookingsAndChildren <- function(adsConnection, BookingIDs, groupSize=50, writeToDatabase) {
+removeBookingsAndChildren <- function(adsConnection, BookingIDs, groupSize=50, writeToDatabase, localDatabase) {
 
   # split the booking edits into chunks and delete them in groups
 
@@ -1026,52 +1438,55 @@ removeBookingsAndChildren <- function(adsConnection, BookingIDs, groupSize=50, w
 
 }
 
-#' @importFrom lubridate %--%
-persistReleases <- function(adsConnection, dfs, unknownCodeTableValue, writeToDatabase) {
-
+#' @importFrom lubridate ddays
+persistReleases <- function(adsConnection, dfs, unknownCodeTableValue, writeToDatabase, localDatabase) {
+  
   bookingDf <- getQuery(adsConnection, "select JailEpisodeID, EpisodeStartDate from JailEpisode")
-
+  
   if (nrow(bookingDf)) {
-
+    
     bookingDf <- bookingDf %>%
       inner_join(dfs$Release, by=c("JailEpisodeID"="BookingID")) %>%
-      mutate(LengthOfStay=(EpisodeStartDate %--% ReleaseDate) %/% days(1), EpisodeEndDate=ReleaseDate) %>% select(-ReleaseDate)
-
+      mutate(LengthOfStay=(ReleaseDate - EpisodeStartDate) / ddays(1), EpisodeEndDate=ReleaseDate) %>% select(-ReleaseDate)
+    
     if (nrow(bookingDf)) {
-
-      for (r in seq(nrow(bookingDf))) {
-        bookingID <- bookingDf[r, 'JailEpisodeID']
-        lengthOfStay <- bookingDf[r, 'LengthOfStay']
-        episodeEndDate <- bookingDf[r, 'EpisodeEndDate']
-        episodeEndDateS <- ifelse(is.na(episodeEndDate), 'NULL', format(episodeEndDate, "%Y-%m-%d"))
-        episodeEndDateID <- ifelse(is.na(episodeEndDate), unknownCodeTableValue, format(episodeEndDate, "%Y%m%d"))
-        sql <- paste0("update JailEpisode set IsActive='N', LengthOfStay=", lengthOfStay, ", EpisodeEndDate='", episodeEndDateS, "'",
-                      ", EpisodeEndDateID=", episodeEndDateID,
-                      " where JailEpisodeID=", bookingID)
-        if (writeToDatabase) {
-          executeQuery(adsConnection, sql)
-        }
+      
+      writeLines(paste0("Updated ", nrow(bookingDf), " JailEpisode records with release information"))
+      
+      if (!writeToDatabase) {
+        writeLines("No JailEpisode records actually updated, because writeToDatabase=FALSE")
+      } else {
+        
+        bookingDf <- bookingDf %>%
+          mutate(
+            EpisodeEndDateID=ifelse(is.na(EpisodeEndDate), unknownCodeTableValue, format(EpisodeEndDate, "%Y%m%d")),
+            EpisodeEndDate=format(EpisodeEndDate, "%Y-%m-%d"),
+            IsActive='N'
+          ) %>% select(JailEpisodeID, EpisodeEndDate, EpisodeEndDateID, IsActive, LengthOfStay)
+        
+        dbWriteTable(adsConnection, 'bTemp', bookingDf, overwrite=TRUE, temporary=TRUE)
+        dbExecute(adsConnection, 'create index ibTemp on bTemp (JailEpisodeID)')
+        dbExecute(adsConnection, 'update JailEpisode j inner join bTemp jj on j.JailEpisodeID=jj.JailEpisodeID set j.EpisodeEndDate=jj.EpisodeEndDate, j.EpisodeEndDateID=jj.EpisodeEndDateID, j.IsActive=jj.IsActive, j.LengthOfStay=jj.LengthOfStay')
+        
       }
-
+      
+    } else {
+      writeLines("No releases found")
     }
-
-    writeLines(paste0("Updated ", nrow(bookingDf), " JailEpisode records with release information"))
-    if (!writeToDatabase) {
-      writeLines("No JailEpisode records actually updated, because writeToDatabase=FALSE")
-    }
-
+    
   } else {
     writeLines("No releases found")
   }
-
+  
   invisible()
-
+  
 }
 
-#' @importFrom lubridate year month day wday quarter
+#' @importFrom lubridate year month day wday quarter as_date
+#' @importFrom tibble tibble
 buildDateDimensionTable <- function(minDate, maxDate, datesToExclude, unknownCodeTableValue, noneCodeTableValue) {
   writeLines(paste0("Building date dimension, earliest date=", minDate, ", latestDate=", maxDate))
-  DateDf <- data.frame(CalendarDate=seq(minDate, maxDate, by="days")) %>%
+  DateDf <- tibble(CalendarDate=seq(minDate, maxDate, by="days")) %>%
     mutate(DateID=as.integer(format(CalendarDate, "%Y%m%d")),
            Year=year(CalendarDate),
            YearLabel=as.character(Year),
@@ -1082,9 +1497,11 @@ buildDateDimensionTable <- function(minDate, maxDate, datesToExclude, unknownCod
            Day=day(CalendarDate),
            DayOfWeek=as.character(wday(CalendarDate, label=TRUE, abbr=FALSE)),
            DayOfWeekSort=wday(CalendarDate),
-           DateMMDDYYYY=format(CalendarDate, "%m%d%Y")
+           DateMMDDYYYY=format(CalendarDate, "%m%d%Y"),
+           WeekStartingDate=CalendarDate - wday(CalendarDate) + 1,
+           DaysAgo=(maxDate - CalendarDate) / ddays(1)
     ) %>%
-    bind_rows(data.frame(CalendarDate=as.Date("1899-01-01"),
+    bind_rows(tibble(CalendarDate=as_date("1899-01-01"),
                          DateID=unknownCodeTableValue,
                          Year=0,
                          YearLabel='Unk',
@@ -1096,8 +1513,9 @@ buildDateDimensionTable <- function(minDate, maxDate, datesToExclude, unknownCod
                          DayOfWeek='Unknown',
                          DayOfWeekSort=0,
                          DateMMDDYYYY='Unknown',
-                         stringsAsFactors=FALSE)) %>%
-    bind_rows(data.frame(CalendarDate=as.Date("1899-01-02"),
+                     WeekStartingDate=as_date("1899-01-01"),
+                     DaysAgo=-1)) %>%
+    bind_rows(tibble(CalendarDate=as_date("1899-01-02"),
                          DateID=noneCodeTableValue,
                          Year=0,
                          YearLabel='None',
@@ -1109,7 +1527,8 @@ buildDateDimensionTable <- function(minDate, maxDate, datesToExclude, unknownCod
                          DayOfWeek='None',
                          DayOfWeekSort=0,
                          DateMMDDYYYY='None',
-                         stringsAsFactors=FALSE))
+                     WeekStartingDate=as_date("1899-01-02"),
+                     DaysAgo=-1))
   DateDf <- DateDf %>% filter(!(CalendarDate %in% datesToExclude))
   writeLines(paste0("Adding ", nrow(DateDf), " new dates to the Date dimension"))
   DateDf
@@ -1117,44 +1536,48 @@ buildDateDimensionTable <- function(minDate, maxDate, datesToExclude, unknownCod
 
 truncateTables <- function(adsConnection) {
 
-  executeQuery(adsConnection, "delete from JailEpisodeCharge")
-  executeQuery(adsConnection, "delete from JailEpisodeArrest")
-  executeQuery(adsConnection, "delete from JailEpisode")
-  executeQuery(adsConnection, "delete from BehavioralHealthAssessmentCategory")
-  executeQuery(adsConnection, "delete from BehavioralHealthTreatment")
-  executeQuery(adsConnection, "delete from BehavioralHealthEvaluation")
-  executeQuery(adsConnection, "delete from PrescribedMedication")
-  executeQuery(adsConnection, "delete from BehavioralHealthAssessment")
-  executeQuery(adsConnection, "delete from Person")
-  executeQuery(adsConnection, "delete from LoadHistory")
+  dbExecute(adsConnection, 'set FOREIGN_KEY_CHECKS=0')
 
-  executeQuery(adsConnection, "delete from PersonSexType")
-  executeQuery(adsConnection, "delete from PersonEthnicityType")
-  executeQuery(adsConnection, "delete from PersonRaceType")
-  executeQuery(adsConnection, "delete from PersonAgeType")
-  executeQuery(adsConnection, "delete from PersonAgeRangeType")
-  executeQuery(adsConnection, "delete from Facility")
-  executeQuery(adsConnection, "delete from Agency")
-  executeQuery(adsConnection, "delete from AssessmentCategoryType")
-  executeQuery(adsConnection, "delete from BondStatusType")
-  executeQuery(adsConnection, "delete from BondType")
-  executeQuery(adsConnection, "delete from ChargeClassType")
-  executeQuery(adsConnection, "delete from DomicileStatusType")
-  executeQuery(adsConnection, "delete from JurisdictionType")
-  executeQuery(adsConnection, "delete from LanguageType")
-  executeQuery(adsConnection, "delete from MedicaidStatusType")
-  executeQuery(adsConnection, "delete from MilitaryServiceStatusType")
-  executeQuery(adsConnection, "delete from ProgramEligibilityType")
-  executeQuery(adsConnection, "delete from SexOffenderStatusType")
-  executeQuery(adsConnection, "delete from SupervisionUnitType")
-  executeQuery(adsConnection, "delete from TreatmentAdmissionReasonType")
-  executeQuery(adsConnection, "delete from TreatmentStatusType")
-  executeQuery(adsConnection, "delete from WorkReleaseStatusType")
-  executeQuery(adsConnection, "delete from CaseStatusType")
-  executeQuery(adsConnection, "delete from ChargeDispositionType")
-  executeQuery(adsConnection, "delete from EducationLevelType")
-  executeQuery(adsConnection, "delete from OccupationType")
-  executeQuery(adsConnection, "delete from PopulationType")
-  executeQuery(adsConnection, "delete from Date")
+  executeQuery(adsConnection, "truncate UnitResponse")
+  executeQuery(adsConnection, "truncate Incident")
+  executeQuery(adsConnection, "truncate JailEpisodeCharge")
+  executeQuery(adsConnection, "truncate JailEpisodeArrest")
+  executeQuery(adsConnection, "truncate JailEpisode")
+  executeQuery(adsConnection, "truncate BehavioralHealthAssessmentCategory")
+  executeQuery(adsConnection, "truncate BehavioralHealthTreatment")
+  executeQuery(adsConnection, "truncate BehavioralHealthEvaluation")
+  executeQuery(adsConnection, "truncate PrescribedMedication")
+  executeQuery(adsConnection, "truncate BehavioralHealthAssessment")
+  executeQuery(adsConnection, "truncate Person")
+  executeQuery(adsConnection, "truncate LoadHistory")
+
+  executeQuery(adsConnection, "truncate PersonSexType")
+  executeQuery(adsConnection, "truncate PersonEthnicityType")
+  executeQuery(adsConnection, "truncate PersonRaceType")
+  executeQuery(adsConnection, "truncate PersonAgeType")
+  executeQuery(adsConnection, "truncate PersonAgeRangeType")
+  executeQuery(adsConnection, "truncate Facility")
+  executeQuery(adsConnection, "truncate Agency")
+  executeQuery(adsConnection, "truncate AssessmentCategoryType")
+  executeQuery(adsConnection, "truncate BondStatusType")
+  executeQuery(adsConnection, "truncate BondType")
+  executeQuery(adsConnection, "truncate ChargeClassType")
+  executeQuery(adsConnection, "truncate DomicileStatusType")
+  executeQuery(adsConnection, "truncate JurisdictionType")
+  executeQuery(adsConnection, "truncate LanguageType")
+  executeQuery(adsConnection, "truncate MedicaidStatusType")
+  executeQuery(adsConnection, "truncate MilitaryServiceStatusType")
+  executeQuery(adsConnection, "truncate ProgramEligibilityType")
+  executeQuery(adsConnection, "truncate SexOffenderStatusType")
+  executeQuery(adsConnection, "truncate SupervisionUnitType")
+  executeQuery(adsConnection, "truncate TreatmentAdmissionReasonType")
+  executeQuery(adsConnection, "truncate TreatmentStatusType")
+  executeQuery(adsConnection, "truncate WorkReleaseStatusType")
+  executeQuery(adsConnection, "truncate CaseStatusType")
+  executeQuery(adsConnection, "truncate ChargeDispositionType")
+  executeQuery(adsConnection, "truncate EducationLevelType")
+  executeQuery(adsConnection, "truncate OccupationType")
+  executeQuery(adsConnection, "truncate PopulationType")
+  executeQuery(adsConnection, "truncate Date")
 
 }

@@ -16,13 +16,18 @@ library(tidyverse)
 library(lubridate)
 library(rvest)
 library(stringr)
-library(RMySQL)
+library(RMariaDB)
 
 # Assumes Arrest dataframe has already been created
 #source('LoadData.R')
 
-# edit mysql connection info here
-connection <- dbConnect(MySQL(), host="localhost", dbname="ojbc_analytics_cch_maine", username="root")
+WRITE_TO_DATABASE = FALSE
+connection <- NULL
+
+if (WRITE_TO_DATABASE) {
+  # edit mysql connection info here
+  connection <- dbConnect(MySQL(), host="db", dbname="ojbc_analytics_cch_maine", username="root")
+}
 
 UNKNOWN_VALUE <- as.integer(999999)
 NONE_VALUE <- as.integer(999998)
@@ -435,20 +440,21 @@ writeTable <- function(name, df, colsToExclude=character(0)) {
   dbWriteTable(connection, name, df %>% select(-one_of(colsToExclude)), append=TRUE, row.names=FALSE)
 }
 
-dbClearResult(dbSendStatement(connection, paste0('set foreign_key_checks=0')))
-writeTable('SexType', SexType, 'ArresteeSex')
-writeTable('RaceType', RaceType, 'ArresteeRace')
-writeTable('ChargeSeverityType', ChargeSeverityType)
-writeTable('ChargeOriginType', ChargeOriginType, 'ChargeOrigin')
-writeTable('DispositionType', DispositionType)
-writeTable('AgeGroupType', AgeGroupType)
-writeTable('AgeYearsType', AgeYearsType)
-writeTable('CourtType', CourtType, 'CourtName')
-writeTable('CountyType', CountyType)
-writeTable('AgencyType', AgencyType, c('ArrestingAgencyName', 'County'))
-writeTable('DateType', DateType)
-writeTable('DaysDurationType', DaysDurationType)
-writeTable('Arrest', ArrestOut)
-dbClearResult(dbSendStatement(connection, paste0('set foreign_key_checks=1')))
-
-dbDisconnect(connection)
+if (WRITE_TO_DATABASE) {
+  dbClearResult(dbSendStatement(connection, paste0('set foreign_key_checks=0')))
+  writeTable('SexType', SexType, 'ArresteeSex')
+  writeTable('RaceType', RaceType, 'ArresteeRace')
+  writeTable('ChargeSeverityType', ChargeSeverityType)
+  writeTable('ChargeOriginType', ChargeOriginType, 'ChargeOrigin')
+  writeTable('DispositionType', DispositionType)
+  writeTable('AgeGroupType', AgeGroupType)
+  writeTable('AgeYearsType', AgeYearsType)
+  writeTable('CourtType', CourtType, 'CourtName')
+  writeTable('CountyType', CountyType)
+  writeTable('AgencyType', AgencyType, c('ArrestingAgencyName', 'County'))
+  writeTable('DateType', DateType)
+  writeTable('DaysDurationType', DaysDurationType)
+  writeTable('Arrest', ArrestOut)
+  dbClearResult(dbSendStatement(connection, paste0('set foreign_key_checks=1')))
+  dbDisconnect(connection)
+}

@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Unless explicitly acquired and licensed from Licensor under another license, the contents of
+    this file are subject to the Reciprocal Public License ("RPL") Version 1.5, or subsequent
+    versions as allowed by the RPL, and You may not copy or use this file in either source code
+    or executable form, except in compliance with the terms and conditions of the RPL
+
+    All software distributed under the RPL is provided strictly on an "AS IS" basis, WITHOUT
+    WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, AND LICENSOR HEREBY DISCLAIMS ALL SUCH
+    WARRANTIES, INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+    PARTICULAR PURPOSE, QUIET ENJOYMENT, OR NON-INFRINGEMENT. See the RPL for specific language
+    governing rights and limitations under the RPL.
+
+    http://opensource.org/licenses/RPL-1.5
+
+    Copyright 2012-2017 Open Justice Broker Consortium
+
+-->
+<Schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="CommunityCorrections" metamodelVersion="4.0" xsi:noNamespaceSchemaLocation="mondrian4.xsd">
+
+  <PhysicalSchema>
+
+		<Table name="Agency"/>
+		<Table name="CensusPlace"/>
+		<Table name="ChargeClassType"/>
+		<Table name="ChargeType"/>
+		<Table name="County"/>
+		<Table name="DateType"/>
+		<Table name="JusticeFacilityLocation"/>
+		<Table name="PersonRaceType"/>
+		<Table name="PersonSexType"/>
+		<Table name="ProbationOfficial"/>
+		<Table name="SupervisionLevelType"/>
+		<Table name="SupervisionStatusType"/>
+
+    <Table name="ArrestView">
+      <ColumnDefs>
+        <CalculatedColumnDef name='SixMonthRebookingStatus' type='Integer'>
+          <ExpressionView>
+            <SQL dialect="mysql">
+              CASE WHEN <Column name="DaysSinceLastBooking"/> IS NULL THEN NULL
+                WHEN <Column name="DaysSinceLastBooking"/> &lt;= 180 THEN 1
+                ELSE 0 END
+            </SQL>
+          </ExpressionView>
+        </CalculatedColumnDef>
+        <CalculatedColumnDef name='OneYearRebookingStatus' type='Integer'>
+          <ExpressionView>
+            <SQL dialect="mysql">
+              CASE WHEN <Column name="DaysSinceLastBooking"/> IS NULL THEN NULL
+                WHEN <Column name="DaysSinceLastBooking"/> &lt;= 365 THEN 1
+                ELSE 0 END
+            </SQL>
+          </ExpressionView>
+        </CalculatedColumnDef>
+        <CalculatedColumnDef name='TwoYearRebookingStatus' type='Integer'>
+          <ExpressionView>
+            <SQL dialect="mysql">
+              CASE WHEN <Column name="DaysSinceLastBooking"/> IS NULL THEN NULL
+                WHEN <Column name="DaysSinceLastBooking"/> &lt;= 730 THEN 1
+                ELSE 0 END
+            </SQL>
+          </ExpressionView>
+        </CalculatedColumnDef>
+      </ColumnDefs>
+    </Table>
+
+    <Table name="ChargeView"/>
+    <Table name="ProbationSupervisionView"/>
+		<Table name="ProbationSupervisionStatusView"/>
+    <Table name="ProbationTermArrestView">
+      <ColumnDefs>
+        <CalculatedColumnDef name='SixMonthRebookingStatus' type='Integer'>
+          <ExpressionView>
+            <SQL dialect="mysql">
+              CASE WHEN <Column name="DaysSinceLastBooking"/> IS NULL THEN NULL
+                WHEN <Column name="DaysSinceLastBooking"/> &lt;= 180 THEN 1
+                ELSE 0 END
+            </SQL>
+          </ExpressionView>
+        </CalculatedColumnDef>
+        <CalculatedColumnDef name='OneYearRebookingStatus' type='Integer'>
+          <ExpressionView>
+            <SQL dialect="mysql">
+              CASE WHEN <Column name="DaysSinceLastBooking"/> IS NULL THEN NULL
+                WHEN <Column name="DaysSinceLastBooking"/> &lt;= 365 THEN 1
+                ELSE 0 END
+            </SQL>
+          </ExpressionView>
+        </CalculatedColumnDef>
+        <CalculatedColumnDef name='TwoYearRebookingStatus' type='Integer'>
+          <ExpressionView>
+            <SQL dialect="mysql">
+              CASE WHEN <Column name="DaysSinceLastBooking"/> IS NULL THEN NULL
+                WHEN <Column name="DaysSinceLastBooking"/> &lt;= 730 THEN 1
+                ELSE 0 END
+            </SQL>
+          </ExpressionView>
+        </CalculatedColumnDef>
+        <CalculatedColumnDef name='ProbationTermArrestStatus' type='Integer'>
+          <ExpressionView>
+            <SQL dialect="mysql">
+              CASE WHEN <Column name="ArrestID"/> IS NULL THEN 0
+                ELSE 1 END
+            </SQL>
+          </ExpressionView>
+        </CalculatedColumnDef>
+        <CalculatedColumnDef name='ProbationArrestCount' type='Integer'>
+          <ExpressionView>
+            <SQL dialect="mysql">
+              if(<Column name="ArrestID"/> IS NULL, 1, 0) * ProbationSupervisionID
+            </SQL>
+          </ExpressionView>
+        </CalculatedColumnDef>
+      </ColumnDefs>
+    </Table>
+
+    <Query alias="PersonAgeType">
+      <ExpressionView>
+        <SQL dialect="generic">
+SELECT PersonAgeTypeID, AgeInYears, AgeRange, AgeRangeSort from PersonAgeType inner join PersonAgeRangeType on PersonAgeType.PersonAgeRangeTypeID=PersonAgeRangeType.PersonAgeRangeTypeID
+        </SQL>
+      </ExpressionView>
+    </Query>
+
+    <InlineTable alias="BinaryIndicatorStatusType">
+      <ColumnDefs>
+        <ColumnDef name="BinaryIndicatorStatusTypeID" type="Integer"/>
+        <ColumnDef name="BinaryIndicatorStatusTypeDescription" type="String"/>
+      </ColumnDefs>
+      <Rows>
+        <Row>
+          <Value column="BinaryIndicatorStatusTypeID">1</Value>
+          <Value column="BinaryIndicatorStatusTypeDescription">Yes</Value>
+        </Row>
+        <Row>
+          <Value column="BinaryIndicatorStatusTypeID">0</Value>
+          <Value column="BinaryIndicatorStatusTypeDescription">No</Value>
+        </Row>
+      </Rows>
+    </InlineTable>
+
+  </PhysicalSchema>
+
+  <Dimension visible="true" name="Date" table="DateType" key="DateTypeID" type="TIME">
+    <Attributes>
+      <Attribute name="DateTypeID" keyColumn="DateTypeID" hasHierarchy="false"/>
+      <Attribute name="Year" keyColumn="YearLabel" hasHierarchy="false"/>
+      <Attribute name="Quarter" hasHierarchy="false" levelType="TimeQuarters">
+        <Key>
+          <Column name="YearLabel"/>
+          <Column name="CalendarQuarter"/>
+        </Key>
+        <Name>
+          <Column name="CalendarQuarter"/>
+        </Name>
+      </Attribute>
+      <Attribute name="Month" hasHierarchy="false" levelType="TimeMonths" orderByColumn="Month">
+        <Key>
+          <Column name="YearLabel"/>
+          <Column name="CalendarQuarter"/>
+          <Column name="MonthName"/>
+        </Key>
+        <Name>
+          <Column name="MonthName"/>
+        </Name>
+      </Attribute>
+      <Attribute name="Day" hasHierarchy="false" levelType="TimeDays">
+        <Key>
+          <Column name="YearLabel"/>
+          <Column name="CalendarQuarter"/>
+          <Column name="MonthName"/>
+          <Column name="Day"/>
+        </Key>
+        <Name>
+          <Column name="Day"/>
+        </Name>
+      </Attribute>
+      <Attribute name="Date" keyColumn="CalendarDate" hasHierarchy="false" levelType="TimeDays"/>
+      <Attribute name="Day of Week" keyColumn="DayOfWeek" hasHierarchy="false" levelType="TimeDays" orderByColumn="DayOfWeekSort"/>
+    </Attributes>
+     <Hierarchies>
+        <Hierarchy name="DateYMD" caption="Year/Month/Day" allMemberName="All Years" allMemberCaption="All Years">
+        <Level attribute="Year" />
+            <Level attribute="Quarter" />
+            <Level attribute="Month" />
+            <Level attribute="Day" />
+        </Hierarchy>
+        <Hierarchy name="CalDate" caption="Calendar Date" allMemberName="All Dates" allMemberCaption="All Dates">
+            <Level attribute="Date"/>
+        </Hierarchy>
+        <Hierarchy name="Day of Week" caption="Day of Week" allMemberName="All Days" allMemberCaption="All Days">
+            <Level attribute="Day of Week"/>
+        </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+
+  <Dimension visible="true" name="Agency" key="AgencyID" table="Agency">
+   <Attributes>
+     <Attribute name="AgencyID" keyColumn="AgencyID" hasHierarchy="false"/>
+     <Attribute name="AgencyDescription" keyColumn="AgencyDescription" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="Agency" allMemberName="All Agencies">
+        <Level attribute="AgencyDescription" caption="Agency"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Census Place" key="CensusPlaceID" table="CensusPlace">
+   <Attributes>
+     <Attribute name="CensusPlaceID" keyColumn="CensusPlaceID" hasHierarchy="false"/>
+     <Attribute name="CensusPlaceName" keyColumn="CensusPlaceName" hasHierarchy="false"/>
+     <Attribute name="CensusPlaceType" keyColumn="CensusPlaceType" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="Census Place" allMemberName="All Census Places">
+        <Level attribute="CensusPlaceType" caption="Place Type" visible="false"/> <!-- Not useful in Hawaii, as all places are CDPs -->
+        <Level attribute="CensusPlaceName" caption="Place Name"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Charge Class" key="ChargeClassTypeID" table="ChargeClassType">
+   <Attributes>
+     <Attribute name="ChargeClassTypeID" keyColumn="ChargeClassTypeID" hasHierarchy="false"/>
+     <Attribute name="ChargeClassTypeDescription" keyColumn="ChargeClassTypeDescription" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="Charge Class" allMemberName="All Charge Classes">
+        <Level attribute="ChargeClassTypeDescription" caption="Charge Class"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Charge Type" key="ChargeTypeID" table="ChargeType">
+   <Attributes>
+     <Attribute name="ChargeTypeID" keyColumn="ChargeTypeID" hasHierarchy="false"/>
+     <Attribute name="ChargeTypeDescription" keyColumn="ChargeTypeDescription" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="Charge Type" allMemberName="All Charge Types">
+        <Level attribute="ChargeTypeDescription" caption="Charge Type"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="County" key="CountyID" table="County">
+   <Attributes>
+     <Attribute name="CountyID" keyColumn="CountyID" hasHierarchy="false"/>
+     <Attribute name="CountyName" keyColumn="CountyName" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="County" allMemberName="All Counties">
+        <Level attribute="CountyName" caption="County"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Justice Facility Location" key="JusticeFacilityLocationID" table="JusticeFacilityLocation">
+   <Attributes>
+     <Attribute name="JusticeFacilityLocationID" keyColumn="JusticeFacilityLocationID" hasHierarchy="false"/>
+     <Attribute name="JusticeFacilityLocationDescription" keyColumn="JusticeFacilityLocationDescription" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="Justice Facility Location" allMemberName="All Locations">
+        <Level attribute="JusticeFacilityLocationDescription" caption="Justice Facility Location"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Age" key="PersonAgeTypeID" table="PersonAgeType">
+   <Attributes>
+     <Attribute name="PersonAgeTypeID" keyColumn="PersonAgeTypeID" hasHierarchy="false"/>
+     <Attribute name="AgeInYears" keyColumn="AgeInYears" hasHierarchy="false"/>
+     <Attribute name="AgeRange" keyColumn="AgeRange" hasHierarchy="false" orderByColumn="AgeRangeSort"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="PersonAgeType" allMemberName="All Ages">
+        <Level attribute="AgeRange" caption="Age Group"/>
+        <Level attribute="AgeInYears" caption="Age"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Race" key="PersonRaceTypeID" table="PersonRaceType">
+   <Attributes>
+     <Attribute name="PersonRaceTypeID" keyColumn="PersonRaceTypeID" hasHierarchy="false"/>
+     <Attribute name="PersonRaceTypeDescription" keyColumn="PersonRaceTypeDescription" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="Race" allMemberName="All PersonRaceTypes">
+        <Level attribute="PersonRaceTypeDescription" caption="Race"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Sex" key="PersonSexTypeID" table="PersonSexType">
+   <Attributes>
+     <Attribute name="PersonSexTypeID" keyColumn="PersonSexTypeID" hasHierarchy="false"/>
+     <Attribute name="PersonSexTypeDescription" keyColumn="PersonSexTypeDescription" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="Sex" allMemberName="All Sexes">
+        <Level attribute="PersonSexTypeDescription" caption="Sex"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Probation Official" key="ProbationOfficialID" table="ProbationOfficial">
+   <Attributes>
+     <Attribute name="ProbationOfficialID" keyColumn="ProbationOfficialID" hasHierarchy="false"/>
+     <Attribute name="ProbationOfficialName" keyColumn="ProbationOfficialName" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="Probation Official" allMemberName="All Officials">
+        <Level attribute="ProbationOfficialName" caption="Official"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Supervision Level" key="SupervisionLevelTypeID" table="SupervisionLevelType">
+   <Attributes>
+     <Attribute name="SupervisionLevelTypeID" keyColumn="SupervisionLevelTypeID" hasHierarchy="false"/>
+     <Attribute name="SupervisionLevelTypeDescription" keyColumn="SupervisionLevelTypeDescription" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="Supervision Level" allMemberName="All Levels">
+        <Level attribute="SupervisionLevelTypeDescription" caption="Supervision Level"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Supervision Status" key="SupervisionStatusTypeID" table="SupervisionStatusType">
+   <Attributes>
+     <Attribute name="SupervisionStatusTypeID" keyColumn="SupervisionStatusTypeID" hasHierarchy="false"/>
+     <Attribute name="SupervisionStatusTypeDescription" keyColumn="SupervisionStatusTypeDescription" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="Supervision Status" allMemberName="All Statuses">
+        <Level attribute="SupervisionStatusTypeDescription" caption="Supervision Status"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Rebooking Status" key="BinaryIndicatorStatusTypeID" table="BinaryIndicatorStatusType">
+   <Attributes>
+     <Attribute name="BinaryIndicatorStatusTypeID" keyColumn="BinaryIndicatorStatusTypeID" hasHierarchy="false"/>
+     <Attribute name="BinaryIndicatorStatusTypeDescription" keyColumn="BinaryIndicatorStatusTypeDescription" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="RebookingStatus" allMemberName="All Statuses" caption="Rebooking Status">
+        <Level attribute="BinaryIndicatorStatusTypeDescription" caption="Previously Booked?"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+  <Dimension visible="true" name="Probation Arrest Status" key="BinaryIndicatorStatusTypeID" table="BinaryIndicatorStatusType">
+   <Attributes>
+     <Attribute name="BinaryIndicatorStatusTypeID" keyColumn="BinaryIndicatorStatusTypeID" hasHierarchy="false"/>
+     <Attribute name="BinaryIndicatorStatusTypeDescription" keyColumn="BinaryIndicatorStatusTypeDescription" hasHierarchy="false"/>
+    </Attributes>
+    <Hierarchies>
+      <Hierarchy name="ProbationArrestStatus" allMemberName="All Statuses" caption="Probation Arrest Status">
+        <Level attribute="BinaryIndicatorStatusTypeDescription" caption="Arrested During Supervision?"/>
+      </Hierarchy>
+    </Hierarchies>
+  </Dimension>
+
+  <Cube name="Arrest" visible="true" caption="Arrests">
+    <Dimensions>
+      <Dimension source="Agency"/>
+      <Dimension name="BookingDate" source="Date" caption="Booking Date"/>
+      <Dimension name="ArrestDate" source="Date" caption="Arrest Date"/>
+      <Dimension source="Sex" caption="Sex"/>
+      <Dimension source="Race" caption="Race"/>
+      <Dimension source="Age" caption="Age"/>
+      <Dimension source="Census Place" caption="Place"/>
+      <Dimension source="County" caption="County"/>
+      <Dimension source="Justice Facility Location" caption="Justice Facility"/>
+      <Dimension source="Rebooking Status" caption="Six Month Rebooking Status" name="Six Month Rebooking Status"/>
+      <Dimension source="Rebooking Status" caption="One Year Rebooking Status" name="One Year Rebooking Status"/>
+      <Dimension source="Rebooking Status" caption="Two Year Rebooking Status" name="Two Year Rebooking Status"/>
+    </Dimensions>
+    <MeasureGroups>
+        <MeasureGroup table="ArrestView" name="Arrests">
+          <Measures>
+            <Measure name="Arrest Count" column="ArrestID" aggregator="distinct-count" visible="true" caption="Arrest Count" formatString="#,###"/>
+            <Measure name="Six Month Rebooking Rate" column="SixMonthRebookingStatus" aggregator="avg" visible="true" formatString="#0.00 %"/>
+            <Measure name="One Year Rebooking Rate" column="OneYearRebookingStatus" aggregator="avg" visible="true" formatString="#0.00 %"/>
+            <Measure name="Two Year Rebooking Rate" column="TwoYearRebookingStatus" aggregator="avg" visible="true" formatString="#0.00 %"/>
+          </Measures>
+          <DimensionLinks>
+            <ForeignKeyLink dimension="Agency" foreignKeyColumn="AgencyID"/>
+            <ForeignKeyLink dimension="BookingDate" foreignKeyColumn="BookingDateTypeID"/>
+            <ForeignKeyLink dimension="ArrestDate" foreignKeyColumn="ArrestDateTypeID"/>
+            <ForeignKeyLink dimension="Sex" foreignKeyColumn="PersonSexTypeID"/>
+            <ForeignKeyLink dimension="Race" foreignKeyColumn="PersonRaceTypeID"/>
+            <ForeignKeyLink dimension="Age" foreignKeyColumn="PersonAgeTypeID"/>
+            <ForeignKeyLink dimension="Census Place" foreignKeyColumn="CensusPlaceID"/>
+            <ForeignKeyLink dimension="County" foreignKeyColumn="CountyID"/>
+            <ForeignKeyLink dimension="Justice Facility Location" foreignKeyColumn="JusticeFacilityLocationID"/>
+            <ForeignKeyLink dimension="Six Month Rebooking Status" foreignKeyColumn="SixMonthRebookingStatus"/>
+            <ForeignKeyLink dimension="One Year Rebooking Status" foreignKeyColumn="OneYearRebookingStatus"/>
+            <ForeignKeyLink dimension="Two Year Rebooking Status" foreignKeyColumn="TwoYearRebookingStatus"/>
+          </DimensionLinks>
+        </MeasureGroup>
+      </MeasureGroups>
+  </Cube>
+
+  <Cube name="ArrestCharge" visible="true" caption="Charges">
+    <Dimensions>
+      <Dimension source="Agency"/>
+      <Dimension name="BookingDate" source="Date" caption="Booking Date"/>
+      <Dimension name="ArrestDate" source="Date" caption="Arrest Date"/>
+      <Dimension source="Sex" caption="Sex"/>
+      <Dimension source="Race" caption="Race"/>
+      <Dimension source="Age" caption="Age"/>
+      <Dimension source="Census Place" caption="Place"/>
+      <Dimension source="County" caption="County"/>
+      <Dimension source="Justice Facility Location" caption="Justice Facility"/>
+      <Dimension source="Charge Type" caption="Charge Type"/>
+      <Dimension source="Charge Class" caption="Charge Class"/>
+    </Dimensions>
+    <MeasureGroups>
+        <MeasureGroup table="ChargeView" name="Charges">
+          <Measures>
+            <Measure name="Arrest Count" column="ArrestID" aggregator="distinct-count" visible="true" caption="Distinct Arrest Count" formatString="#,###"/>
+            <Measure name="Charge Count" column="ChargeID" aggregator="distinct-count" visible="true" caption="Distinct Charge Count" formatString="#,###"/>
+          </Measures>
+          <DimensionLinks>
+            <ForeignKeyLink dimension="Agency" foreignKeyColumn="AgencyID"/>
+            <ForeignKeyLink dimension="BookingDate" foreignKeyColumn="BookingDateTypeID"/>
+            <ForeignKeyLink dimension="ArrestDate" foreignKeyColumn="ArrestDateTypeID"/>
+            <ForeignKeyLink dimension="Sex" foreignKeyColumn="PersonSexTypeID"/>
+            <ForeignKeyLink dimension="Race" foreignKeyColumn="PersonRaceTypeID"/>
+            <ForeignKeyLink dimension="Age" foreignKeyColumn="PersonAgeTypeID"/>
+            <ForeignKeyLink dimension="Census Place" foreignKeyColumn="CensusPlaceID"/>
+            <ForeignKeyLink dimension="County" foreignKeyColumn="CountyID"/>
+            <ForeignKeyLink dimension="Justice Facility Location" foreignKeyColumn="JusticeFacilityLocationID"/>
+            <ForeignKeyLink dimension="Charge Type" foreignKeyColumn="ChargeTypeID"/>
+            <ForeignKeyLink dimension="Charge Class" foreignKeyColumn="ChargeClassTypeID"/>
+          </DimensionLinks>
+        </MeasureGroup>
+      </MeasureGroups>
+  </Cube>
+
+  <Cube name="Probation" visible="false" caption="Probation">
+    <Dimensions>
+      <Dimension source="Agency"/>
+      <Dimension name="TermStartDate" source="Date" caption="Supervision Start Date"/>
+      <Dimension name="TermEndDate" source="Date" caption="Supervision End Date"/>
+      <Dimension source="Sex" caption="Sex"/>
+      <Dimension source="Race" caption="Race"/>
+      <Dimension source="Age" caption="Age"/>
+      <Dimension source="Supervision Status" caption="Status"/>
+      <Dimension source="Supervision Level" caption="Level"/>
+      <Dimension source="Probation Official" caption="Officer"/>
+    </Dimensions>
+    <MeasureGroups>
+        <MeasureGroup table="ProbationSupervisionStatusView" name="Probation">
+          <Measures>
+            <Measure name="Case Count" column="ProbationSupervisionID" aggregator="distinct-count" visible="true" caption="Distinct Case Count" formatString="#,###"/>
+            <Measure name="Assignment Count" column="ProbationSupervisionStatusID" aggregator="distinct-count" visible="true" caption="Distinct Assignment Count" formatString="#,###"/>
+          </Measures>
+          <DimensionLinks>
+            <ForeignKeyLink dimension="Agency" foreignKeyColumn="AgencyID"/>
+            <ForeignKeyLink dimension="TermStartDate" foreignKeyColumn="TermStartDateTypeID"/>
+            <ForeignKeyLink dimension="TermEndDate" foreignKeyColumn="TermEndDateTypeID"/>
+            <ForeignKeyLink dimension="Sex" foreignKeyColumn="PersonSexTypeID"/>
+            <ForeignKeyLink dimension="Race" foreignKeyColumn="PersonRaceTypeID"/>
+            <ForeignKeyLink dimension="Age" foreignKeyColumn="PersonAgeTypeID"/>
+            <ForeignKeyLink dimension="Supervision Status" foreignKeyColumn="SupervisionStatusTypeID"/>
+            <ForeignKeyLink dimension="Supervision Level" foreignKeyColumn="SupervisionLevelTypeID"/>
+            <ForeignKeyLink dimension="Probation Official" foreignKeyColumn="ProbationOfficialID"/>
+          </DimensionLinks>
+        </MeasureGroup>
+      </MeasureGroups>
+  </Cube>
+
+  <Cube name="ProbationTermArrest" visible="true" caption="Probation-Arrest">
+    <Dimensions>
+      <Dimension name="ProbationAgency" source="Agency" caption="Probation Agency"/>
+      <Dimension name="TermStartDate" source="Date" caption="Supervision Start Date"/>
+      <Dimension name="TermEndDate" source="Date" caption="Supervision End Date"/>
+      <Dimension name="ProbationerSex" source="Sex" caption="Probationer Sex"/>
+      <Dimension name="ProbationerRace" source="Race" caption="Probationer Race"/>
+      <Dimension name="ProbationerAge" source="Age" caption="Probationer Age"/>
+      <Dimension source="Supervision Status" caption="Status"/>
+      <Dimension source="Supervision Level" caption="Level"/>
+      <Dimension source="Probation Official" caption="Officer"/>
+      <Dimension name="LEA" source="Agency" caption="Police Agency"/>
+      <Dimension name="BookingDate" source="Date" caption="Booking Date"/>
+      <Dimension name="ArrestDate" source="Date" caption="Arrest Date"/>
+      <Dimension name="ArresteeSex" source="Sex" caption="Arrestee Sex"/>
+      <Dimension name="ArresteeRace" source="Race" caption="Arrestee Race"/>
+      <Dimension name="ArresteeAge" source="Age" caption="Arrestee Age"/>
+      <Dimension source="Census Place" caption="Place"/>
+      <Dimension source="County" caption="County"/>
+      <Dimension source="Justice Facility Location" caption="Justice Facility"/>
+      <Dimension source="Charge Type" caption="Charge Type"/>
+      <Dimension source="Charge Class" caption="Charge Class"/>
+      <Dimension source="Rebooking Status" caption="Six Month Rebooking Status" name="Six Month Rebooking Status"/>
+      <Dimension source="Rebooking Status" caption="One Year Rebooking Status" name="One Year Rebooking Status"/>
+      <Dimension source="Rebooking Status" caption="Two Year Rebooking Status" name="Two Year Rebooking Status"/>
+      <Dimension source="Probation Arrest Status" caption="Probation Arrest Status"/>
+    </Dimensions>
+    <MeasureGroups>
+        <MeasureGroup table="ProbationTermArrestView" name="Probation-Arrest">
+          <Measures>
+            <Measure name="Case Count" column="ProbationSupervisionID" aggregator="distinct-count" visible="true" caption="Distinct Case Count" formatString="#,###"/>
+            <Measure name="Assignment Count" column="ProbationSupervisionStatusID" aggregator="distinct-count" visible="true" caption="Distinct Assignment Count" formatString="#,###"/>
+            <Measure name="Six Month Rebooking Rate" column="SixMonthRebookingStatus" aggregator="avg" visible="true" formatString="#0.00 %"/>
+            <Measure name="One Year Rebooking Rate" column="OneYearRebookingStatus" aggregator="avg" visible="true" formatString="#0.00 %"/>
+            <Measure name="Two Year Rebooking Rate" column="TwoYearRebookingStatus" aggregator="avg" visible="true" formatString="#0.00 %"/>
+            <Measure name="ProbationArrestCount" column="ProbationArrestCount" aggregator="distinct-count" visible="false"/>
+          </Measures>
+          <DimensionLinks>
+            <ForeignKeyLink dimension="ProbationAgency" foreignKeyColumn="ProbationAgencyID"/>
+            <ForeignKeyLink dimension="TermStartDate" foreignKeyColumn="TermStartDateTypeID"/>
+            <ForeignKeyLink dimension="TermEndDate" foreignKeyColumn="TermEndDateTypeID"/>
+            <ForeignKeyLink dimension="ProbationerSex" foreignKeyColumn="ProbationSupervisionPersonSexTypeID"/>
+            <ForeignKeyLink dimension="ProbationerRace" foreignKeyColumn="ProbationSupervisionPersonRaceTypeID"/>
+            <ForeignKeyLink dimension="ProbationerAge" foreignKeyColumn="ProbationSupervisionPersonAgeTypeID"/>
+            <ForeignKeyLink dimension="Supervision Status" foreignKeyColumn="SupervisionStatusTypeID"/>
+            <ForeignKeyLink dimension="Supervision Level" foreignKeyColumn="SupervisionLevelTypeID"/>
+            <ForeignKeyLink dimension="Probation Official" foreignKeyColumn="ProbationOfficialID"/>
+            <ForeignKeyLink dimension="LEA" foreignKeyColumn="ArrestAgencyID"/>
+            <ForeignKeyLink dimension="BookingDate" foreignKeyColumn="BookingDateTypeID"/>
+            <ForeignKeyLink dimension="ArrestDate" foreignKeyColumn="ArrestDateTypeID"/>
+            <ForeignKeyLink dimension="ArresteeSex" foreignKeyColumn="ArrestPersonSexTypeID"/>
+            <ForeignKeyLink dimension="ArresteeRace" foreignKeyColumn="ArrestPersonRaceTypeID"/>
+            <ForeignKeyLink dimension="ArresteeAge" foreignKeyColumn="ArrestPersonAgeTypeID"/>
+            <ForeignKeyLink dimension="Census Place" foreignKeyColumn="CensusPlaceID"/>
+            <ForeignKeyLink dimension="County" foreignKeyColumn="CountyID"/>
+            <ForeignKeyLink dimension="Justice Facility Location" foreignKeyColumn="JusticeFacilityLocationID"/>
+            <ForeignKeyLink dimension="Charge Type" foreignKeyColumn="ChargeTypeID"/>
+            <ForeignKeyLink dimension="Charge Class" foreignKeyColumn="ChargeClassTypeID"/>
+            <ForeignKeyLink dimension="Six Month Rebooking Status" foreignKeyColumn="SixMonthRebookingStatus"/>
+            <ForeignKeyLink dimension="One Year Rebooking Status" foreignKeyColumn="OneYearRebookingStatus"/>
+            <ForeignKeyLink dimension="Two Year Rebooking Status" foreignKeyColumn="TwoYearRebookingStatus"/>
+            <ForeignKeyLink dimension="Probation Arrest Status" foreignKeyColumn="ProbationTermArrestStatus"/>
+          </DimensionLinks>
+        </MeasureGroup>
+      </MeasureGroups>
+      <CalculatedMembers>
+  			<CalculatedMember name="Probation Arrest Rate" caption="Probation Arrest Rate" dimension="Measures">
+  				<Formula><![CDATA[IIf([Measures].[Case Count] > 0, ([Measures].[ProbationArrestCount]-1)  / [Measures].[Case Count], NULL)]]></Formula>
+  				<CalculatedMemberProperty name="FORMAT_STRING" value="#0.0 %"/>
+  			</CalculatedMember>
+      </CalculatedMembers>
+  </Cube>
+
+</Schema>

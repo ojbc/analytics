@@ -1,0 +1,1 @@
+{"connectionname":"Analytics","connectiontype":"MONDRIAN","jdbcurl":"jdbc:mariadb://db-analytics-cc/ojbc_cc_dimensional_demo","schema":"/datasources/Analytics.xml","driver":"org.mariadb.jdbc.Driver","username":"analytics","password":"","security_type":null}
