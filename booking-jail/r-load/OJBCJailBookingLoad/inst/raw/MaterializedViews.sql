@@ -11,6 +11,7 @@ create table FullIncidentView as
     CallNatureTypeID,
     DispositionLocationTypeID,
     PendingCriminalChargesTypeID,
+    TimeSpanTypeID,
     OfficerCount,
     DurationInMinutes,
     CostInUnitMinutes,

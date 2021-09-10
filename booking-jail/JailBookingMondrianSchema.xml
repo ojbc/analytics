@@ -86,6 +86,7 @@
 		<Table name="CallNatureType"/>
 		<Table name="DispositionLocationType"/>
 		<Table name="BookingClassificationType"/>
+		<Table name="TimeSpanType"/>
 		<Table name="FullIncidentView">
 			<ColumnDefs>
 				<CalculatedColumnDef name='SixMonthIncidentReoccurrence' type='Integer'>
@@ -650,6 +651,18 @@
 		</Hierarchies>
 	</Dimension>
 
+	<Dimension visible="true" name="TimeSpan" table="TimeSpanType" key="TimeSpanTypeID" caption="Time of Day">
+		<Attributes>
+			<Attribute name="TimeSpanTypeID" keyColumn="TimeSpanTypeID" hasHierarchy="false"/>
+			<Attribute name="TimeSpanTypeDescription" keyColumn="TimeSpanTypeDescription" hasHierarchy="false" caption="Time of Day"/>
+		</Attributes>
+		<Hierarchies>
+			<Hierarchy name="Time of Day" visible="true" allMemberName="All Times">
+				<Level attribute="TimeSpanTypeDescription" caption="Time of Day"/>
+			</Hierarchy>
+		</Hierarchies>
+	</Dimension>
+
 	<Dimension visible="true" name="Race" table="PersonRaceType" key="PersonRaceTypeID">
 		<Attributes>
 			<Attribute name="PersonRaceTypeID" keyColumn="PersonRaceTypeID" hasHierarchy="false"/>
@@ -840,10 +853,12 @@
 		<Attributes>
 			<Attribute name="AgencyID" keyColumn="AgencyID" hasHierarchy="false"/>
 			<Attribute name="AgencyCategory" keyColumn="AgencyCategory" hasHierarchy="false" caption="Agency"/>
+			<Attribute name="AgencyDescription" keyColumn="AgencyDescription" hasHierarchy="false" caption="Agency"/>
 		</Attributes>
 		<Hierarchies>
 			<Hierarchy name="ArrestAgency" visible="true" caption="Arrest Agency" allMemberName="All Agencies" allMemberCaption="All Agencies">
 				<Level attribute="AgencyCategory" caption="Agency"/>
+				<Level caption="Agency" attribute="AgencyDescription"/>
 			</Hierarchy>
 		</Hierarchies>
 	</Dimension>
@@ -1039,8 +1054,6 @@
 		</Hierarchies>
 	</Dimension>
 
-
-
 	<Dimension visible="true" name="TreatmentProvider" table="TreatmentProviderType" key="TreatmentProviderTypeID" caption="Treatment Provider">
 		<Attributes>
 			<Attribute name="TreatmentProviderTypeID" keyColumn="TreatmentProviderTypeID" hasHierarchy="false"/>
@@ -1102,6 +1115,7 @@
 			<Dimension source="TreatmentAdmissionReason"/>
 			<Dimension source="PendingCriminalCharges"/>
 			<Dimension source="CallNature"/>
+			<Dimension source="TimeSpan"/>
 			<Dimension source="DispositionLocation"/>
             <Dimension source="Hour"/>
             <Dimension source="Prior Interactions" name="Prior Interactions Past 6 Months" caption="Prior Interactions Past 6 Months"/>
@@ -1163,6 +1177,7 @@
 					<ForeignKeyLink dimension="TreatmentAdmissionReason" foreignKeyColumn="TreatmentAdmissionReasonTypeID"/>
 					<ForeignKeyLink dimension="PendingCriminalCharges" foreignKeyColumn="PendingCriminalChargesTypeID"/>
 					<ForeignKeyLink dimension="CallNature" foreignKeyColumn="CallNatureTypeID"/>
+					<ForeignKeyLink dimension="TimeSpan" foreignKeyColumn="TimeSpanTypeID"/>
 					<ForeignKeyLink dimension="DispositionLocation" foreignKeyColumn="DispositionLocationTypeID"/>
 					<ForeignKeyLink dimension="Hour" foreignKeyColumn="IncidentReportedHour"/>
                     <FactLink dimension="Engagement Status"/>
@@ -1185,7 +1200,8 @@
 					<Measure name="Average Cost" column="CostInDollars" aggregator="avg" visible="true" formatString="$0.00"/>
 					<Measure name="Average Days Since Prior Encounter" column="DaysSinceLastIncident" aggregator="avg" visible="true"/>
 					<Measure name="Reoccurrence Rate" column="SixMonthIncidentReoccurrence" aggregator="avg" visible="true" formatString="#0.0 %"/>
-          <Measure name="Subsequent Booking Rate" column="SixMonthSubsequentBooking" aggregator="avg" visible="true" formatString="#0.0 %"/>
+					<Measure name="Subsequent Booking Rate" column="SixMonthSubsequentBooking" aggregator="avg" visible="true" formatString="#0.0 %"/>
+					<Measure name="Subsequent Booking Count" column="SixMonthSubsequentBooking" aggregator="sum" visible="true"/>
           <Measure name="Average # Prior Interactions in Past 6 Months" column="PriorInteractions6Months" aggregator="avg" visible="true" formatString="0.00"/>
           <Measure name="Average # Prior Interactions in Past 12 Months" column="PriorInteractions12Months" aggregator="avg" visible="true" formatString="0.00"/>
           <Measure name="Average # Prior Interactions in Past 18 Months" column="PriorInteractions18Months" aggregator="avg" visible="true" formatString="0.00"/>
